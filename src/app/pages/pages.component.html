@@ -1,0 +1,23 @@
+<nb-layout windowMode>
+    <nb-layout-header fixed>
+        <app-header></app-header>
+    </nb-layout-header>
+
+    <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
+        <nb-menu [items]="translatedMenu"></nb-menu>
+    </nb-sidebar>
+
+    <nb-layout-column>
+        <router-outlet></router-outlet>
+    </nb-layout-column>
+
+    <nb-layout-footer fixed>
+        <app-footer class="footer"></app-footer>
+        <div class="social-icons">
+            <a href="https://www.linkedin.com/in/zalanfarkas" target="_blank" class="social-icon"><i
+                    class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/FarkasZalan" target="_blank" class="social-icon"><i
+                    class="fab fa-github"></i></a>
+        </div>
+    </nb-layout-footer>
+</nb-layout>
