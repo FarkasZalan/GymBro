@@ -10,6 +10,8 @@ import { environment } from '../environments/environment';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
+import { AuthGuard } from './auth/auth-guard.service';
+import { AuthService } from './auth/auth.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
     AngularFireFunctionsModule
   ],
   providers: [
-    provideAnimationsAsync()
+    AuthService,
+    provideAnimationsAsync(),
+    AuthGuard,
   ],
   bootstrap: [AppComponent]
 })

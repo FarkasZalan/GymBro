@@ -1,0 +1,118 @@
+<!-- register title -->
+<h1 id="title" class="title">Regisztráció</h1>
+<!-- register form -->
+<div class="container">
+    <nb-card>
+        <nb-card-body class="login-col">
+
+            <div class="row">
+                <div class="col">
+                    <form (ngSubmit)="register()" #form="ngForm">
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- First Name block -->
+                                <div class="form-group">
+                                    <label for="firstName" class="label">Keresztnév</label>
+                                    <input type="text" class="form-control" ngModel name="firstName" minlength="1"
+                                        required placeholder="Keresztnév*" #firstName="ngModel">
+                                    <span class="help-block" *ngIf="firstName.touched && !firstName.valid">A mező
+                                        kitöltése kötelező!</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <!-- Last Name block -->
+                                <div class="form-group">
+                                    <label for="lastName" class="label">Vezetéknév</label>
+                                    <input type="text" class="form-control" ngModel name="lastName" minlength="1"
+                                        required placeholder="Vezetéknév*" #lastName="ngModel">
+                                    <span class="help-block" *ngIf="lastName.touched && !lastName.valid">A mező
+                                        kitöltése kötelező!</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- Email block -->
+                                <div class="form-group">
+                                    <label for="email" class="label">Email cím</label>
+                                    <input type="email" class="form-control" ngModel name="email" required
+                                        placeholder="Email*" #email="ngModel">
+                                    <span class="help-block" *ngIf="email.touched && !email.valid">Érvénytelem email
+                                        cím!</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <!-- Phone block -->
+                                <div class="form-group">
+                                    <label for="phone" class="label">Telefonszám</label>
+                                    <input type="tel" class="form-control" ngModel name="phone" required
+                                        placeholder="Telefonszám*" #phone="ngModel">
+                                    <span class="help-block" *ngIf="phone.touched && !phone.valid">A mező
+                                        kitöltése kötelező!</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Password -->
+                        <div class="password-info">
+                            <div class="form-group">
+                                <label for="password" class="label">Jelszó</label>
+                                <input type="password" class="form-control" ngModel name="password" minlength="6"
+                                    required placeholder="Jelszó*" #passwordFirst="ngModel">
+                                <span class="help-block" *ngIf="passwordFirst.touched && !passwordFirst.valid">A
+                                    jelszónak minimum
+                                    6 karakterből kell állnia!</span>
+                            </div>
+                        </div>
+                        <!-- Password again Section -->
+                        <div class="password-info">
+                            <div class="form-group">
+                                <label for="password_again" class="label">Jelszó újra</label>
+                                <input type="password" class="form-control" ngModel name="password_again" minlength="6"
+                                    required placeholder="Jelszó újra*" #passwordAgain="ngModel">
+                                <span class="help-block"
+                                    *ngIf="passwordAgain.touched && (passwordAgain.value !== passwordFirst.value)">Nem
+                                    egyeznek a
+                                    megadott jelszavak!</span>
+                            </div>
+                        </div><br>
+                        <!-- Data Management Checkbox -->
+                        <div class="form-group">
+                            <label for="dataManagementCheckBox" class="checkbox-container">
+                                <label for="dataManagementCheckBox">Elfogadom az <a><span (click)="goToDataManagement()"
+                                            class="forgot-password-text">Adatkezelési
+                                            tájékoztatót</span></a>
+                                </label>
+                                <input type="checkbox" ngModel name="dataManagementCheckBox" id="dataManagementCheckBox"
+                                    #admin="ngModel" required>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <!-- login error -->
+                        <span *ngIf="errorMessage" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
+                            Ez az email cím már használatban van!
+                        </span>
+                        <!-- register submit button -->
+                        <div class="login-button-container">
+                            <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
+                                [disabled]="!form.valid">Regisztráció</button>
+                        </div>
+                    </form><br>
+                </div>
+                <div class="col">
+                    <div class="register-div">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <p class="register-text">Már van GymBro fiókod?</p>
+                    <p class="register-text">Jelentkezz be most!</p>
+                    <!-- go to login button -->
+                    <div class="login-button-container">
+                        <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
+                            (click)="goToLogin()">Bejelentkezés</button>
+                    </div>
+                </div>
+            </div>
+
+        </nb-card-body>
+    </nb-card>
+</div>

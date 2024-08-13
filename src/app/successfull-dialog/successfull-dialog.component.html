@@ -1,0 +1,15 @@
+<nb-card>
+    <nb-card-body>
+        <div>
+            <img src="../../assets/images/succedImage.jpg" alt="Email sent image">
+            <br>
+            <p class="title">{{ text }}</p>
+            <!-- button -->
+            <div class="send-button-container">
+                <button (click)="hideDialog()" class="btn btn-primary" type="submit" nbButton status="success">
+                    {{ buttonText }}
+                </button>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>

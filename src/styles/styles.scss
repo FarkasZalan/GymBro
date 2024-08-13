@@ -12,3 +12,67 @@ nb-layout-footer nav {
     justify-content: space-between !important;
     display: flex;
 }
+
+.checkbox-container {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+/* Hide the default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #d7dddc;
+    /* Default fill color */
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked~.checkmark {
+    background-color: #00d68f;
+    /* Custom fill color */
+}
+
+.checkbox-container:hover input:checked~.checkmark {
+    background-color: #2ce69b;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark::after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked~.checkmark::after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark::after {
+    left: 7px;
+    top: 3px;
+    width: 7px;
+    height: 12px;
+    border: solid white;
+    transform: rotate(45deg);
+    border-width: 0 3px 3px 0;
+}

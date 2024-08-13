@@ -1,0 +1,155 @@
+input[type='text'] {
+    cursor: text;
+}
+
+.login-button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.forgot-password-text {
+    font-weight: bold;
+    margin-top: 3%;
+    text-align: center;
+    cursor: pointer;
+    color: #0099ffd3;
+    font-size: 16px;
+}
+
+p {
+    font-size: 16px;
+    cursor: auto;
+}
+
+.forgot-password-text:hover {
+    color: #0099ff8a;
+}
+
+input[type='email'] {
+    cursor: text;
+    margin-bottom: 7px;
+}
+
+input[type='password'] {
+    cursor: text;
+    margin-bottom: 7px;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+    margin-bottom: 1% !important;
+}
+
+input.ng-valid {
+    border: 1px solid green;
+}
+
+.help-block-login-error {
+    display: flex;
+    align-items: center;
+    background-color: #f8d7da;
+    /* Light red background */
+    color: #721c24;
+    /* Dark red text color */
+    border: 1px solid #f5c6cb;
+    /* Red border */
+    border-radius: 4px;
+    /* Rounded corners */
+    padding: 10px;
+    margin: 15px 0;
+    /* Margin around the error block */
+    font-size: 1em;
+    /* Adjust font size as needed */
+}
+
+.help-block-login-error .icon {
+    margin-right: 10px;
+    /* Space between the icon and text */
+    font-size: 1.5em;
+    /* Adjust icon size */
+}
+
+.help-block {
+    color: #721c24;
+}
+
+.register-text {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.title {
+    margin-top: 5%;
+    text-align: center;
+}
+
+.register-div {
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: flex-start;
+    /* Align to top */
+    position: relative;
+    /* Needed if you use absolute positioning */
+    font-size: 30px;
+    /* Adjust the size of the icon */
+    color: #333;
+}
+
+ul.custom-list {
+    list-style-type: none;
+    /* Remove default list markers */
+    padding: 0;
+    /* Remove default padding */
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+ul.custom-list li {
+    position: relative;
+    padding-left: 2em;
+    /* Space for the custom symbol */
+    margin-bottom: 1em;
+    /* Space between items */
+
+}
+
+ul.custom-list li::before {
+    content: "🏋️";
+    /* Custom symbol */
+    position: absolute;
+    left: 0;
+    /* Position symbol to the left of the list item text */
+    font-size: 1.5em;
+    /* Size of the symbol */
+    color: red;
+    /* Color of the symbol */
+    top: 50%;
+    transform: translateY(-50%);
+    /* Vertically center the symbol */
+}
+
+.basic-btn {
+    background-color: white !important;
+    color: #2CE69B !important;
+}
+
+.basic-btn:hover {
+    background-color: #2CE69B !important;
+    color: white !important;
+}
+
+.basic-btn:disabled {
+    background-color: rgb(216, 208, 208) !important;
+    color: rgb(112, 112, 112) !important;
+}
+
+.col {
+    margin-bottom: 1%;
+}

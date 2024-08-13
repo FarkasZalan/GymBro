@@ -1,0 +1,55 @@
+.buttons {
+    display: block;
+    text-align: center;
+}
+
+.buttons button {
+    border: none;
+    background-size: cover;
+    border-radius: 10px;
+}
+
+.btn-logout {
+    background-color: #e35757;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 50px;
+    width: 120px;
+}
+
+.btn-logout:hover {
+    background-color: #df1313;
+}
+
+.btn-logout:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-cancel {
+    background-color: #00d68f;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 50px;
+    width: 120px;
+}
+
+.btn-cancel:hover {
+    background-color: #2ce69b;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+.buttons button:focus {
+    outline: none;
+}
+
+.title {
+    margin: 20px;
+}
+
+.container:focus {
+    outline: none;
+}

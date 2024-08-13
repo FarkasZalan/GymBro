@@ -1,20 +1,97 @@
-.flex-centered {
-  margin: auto;
-}
-nb-card-body {
+.not-found-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: white;
+  color: #2CE69B;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
 }
 
-.title {
-  text-align: center;
+.not-found-content {
+  max-width: 800px;
+  max-height: 800px;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
-.sub-title {
-  text-align: center;
-  display: block;
-  margin-bottom: 3rem;
+.animation-wrapper {
+  position: relative;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dumbbell {
+  position: absolute;
+  width: 80px;
+  animation: lift 3s ease-in-out infinite;
+}
+
+.dumbbell-left {
+  left: 10%;
+  top: 15%;
+}
+
+.dumbbell-right {
+  right: 10%;
+  bottom: 5%;
+}
+
+.error-code-container {
+  position: relative;
+  z-index: 1;
+  /* Ensure it is above the dumbbells */
+}
+
+.error-code {
+  font-size: 120px;
+  margin: 0;
+  font-weight: bold;
+  letter-spacing: 8px;
+  color: #2CE69B;
+}
+
+.error-message {
+  font-size: 22px;
+  margin-top: 10%;
+  color: #333;
+  line-height: 1.4;
+  font-weight: 300;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .home-button {
-  margin-bottom: 2rem;
+  background: white;
+  color: #2CE69B;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 18px;
+  box-shadow: 0 8px 15px rgba(44, 230, 155, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #2CE69B;
+    color: white;
+    box-shadow: 0 15px 20px rgba(44, 230, 155, 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes lift {
+
+  0%,
+  100% {
+    transform: translateY(-10px);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
 }
