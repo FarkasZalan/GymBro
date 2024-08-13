@@ -4,10 +4,12 @@
       <img src="../../assets/images/dumbel.png" alt="Dumbbell" class="dumbbell dumbbell-left">
       <div class="error-code-container">
         <h1 class="error-code">404</h1>
-        <p class="error-message">Looks like you took a wrong turn. This page isn't pumped up yet!</p>
+        <p class="error-message">{{ 'notFoundPage.notFoundText' | translate }}</p>
       </div>
       <img src="../../assets/images/dumbel.png" alt="Dumbbell" class="dumbbell dumbbell-right">
     </div>
-    <button class="home-button" (click)="goToHome()">Back to the items</button>
+    <button class="home-button" (click)="goToHome()">
+      <span class="arrow">&#9664;</span>
+      {{ 'notFoundPage.backTohome' | translate }}</button>
   </div>
 </div>

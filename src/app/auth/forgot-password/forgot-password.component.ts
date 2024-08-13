@@ -31,8 +31,7 @@ export class ForgotPasswordComponent {
           this.dialog.closeAll();
           this.dialog.open(SuccessfullDialogComponent, {
             data: {
-              text: "A link elküldve a megadott email címre!",
-              buttonText: "Vissza a bejelentkezéshez",
+              text: SuccessFullDialogText.PASSWORD_EMAIL_SENT,
               needToGoPrevoiusPage: false
             }
           })
@@ -40,5 +39,9 @@ export class ForgotPasswordComponent {
           this.errorMessage = true;
         }
       });
+  }
+
+  back() {
+    this.dialog.closeAll();
   }
 }

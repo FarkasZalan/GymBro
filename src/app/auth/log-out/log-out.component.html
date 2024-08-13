@@ -1,13 +1,15 @@
 <div class="container">
     <!-- log out title -->
-    <h1 id="title" class="title">Biztosan ki szeretnél jelentkezni?</h1>
+    <h1 id="title" class="title">{{ 'header.logOutConfirm' | translate }}</h1>
     <!-- log out confirm buttons -->
     <div class="container">
         <nb-card>
             <nb-card-body>
                 <div class="buttons">
-                    <button type="submit" class="btn btn-primary btn-logout" (click)="logOut()">Kijelentkezés</button>
-                    <button type="submit" class="btn btn-primary btn-cancel" (click)="cancel()">Mégse</button>
+                    <button type="submit" class="btn btn-primary btn-logout" (click)="logOut()">{{ 'header.logOut' |
+                        translate }}</button>
+                    <button type="submit" class="btn btn-primary btn-cancel" (click)="cancel()">{{ 'header.cancel' |
+                        translate }}</button>
                 </div>
             </nb-card-body>
         </nb-card>

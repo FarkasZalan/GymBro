@@ -154,3 +154,43 @@ ul.custom-list li::before {
 .col {
     margin-bottom: 1%;
 }
+
+.back-btn {
+    position: relative;
+    /* Ensure the button is the reference point for positioning */
+    padding-left: 40px !important;
+    /* Add padding to the left to make space for the arrow */
+    /* Other button styles */
+}
+
+.arrow {
+    position: absolute;
+    /* Position the arrow absolutely within the button */
+    left: 10px;
+    /* Adjust as needed to position the arrow */
+
+    /* Center vertically */
+    transform: translateY(-50%);
+    /* Adjust vertical centering */
+    color: #2ce69b;
+    /* Set the color of the arrow */
+    font-size: 18px;
+    /* Adjust size as needed */
+    animation: arrowLift 3s ease-in-out infinite;
+}
+
+.back-btn:hover .arrow {
+    color: white !important;
+}
+
+@keyframes arrowLift {
+
+    0%,
+    100% {
+        transform: translateX(-2px);
+    }
+
+    50% {
+        transform: translateX(2px);
+    }
+}

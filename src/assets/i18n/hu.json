@@ -1,0 +1,94 @@
+{
+        "menu": {
+                "mainPage": "Kezdőlap",
+                "foodSuplimentsMenu": {
+                        "foodSupliments": "Étrend kiegészítők",
+                        "proteins": "Fehérjék",
+                        "massGainers": "Tömegnövelők",
+                        "aminoAcids": "Aminósavak",
+                        "creatines": "Kreatinok",
+                        "vitamins": "Vitaminok",
+                        "minerals": "Ásványi anyagok",
+                        "healthyFats": "Egészséges zsírok",
+                        "joinSupport": "Ízületvédelem",
+                        "fatBurners": "Zsírégetők"
+                },
+                "healthyFoodsMenu": {
+                        "healthyFoods": "Egészséges élelmiszerek",
+                        "cereals": "Gabonafélék",
+                        "healthySnacks": "Egészséges nasi",
+                        "flavorsAndSweeteners": "Ízesítők és édesítők",
+                        "cookingIngredients": "Hozzávalók főzéshez",
+                        "drinks": "Italok"
+                },
+                "clothingMenu": {
+                        "clothing": "Ruházat",
+                        "womensClothing": "Női ruházat",
+                        "mansClothing": "Férfi ruházat"
+                },
+                "accessoriesMenu": {
+                        "accessories": "Kiegészítők",
+                        "homeWorkout": "Otthoni edzés",
+                        "workoutGear": "Kellékek edzéshez",
+                        "activityBasedTools": "Tevékenységalapú eszközök",
+                        "bagsAndBackpacks": "Táskák és hátizsákok",
+                        "rehabilitationTools": "Rehabilitációs eszközök"
+                },
+                "blog": "Blog"
+        },
+        "header": {
+                "profile": "Profil",
+                "logOut": "Kijelentkezés",
+                "cancel": "Mégse",
+                "logOutConfirm": "Biztosan ki szeretnél jelentkezni?"
+        },
+        "footer": {
+                "createdBy": "Készítette Farkas Zalán"
+        },
+        "notFoundPage": {
+                "notFoundText": "Úgy tűnik, ez az oldal nem található. Próbálkozz a főoldalon!",
+                "backTohome": "Vissza a főoldalra"
+        },
+        "loginPage": {
+                "login": "Bejelentkezés",
+                "emailAddress": "E-mail cím",
+                "email": "E-mail",
+                "invalidEmail": "Érvénytelen e-mail cím",
+                "password": "Jelszó",
+                "invalidPassword": "Legalább 6 hosszúságú jelszót kell megadnod",
+                "forgotPasswordText": "Elfelejtetted a jelszavad?",
+                "resetPasswordText": " Jelszó visszaállítása",
+                "loginError": "Érvénytelen email vagy jelszó!",
+                "forgotPasswordPageTitle": "Jelszó helyreállítása",
+                "emailNotRegistered": "Ezzel az email címmel még nincs regisztrált felhasználó!",
+                "sendEmail": "Jelszó helyreállító link küldése",
+                "dontHaveAccount": "Még nincs fiókod?",
+                "collectCuponsText": "Gyűjtsd a pontokat a kedvezményekért!",
+                "saveDateText": "Mentsd el adataid, hogy kényelmesebben vásárolhass!",
+                "register": "Regisztráció",
+                "back": "Vissza",
+                "goToItems": "Vissza a termékekhez"
+        },
+        "register": {
+                "firstName": "Keresztnév",
+                "lastName": "Vezetéknév",
+                "phone": "Telefonszám",
+                "passwordAgain": "Jelszó újra",
+                "passwordsNotMatch": "Nem egyeznek a megadott jelszavak!",
+                "acceptPrivacySimpleText": "Elfogadom az",
+                "acceptPrivacyLink": "Adatkezelési tájékoztatót",
+                "emailRegistered": "Ez az email cím már használatban van!",
+                "alreadyHaveAccount": "Már van GymBro fiókod?",
+                "loginNow": "Jelentkezz be most!",
+                "fieldRequired": "A mező nem maradhat üresen!"
+        },
+        "succesfullDialog": {
+                "ok": "Rendben",
+                "backToLogin": "Vissza a bejelentkezéshez",
+                "modificationSuccessfull": "Sikeres módosítás!",
+                "deletionSuccessfull": "Sikeres törlés!",
+                "passwordEmailSent": "A link elküldve a megadott email címre!",
+                "verrifyEmail": "Sikeres regisztráció!\n\nA hitelesítő link elküldve\na megadott email címre!",
+                "creationSuccessfull": "Sikeres létrehozás!"
+        }
+}

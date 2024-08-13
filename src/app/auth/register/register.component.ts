@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 import { User } from '../../user/user.model';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
@@ -38,8 +37,7 @@ export class RegisterComponent {
         this.authService.logOut();
         this.dialog.open(SuccessfullDialogComponent, {
           data: {
-            text: SuccessFullDialogText.EMAIL_SENT,
-            buttonText: "Vissza a bejelentkezéshez",
+            text: SuccessFullDialogText.VERRIFY_EMAIL_SENT,
             needToGoPrevoiusPage: true
           }
         })

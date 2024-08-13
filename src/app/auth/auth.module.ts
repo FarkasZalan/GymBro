@@ -15,6 +15,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { LogOutComponent } from './log-out/log-out.component';
 import { SuccessfullDialogComponent } from '../successfull-dialog/successfull-dialog.component';
 import { RegisterComponent } from './register/register.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     imports: [
@@ -26,7 +27,8 @@ import { RegisterComponent } from './register/register.component';
         NbButtonModule,
         NbCheckboxModule,
         AuthRoutingModule,
-        NbAuthModule
+        NbAuthModule,
+        TranslateModule
     ],
     declarations: [
         LoginComponent,

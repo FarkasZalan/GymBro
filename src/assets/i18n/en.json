@@ -1,0 +1,94 @@
+{
+   "menu": {
+      "mainPage": "Home",
+      "foodSuplimentsMenu": {
+         "foodSupliments": "Food Supliments",
+         "proteins": "Proteins",
+         "massGainers": "Mass Gainers",
+         "aminoAcids": "Amino Acids",
+         "creatines": "Creatines",
+         "vitamins": "Vitamins",
+         "minerals": "Minerals",
+         "healthyFats": "Helathy Fats",
+         "joinSupport": "Join Support",
+         "fatBurners": "Fat Burners"
+      },
+      "healthyFoodsMenu": {
+         "healthyFoods": "Healthy Foods",
+         "cereals": "Cereals",
+         "healthySnacks": "Healthy Snacks",
+         "flavorsAndSweeteners": "Flavors and Sweeteners",
+         "cookingIngredients": "Cooking Ingredients",
+         "drinks": "Drinls"
+      },
+      "clothingMenu": {
+         "clothing": "Clothing",
+         "womensClothing": "Womens's Clothing",
+         "mansClothing": "Man's Clothing"
+      },
+      "accessoriesMenu": {
+         "accessories": "Accessories",
+         "homeWorkout": "Home Workout",
+         "workoutGear": "Workout Gear",
+         "activityBasedTools": "Activity-Based Tools",
+         "bagsAndBackpacks": "Bags and Backpacks",
+         "rehabilitationTools": "Rehabilitation Tools"
+      },
+      "blog": "Blog"
+   },
+   "header": {
+      "profile": "Profile",
+      "logOut": "Log out",
+      "cancel": "Cancel",
+      "logOutConfirm": "Are you sure you want to log out?"
+   },
+   "footer": {
+      "createdBy": "Created By Zalán Farkas"
+   },
+   "notFoundPage": {
+      "notFoundText": "Looks like you took a wrong turn. This page isn't pumped up yet!",
+      "backTohome": "Back to Home"
+   },
+   "loginPage": {
+      "login": "Login",
+      "emailAddress": "E-mail address",
+      "email": "E-mail",
+      "invalidEmail": "Invalid e-mail",
+      "password": "Password",
+      "invalidPassword": "You must enter a password of at least 6 characters",
+      "forgotPasswordText": "Forgot your password?",
+      "resetPasswordText": "Reset Password",
+      "loginError": "Invalid email or password!",
+      "forgotPasswordPageTitle": "Password recovery",
+      "emailNotRegistered": "No user is registered with this email address!",
+      "sendEmail": "Send password recovery link",
+      "dontHaveAccount": "Don't have an account?",
+      "collectCuponsText": "Collect points for discounts!",
+      "saveDateText": "Save your data for easier shopping!",
+      "register": "Register",
+      "back": "Back",
+      "goToItems": "Back to the Items"
+   },
+   "register": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone Number",
+      "passwordAgain": "Confirm Password",
+      "passwordsNotMatch": "The passwords do not match!",
+      "acceptPrivacySimpleText": "I accept the",
+      "acceptPrivacyLink": "Privacy Policy",
+      "emailRegistered": "This email address is already in use!",
+      "alreadyHaveAccount": "Already have a GymBro account?",
+      "loginNow": "Log in now!",
+      "fieldRequired": "This field cannot be empty!"
+   },
+   "succesfullDialog": {
+      "ok": "Ok",
+      "backToLogin": "Back to Login",
+      "modificationSuccessfull": "Modification Successful!",
+      "deletionSuccessfull": "Deletion Successful!",
+      "passwordEmailSent": "The link has been sent to the provided email address!",
+      "verrifyEmail": "Registration Successful!\n\nThe verification link has been sent\nto the provided email address!",
+      "creationSuccessfull": "Creation Successful!"
+   }
+}

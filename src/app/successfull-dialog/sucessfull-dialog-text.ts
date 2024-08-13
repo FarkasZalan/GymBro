@@ -1,5 +1,7 @@
 export enum SuccessFullDialogText {
-    EMAIL_SENT = 'A hitelesítő email elküldve a megadott email címre',
+    VERRIFY_EMAIL_SENT = 'verrify Email',
+    PASSWORD_EMAIL_SENT = "password email",
+    NEXT = "next",
     CREATED_TEXT = "created",
     MODIFIED_TEXT = "modified",
     DELETED_TEXT = "deleted"

@@ -41,6 +41,10 @@ export class LoginComponent {
     this.router.navigate(['/auth/register']);
   }
 
+  goToItems() {
+    this.router.navigate(['/']);
+  }
+
   forgotPassword() {
     this.email = this.loginForm.value.email;
     this.dialog.open(ForgotPasswordComponent, {

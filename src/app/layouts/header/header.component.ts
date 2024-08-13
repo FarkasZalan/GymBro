@@ -7,6 +7,7 @@ import { User } from '../../user/user.model';
 import { filter, tap } from 'rxjs';
 import { LogOutComponent } from '../../auth/log-out/log-out.component';
 import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private dialog: MatDialog,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {
@@ -39,23 +41,33 @@ export class HeaderComponent implements OnInit {
       }
     })
 
-    this.userMenu = [
-      { title: 'Profil' },
-      { title: 'Kijelentkezés' }
-    ];
+    // Translate userMenu items
+    this.translate.onLangChange.subscribe(() => {
+      //this method call when the languaage is changed
+      this.translateMenu();
+    });
+    //this is for the first time when we need to load in the items based on the default language
+    this.translateMenu();
 
     this.menuService.onItemClick()
       .pipe(
         //the 'header-menu' tag is for the html to the nbContextMenuTag, this is a click listener for this menu
         filter(({ tag }) => tag === 'header-menu'),
         tap(({ item }) => {
-          if (item.title === 'Kijelentkezés') {
+          if (item.title === this.translate.instant('header.logOut')) {
             this.logOut();
           } else {
             this.router.navigate(['profile']);
           }
         })
       ).subscribe()
+  }
+
+  translateMenu() {
+    this.userMenu = [
+      { title: this.translate.instant('header.profile') },
+      { title: this.translate.instant('header.logOut') }
+    ];
   }
 
   //hamburger icon

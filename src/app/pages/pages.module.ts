@@ -7,6 +7,7 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { FooterComponent } from '../layouts/footer/footer.component';
 import { HeaderComponent } from '../layouts/header/header.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { NotFoundComponent } from '../not-found/not-found.component';
         NbSelectModule,
         NbIconModule,
         NbEvaIconsModule,
+        TranslateModule
     ]
 })
 export class PagesModule {

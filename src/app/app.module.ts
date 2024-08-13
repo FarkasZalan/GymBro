@@ -12,10 +12,19 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
 import { AuthGuard } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ProfileComponent } from './user/profile/profile.component';
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -32,12 +41,22 @@ import { AuthService } from './auth/auth.service';
     AngularFireAuthModule,
     MatDialogModule,
     AngularFirestoreModule,
-    AngularFireFunctionsModule
+    AngularFireFunctionsModule,
+    // Translate
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
   providers: [
     AuthService,
     provideAnimationsAsync(),
+    provideHttpClient(),
     AuthGuard,
+    TranslateService
   ],
   bootstrap: [AppComponent]
 })

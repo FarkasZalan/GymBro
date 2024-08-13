@@ -1,5 +1,5 @@
 <!-- login title -->
-<h1 id="title" class="title">Bejelentkezés</h1>
+<h1 id="title" class="title">{{ 'loginPage.login' | translate }}</h1>
 <!-- login form -->
 <div class="container">
     <nb-card>
@@ -10,39 +10,41 @@
                     <form (ngSubmit)="login()" #form="ngForm">
                         <!-- email block -->
                         <div class="form-group">
-                            <label for="email" class="label">Email</label>
+                            <label for="email" class="label">{{ 'loginPage.email' | translate }}</label>
                             <input type="email" class="form-control" ngModel name="email" fullWidth
-                                placeholder="Email cím" required email #emailInput="ngModel">
+                                placeholder="{{ 'loginPage.emailAddress' | translate }}" required email
+                                #emailInput="ngModel">
                             <!-- email error block -->
-                            <span class="help-block" *ngIf="emailInput.touched && !emailInput.valid">Érvénytelen e-mail
-                                cím!</span>
+                            <span class="help-block" *ngIf="emailInput.touched && !emailInput.valid">{{
+                                'loginPage.invalidEmail' | translate }}</span>
                         </div>
                         <!-- password block -->
                         <div class="form-group">
-                            <label for="password" class="label">Jelszó</label>
+                            <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
                             <input type="password" class="form-control" ngModel name="password" fullWidth
-                                placeholder="Jelszó" minlength="6" required #password="ngModel">
+                                placeholder="{{ 'loginPage.password' | translate }}" minlength="6" required
+                                #password="ngModel">
                             <!-- password error block -->
-                            <span class="help-block" *ngIf="!password.valid && password.touched">Legalább 6 hosszúságú
-                                jelszót kell megadnod!
+                            <span class="help-block" *ngIf="!password.valid && password.touched">{{
+                                'loginPage.invalidPassword' | translate }}
                             </span>
                         </div>
                         <!-- login error -->
                         <span *ngIf="errorMessage" class="help-block-login-error">
                             <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
-                            Érvénytelen email vagy jelszó!
+                            {{ 'loginPage.loginError' | translate }}
                         </span>
                         <!-- login submit button -->
                         <div class="login-button-container">
                             <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
-                                [disabled]="!form.valid">Bejelentkezés</button>
+                                [disabled]="!form.valid">{{ 'loginPage.login' | translate }}</button>
                         </div>
 
                         <!-- forgot password block -->
                         <div class="form-group forgot-password-text">
-                            <p>Elfelejetted a jelszavadat?<a><span (click)="forgotPassword()"
+                            <p>{{ 'loginPage.forgotPasswordText' | translate }}<a><span (click)="forgotPassword()"
                                         class="forgot-password-text">
-                                        Jelszó visszaállítása</span></a>
+                                        {{ 'loginPage.resetPasswordText' | translate }}</span></a>
                             </p>
                         </div>
                     </form>
@@ -51,17 +53,23 @@
                     <div class="register-div">
                         <i class="fas fa-user"></i>
                     </div>
-                    <p class="register-text">Még nincs fiókod?</p><br>
+                    <p class="register-text">{{ 'loginPage.dontHaveAccount' | translate }}</p><br>
                     <ul class="custom-list">
-                        <li>Gyűjtsd a pontokat a kedvezményekért!</li>
-                        <li>Mentsd el adataid, hogy kényelmesebben vásárolhass!</li>
+                        <li>{{ 'loginPage.collectCuponsText' | translate }}</li>
+                        <li>{{ 'loginPage.saveDateText' | translate }}</li>
                     </ul><br>
                     <!-- go to register button -->
                     <div class="login-button-container">
                         <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
-                            (click)="goToRegister()">Regisztráció</button>
+                            (click)="goToRegister()">{{ 'loginPage.register' | translate }}</button>
                     </div>
                 </div>
+            </div>
+            <div class="login-button-container">
+                <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success"
+                    (click)="goToItems()">
+                    <span class="arrow">&#9664;</span>
+                    {{ 'loginPage.goToItems' | translate }}</button>
             </div>
 
         </nb-card-body>

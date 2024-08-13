@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: white;
+  background: #f8f8f8;
   color: #2CE69B;
   text-align: center;
   font-family: 'Roboto', sans-serif;
@@ -13,7 +13,6 @@
   max-width: 800px;
   max-height: 800px;
   padding: 20px;
-  background: #f8f8f8;
   border-radius: 10px;
 }
 
@@ -32,12 +31,12 @@
 }
 
 .dumbbell-left {
-  left: 10%;
+  left: -5%;
   top: 15%;
 }
 
 .dumbbell-right {
-  right: 10%;
+  right: -5%;
   bottom: 5%;
 }
 
@@ -64,9 +63,10 @@
 }
 
 .home-button {
+  position: relative;
   background: white;
   color: #00d68f;
-  padding: 12px 24px;
+  padding: 10px 20px 10px 40px !important;
   border-radius: 20px;
   cursor: pointer;
   font-size: 18px;
@@ -81,6 +81,38 @@
   }
 }
 
+.arrow {
+  position: absolute;
+  /* Position the arrow absolutely within the button */
+  left: 10px;
+  /* Adjust as needed to position the arrow */
+
+  /* Center vertically */
+  transform: translateY(-50%);
+  /* Adjust vertical centering */
+  color: #2ce69b;
+  /* Set the color of the arrow */
+  font-size: 18px;
+  /* Adjust size as needed */
+  animation: arrowLift 3s ease-in-out infinite;
+}
+
+.home-button:hover .arrow {
+  color: white !important;
+}
+
+@keyframes arrowLift {
+
+  0%,
+  100% {
+    transform: translateX(-2px);
+  }
+
+  50% {
+    transform: translateX(2px);
+  }
+}
+
 @keyframes lift {
 
   0%,
@@ -88,7 +120,7 @@
     transform: translateY(-10px);
   }
 
-  50% {
+  20% {
     transform: translateY(10px);
   }
 }
