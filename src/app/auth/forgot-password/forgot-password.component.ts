@@ -33,7 +33,7 @@ export class ForgotPasswordComponent {
             data: {
               text: "A link elküldve a megadott email címre!",
               buttonText: "Vissza a bejelentkezéshez",
-              needToGoPrevoiusPage: true
+              needToGoPrevoiusPage: false
             }
           })
         } else {
