@@ -10,7 +10,8 @@
 }
 
 .btn-logout {
-    background-color: #e35757;
+    background-color: #e35757 !important;
+    color: white !important;
     margin-right: 20px;
     margin-left: 20px;
     height: 50px;
@@ -18,7 +19,7 @@
 }
 
 .btn-logout:hover {
-    background-color: #df1313;
+    background-color: #df1313 !important;
 }
 
 .btn-logout:focus {
@@ -27,7 +28,8 @@
 }
 
 .btn-cancel {
-    background-color: #00d68f;
+    background-color: #00d68f !important;
+    color: white !important;
     margin-right: 20px;
     margin-left: 20px;
     height: 50px;
@@ -35,7 +37,7 @@
 }
 
 .btn-cancel:hover {
-    background-color: #2ce69b;
+    background-color: #2ce69b !important;
 }
 
 .container {

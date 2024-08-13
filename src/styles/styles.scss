@@ -1,6 +1,7 @@
 html,
 body {
     height: 100%;
+    font-size: 16px !important;
 }
 
 body {
@@ -46,12 +47,12 @@ nb-layout-footer nav {
 
 /* When the checkbox is checked, add a blue background */
 .checkbox-container input:checked~.checkmark {
-    background-color: #00d68f;
+    background-color: #0b8e92;
     /* Custom fill color */
 }
 
 .checkbox-container:hover input:checked~.checkmark {
-    background-color: #2ce69b;
+    background-color: #0b8e92;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -75,4 +76,127 @@ nb-layout-footer nav {
     border: solid white;
     transform: rotate(45deg);
     border-width: 0 3px 3px 0;
+}
+
+app-header {
+    display: block !important;
+}
+
+.btn {
+    background-color: white !important;
+    color: #0b8e92 !important;
+    border-radius: 10px !important;
+    font-size: 18px;
+    border-color: #0b8e92;
+    border-style: solid;
+    border-width: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    &:hover {
+        background-color: #0b8e92 !important;
+        color: white !important;
+        transform: scale(1.05) !important;
+    }
+
+    &:active {
+        background-color: darken(#0b8e92, 15%);
+        transform: scale(0.98);
+    }
+}
+
+nb-menu .menu-item a {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+}
+
+nb-menu .menu-item:hover a:hover {
+    color: #0b8e92 !important;
+}
+
+nb-menu .menu-item:hover a:hover .menu-icon {
+    color: #0b8e92 !important;
+}
+
+nb-menu .menu-item a.active {
+    color: #0b8e92 !important;
+}
+
+nb-menu .menu-item a.active .menu-icon {
+    color: #0b8e92 !important;
+}
+
+nb-sidebar.compacted nb-menu .menu-item a.active::before {
+    color: #0b8e92 !important;
+    background-color: #0b8e92 !important;
+}
+
+.nb-theme-default nb-layout.window-mode .layout nb-layout-header {
+    background-color: #0b8e92;
+}
+
+nb-user .user-name {
+    color: white !important;
+    font-weight: 900 !important;
+}
+
+.user-picture.initials {
+    color: white !important;
+    font-weight: 900 !important;
+}
+
+.nb-theme-default nb-user.shape-round .user-picture {
+    border-style: solid;
+    border-width: 3px;
+    width: 45px;
+    height: 45px;
+}
+
+.user-container:hover {
+    transform: scale(1.05) !important;
+}
+
+.header-container {
+    color: white;
+}
+
+a .logo {
+    color: white;
+}
+
+.social-icons {
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    color: #0b8e92 !important;
+}
+
+.social-icon {
+    margin-left: 18px;
+    color: #0b8e92 !important;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    &:hover {
+        color: #0b8e92 !important;
+        transform: scale(1.1) !important;
+    }
+
+    &:active {
+        color: darken(#0b8e92, 15%);
+        transform: scale(0.98);
+    }
+}
+
+nb-sidebar {
+    font-size: 15px !important;
 }

@@ -137,18 +137,37 @@ ul.custom-list li::before {
 
 .basic-btn {
     background-color: white !important;
-    color: #2CE69B !important;
+    color: #0b8e92 !important;
     border-radius: 10px !important;
-}
+    font-size: 14px;
+    border-color: #0b8e92 !important;
+    border-style: solid;
+    border-width: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
 
-.basic-btn:hover {
-    background-color: #2CE69B !important;
-    color: white !important;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    &:hover {
+        background-color: #0b8e92 !important;
+        color: white !important;
+        transform: scale(1.05) !important;
+    }
+
+    &:active {
+        background-color: darken(#0b8e92, 15%);
+        transform: scale(0.98);
+    }
 }
 
 .basic-btn:disabled {
     background-color: rgb(216, 208, 208) !important;
     color: rgb(112, 112, 112) !important;
+    border-color: #b8b8b8 !important;
 }
 
 .col {
@@ -159,8 +178,33 @@ ul.custom-list li::before {
     position: relative;
     /* Ensure the button is the reference point for positioning */
     padding-left: 40px !important;
-    /* Add padding to the left to make space for the arrow */
-    /* Other button styles */
+
+    background-color: white;
+    color: #0b8e92;
+    border-radius: 10px;
+    font-size: 14px;
+    border-color: #0b8e92;
+    border-style: solid;
+    border-width: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    &:hover {
+        background-color: #0b8e92;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    &:active {
+        background-color: darken(#0b8e92, 15%);
+        transform: scale(0.98);
+    }
 }
 
 .arrow {
@@ -172,7 +216,7 @@ ul.custom-list li::before {
     /* Center vertically */
     transform: translateY(-50%);
     /* Adjust vertical centering */
-    color: #2ce69b;
+    color: #0b8e92;
     /* Set the color of the arrow */
     font-size: 18px;
     /* Adjust size as needed */

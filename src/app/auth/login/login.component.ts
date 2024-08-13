@@ -32,6 +32,7 @@ export class LoginComponent {
         if (success) {
           this.errorMessage = false;
           this.router.navigate(['/']);
+          console.log("a")
         } else {
           this.errorMessage = true;
         }
@@ -43,6 +44,7 @@ export class LoginComponent {
 
   goToItems() {
     this.router.navigate(['/']);
+    console.log("b")
   }
 
   forgotPassword() {

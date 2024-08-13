@@ -1,16 +1,34 @@
 <div class="header-container">
+    <!-- Left Side Elements -->
     <div class="logo-container">
         <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
             <nb-icon icon="menu-2-outline"></nb-icon>
         </a>
-        <a class="logo" href="#" (click)="navigateHome()">Gym<span>Bro</span></a>
+        <a class="logo" (click)="navigateHome()"><span class="bro">Gym</span>Bro</a>
     </div>
-</div>
-<div *ngIf="userLoggedIn" class="header-container-user">
-    <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu" nbContextMenuTag="header-menu">
-    </nb-user>
-</div>
 
-<div *ngIf="!userLoggedIn" class="header-container-user">
-    <i (click)="navigateToLogin()" class="material-icons login-icon">login</i>
+    <!-- Right Side Elements -->
+    <div class="header-container-right">
+        <div *ngIf="userLoggedIn" class="header-container-user">
+            <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
+                nbContextMenuTag="header-menu">
+            </nb-user>
+        </div>
+
+        <div *ngIf="userLoggedIn" class="header-container-user .cart-button-container">
+            <button class="cart-button">
+                <i class="material-icons cart-icon">shopping_cart</i>
+                <span class="cart-badge">3</span>
+            </button>
+        </div>
+
+        <div *ngIf="!userLoggedIn" class="header-container-user">
+            <i (click)="navigateToLogin()" class="material-icons login-icon">login</i>
+        </div>
+
+        <div class="header-container-user">
+            <button (click)="switchLanguage()" class="languageswitch-btn">{{ languageSwithButtonText.toUpperCase()
+                }}</button>
+        </div>
+    </div>
 </div>

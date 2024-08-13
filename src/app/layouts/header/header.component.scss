@@ -50,6 +50,8 @@
             @include nb-rtl(border-right, 1px solid nb-theme(divider-color));
             white-space: nowrap;
             text-decoration: none;
+            color: white;
+            cursor: pointer;
         }
     }
 
@@ -77,4 +79,173 @@
 
 .login-icon:hover {
     cursor: pointer;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    /* Distribute space between left and right content */
+    align-items: center;
+    /* Center items vertically */
+    width: 100%;
+    padding: 0 1rem;
+    /* Add padding if necessary */
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        /* Ensure this container only takes as much space as needed */
+    }
+
+    .header-container-right {
+        display: flex;
+        align-items: center;
+        /* Vertically align items */
+        /* You can add margin or padding here if needed */
+    }
+
+    .header-container-user {
+        margin-left: 10px;
+        color: white;
+        /* Space between elements on the right */
+        /* Adjust margin as needed */
+    }
+
+    .login-icon {
+        cursor: pointer;
+        font-size: 30px !important;
+
+        &:hover {
+            color: darken(white, 10%);
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.98);
+            color: darken(white, 15%);
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        .control-item {
+            display: none;
+        }
+
+        .user-action {
+            border: none;
+            padding: 0;
+        }
+    }
+
+    @include media-breakpoint-down(is) {
+        nb-select {
+            display: none;
+        }
+    }
+}
+
+.languageswitch-btn {
+    background-color: white;
+    color: #0b8e92;
+    border-radius: 100%;
+    padding: 8px 16px;
+    font-size: 16px;
+    width: 45px;
+    height: 45px;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    &:hover {
+        background-color: darken(white, 10%);
+        color: darken(#0b8e92, 10%);
+        transform: scale(1.05);
+    }
+
+    &:active {
+        background-color: darken(white, 15%);
+        transform: scale(0.98);
+        color: darken(#0b8e92, 15%);
+    }
+}
+
+.bro {
+    font-weight: 900;
+}
+
+.cart-button-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cart-button {
+    background-color: white;
+    /* Main color for the button */
+    color: #0b8e92;
+    /* Text and icon color */
+    border: none;
+    /* Remove default border */
+    border-radius: 100%;
+    /* Make the button circular */
+    width: 45px;
+    /* Set width */
+    height: 45px;
+    /* Set height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    /* Change cursor on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    /* Smooth transitions */
+    outline: none;
+    /* Remove focus outline */
+
+    transform: scale(1);
+
+    .cart-icon {
+        font-size: 24px;
+        /* Adjust icon size */
+    }
+
+    &:hover {
+        background-color: darken(white, 10%);
+        color: darken(#0b8e92, 10%);
+        transform: scale(1.1);
+        /* Slightly enlarge button on hover */
+    }
+
+    &:active {
+        background-color: darken(white, 15%);
+        transform: scale(0.95);
+        color: darken(#0b8e92, 15%);
+    }
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff3d71;
+    /* Badge color */
+    color: #fff;
+    /* Text color */
+    border-radius: 50%;
+    /* Make the badge circular */
+    padding: 4px 8px;
+    /* Padding inside the badge */
+    font-size: 12px;
+    /* Font size */
+    font-weight: bold;
+    /* Bold text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

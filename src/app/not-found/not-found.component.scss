@@ -4,7 +4,7 @@
   align-items: center;
   height: 100vh;
   background: #f8f8f8;
-  color: #2CE69B;
+  color: #0b8e92;
   text-align: center;
   font-family: 'Roboto', sans-serif;
 }
@@ -51,7 +51,7 @@
   margin: 0;
   font-weight: bold;
   letter-spacing: 8px;
-  color: #2CE69B;
+  color: #0b8e92;
 }
 
 .error-message {
@@ -64,19 +64,36 @@
 
 .home-button {
   position: relative;
-  background: white;
-  color: #00d68f;
   padding: 10px 20px 10px 40px !important;
-  border-radius: 20px;
-  cursor: pointer;
+  background-color: white !important;
+  color: #0b8e92 !important;
+  border-radius: 10px !important;
   font-size: 18px;
-  border-color: #00d68f;
+  border-color: #0b8e92;
   border-style: solid;
   border-width: 1px;
   text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+  align-items: center;
+  justify-content: center;
+  outline: none;
 
   &:hover {
-    background: #00d68f;
+    background-color: #0b8e92 !important;
+    color: white !important;
+    transform: scale(1.05) !important;
+  }
+
+  &:active {
+    background-color: darken(#0b8e92, 15%);
+    transform: scale(0.98);
+  }
+
+  &:hover {
+    background: #0b8e92;
     color: white;
   }
 }
@@ -90,7 +107,7 @@
   /* Center vertically */
   transform: translateY(-50%);
   /* Adjust vertical centering */
-  color: #2ce69b;
+  color: #0b8e92;
   /* Set the color of the arrow */
   font-size: 18px;
   /* Adjust size as needed */

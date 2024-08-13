@@ -8,6 +8,7 @@ import { filter, tap } from 'rxjs';
 import { LogOutComponent } from '../../auth/log-out/log-out.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,8 @@ export class HeaderComponent implements OnInit {
   userLoggedIn: boolean = false;
   userMenu = [];
   user: User;
+  language: string = "";
+  languageSwithButtonText: string = "";
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
@@ -26,6 +29,7 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private translate: TranslateService,
+    private appComponent: AppComponent
   ) { }
 
   ngOnInit(): void {
@@ -40,6 +44,15 @@ export class HeaderComponent implements OnInit {
         this.userLoggedIn = false;
       }
     })
+
+    // Get the current language
+    this.language = this.appComponent.getBrowserLanguage();
+    if (this.language === 'en') {
+      this.languageSwithButtonText = 'hu';
+    } else {
+      this.languageSwithButtonText = 'en';
+    }
+
 
     // Translate userMenu items
     this.translate.onLangChange.subscribe(() => {
@@ -70,6 +83,18 @@ export class HeaderComponent implements OnInit {
     ];
   }
 
+  switchLanguage() {
+    if (this.language === 'en') {
+      this.language = 'hu';
+      this.languageSwithButtonText = 'en';
+    } else {
+      this.language = 'en';
+      this.languageSwithButtonText = 'hu';
+    }
+
+    this.appComponent.switchLanguage(this.language);
+  }
+
   //hamburger icon
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
@@ -79,8 +104,7 @@ export class HeaderComponent implements OnInit {
 
   //click to logo and then navigate home
   navigateHome() {
-    this.menuService.navigateHome();
-    return false;
+    this.router.navigate(['/home']);
   }
 
   //go to login

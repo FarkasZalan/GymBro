@@ -14,7 +14,6 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.language = this.getBrowserLanguage();
-    console.log(this.language)
     if (this.language !== 'hu' && this.language !== 'en') {
       this.language = 'en';
     }
