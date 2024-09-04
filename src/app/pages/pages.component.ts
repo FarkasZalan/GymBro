@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-pages',
   templateUrl: './pages.component.html',
-  styleUrl: './pages.component.scss'
+  styleUrls: ['./pages.component.scss']
 })
 export class PagesComponent {
   translatedMenu: NbMenuItem[];
@@ -19,152 +19,145 @@ export class PagesComponent {
 
   private translateMenu() {
     this.translatedMenu = [
-      {
-        title: this.translate.instant('menu.mainPage'),
-        icon: 'home-outline',
-        link: '/home',
-        home: true
-      },
+
       {
         title: this.translate.instant('menu.foodSuplimentsMenu.foodSupliments'),
-        icon: 'clipboard-outline',
-        link: '/worksheets',
+        icon: 'flash-outline',
         expanded: false,
         children: [
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.proteins'),
-            link: '/users/list',
-            icon: 'cube-outline'
+            icon: ' ',
+            link: '/food-supliments/proteins',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.massGainers'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/mass-gainers',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.aminoAcids'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/amino-acids',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.creatines'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/creatines',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.vitamins'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/vitamins',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.minerals'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/minerals',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.healthyFats'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/healthy-fats',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.joinSupport'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/join-support',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.fatBurners'),
-            link: '/work-processes/list',
-            icon: 'flash-outline'
+            icon: ' ',
+            link: '/food-supliments/fat-burners',
           }
         ]
       },
       {
         title: this.translate.instant('menu.healthyFoodsMenu.healthyFoods'),
-        icon: 'award-outline',  // closest available icon
+        icon: 'heart-outline',
         expanded: false,
         children: [
           {
             title: this.translate.instant('menu.healthyFoodsMenu.cereals'),
+            icon: ' ',
             link: '/users/list',
-            icon: 'heart-outline' // closest available icon
           },
           {
             title: this.translate.instant('menu.healthyFoodsMenu.healthySnacks'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'book-outline'  // closest available icon
           },
           {
             title: this.translate.instant('menu.healthyFoodsMenu.flavorsAndSweeteners'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'book-outline'  // closest available icon
           },
           {
             title: this.translate.instant('menu.healthyFoodsMenu.cookingIngredients'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'book-outline'  // closest available icon
           },
           {
             title: this.translate.instant('menu.healthyFoodsMenu.drinks'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'book-outline'  // closest available icon
           }
         ]
       },
       {
         title: this.translate.instant('menu.clothingMenu.clothing'),
-        icon: 'shopping-bag-outline',  // closest available icon
+        icon: 'pricetags-outline',
         link: '/statements',
         expanded: false,
         children: [
           {
             title: this.translate.instant('menu.clothingMenu.womensClothing'),
+            icon: ' ',
             link: '/users/list',
-            icon: 'person-outline'
           },
           {
             title: this.translate.instant('menu.clothingMenu.mansClothing'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'paper-plane-outline'  // closest available icon
           }
         ]
       },
       {
         title: this.translate.instant('menu.accessoriesMenu.accessories'),
-        icon: 'shopping-bag-outline',  // closest available icon
+        icon: 'shield-outline',
         link: '/statements',
         expanded: false,
         children: [
           {
             title: this.translate.instant('menu.accessoriesMenu.homeWorkout'),
+            icon: ' ',
             link: '/users/list',
-            icon: 'person-outline'
           },
           {
             title: this.translate.instant('menu.accessoriesMenu.workoutGear'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'paper-plane-outline'  // closest available icon
           },
           {
             title: this.translate.instant('menu.accessoriesMenu.activityBasedTools'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'paper-plane-outline'  // closest available icon
           },
           {
             title: this.translate.instant('menu.accessoriesMenu.bagsAndBackpacks'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'paper-plane-outline'  // closest available icon
           },
           {
             title: this.translate.instant('menu.accessoriesMenu.rehabilitationTools'),
+            icon: ' ',
             link: '/work-processes/list',
-            icon: 'paper-plane-outline'  // closest available icon
           }
         ]
       },
       {
         title: this.translate.instant('menu.blog'),
         icon: 'book-outline',
-        link: '/statements'
       }
     ];
   }

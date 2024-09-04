@@ -1,0 +1,104 @@
+<!-- Profile title -->
+
+<!-- kellene egy mini felső menü majd ahol gombok segítségével lehetne navigálni a profil, rendelések, rendelési címek hűségprogramok között -->
+<h1 id="title" class="title">{{ 'profilePage.profile' | translate }}</h1>
+
+<div class="container">
+    <nb-card>
+        <nb-card-body class="login-col">
+
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- First Name block -->
+                            <div class="form-group">
+                                <label for="firstName" class="label">{{ 'register.firstName' | translate }}</label>
+                                <input type="text" class="form-control" ngModel name="firstName" minlength="1" required
+                                    placeholder="{{ 'register.firstName' | translate }}*" #firstName="ngModel">
+                                <span class="help-block" *ngIf="firstName.touched && !firstName.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!-- Last Name block -->
+                            <div class="form-group">
+                                <label for="lastName" class="label">{{ 'register.lastName' | translate }}</label>
+                                <input type="text" class="form-control" ngModel name="lastName" minlength="1" required
+                                    placeholder="{{ 'register.lastName' | translate }}*" #lastName="ngModel">
+                                <span class="help-block" *ngIf="lastName.touched && !lastName.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Email block -->
+                            <div class="form-group">
+                                <label for="email" class="label">{{ 'loginPage.email' | translate }}</label>
+                                <input type="email" class="form-control" ngModel name="email" required
+                                    placeholder="{{ 'loginPage.emailAddress' | translate }}*" #email="ngModel">
+                                <span class="help-block" *ngIf="email.touched && !email.valid">{{
+                                    'loginPage.invalidEmail' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!-- Phone block -->
+                            <div class="form-group">
+                                <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
+                                <input type="tel" class="form-control" ngModel name="phone" required
+                                    placeholder="{{ 'register.phone' | translate }}*" #phone="ngModel">
+                                <span class="help-block" *ngIf="phone.touched && !phone.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Password -->
+                    <div class="password-info">
+                        <div class="form-group">
+                            <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
+                            <input type="password" class="form-control" ngModel name="password" minlength="6" required
+                                placeholder="{{ 'loginPage.password' | translate }}*" #passwordFirst="ngModel">
+                            <span class="help-block" *ngIf="passwordFirst.touched && !passwordFirst.valid">{{
+                                'loginPage.invalidPassword' | translate }}</span>
+                        </div>
+                    </div>
+                    <!-- login submit button -->
+                    <div class="login-button-container">
+                        <button class="btn btn-primary basic-btn" type="submit" nbButton status="success">{{
+                            'loginPage.login' | translate }}</button>
+                    </div>
+
+                    <!-- forgot password block -->
+                    <div class="form-group forgot-password-text">
+                        <p><a><span class="forgot-password-text">{{
+                                    'loginPage.forgotPasswordText' | translate }}</span></a>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="col">
+                    <div class="register-div">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <p class="register-text">{{ 'loginPage.dontHaveAccount' | translate }}</p><br>
+                    <ul class="custom-list">
+                        <li>{{ 'loginPage.collectCuponsText' | translate }}</li>
+                        <li>{{ 'loginPage.saveDateText' | translate }}</li>
+                    </ul><br>
+                    <!-- go to register button -->
+                    <div class="login-button-container">
+                        <button class="btn btn-primary basic-btn" type="submit" nbButton status="success">{{
+                            'loginPage.register' | translate }}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="login-button-container">
+                <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success">
+                    <span class="arrow">&#9664;</span>
+                    {{ 'loginPage.goToItems' | translate }}</button>
+            </div>
+
+        </nb-card-body>
+    </nb-card>
+</div>

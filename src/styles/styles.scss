@@ -87,7 +87,7 @@ app-header {
     color: #0b8e92 !important;
     border-radius: 10px !important;
     font-size: 18px;
-    border-color: #0b8e92;
+    border-color: #0b8e92 !important;
     border-style: solid;
     border-width: 1px;
     text-transform: uppercase;
@@ -107,7 +107,13 @@ app-header {
 
     &:active {
         background-color: darken(#0b8e92, 15%);
-        transform: scale(0.98);
+        transform: scale(0.95);
+    }
+
+    &:disabled {
+        background-color: rgb(216, 208, 208) !important;
+        color: rgb(112, 112, 112) !important;
+        border-color: #b8b8b8 !important;
     }
 }
 
@@ -158,8 +164,16 @@ nb-user .user-name {
     height: 45px;
 }
 
-.user-container:hover {
-    transform: scale(1.05) !important;
+.user-container {
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        transform: scale(1.05) !important;
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
 }
 
 .header-container {

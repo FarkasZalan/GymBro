@@ -15,7 +15,8 @@
     margin-right: 20px;
     margin-left: 20px;
     height: 50px;
-    width: 120px;
+    min-width: 120px;
+
 }
 
 .btn-logout:hover {
@@ -28,7 +29,7 @@
 }
 
 .btn-cancel {
-    background-color: #00d68f !important;
+    background-color: #0b8e92 !important;
     color: white !important;
     margin-right: 20px;
     margin-left: 20px;
@@ -37,7 +38,7 @@
 }
 
 .btn-cancel:hover {
-    background-color: #2ce69b !important;
+    background-color: #15b2b8 !important;
 }
 
 .container {

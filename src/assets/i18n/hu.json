@@ -30,9 +30,9 @@
                         "accessories": "Kiegészítők",
                         "homeWorkout": "Otthoni edzés",
                         "workoutGear": "Kellékek edzéshez",
-                        "activityBasedTools": "Tevékenységalapú eszközök",
+                        "activityBasedTools": "Tevékenységalapú",
                         "bagsAndBackpacks": "Táskák és hátizsákok",
-                        "rehabilitationTools": "Rehabilitációs eszközök"
+                        "rehabilitationTools": "Rehabilitációs"
                 },
                 "blog": "Blog"
         },
@@ -57,7 +57,6 @@
                 "password": "Jelszó",
                 "invalidPassword": "Legalább 6 hosszúságú jelszót kell megadnod",
                 "forgotPasswordText": "Elfelejtetted a jelszavad?",
-                "resetPasswordText": " Jelszó visszaállítása",
                 "loginError": "Érvénytelen email vagy jelszó!",
                 "forgotPasswordPageTitle": "Jelszó helyreállítása",
                 "emailNotRegistered": "Ezzel az email címmel még nincs regisztrált felhasználó!",
@@ -90,5 +89,8 @@
                 "passwordEmailSent": "A link elküldve a megadott email címre!",
                 "verrifyEmail": "Sikeres regisztráció!\n\nA hitelesítő link elküldve\na megadott email címre!",
                 "creationSuccessfull": "Sikeres létrehozás!"
+        },
+        "profilePage": {
+                "profile": "Profil"
         }
 }

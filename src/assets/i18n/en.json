@@ -57,7 +57,6 @@
       "password": "Password",
       "invalidPassword": "You must enter a password of at least 6 characters",
       "forgotPasswordText": "Forgot your password?",
-      "resetPasswordText": "Reset Password",
       "loginError": "Invalid email or password!",
       "forgotPasswordPageTitle": "Password recovery",
       "emailNotRegistered": "No user is registered with this email address!",
@@ -90,5 +89,8 @@
       "passwordEmailSent": "The link has been sent to the provided email address!",
       "verrifyEmail": "Registration Successful!\n\nThe verification link has been sent\nto the provided email address!",
       "creationSuccessfull": "Creation Successful!"
+   },
+   "profilePage": {
+      "profile": "Profile"
    }
 }

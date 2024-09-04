@@ -52,6 +52,16 @@
             text-decoration: none;
             color: white;
             cursor: pointer;
+
+            transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+            &:hover {
+                transform: scale(1.1) !important;
+            }
+
+            &:active {
+                transform: scale(0.98);
+            }
         }
     }
 
@@ -114,14 +124,15 @@
     .login-icon {
         cursor: pointer;
         font-size: 30px !important;
+        transition: background-color 0.3s ease, transform 0.3s ease !important;
 
         &:hover {
             color: darken(white, 10%);
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
         &:active {
-            transform: scale(0.98);
+            transform: scale(0.95);
             color: darken(white, 15%);
         }
     }
@@ -165,12 +176,12 @@
     &:hover {
         background-color: darken(white, 10%);
         color: darken(#0b8e92, 10%);
-        transform: scale(1.05);
+        transform: scale(1.1);
     }
 
     &:active {
         background-color: darken(white, 15%);
-        transform: scale(0.98);
+        transform: scale(0.95);
         color: darken(#0b8e92, 15%);
     }
 }
@@ -187,39 +198,28 @@
 
 .cart-button {
     background-color: white;
-    /* Main color for the button */
     color: #0b8e92;
-    /* Text and icon color */
     border: none;
-    /* Remove default border */
     border-radius: 100%;
-    /* Make the button circular */
     width: 45px;
-    /* Set width */
     height: 45px;
-    /* Set height */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    /* Change cursor on hover */
     transition: background-color 0.3s ease, transform 0.3s ease;
-    /* Smooth transitions */
     outline: none;
-    /* Remove focus outline */
 
     transform: scale(1);
 
     .cart-icon {
         font-size: 24px;
-        /* Adjust icon size */
     }
 
     &:hover {
         background-color: darken(white, 10%);
         color: darken(#0b8e92, 10%);
         transform: scale(1.1);
-        /* Slightly enlarge button on hover */
     }
 
     &:active {

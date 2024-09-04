@@ -8,6 +8,7 @@ import { FooterComponent } from '../layouts/footer/footer.component';
 import { HeaderComponent } from '../layouts/header/header.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
         NbSelectModule,
         NbIconModule,
         NbEvaIconsModule,
+        MatIconModule,
         TranslateModule
     ]
 })

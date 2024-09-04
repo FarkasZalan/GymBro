@@ -12,17 +12,28 @@ input[type='text'] {
     margin-top: 3%;
     text-align: center;
     cursor: pointer;
-    color: #0099ffd3;
-    font-size: 16px;
+    color: #0b8e92;
+    font-size: 17px !important;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        color: #15b2b8 !important;
+        transform: scale(1.1) !important;
+    }
+
+    &:active {
+        color: darken(#0b8e92, 15%);
+        transform: scale(0.95);
+    }
+}
+
+.fa-user {
+    color: #0b8e92;
 }
 
 p {
-    font-size: 16px;
+    font-size: 18px !important;
     cursor: auto;
-}
-
-.forgot-password-text:hover {
-    color: #0099ff8a;
 }
 
 input[type='email'] {
@@ -62,7 +73,7 @@ input.ng-valid {
     padding: 10px;
     margin: 15px 0;
     /* Margin around the error block */
-    font-size: 1em;
+    font-size: 16px !important;
     /* Adjust font size as needed */
 }
 
@@ -75,6 +86,7 @@ input.ng-valid {
 
 .help-block {
     color: #721c24;
+    font-size: 15px !important;
 }
 
 .register-text {
@@ -87,6 +99,11 @@ input.ng-valid {
 .title {
     margin-top: 5%;
     text-align: center;
+    font-weight: 700;
+}
+
+button {
+    font-size: 15px !important;
 }
 
 .register-div {
@@ -117,6 +134,7 @@ ul.custom-list li {
     /* Space for the custom symbol */
     margin-bottom: 1em;
     /* Space between items */
+    font-size: 16px !important;
 
 }
 
@@ -125,49 +143,10 @@ ul.custom-list li::before {
     /* Custom symbol */
     position: absolute;
     left: 0;
-    /* Position symbol to the left of the list item text */
     font-size: 1.5em;
     /* Size of the symbol */
-    color: red;
-    /* Color of the symbol */
     top: 50%;
     transform: translateY(-50%);
-    /* Vertically center the symbol */
-}
-
-.basic-btn {
-    background-color: white !important;
-    color: #0b8e92 !important;
-    border-radius: 10px !important;
-    font-size: 14px;
-    border-color: #0b8e92 !important;
-    border-style: solid;
-    border-width: 1px;
-    text-transform: uppercase;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease !important;
-
-    align-items: center;
-    justify-content: center;
-    outline: none;
-
-    &:hover {
-        background-color: #0b8e92 !important;
-        color: white !important;
-        transform: scale(1.05) !important;
-    }
-
-    &:active {
-        background-color: darken(#0b8e92, 15%);
-        transform: scale(0.98);
-    }
-}
-
-.basic-btn:disabled {
-    background-color: rgb(216, 208, 208) !important;
-    color: rgb(112, 112, 112) !important;
-    border-color: #b8b8b8 !important;
 }
 
 .col {
