@@ -91,6 +91,11 @@
                 "creationSuccessfull": "Sikeres létrehozás!"
         },
         "profilePage": {
-                "profile": "Profil"
+                "profile": "Profil",
+                "dataChange": "Profil módosítása",
+                "modify": "Módosítás",
+                "newPassword": "Új Jelszó",
+                "newPasswordAgain": "Új Jelszó újra",
+                "cancel": "Mégse"
         }
 }

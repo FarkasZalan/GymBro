@@ -50,6 +50,14 @@ input[type='password'] {
     margin-top: 30px;
 }
 
+.container-profile {
+    margin-top: 30px;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 40%;
+}
+
 input.ng-invalid.ng-touched {
     border: 1px solid red;
     margin-bottom: 1% !important;

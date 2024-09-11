@@ -68,14 +68,11 @@
                         <!-- Password again Section -->
                         <div class="password-info">
                             <div class="form-group">
-                                <label for="password_again" class="label">{{ 'register.passwordAgain' | translate
+                                <label for="passwordAgain" class="label">{{ 'register.passwordAgain' | translate
                                     }}</label>
-                                <input type="password" class="form-control" ngModel name="password_again" minlength="6"
+                                <input type="password" class="form-control" ngModel name="passwordAgain" minlength="6"
                                     required placeholder="{{ 'register.passwordAgain' | translate }}*"
                                     #passwordAgain="ngModel">
-                                <span class="help-block"
-                                    *ngIf="passwordAgain.touched && (passwordAgain.value !== passwordFirst.value) && !passwordAgain.valid">{{
-                                    'register.passwordsNotMatch' | translate }}</span>
                             </div>
                         </div><br>
                         <!-- Data Management Checkbox -->
@@ -90,7 +87,12 @@
                                 <span class="checkmark"></span>
                             </label>
                         </div>
-                        <!-- login error -->
+                        <!-- password error -->
+                        <span *ngIf="errorMessagePassword" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
+                            {{ 'register.passwordsNotMatch' | translate }}
+                        </span>
+                        <!-- email error -->
                         <span *ngIf="errorMessage" class="help-block-login-error">
                             <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
                             {{ 'register.emailRegistered' | translate }}

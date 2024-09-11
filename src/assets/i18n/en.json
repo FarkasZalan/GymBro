@@ -91,6 +91,11 @@
       "creationSuccessfull": "Creation Successful!"
    },
    "profilePage": {
-      "profile": "Profile"
+      "profile": "Profile",
+      "dataChange": "Change Profile Data",
+      "modify": "Modify",
+      "newPassword": "New password",
+      "newPasswordAgain": "New password again",
+      "cancel": "Cancel"
    }
 }

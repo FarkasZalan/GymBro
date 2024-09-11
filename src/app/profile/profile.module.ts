@@ -12,6 +12,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { ProfileListComponent } from './profile-list/profile-list.component';
 import { ProfileRoutingModule } from './profile-routing.module';
+import { ChangeProfileComponent } from './profile-list/change-profile/change-profile.component';
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import { ProfileRoutingModule } from './profile-routing.module';
         TranslateModule
     ],
     declarations: [
-        ProfileListComponent
+        ProfileListComponent,
+        ChangeProfileComponent
     ],
 })
 export class ProfileModule {

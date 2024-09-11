@@ -1,0 +1,95 @@
+<!-- Change Data title -->
+<h1 id="title" class="title">{{ 'profilePage.dataChange' | translate }}</h1>
+<!-- Change Data form -->
+<div class="container">
+    <nb-card>
+        <nb-card-body class="login-col">
+
+            <div class="row">
+                <div class="col">
+                    <form (ngSubmit)="changeData()" #form="ngForm">
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- First Name block -->
+                                <div class="form-group">
+                                    <label for="firstName" class="label">{{ 'register.firstName' | translate }}</label>
+                                    <input type="text" class="form-control" name="firstName" minlength="1" required
+                                        placeholder="{{ 'register.firstName' | translate }}*" #firstName="ngModel"
+                                        [(ngModel)]="modifyUser.firstName">
+                                    <span class="help-block" *ngIf="firstName.touched && !firstName.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <!-- Last Name block -->
+                                <div class="form-group">
+                                    <label for="lastName" class="label">{{ 'register.lastName' | translate }}</label>
+                                    <input type="text" class="form-control" ngModel name="lastName" minlength="1"
+                                        required placeholder="{{ 'register.lastName' | translate }}*"
+                                        #lastName="ngModel" [(ngModel)]="modifyUser.lastName">
+                                    <span class="help-block" *ngIf="lastName.touched && !lastName.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- Phone block -->
+                                <div class="form-group">
+                                    <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
+                                    <input type="tel" class="form-control" ngModel name="phone" required
+                                        placeholder="{{ 'register.phone' | translate }}*" #phone="ngModel"
+                                        [(ngModel)]="modifyUser.phone">
+                                    <span class="help-block" *ngIf="phone.touched && !phone.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Password -->
+                        <div class="password-info">
+                            <div class="form-group">
+                                <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
+                                <input type="password" class="form-control" name="password" minlength="6" ngModel
+                                    placeholder="{{ 'profilePage.newPassword' | translate }}" #passwordFirst="ngModel">
+                                <span class="help-block" *ngIf="passwordFirst.touched && !passwordFirst.valid">{{
+                                    'loginPage.invalidPassword' | translate }}</span>
+                            </div>
+                        </div>
+                        <!-- Password again Section -->
+                        <div class="password-info">
+                            <div class="form-group">
+                                <label for="passwordAgain" class="label">{{ 'register.passwordAgain' | translate
+                                    }}</label>
+                                <input type="password" class="form-control" ngModel name="passwordAgain" minlength="6"
+                                    placeholder="{{ 'profilePage.newPasswordAgain' | translate }}*"
+                                    #passwordAgain="ngModel">
+                                <span class="help-block" *ngIf="passwordAgain.touched && !passwordAgain.valid">{{
+                                    'loginPage.invalidPassword' | translate }}</span>
+                            </div>
+                        </div>
+                        <!-- modify error -->
+                        <span *ngIf="errorMessage" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
+                            {{ 'register.passwordsNotMatch' | translate }}
+                        </span><br>
+                        <!-- Change Data submit button -->
+                        <div class="login-button-container">
+                            <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
+                                [disabled]="!form.valid && (passwordAgain.pa)">{{
+                                'profilePage.modify' | translate }}</button>
+                        </div>
+
+                        <!-- back button -->
+                        <div class="login-button-container">
+                            <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success"
+                                (click)="goToBack()">
+                                <span class="arrow">&#9664;</span>
+                                {{ 'profilePage.cancel' | translate }}</button>
+                        </div>
+                    </form><br>
+                </div>
+            </div>
+
+        </nb-card-body>
+    </nb-card>
+</div>
