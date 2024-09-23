@@ -78,15 +78,14 @@
                                 [disabled]="!form.valid && (passwordAgain.pa)">{{
                                 'profilePage.modify' | translate }}</button>
                         </div>
-
-                        <!-- back button -->
-                        <div class="login-button-container">
-                            <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success"
-                                (click)="goToBack()">
-                                <span class="arrow">&#9664;</span>
-                                {{ 'profilePage.cancel' | translate }}</button>
-                        </div>
-                    </form><br>
+                    </form>
+                    <!-- back button -->
+                    <div class="login-button-container">
+                        <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success"
+                            (click)="goToBack()">
+                            <span class="arrow">&#9664;</span>
+                            {{ 'profilePage.cancel' | translate }}</button>
+                    </div><br>
                 </div>
             </div>
 

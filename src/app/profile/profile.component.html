@@ -1,0 +1,75 @@
+<!-- profile details -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
+                {{ 'profileMenu.prodilDetails' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedProfileDetails">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
+            <app-profile-list></app-profile-list>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- shipping addresses -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedShippingAddress()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedShippingAddress, 'left': !isCollapsedShippingAddress}">
+                {{ 'profileMenu.shippingAddresses' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedShippingAddress">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedShippingAddress">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedShippingAddress" [@collapseComponent] class="collapse-container">
+            <app-profile-shipping-address></app-profile-shipping-address>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- payement methods -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedPayemenetMethods()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedPayemenetMethods, 'left': !isCollapsedPayemenetMethods}">
+                {{ 'profileMenu.payementMethods' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedPayemenetMethods">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedPayemenetMethods">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedPayemenetMethods" [@collapseComponent] class="collapse-container">
+            <app-profile-payement-methods></app-profile-payement-methods>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- loyality program -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedLoyaltyProgram()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedLoyaltyProgram, 'left': !isCollapsedLoyaltyProgram}">
+                {{ 'profileMenu.loyaltyProgram' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedLoyaltyProgram">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedLoyaltyProgram">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedLoyaltyProgram" [@collapseComponent] class="collapse-container">
+            <app-profile-loyalty-program></app-profile-loyalty-program>
+        </div>
+    </nb-card-body>
+</nb-card>

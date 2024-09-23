@@ -97,5 +97,11 @@
                 "newPassword": "Új Jelszó",
                 "newPasswordAgain": "Új Jelszó újra",
                 "cancel": "Mégse"
+        },
+        "profileMenu": {
+                "prodilDetails": "Profil adatok",
+                "shippingAddresses": "Szállítási cím",
+                "payementMethods": "Fizetési módok",
+                "loyaltyProgram": "Hűségprogram"
         }
 }

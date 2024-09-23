@@ -8,12 +8,13 @@ import { User } from '../../user/user.model';
 @Component({
   selector: 'app-profile-list',
   templateUrl: './profile-list.component.html',
-  styleUrl: '../../../styles/basic-form.scss'
+  styleUrl: '../../../styles/basic-form.scss',
 })
 export class ProfileListComponent implements OnInit {
 
   user: User;
   userId: string = "";
+  isCollapsed = true;
 
   constructor(private dialog: MatDialog,
     private auth: AngularFireAuth,
@@ -38,5 +39,4 @@ export class ProfileListComponent implements OnInit {
       }
     });
   }
-
 }

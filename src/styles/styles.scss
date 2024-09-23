@@ -214,3 +214,68 @@ a .logo {
 nb-sidebar {
     font-size: 15px !important;
 }
+
+.back-btn {
+    position: relative;
+    /* Ensure the button is the reference point for positioning */
+    padding-left: 40px !important;
+
+    background-color: white;
+    color: #0b8e92;
+    border-radius: 10px;
+    font-size: 14px;
+    border-color: #0b8e92;
+    border-style: solid;
+    border-width: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    &:hover {
+        background-color: #0b8e92;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    &:active {
+        background-color: darken(#0b8e92, 15%);
+        transform: scale(0.98);
+    }
+}
+
+.arrow {
+    position: absolute;
+    /* Position the arrow absolutely within the button */
+    left: 10px;
+    /* Adjust as needed to position the arrow */
+
+    /* Center vertically */
+    transform: translateY(-50%);
+    /* Adjust vertical centering */
+    color: #0b8e92;
+    /* Set the color of the arrow */
+    font-size: 18px;
+    /* Adjust size as needed */
+    animation: arrowLift 3s ease-in-out infinite;
+}
+
+.back-btn:hover .arrow {
+    color: white !important;
+}
+
+@keyframes arrowLift {
+
+    0%,
+    100% {
+        transform: translateX(-2px);
+    }
+
+    50% {
+        transform: translateX(2px);
+    }
+}

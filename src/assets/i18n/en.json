@@ -97,5 +97,11 @@
       "newPassword": "New password",
       "newPasswordAgain": "New password again",
       "cancel": "Cancel"
+   },
+   "profileMenu": {
+      "prodilDetails": "Account details",
+      "shippingAddresses": "Shipping address",
+      "payementMethods": "Payment methods",
+      "loyaltyProgram": "Loyalty program"
    }
 }

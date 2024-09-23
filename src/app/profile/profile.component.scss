@@ -1,0 +1,108 @@
+.container-collapse-component {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 16px;
+
+
+    nb-card-body {
+        padding: 16px;
+    }
+}
+
+.header-collapse-component {
+    display: flex;
+    justify-content: center;
+    /* Center initially */
+    align-items: center;
+    cursor: pointer;
+
+    h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: #333;
+        flex-grow: 1;
+    }
+
+    .toggle-button-collapse-component {
+        background-color: white;
+        color: #0b8e92;
+        border-radius: 10px;
+        font-size: 20px;
+        border: none;
+        text-transform: uppercase;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}
+
+.title {
+    transition: transform 250ms ease;
+    overflow: hidden;
+
+    &.center {
+        font-size: 30px;
+        transform: translateX(46%); // Start from center
+    }
+
+    &.left {
+        font-size: 24px;
+        transform: translateX(0); // Move to left
+    }
+}
+
+.arrow {
+    /* Center vertically */
+    transform: translateY(-50%);
+    /* Adjust vertical centering */
+    color: #0b8e92;
+    /* Set the color of the arrow */
+    font-size: 23px;
+    /* Adjust size as needed */
+    animation: arrowLift 3s ease-in-out infinite;
+}
+
+@keyframes arrowLift {
+
+    0%,
+    100% {
+        transform: translateY(-50%) translateY(-2px);
+        /* Move up */
+    }
+
+    50% {
+        transform: translateY(-50%) translateY(2px);
+        /* Move down */
+    }
+}
+
+.collapse-container {
+    padding: 16px;
+    background-color: white;
+    border-top: 1px solid #0b8e92;
+}
+
+nb-card-body {
+    overflow: hidden !important;
+}
+
+@media (max-width: 768px) {
+    h2 {
+        transform: translateX(0) !important;
+        /* Adjust translate for smaller screens */
+    }
+}
+
+@media (max-width: 1500px) {
+    .title {
+        transition: transform 250ms ease;
+        overflow: hidden;
+
+        &.left {
+            transform: translateX(0); // Start from left
+        }
+
+        &.center {
+            transform: translateX(43%); // Move to center
+        }
+    }
+}

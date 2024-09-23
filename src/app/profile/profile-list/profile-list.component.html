@@ -1,23 +1,18 @@
-<!-- Profile title -->
-
-<!-- kellene egy mini felső menü majd ahol gombok segítségével lehetne navigálni a profil, rendelések, rendelési címek hűségprogramok között -->
-<h1 id="title" class="title">{{ 'profilePage.profile' | translate }}</h1>
-
 <div class="container-profile">
+    <!-- Profile page -->
     <nb-card>
-        <nb-card-body class="login-col">
-
+        <nb-card-body class="no-border-container">
             <div class="row">
-                <div class="col">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <!-- First Name block -->
                             <div class="form-group">
                                 <label for="firstName" class="label">{{ 'register.firstName' | translate }}</label>
                                 <p>{{ user.firstName }}</p>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <!-- Last Name block -->
                             <div class="form-group">
                                 <label for="lastName" class="label">{{ 'register.lastName' | translate }}</label>
@@ -26,14 +21,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <!-- Email block -->
                             <div class="form-group">
                                 <label for="email" class="label">{{ 'loginPage.email' | translate }}</label>
                                 <p>{{ user.email }}</p>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <!-- Phone block -->
                             <div class="form-group">
                                 <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
@@ -44,12 +39,10 @@
                     <!-- data change button -->
                     <div class="login-button-container">
                         <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
-                            (click)="goToChangeData()">{{
-                            'profilePage.dataChange' | translate }}</button>
+                            (click)="goToChangeData()">{{ 'profilePage.dataChange' | translate }}</button>
                     </div>
                 </div>
             </div>
-
         </nb-card-body>
     </nb-card>
 </div>

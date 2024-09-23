@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -22,20 +23,6 @@ export class DocumentHandlerService {
         deleted: true
       });
     } catch { }
-  }
-
-  async updateDocument(collection: string, documentId: string) {
-    return new Promise<boolean>((resolve, reject) => {
-      let updatedDocument = null
-      this.getDocumentByID(collection, documentId).subscribe((document) => {
-        updatedDocument = document;
-        this.db.collection(collection).doc(documentId).set(updatedDocument).then(() => {
-          resolve(true);
-        }).catch(() => {
-          resolve(false);
-        });
-      });
-    });
   }
 
   makeUpperCaseUserName(name: string) {

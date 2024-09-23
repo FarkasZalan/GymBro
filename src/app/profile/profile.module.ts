@@ -7,12 +7,17 @@ import {
     NbButtonModule,
     NbCardModule,
     NbCheckboxModule,
-    NbInputModule
+    NbInputModule,
+    NbMenuModule
 } from '@nebular/theme';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProfileListComponent } from './profile-list/profile-list.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ChangeProfileComponent } from './profile-list/change-profile/change-profile.component';
+import { ProfileShippingAddressComponent } from './profile-shipping-address/profile-shipping-address.component';
+import { ProfileComponent } from './/profile.component';
+import { ProfilePayementMethodsComponent } from './profile-payement-methods/profile-payement-methods.component';
+import { ProfileLoyaltyProgramComponent } from './profile-loyalty-program/profile-loyalty-program.component';
 
 @NgModule({
     imports: [
@@ -20,6 +25,7 @@ import { ChangeProfileComponent } from './profile-list/change-profile/change-pro
         FormsModule,
         RouterModule,
         NbCardModule,
+        NbMenuModule,
         NbInputModule,
         NbButtonModule,
         NbCheckboxModule,
@@ -29,7 +35,11 @@ import { ChangeProfileComponent } from './profile-list/change-profile/change-pro
     ],
     declarations: [
         ProfileListComponent,
-        ChangeProfileComponent
+        ChangeProfileComponent,
+        ProfileShippingAddressComponent,
+        ProfileComponent,
+        ProfilePayementMethodsComponent,
+        ProfileLoyaltyProgramComponent
     ],
 })
 export class ProfileModule {
