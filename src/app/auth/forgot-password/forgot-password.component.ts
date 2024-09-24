@@ -11,24 +11,31 @@ import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialo
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent {
-  @ViewChild('form') loginForm: NgForm;
+  @ViewChild('form') loginForm: NgForm;  // Reference to the form for validation
+
+  // error handleing
   public errorMessage = false;
+
   emailToForgotPassword: string;
   emailSent = false;
 
   constructor(private authService: AuthService, @Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>) {
-    this.emailToForgotPassword = data.email;
+    this.emailToForgotPassword = data.email; // Initialize email from injected data
   }
 
+  // Method to initiate password recovery
   forgotPassword() {
     this.emailToForgotPassword = this.loginForm.value.email;
 
+    // send the password recovry email to the given email
     this.authService.forgotPassword(this.emailToForgotPassword)
       .then(success => {
         console.log(success)
         if (success) {
           this.errorMessage = false;
           this.dialog.closeAll();
+
+          // Open success dialog to inform user
           this.dialog.open(SuccessfullDialogComponent, {
             data: {
               text: SuccessFullDialogText.PASSWORD_EMAIL_SENT,
@@ -41,6 +48,7 @@ export class ForgotPasswordComponent {
       });
   }
 
+  // Close all dialogs
   back() {
     this.dialog.closeAll();
   }

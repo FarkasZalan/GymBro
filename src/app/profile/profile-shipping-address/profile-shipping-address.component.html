@@ -1,5 +1,5 @@
-<div class="list-container">
-    <!-- Shipping addresses page -->
+<!-- If no shipping addresses are present, display the empty card -->
+<div *ngIf="shippingAddresses.length === 0" class="empty-list-container">
     <nb-card class="rounded-card emptyCard">
         <nb-card-body>
             <div>
@@ -9,6 +9,33 @@
         </nb-card-body>
     </nb-card>
 </div>
+
+<!-- Display each shipping address as an nb-card when addresses are available -->
+<div class="list-container">
+    <nb-card *ngFor="let address of shippingAddresses" class="rounded-card addressCard">
+        <nb-card-header class="card-header">
+            <strong class="default-label">{{ address.addressName }}</strong>
+            <span *ngIf="address.isSetAsDefaultAddress">{{
+                'profileMenu.shippingAddressForm.defaultShippingAddress' | translate }}</span>
+        </nb-card-header>
+        <nb-card-body class="address-details">
+            <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
+            <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }} </p>
+            <p>{{ address.city }}, {{ address.postalCode }}</p>
+            <p>{{ address.country }}</p>
+
+            <!-- Display companyName and taxNumber only if they exist -->
+            <p *ngIf="address.companyName">
+                <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong> {{ address.companyName
+                }}
+            </p>
+            <p *ngIf="address.taxNumber">
+                <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong> {{ address.taxNumber }}
+            </p>
+        </nb-card-body>
+    </nb-card>
+</div>
+
 <!-- open new address button -->
 <div class="login-button-container">
     <button class="btn btn-primary basic-btn" type="submit" nbButton status="success" (click)="goToAddNewAddress()">{{

@@ -4,19 +4,22 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-pages',
-  templateUrl: './pages.component.html',
-  styleUrls: ['./pages.component.scss']
+  templateUrl: './pages.component.html'
 })
 export class PagesComponent {
+  // Translated menu items that will be displayed in the component
   translatedMenu: NbMenuItem[];
 
   constructor(private translate: TranslateService) {
+    // Subscribe to language change events to re-translate menu items
     this.translate.onLangChange.subscribe(() => {
       this.translateMenu();
     });
+    // Initial translation of menu items
     this.translateMenu();
   }
 
+  // Function to translate menu items based on the current language
   private translateMenu() {
     this.translatedMenu = [
 

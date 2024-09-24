@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -12,43 +11,47 @@ import { ForgotPasswordComponent } from '../forgot-password/forgot-password.comp
   styleUrl: '../../../styles/basic-form.scss'
 })
 export class LoginComponent {
-  @ViewChild('form') loginForm: NgForm;
-  private authService: AuthService;
-  private router: Router;
+  @ViewChild('form') loginForm: NgForm; // Reference to the login form for validation
+
+  // user data
   email = "";
   password = "";
+
+  // Flag for displaying login error
   public errorMessage = false;
 
-  constructor(authService: AuthService, router: Router, private dialog: MatDialog) {
-    this.authService = authService;
-    this.router = router;
-  }
+  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) { }
 
+  // Method to handle user login
   login() {
     this.email = this.loginForm.value.email;
     this.password = this.loginForm.value.password;
+
+    // Authenticate user
     this.authService.login(this.email, this.password)
       .then(success => {
         if (success) {
           this.errorMessage = false;
           this.router.navigate(['/']);
-          console.log("a")
         } else {
-          this.errorMessage = true;
+          this.errorMessage = true; // Show error message on failure
         }
       });
   }
+
+  // Navigate to registration page
   goToRegister() {
     this.router.navigate(['/auth/register']);
   }
 
   goToItems() {
     this.router.navigate(['/']);
-    console.log("b")
   }
 
   forgotPassword() {
     this.email = this.loginForm.value.email;
+
+    // Pass the email to the dialog for password recovery
     this.dialog.open(ForgotPasswordComponent, {
       data: {
         email: this.email

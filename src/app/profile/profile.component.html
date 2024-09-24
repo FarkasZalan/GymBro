@@ -17,6 +17,25 @@
     </nb-card-body>
 </nb-card>
 
+<!-- orders -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">
+                {{ 'profileMenu.orders' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedOrders">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedOrders">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
+            <app-profile-orders></app-profile-orders>
+        </div>
+    </nb-card-body>
+</nb-card>
+
 <!-- shipping addresses -->
 <nb-card class="container-collapse-component">
     <nb-card-body>

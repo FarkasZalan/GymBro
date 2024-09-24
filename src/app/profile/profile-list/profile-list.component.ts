@@ -4,6 +4,7 @@ import { ChangeProfileComponent } from './change-profile/change-profile.componen
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../user/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-list',
@@ -11,14 +12,16 @@ import { User } from '../../user/user.model';
   styleUrl: '../../../styles/basic-form.scss',
 })
 export class ProfileListComponent implements OnInit {
-
+  // display user details
   user: User;
+
+  // add to the change details dialog
   userId: string = "";
-  isCollapsed = true;
 
   constructor(private dialog: MatDialog,
     private auth: AngularFireAuth,
-    private authService: AuthService,) { }
+    private authService: AuthService,
+    private router: Router) { }
 
   ngOnInit(): void {
     //load the current user
@@ -27,11 +30,19 @@ export class ProfileListComponent implements OnInit {
         this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
           this.user = currentUser;
           this.userId = this.user.id;
+
+          // if no user logged-in then redirect to home page
+          if (this.userId === null) {
+            this.authService.logOut();
+            this.dialog.closeAll();
+            this.router.navigate(['/home']);
+          }
         })
       }
     })
   }
 
+  // open the change profile dialog
   goToChangeData() {
     this.dialog.open(ChangeProfileComponent, {
       data: {

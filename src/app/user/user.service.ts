@@ -9,6 +9,7 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 export class UserService {
     constructor(private db: AngularFirestore, private auth: AngularFireAuth) { }
 
+    // Method to update user information in Firestore
     updateUser(user: User) {
         return new Promise<boolean>((resolve, reject) => {
             this.db.collection("users").doc(user.id).set({
@@ -19,6 +20,7 @@ export class UserService {
                 phone: user.phone,
                 deleted: false
             }).then(() => {
+                // Resolve the promise to indicate successful update
                 resolve(true);
             }).catch(() => {
                 resolve(false);
@@ -27,10 +29,10 @@ export class UserService {
     }
 
     async updatePassword(newPassword: string) {
+        // Get the current authenticated user
         this.auth.currentUser
             .then((user) => {
                 if (user) {
-                    console.log(user)
                     return user.updatePassword(newPassword) // Update password
                 }
             })

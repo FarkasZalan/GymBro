@@ -100,10 +100,37 @@
    },
    "profileMenu": {
       "prodilDetails": "Account details",
+      "orders": "Order history",
       "shippingAddresses": "Shipping address",
       "payementMethods": "Payment methods",
       "loyaltyProgram": "Loyalty program",
       "addNewShippingAddress": "Add new address",
-      "noAddresses": "There is not a single saved address!"
+      "noAddresses": "There is not a single saved address!",
+      "shippingAddressForm": {
+         "newAddressTitle": "Add new address",
+         "addressName": "Address type and name",
+         "country": "Country",
+         "postalCode": "Postal code",
+         "city": "City",
+         "streetName": "Street name",
+         "streetType": "Street type",
+         "houseNumber": "House number",
+         "floor": "Floor",
+         "fieldIncorrect": "Wrong value",
+         "door": "Door",
+         "setToDefault": "Set as default",
+         "setAsCompanyAddress": "Business customer",
+         "companyName": "Company name",
+         "taxNumber": "Tax number",
+         "addAddress": "Add address",
+         "nameAlreadyExists": "Already have an address with this name",
+         "changeDefaultAddressTitle": "Do you want to change this to your default address?",
+         "changeDefaultAddressConfirm": "Change",
+         "defaultShippingAddress": " (Default)",
+         "addressNameDescription": "Add labels to the shipping addresses \nto make it easier to choose between them!",
+         "missingAddressNameError": "The address type is required!",
+         "home": "Home",
+         "work": "Work"
+      }
    }
 }

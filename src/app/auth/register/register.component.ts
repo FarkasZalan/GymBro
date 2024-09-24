@@ -6,6 +6,7 @@ import { AuthService } from '../auth.service';
 import { User } from '../../user/user.model';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
+import { DocumentHandlerService } from '../../document.handler.service';
 
 @Component({
   selector: 'app-register',
@@ -13,39 +14,52 @@ import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialo
   styleUrl: '../../../styles/basic-form.scss'
 })
 export class RegisterComponent {
-  @ViewChild('form') createUserForm: NgForm;
+  @ViewChild('form') createUserForm: NgForm;  // Access the form for validation
   newUser: User;
   password: string = "";
   passwordAgain: string = "";
+
+  // error handleing
   public errorMessage = false;
   errorMessagePassword: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) { }
+  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog, private documentHandler: DocumentHandlerService) { }
 
+  // Method to handle user registration
   register() {
     this.password = this.createUserForm.value.password;
     this.passwordAgain = this.createUserForm.value.passwordAgain;
 
+    // Check if passwords match
     if (this.password !== this.passwordAgain) {
       this.errorMessagePassword = true;
     } else {
       this.errorMessagePassword = false;
+
+      // Construct new user object
       this.newUser = {
         id: "",
-        firstName: this.createUserForm.value.firstName,
-        lastName: this.createUserForm.value.lastName,
+        firstName: this.documentHandler.makeUpperCaseUserName(this.createUserForm.value.firstName),
+        lastName: this.documentHandler.makeUpperCaseUserName(this.createUserForm.value.lastName),
         email: this.createUserForm.value.email,
         phone: this.createUserForm.value.phone,
         deleted: false
       }
       this.password = this.createUserForm.value.password;
+
+      // Register the user
       this.authService.register(this.newUser.email,
-        this.newUser.firstName, this.newUser.lastName, this.newUser.phone, this.password
+        this.newUser.firstName,
+        this.newUser.lastName,
+        this.newUser.phone,
+        this.password
       ).then((resolve) => {
         if (resolve) {
           this.authService.logOut();
           this.errorMessage = false;
           this.errorMessagePassword = false;
+
+          // Open dialog to notify user about email verification
           this.dialog.open(SuccessfullDialogComponent, {
             data: {
               text: SuccessFullDialogText.VERRIFY_EMAIL_SENT,
@@ -62,6 +76,8 @@ export class RegisterComponent {
       })
     }
   }
+
+  // Navigate to login page
   goToLogin() {
     this.router.navigate(['/auth/login']);
   }

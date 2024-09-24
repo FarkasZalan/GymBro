@@ -1,15 +1,19 @@
 <div class="header-container">
     <!-- Left Side Elements -->
     <div class="logo-container">
+        <!-- Sidebar toggle button -->
         <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
-            <nb-icon icon="menu-2-outline"></nb-icon>
+            <nb-icon icon="menu-2-outline"></nb-icon> <!-- Icon for menu toggle -->
         </a>
+
+        <!-- Logo that navigates to home when clicked -->
         <a class="logo" (click)="navigateHome()"><img src="../../../assets/images/gym-bro-logo.png" alt="GymBro"
                 class="logoImage"></a>
     </div>
 
     <!-- Right Side Elements -->
     <div class="header-container-right">
+        <!-- User information displayed if logged in -->
         <div *ngIf="userLoggedIn" class="header-container-user">
             <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
                 nbContextMenuTag="header-menu">
@@ -23,10 +27,12 @@
             </button>
         </div>
 
+        <!-- Login icon displayed if user is not logged in -->
         <div *ngIf="!userLoggedIn" class="header-container-user">
             <i (click)="navigateToLogin()" class="material-icons login-icon">login</i>
         </div>
 
+        <!-- Button to switch language -->
         <div class="header-container-user">
             <button (click)="switchLanguage()" class="languageswitch-btn">{{ languageSwithButtonText.toUpperCase()
                 }}</button>

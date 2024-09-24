@@ -1,0 +1,59 @@
+.buttons {
+    display: block;
+    text-align: center;
+}
+
+.buttons button {
+    border: none;
+    background-size: cover;
+    border-radius: 10px;
+}
+
+.btn-logout {
+    background-color: #e35757 !important;
+    color: white !important;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 50px;
+    min-width: 120px;
+
+}
+
+.btn-logout:hover {
+    background-color: #df1313 !important;
+}
+
+.btn-logout:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.btn-cancel {
+    background-color: #0b8e92 !important;
+    color: white !important;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 50px;
+    width: 120px;
+}
+
+.btn-cancel:hover {
+    background-color: #15b2b8 !important;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+.buttons button:focus {
+    outline: none;
+}
+
+.title {
+    margin: 20px;
+    font-size: 28px !important;
+}
+
+.container:focus {
+    outline: none;
+}

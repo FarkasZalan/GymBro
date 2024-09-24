@@ -5,9 +5,12 @@ export interface ShippingAddress {
     postalCode: string;
     city: string;
     street: string;
+    streetType: string;
     houseNumber: string;
     floor?: number;
     door?: number;
-    isSetToDefaultAddress: boolean;
+    isSetAsDefaultAddress: boolean;
+    companyName?: string;
+    taxNumber?: string;
     deleted: boolean;
 }

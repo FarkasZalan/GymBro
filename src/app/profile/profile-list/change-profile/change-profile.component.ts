@@ -20,21 +20,26 @@ export class ChangeProfileComponent {
   modifyUser: User;
   password: string;
   passwordAgain: string;
+
+  // for error handleing
   errorMessage: boolean = false;
 
-  constructor(private authService: AuthService,
-    private router: Router,
+  constructor(
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data,
     private documentumHandler: DocumentHandlerService,
-    private userService: UserService) {
+    private userService: UserService
+  ) {
     this.modifyUserId = data.userId;
+
+    // Fetch user details by ID when the component initializes
     this.documentumHandler.getDocumentByID("users", this.modifyUserId).subscribe((user: User) => {
       this.modifyUser = user;
     });
   }
 
   async changeData() {
+    // Retrieve password and confirmation from the form
     this.password = this.modifyUserForm.value.password;
     this.passwordAgain = this.modifyUserForm.value.passwordAgain;
 
@@ -42,10 +47,12 @@ export class ChangeProfileComponent {
       this.errorMessage = true;
     }
 
+    // Update password in the backend if valid
     if (this.password !== "" && this.password !== null && this.password === this.passwordAgain) {
       await this.userService.updatePassword(this.password);
     }
 
+    // Create an updated user object
     this.modifyUser = {
       id: this.modifyUserId,
       firstName: this.modifyUserForm.value.firstName,
@@ -55,10 +62,13 @@ export class ChangeProfileComponent {
       deleted: false
     }
 
+    // Update user details and handle response
     this.userService.updateUser(this.modifyUser).then((modified) => {
       if (modified) {
         this.errorMessage = false;
         this.goToBack();
+
+        // Open success dialog with a message
         this.dialog.open(SuccessfullDialogComponent, {
           data: {
             text: SuccessFullDialogText.MODIFIED_TEXT,

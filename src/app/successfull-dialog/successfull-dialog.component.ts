@@ -11,7 +11,10 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SuccessfullDialogComponent {
 
+  // e.g., email sent, modification, etc.
   operation: string = "";
+
+  // Text to display on the UI
   text: string = "";
   buttonText: string = "";
 
@@ -21,12 +24,15 @@ export class SuccessfullDialogComponent {
 
   ngOnInit(): void {
     this.operation = this.data.text;
+
+    // Subscribe to language change events to re-translate dialog text
     this.translate.onLangChange.subscribe(() => {
       this.translateText();
     });
     this.translateText();
   }
 
+  // Method to translate dialog text based on the operation type
   translateText() {
     if (this.operation === SuccessFullDialogText.PASSWORD_EMAIL_SENT) {
       this.text = this.translate.instant("succesfullDialog.passwordEmailSent");
@@ -34,7 +40,6 @@ export class SuccessfullDialogComponent {
     }
     if (this.operation === SuccessFullDialogText.VERRIFY_EMAIL_SENT) {
       this.text = this.translate.instant("succesfullDialog.verrifyEmail");
-      console.log(this.text)
       this.buttonText = this.translate.instant("succesfullDialog.backToLogin");
     }
     if (this.operation === SuccessFullDialogText.MODIFIED_TEXT) {
@@ -51,6 +56,7 @@ export class SuccessfullDialogComponent {
     }
   }
 
+  // Method to hide the dialog and optionally navigate back to the previous page
   hideDialog() {
     this.dialog.closeAll();
     if (this.data.needToGoPrevoiusPage === true) {

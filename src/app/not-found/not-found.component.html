@@ -1,13 +1,21 @@
 <div class="not-found-container">
   <div class="not-found-content">
     <div class="animation-wrapper">
+      <!-- Left dumbbell image for visual representation -->
       <img src="../../assets/images/dumbel.png" alt="Dumbbell" class="dumbbell dumbbell-left">
+
       <div class="error-code-container">
+        <!-- Displaying the error code -->
         <h1 class="error-code">404</h1>
+        <!-- Translating the not found text message -->
         <p class="error-message">{{ 'notFoundPage.notFoundText' | translate }}</p>
       </div>
+
+      <!-- Right dumbbell image for visual representation -->
       <img src="../../assets/images/dumbel.png" alt="Dumbbell" class="dumbbell dumbbell-right">
     </div>
+
+    <!-- Button to navigate back to the home page -->
     <button class="home-button" (click)="goToHome()">
       <span class="arrow">&#9664;</span>
       {{ 'notFoundPage.backTohome' | translate }}</button>

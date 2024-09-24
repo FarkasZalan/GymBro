@@ -3,8 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
   title = 'GymBro';
@@ -13,6 +12,7 @@ export class AppComponent {
   constructor(public translate: TranslateService) { }
 
   ngOnInit(): void {
+    // Get the browser default language and translate the app
     this.language = this.getBrowserLanguage();
     if (this.language !== 'hu' && this.language !== 'en') {
       this.language = 'en';

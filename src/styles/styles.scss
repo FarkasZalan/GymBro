@@ -43,6 +43,7 @@ nb-layout-footer nav {
 /* On mouse-over, add a grey background color */
 .checkbox-container:hover input~.checkmark {
     background-color: #ccc;
+    cursor: pointer !important;
 }
 
 /* When the checkbox is checked, add a blue background */

@@ -6,7 +6,7 @@ import { NotFoundComponent } from '../not-found/not-found.component';
 
 const routes: Routes = [{
   path: '',
-  component: PagesComponent,
+  component: PagesComponent, // Main component for the Pages module
   children: [
     {
       path: 'home',

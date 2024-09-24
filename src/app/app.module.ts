@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { NbSidebarModule, NbMenuModule, NbDatepickerModule, NbDialogModule, NbWindowModule, NbThemeModule } from '@nebular/theme';
+import { NbSidebarModule, NbMenuModule, NbDatepickerModule, NbDialogModule, NbWindowModule, NbThemeModule, NbIconModule } from '@nebular/theme';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -19,6 +19,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 
+// Factory function to create an instance of TranslateHttpLoader
+// This loader will be used to fetch translation files over HTTP using the provided HttpClient.
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
 }
@@ -34,10 +36,12 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     // Nebular theme modules for menu
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
+    // For the page design
     NbDatepickerModule.forRoot(),
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbThemeModule.forRoot(),
+    NbIconModule,
     MatIconModule,
     ReactiveFormsModule,
     // Firebase

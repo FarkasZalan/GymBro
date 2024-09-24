@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
           this.user = currentUser;
         })
       } else {
-        this.userLoggedIn = false;
+        this.userLoggedIn = false; // User is logged out
       }
     })
 
@@ -62,6 +62,7 @@ export class HeaderComponent implements OnInit {
     //this is for the first time when we need to load in the items based on the default language
     this.translateMenu();
 
+    // Handle menu item clicks
     this.menuService.onItemClick()
       .pipe(
         //the 'header-menu' tag is for the html to the nbContextMenuTag, this is a click listener for this menu
@@ -83,6 +84,7 @@ export class HeaderComponent implements OnInit {
     ];
   }
 
+  // Toggle between languages
   switchLanguage() {
     if (this.language === 'en') {
       this.language = 'hu';
@@ -95,7 +97,7 @@ export class HeaderComponent implements OnInit {
     this.appComponent.switchLanguage(this.language);
   }
 
-  //hamburger icon
+  // Toggle the sidebar visibility
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
 
@@ -112,7 +114,7 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/auth']);
   }
 
-  //display dialog when click log out in the header
+  // Open logout confirmation dialog
   logOut() {
     this.dialog.open(LogOutComponent);
   }

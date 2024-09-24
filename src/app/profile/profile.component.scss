@@ -40,12 +40,12 @@
     overflow: hidden;
 
     &.center {
-        font-size: 30px;
+        font-size: 22px !important;
         transform: translateX(46%); // Start from center
     }
 
     &.left {
-        font-size: 24px;
+        font-size: 20px !important;
         transform: translateX(0); // Move to left
     }
 }

@@ -12,7 +12,7 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module')
-      .then(m => m.AuthModule),
+      .then(m => m.AuthModule), // Ensures only authenticated users can access this route
   },
   {
     path: 'profile',
@@ -21,6 +21,8 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'pages', pathMatch: 'full' },
+
+  // Catch-all route for undefined paths, shows NotFoundComponent
   {
     path: '**',
     component: NotFoundComponent,
@@ -28,8 +30,8 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes)], // Configures the router with the defined routes
+  exports: [RouterModule], // Exports RouterModule to make it available in the application
 })
 export class AppRoutingModule {
 }

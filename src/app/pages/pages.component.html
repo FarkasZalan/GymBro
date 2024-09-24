@@ -1,16 +1,20 @@
 <nb-layout windowMode>
+    <!-- display app header bar -->
     <nb-layout-header fixed>
         <app-header></app-header>
     </nb-layout-header>
 
+    <!-- display menubar on the left side -->
     <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
         <nb-menu [items]="translatedMenu"></nb-menu>
     </nb-sidebar>
 
+    <!-- display the application body -->
     <nb-layout-column>
         <router-outlet></router-outlet>
     </nb-layout-column>
 
+    <!-- display footer with 2 social icons -->
     <nb-layout-footer>
         <app-footer class="footer"></app-footer>
         <div class="social-icons">

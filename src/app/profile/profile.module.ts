@@ -7,9 +7,12 @@ import {
     NbButtonModule,
     NbCardModule,
     NbCheckboxModule,
+    NbIconModule,
     NbInputModule,
     NbMenuModule
 } from '@nebular/theme';
+
+// Importing profile components for the Profile module
 import { TranslateModule } from '@ngx-translate/core';
 import { ProfileListComponent } from './profile-list/profile-list.component';
 import { ProfileRoutingModule } from './profile-routing.module';
@@ -18,6 +21,9 @@ import { ProfileShippingAddressComponent } from './profile-shipping-address/prof
 import { ProfileComponent } from './/profile.component';
 import { ProfilePayementMethodsComponent } from './profile-payement-methods/profile-payement-methods.component';
 import { ProfileLoyaltyProgramComponent } from './profile-loyalty-program/profile-loyalty-program.component';
+import { ProfileOrdersComponent } from './profile-orders/profile-orders.component';
+import { CreateShippingAddressComponent } from './profile-shipping-address/create-shipping-address/create-shipping-address.component';
+import { ChangeDefaultAddressConfirmDialogComponent } from './profile-shipping-address/change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
 
 @NgModule({
     imports: [
@@ -29,18 +35,23 @@ import { ProfileLoyaltyProgramComponent } from './profile-loyalty-program/profil
         NbInputModule,
         NbButtonModule,
         NbCheckboxModule,
+        NbIconModule,
         ReactiveFormsModule,
         ProfileRoutingModule,
         NbAuthModule,
         TranslateModule
     ],
     declarations: [
+        // Declaring components that belong to the Profile module
         ProfileListComponent,
         ChangeProfileComponent,
         ProfileShippingAddressComponent,
         ProfileComponent,
         ProfilePayementMethodsComponent,
-        ProfileLoyaltyProgramComponent
+        ProfileLoyaltyProgramComponent,
+        ProfileOrdersComponent,
+        CreateShippingAddressComponent,
+        ChangeDefaultAddressConfirmDialogComponent
     ],
 })
 export class ProfileModule {

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class LogOutComponent {
   constructor(private authService: AuthService, private dialog: MatDialog, private router: Router) { }
 
+  // Handle logout and navigate to home
   logOut() {
     this.authService.logOut();
     this.dialog.closeAll();

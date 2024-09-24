@@ -7,7 +7,7 @@ import { PagesComponent } from '../pages/pages.component';
 export const routes: Routes = [
     {
         path: '',
-        component: PagesComponent,
+        component: PagesComponent, // Wrap all child routes under PagesComponent
         children: [
             {
                 path: '',
@@ -27,8 +27,8 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+    imports: [RouterModule.forChild(routes)], // Register the routes in the RouterModule
+    exports: [RouterModule], // Export RouterModule for use in other modules
 })
 export class AuthRoutingModule {
 }
