@@ -102,6 +102,8 @@
       "prodilDetails": "Account details",
       "shippingAddresses": "Shipping address",
       "payementMethods": "Payment methods",
-      "loyaltyProgram": "Loyalty program"
+      "loyaltyProgram": "Loyalty program",
+      "addNewShippingAddress": "Add new address",
+      "noAddresses": "There is not a single saved address!"
    }
 }

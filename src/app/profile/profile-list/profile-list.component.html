@@ -1,6 +1,6 @@
 <div class="container-profile">
     <!-- Profile page -->
-    <nb-card>
+    <nb-card class="rounded-card">
         <nb-card-body class="no-border-container">
             <div class="row">
                 <div class="col-12">
@@ -36,11 +36,12 @@
                             </div>
                         </div>
                     </div>
-                    <!-- data change button -->
-                    <div class="login-button-container">
-                        <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
-                            (click)="goToChangeData()">{{ 'profilePage.dataChange' | translate }}</button>
-                    </div>
+                </div>
+                <!-- data change button -->
+                <div class="login-button-container">
+                    <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
+                        (click)="goToChangeData()">{{
+                        'profilePage.dataChange' | translate }}</button>
                 </div>
             </div>
         </nb-card-body>

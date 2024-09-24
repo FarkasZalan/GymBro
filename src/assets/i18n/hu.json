@@ -102,6 +102,8 @@
                 "prodilDetails": "Profil adatok",
                 "shippingAddresses": "Szállítási cím",
                 "payementMethods": "Fizetési módok",
-                "loyaltyProgram": "Hűségprogram"
+                "loyaltyProgram": "Hűségprogram",
+                "addNewShippingAddress": "Cím hozzáadása",
+                "noAddresses": "Nincs egyetlen mentett cím sem!"
         }
 }

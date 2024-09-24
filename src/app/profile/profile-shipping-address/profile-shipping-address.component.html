@@ -1,1 +1,16 @@
-<p>profile-shipping-address works!</p>
+<div class="list-container">
+    <!-- Shipping addresses page -->
+    <nb-card class="rounded-card emptyCard">
+        <nb-card-body>
+            <div>
+                <img src="../../../assets/images/no-address.png" alt="SadHouse" class="emptyCardImage">
+                <p>{{ 'profileMenu.noAddresses' | translate }}</p>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+<!-- open new address button -->
+<div class="login-button-container">
+    <button class="btn btn-primary basic-btn" type="submit" nbButton status="success" (click)="goToAddNewAddress()">{{
+        'profileMenu.addNewShippingAddress' | translate }}</button>
+</div>

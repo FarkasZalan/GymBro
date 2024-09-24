@@ -44,7 +44,7 @@ export class AuthService {
                     phone: phone,
                     deleted: false
                 }
-                await this.db.collection('users').doc(userAuth.user.uid).set(newUser);
+                await this.db.collection('users').doc(userAuth.user.uid).collection('details').doc(userAuth.user.uid).set(newUser);
                 await this.sendEmailVerification();
             }
             return userAuth;
@@ -64,7 +64,7 @@ export class AuthService {
     }
 
     getCurrentUser(userId: string) {
-        return this.db.collection('users').doc(userId).valueChanges();
+        return this.db.collection('users').doc(userId).collection('details').doc(userId).valueChanges();
     }
 
     logOut() {

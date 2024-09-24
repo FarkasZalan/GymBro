@@ -59,7 +59,6 @@ export class ChangeProfileComponent {
       if (modified) {
         this.errorMessage = false;
         this.goToBack();
-        console.log("why")
         this.dialog.open(SuccessfullDialogComponent, {
           data: {
             text: SuccessFullDialogText.MODIFIED_TEXT,
