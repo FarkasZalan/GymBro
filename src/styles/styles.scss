@@ -184,6 +184,15 @@ a .logo {
     color: white;
 }
 
+.header-container .logo {
+    padding: 0 !important;
+}
+
+.logoImage {
+    width: 100px;
+    height: auto;
+}
+
 .social-icons {
     display: flex;
     align-items: center;
