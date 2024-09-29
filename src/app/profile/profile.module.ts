@@ -53,6 +53,9 @@ import { ChangeDefaultAddressConfirmDialogComponent } from './profile-shipping-a
         CreateShippingAddressComponent,
         ChangeDefaultAddressConfirmDialogComponent
     ],
+    exports: [
+        ProfileListComponent // To the admin profile module
+    ]
 })
 export class ProfileModule {
 }

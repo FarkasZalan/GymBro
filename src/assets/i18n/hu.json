@@ -132,5 +132,12 @@
                         "home": "Otthon",
                         "work": "Munkahely"
                 }
+        },
+        "adminMenu": {
+                "adminProfile": "Profil adatok",
+                "statistic": "Statisztikák",
+                "items": "Termékek",
+                "blog": "Bejegyzések",
+                "users": "Felhasználók"
         }
 }

@@ -14,8 +14,13 @@ export class AuthService {
     isAuthenticated() {
         return new Promise(resolve => {
             this.auth.onAuthStateChanged(user => {
-                // Convert user object to boolean: true if user exists, false if null
-                resolve(!!user);
+                this.getCurrentUser(user.uid).subscribe((isAdminUser: User) => {
+                    if (!isAdminUser.isAdmin) { // check if user is authenticated and is not admin
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                });
             });
         });
     }
@@ -47,6 +52,7 @@ export class AuthService {
                     firstName: firstName,
                     lastName: lastName,
                     phone: phone,
+                    isAdmin: false,
                     deleted: false
                 }
                 await this.db.collection('users').doc(userAuth.user.uid).set(newUser);

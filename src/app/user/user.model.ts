@@ -8,5 +8,6 @@ export interface User {
     city?: string;
     street?: string;
     houseNumber?: string;
+    isAdmin: boolean;
     deleted: boolean;
 }

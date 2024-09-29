@@ -18,6 +18,7 @@ export class UserService {
                 lastName: user.lastName,
                 email: user.email,
                 phone: user.phone,
+                isAdmin: user.isAdmin,
                 deleted: false
             }).then(() => {
                 // Resolve the promise to indicate successful update

@@ -43,6 +43,7 @@ export class RegisterComponent {
         lastName: this.documentHandler.makeUpperCaseUserName(this.createUserForm.value.lastName),
         email: this.createUserForm.value.email,
         phone: this.createUserForm.value.phone,
+        isAdmin: false,
         deleted: false
       }
       this.password = this.createUserForm.value.password;

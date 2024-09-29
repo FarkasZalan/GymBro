@@ -132,5 +132,11 @@
          "home": "Home",
          "work": "Work"
       }
+   },
+   "adminMenu": {
+      "adminProfile": "Account details",
+      "statistic": "Statistics",
+      "items": "Products",
+      "blog": "Publications"
    }
 }

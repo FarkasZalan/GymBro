@@ -39,6 +39,10 @@ export class HeaderComponent implements OnInit {
         this.userLoggedIn = true;
         this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
           this.user = currentUser;
+          if (this.user === undefined) {
+            this.authService.logOut();
+            this.userLoggedIn = false; // User is logged out
+          }
         })
       } else {
         this.userLoggedIn = false; // User is logged out
@@ -71,7 +75,11 @@ export class HeaderComponent implements OnInit {
           if (item.title === this.translate.instant('header.logOut')) {
             this.logOut();
           } else {
-            this.router.navigate(['profile']);
+            if (this.user.isAdmin) {
+              this.router.navigate(['admin-profile']);
+            } else {
+              this.router.navigate(['profile']);
+            }
           }
         })
       ).subscribe()

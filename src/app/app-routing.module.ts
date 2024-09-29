@@ -2,6 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthGuard } from './auth/auth-guard.service';
+import { AdminGuard } from './admin-profile/admin-guard.service';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,12 @@ export const routes: Routes = [
     loadChildren: () => import('./profile/profile.module')
       .then(m => m.ProfileModule),
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'admin-profile',
+    loadChildren: () => import('./admin-profile/admin-profile.module')
+      .then(m => m.AdminProfileModule),
+    canActivate: [AdminGuard],
   },
   { path: '', redirectTo: 'pages', pathMatch: 'full' },
 

@@ -1,0 +1,95 @@
+<!-- statistic details -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedStatistics()">
+            <h2 class="title"
+                [ngClass]="{'center': isCollapsedStatisticsDetails, 'left': !isCollapsedStatisticsDetails}">
+                {{ 'adminMenu.statistic' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedStatisticsDetails">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedStatisticsDetails">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedStatisticsDetails" [@collapseComponent] class="collapse-container">
+            <app-statistics></app-statistics>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- product list -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedItemsDetails, 'left': !isCollapsedItemsDetails}">
+                {{ 'adminMenu.items' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedItemsDetails">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedItemsDetails">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedItemsDetails" [@collapseComponent] class="collapse-container">
+            <app-products-list></app-products-list>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- blog list -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedBlogDetails()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedBlogDetails, 'left': !isCollapsedBlogDetails}">
+                {{ 'adminMenu.blog' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedBlogDetails">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedBlogDetails">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedBlogDetails" [@collapseComponent] class="collapse-container">
+            <app-blog-list></app-blog-list>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- orders details -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">
+                {{ 'profileMenu.orders' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedOrders">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedOrders">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
+            <app-order-list></app-order-list>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- profile details -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
+                {{ 'adminMenu.adminProfile' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedProfileDetails">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
+            <app-profile-list></app-profile-list>
+        </div>
+    </nb-card-body>
+</nb-card>

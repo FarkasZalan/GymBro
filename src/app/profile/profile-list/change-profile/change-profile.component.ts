@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../auth/auth.service';
 import { SuccessfullDialogComponent } from '../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../successfull-dialog/sucessfull-dialog-text';
 import { User } from '../../../user/user.model';
@@ -18,6 +16,7 @@ export class ChangeProfileComponent {
   @ViewChild('form') modifyUserForm: NgForm;
   modifyUserId: string = "";
   modifyUser: User;
+  userIsAdmin: boolean;
   password: string;
   passwordAgain: string;
 
@@ -35,6 +34,7 @@ export class ChangeProfileComponent {
     // Fetch user details by ID when the component initializes
     this.documentumHandler.getDocumentByID("users", this.modifyUserId).subscribe((user: User) => {
       this.modifyUser = user;
+      this.userIsAdmin = this.modifyUser.isAdmin;
     });
   }
 
@@ -59,6 +59,7 @@ export class ChangeProfileComponent {
       lastName: this.modifyUserForm.value.lastName,
       email: this.modifyUser.email,
       phone: this.modifyUserForm.value.phone,
+      isAdmin: this.userIsAdmin,
       deleted: false
     }
 

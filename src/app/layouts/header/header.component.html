@@ -20,7 +20,7 @@
             </nb-user>
         </div>
 
-        <div *ngIf="userLoggedIn" class="header-container-user .cart-button-container">
+        <div *ngIf="userLoggedIn && !user.isAdmin" class="header-container-user .cart-button-container">
             <button class="cart-button">
                 <i class="material-icons cart-icon">shopping_cart</i>
                 <span class="cart-badge">3</span>

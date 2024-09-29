@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,9 @@ import { Router } from '@angular/router';
   styleUrl: './log-out.component.scss'
 })
 export class LogOutComponent {
-  constructor(private authService: AuthService, private dialog: MatDialog, private router: Router) { }
+  constructor(private authService: AuthService, private dialog: MatDialog, private router: Router, public dialogRef: MatDialogRef<LogOutComponent>) {
+    dialogRef.disableClose = true;
+  }
 
   // Handle logout and navigate to home
   logOut() {

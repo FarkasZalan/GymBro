@@ -1,22 +1,22 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
-import { AuthService } from "./auth.service";
+import { AdminService } from "./admin.service";
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private adminService: AdminService, private router: Router) { }
 
     // Method that determines if a route can be activated
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        return this.authService.isAuthenticated().then(
+        return this.adminService.isAuthenticated().then(
             (authenticated: boolean) => {
-                // If the user is authenticated, allow access to the route
+                // If the admin user is authenticated, allow access to the route
                 if (authenticated) {
                     return true;
                 } else {
-                    // If not authenticated (or admin), redirect to the home page
+                    // If not authenticated (or not admin), redirect to the login page
                     this.router.navigate(['/']);
                     return false;
                 }
