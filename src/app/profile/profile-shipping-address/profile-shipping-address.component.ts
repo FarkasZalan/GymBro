@@ -9,6 +9,8 @@ import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../../user/user.model';
 import { TranslateService } from '@ngx-translate/core';
+import { EditShippingAddressComponent } from './edit-shipping-address/edit-shipping-address.component';
+import { AddressTypeText } from '../profile-address-type-text';
 
 @Component({
   selector: 'app-profile-shipping-address',
@@ -17,7 +19,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ProfileShippingAddressComponent implements OnInit {
   userId: string;
-  newAddress: ShippingAddress;
   shippingAddresses: ShippingAddress[];
 
   constructor(private dialog: MatDialog,
@@ -52,14 +53,14 @@ export class ProfileShippingAddressComponent implements OnInit {
     this.dialog.open(CreateShippingAddressComponent);
   }
 
-  // Remove an address from the list
-  removeAddress(index: number) {
-
-  }
-
   // Go to Edit Address
   editAddress(addresId: string) {
-
+    this.dialog.open(EditShippingAddressComponent, {
+      data: {
+        addresId: addresId, // pass the clicked address id and the current user id to the edit component
+        userId: this.userId
+      }
+    });
   }
 
   getAllShippingAddress(userId: string) {
@@ -69,8 +70,7 @@ export class ProfileShippingAddressComponent implements OnInit {
       .collection("shippingAddresses")
       .valueChanges()
       .subscribe((addresses: ShippingAddress[]) => {
-        // Filter out deleted addresses
-        this.shippingAddresses = addresses.filter((address: ShippingAddress) => !address.deleted);
+        this.shippingAddresses = addresses;
 
         // Subscribe to language changes and reapply translations
         this.translate.stream([
@@ -79,9 +79,10 @@ export class ProfileShippingAddressComponent implements OnInit {
         ]).subscribe(translations => {
           this.shippingAddresses = this.shippingAddresses.map((address: ShippingAddress) => {
             // Check for "home", "otthon", "work", or "munkahely" and translate accordingly
-            if (address.addressName === 'Home' || address.addressName === 'Otthon') {
+            if (address.addressType === AddressTypeText.HOME) {
               address.addressName = translations['profileMenu.shippingAddressForm.home'];
-            } else if (address.addressName === 'Work' || address.addressName === 'Munkahely') {
+            }
+            if (address.addressType === AddressTypeText.WORK) {
               address.addressName = translations['profileMenu.shippingAddressForm.work'];
             }
             return address;

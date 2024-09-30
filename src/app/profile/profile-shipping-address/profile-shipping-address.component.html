@@ -12,7 +12,8 @@
 
 <!-- Display each shipping address as an nb-card when addresses are available -->
 <div class="list-container">
-    <nb-card *ngFor="let address of shippingAddresses" class="rounded-card addressCard">
+    <nb-card *ngFor="let address of shippingAddresses" class="rounded-card addressCard"
+        (click)="editAddress(address.id)">
         <nb-card-header class="card-header">
             <strong class="default-label">{{ address.addressName }}</strong>
             <span *ngIf="address.isSetAsDefaultAddress">{{

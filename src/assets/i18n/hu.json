@@ -130,7 +130,10 @@
                         "addressNameDescription": "Adj címkéket a szállítási címekhez, \nhogy könnyebben tudj választani közülük!",
                         "missingAddressNameError": "Nem adtad meg a cím típusát!",
                         "home": "Otthon",
-                        "work": "Munkahely"
+                        "work": "Munkahely",
+                        "deleteAddressText": "Biztosam törölni szeretnéd ezt a címet?",
+                        "deleteAddress": "Törlés",
+                        "modifyAddress": "Módosítás"
                 }
         },
         "adminMenu": {

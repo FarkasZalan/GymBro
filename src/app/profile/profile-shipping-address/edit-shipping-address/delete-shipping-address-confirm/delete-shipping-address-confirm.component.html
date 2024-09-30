@@ -1,13 +1,13 @@
 <div class="container">
-    <!-- change default address title -->
-    <h1 id="title" class="title">{{ 'profileMenu.shippingAddressForm.changeDefaultAddressTitle' | translate }}</h1>
-    <!-- change default address confirm buttons -->
+    <!-- delete address title -->
+    <h1 id="title" class="title">{{ 'profileMenu.shippingAddressForm.deleteAddressText' | translate }}</h1>
+    <!-- delete address confirm buttons -->
     <div class="container">
         <nb-card>
             <nb-card-body>
                 <div class="buttons">
                     <button type="submit" class="btn btn-primary btn-logout" (click)="confirm()">{{
-                        'profileMenu.shippingAddressForm.changeDefaultAddressConfirm' |
+                        'profileMenu.shippingAddressForm.deleteAddress' |
                         translate }}</button>
                     <button type="submit" class="btn btn-primary btn-cancel" (click)="cancel()">{{ 'header.cancel' |
                         translate }}</button>

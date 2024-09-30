@@ -130,7 +130,10 @@
          "addressNameDescription": "Add labels to the shipping addresses \nto make it easier to choose between them!",
          "missingAddressNameError": "The address type is required!",
          "home": "Home",
-         "work": "Work"
+         "work": "Work",
+         "deleteAddressText": "Are you sure you want to delete this address?",
+         "deleteAddress": "Delete",
+         "modifyAddress": "Modify"
       }
    },
    "adminMenu": {

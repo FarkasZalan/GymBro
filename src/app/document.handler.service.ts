@@ -33,14 +33,20 @@ export class DocumentHandlerService {
 
   // When create a new address it can be useful because of the lowercase and uppercase typo
   makeUpperCaseEveryWordFirstLetter(text: string) {
-    text = text.trim();
-    const words = text.split(" ");
+    text = text.trim();  // Trim leading/trailing whitespaces
+    text = text.replace(/\s+/g, " ");  // Replace multiple spaces with a single space
+
+    const words = text.split(" ");  // Split text by spaces
     let uppercaseText = "";
 
     for (let i = 0; i < words.length; i++) {
-      words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-      uppercaseText += words[i] + " "
+      // Capitalize the first letter and make the rest lowercase
+      words[i] = words[i][0].toUpperCase() + words[i].substr(1).toLowerCase();
     }
+
+    // Join words with a single space and return the result
+    uppercaseText = words.join(" ");
+
     return uppercaseText;
   }
 
@@ -80,7 +86,9 @@ export class DocumentHandlerService {
         .collection(collection)
         .doc(innerDocument)
         .collection(innerCollection)
-        .ref.where(fieldName, '==', input)
+        .ref
+        .where("deleted", '==', false)
+        .where(fieldName, '==', input)
         .where("id", "!=", ownId) // found a match in one document which is not his own 
         .get() // then we get the document
         .then(document => {

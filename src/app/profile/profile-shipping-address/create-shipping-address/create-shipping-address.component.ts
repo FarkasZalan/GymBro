@@ -102,13 +102,32 @@ export class CreateShippingAddressComponent implements OnInit {
     if (this.addressName === null || this.addressName === undefined || this.addressName === "") {
       this.missingAddressNameError = true;
     } else {
-      let errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-        "users", this.userId, "shippingAddresses", "addressName", this.addressName, undefined, ""
-      );
+      let errorCheck: boolean = false;
+
+      // check what is the shipping address type, name because of the duplication check
+      if (this.selectedAddressType === AddressTypeText.HOME) {
+        this.addressName = AddressTypeText.HOME;
+        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+          "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.HOME, undefined, ""
+        );
+      }
+      else if (this.selectedAddressType === AddressTypeText.WORK) {
+        this.addressName = AddressTypeText.WORK;
+        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+          "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.WORK, undefined, ""
+        );
+      }
+      else {
+        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+          "users", this.userId, "shippingAddresses", "addressName", this.addressName, undefined, ""
+        );
+      }
 
       if (errorCheck) {
         this.errorMessage = true;
         return; // Exit early if there's an error
+      } else {
+        this.errorMessage = false;
       }
 
       // check if a default address already has been added before
@@ -158,6 +177,7 @@ export class CreateShippingAddressComponent implements OnInit {
         const documentumRef = await this.db.collection("users").doc(this.userId).collection("shippingAddresses").add({
           id: "",
           addressName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.addressName),
+          addressType: this.selectedAddressType,
           country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.country),
           postalCode: this.createShippingAddressForm.value.postalCode,
           city: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.city),
@@ -168,8 +188,7 @@ export class CreateShippingAddressComponent implements OnInit {
           door: this.createShippingAddressForm.value.door,
           isSetAsDefaultAddress: this.isSetAsDefaultAddress,
           taxNumber: this.taxNumber,
-          companyName: this.companyName,
-          deleted: false
+          companyName: this.companyName
         });
         // id the document created then save the document id in the field
         await documentumRef.update({ id: documentumRef.id });

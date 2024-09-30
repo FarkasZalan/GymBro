@@ -1,5 +1,5 @@
 export enum AddressTypeText {
-    HOME = "home",
-    WORK = "work",
-    OTHER = "other"
+    HOME = "Home",
+    WORK = "Work",
+    OTHER = "Other"
 }

@@ -1,6 +1,7 @@
 export interface ShippingAddress {
     id?: string;
     addressName: string;
+    addressType: string;
     country: string;
     postalCode: string;
     city: string;
