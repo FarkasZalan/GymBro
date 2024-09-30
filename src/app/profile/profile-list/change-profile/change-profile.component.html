@@ -74,15 +74,15 @@
                         </span><br>
                         <!-- Change Data submit button -->
                         <div class="login-button-container">
-                            <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
-                                [disabled]="!form.valid && (passwordAgain.pa)">{{
+                            <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton
+                                status="success" [disabled]="!form.valid && (passwordAgain.pa)">{{
                                 'profilePage.modify' | translate }}</button>
                         </div>
                     </form>
                     <!-- back button -->
                     <div class="login-button-container">
-                        <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success"
-                            (click)="goToBack()">
+                        <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                            status="success" (click)="goToBack()">
                             <span class="arrow">&#9664;</span>
                             {{ 'profilePage.cancel' | translate }}</button>
                     </div><br>

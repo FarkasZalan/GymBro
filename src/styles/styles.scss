@@ -295,11 +295,14 @@ nb-sidebar {
     }
 }
 
+.basic-form-btn {
+    width: 128px !important;
+}
+
 .back-btn {
     position: relative;
     /* Ensure the button is the reference point for positioning */
     padding-left: 40px !important;
-    width: 128px !important;
     background-color: white;
     color: #0b8e92;
     border-radius: 10px;

@@ -222,19 +222,20 @@
                         </span>
                         <!-- modify address submit button -->
                         <div class="login-button-container">
-                            <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
-                                [disabled]="!form.valid">{{ 'profileMenu.shippingAddressForm.modifyAddress' | translate
+                            <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton
+                                status="success" [disabled]="!form.valid">{{
+                                'profileMenu.shippingAddressForm.modifyAddress' | translate
                                 }}</button>
                         </div>
                     </form>
                     <div class="login-button-container">
-                        <button class="btn btn-primary basic-btn delete-btn" type="submit" nbButton status="success"
-                            (click)="deleteAddress()">
+                        <button class="btn btn-primary basic-btn delete-btn basic-form-btn" type="submit" nbButton
+                            status="success" (click)="deleteAddress()">
                             {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}</button>
                     </div>
                     <div class="login-button-container">
-                        <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success"
-                            (click)="back()">
+                        <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                            status="success" (click)="back()">
                             <span class="arrow">&#9664;</span>
                             {{ 'loginPage.back' | translate }}</button>
                     </div><br>
