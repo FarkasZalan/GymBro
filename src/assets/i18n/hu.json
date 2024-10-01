@@ -28,11 +28,9 @@
                 },
                 "accessoriesMenu": {
                         "accessories": "Kiegészítők",
-                        "homeWorkout": "Otthoni edzés",
-                        "workoutGear": "Kellékek edzéshez",
-                        "activityBasedTools": "Tevékenységalapú",
-                        "bagsAndBackpacks": "Táskák és hátizsákok",
-                        "rehabilitationTools": "Rehabilitációs"
+                        "shakers": "Shakerek",
+                        "weightLifting": "Súlyemelés",
+                        "other": "Egyéb"
                 },
                 "blog": "Blog"
         },
@@ -142,5 +140,8 @@
                 "items": "Termékek",
                 "blog": "Bejegyzések",
                 "users": "Felhasználók"
+        },
+        "products": {
+                "pcs": "db"
         }
 }

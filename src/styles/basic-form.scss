@@ -58,6 +58,13 @@ input[type='password'] {
     /* Enable vertical scrolling */
 }
 
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    /* Space between cards */
+    width: 100%;
+    /* Full width for the row */
+}
 
 .list-container {
     display: flex;
@@ -71,14 +78,6 @@ input[type='password'] {
     padding: 16px;
     height: fit-content;
     justify-content: center;
-}
-
-.card-row {
-    display: flex;
-    justify-content: space-between;
-    /* Space between cards */
-    width: 100%;
-    /* Full width for the row */
 }
 
 .empty-list-container {

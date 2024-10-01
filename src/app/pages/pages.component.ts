@@ -132,27 +132,17 @@ export class PagesComponent {
         expanded: false,
         children: [
           {
-            title: this.translate.instant('menu.accessoriesMenu.homeWorkout'),
+            title: this.translate.instant('menu.accessoriesMenu.shakers'),
             icon: ' ',
             link: '/users/list',
           },
           {
-            title: this.translate.instant('menu.accessoriesMenu.workoutGear'),
+            title: this.translate.instant('menu.accessoriesMenu.weightLifting'),
             icon: ' ',
             link: '/work-processes/list',
           },
           {
-            title: this.translate.instant('menu.accessoriesMenu.activityBasedTools'),
-            icon: ' ',
-            link: '/work-processes/list',
-          },
-          {
-            title: this.translate.instant('menu.accessoriesMenu.bagsAndBackpacks'),
-            icon: ' ',
-            link: '/work-processes/list',
-          },
-          {
-            title: this.translate.instant('menu.accessoriesMenu.rehabilitationTools'),
+            title: this.translate.instant('menu.accessoriesMenu.other'),
             icon: ' ',
             link: '/work-processes/list',
           }

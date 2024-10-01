@@ -17,7 +17,7 @@
          "healthyFoods": "Healthy Foods",
          "cereals": "Cereals",
          "healthySnacks": "Healthy Snacks",
-         "flavorsAndSweeteners": "Flavors and Sweeteners",
+         "flavorsAndSweeteners": "Flavors",
          "cookingIngredients": "Cooking Ingredients",
          "drinks": "Drinls"
       },
@@ -28,11 +28,9 @@
       },
       "accessoriesMenu": {
          "accessories": "Accessories",
-         "homeWorkout": "Home Workout",
-         "workoutGear": "Workout Gear",
-         "activityBasedTools": "Activity-Based Tools",
-         "bagsAndBackpacks": "Bags and Backpacks",
-         "rehabilitationTools": "Rehabilitation Tools"
+         "shakers": "Shakers",
+         "weightLifting": "Weight-lifting",
+         "other": "Others"
       },
       "blog": "Blog"
    },
@@ -141,5 +139,8 @@
       "statistic": "Statistics",
       "items": "Products",
       "blog": "Publications"
+   },
+   "products": {
+      "pcs": "pcs"
    }
 }
