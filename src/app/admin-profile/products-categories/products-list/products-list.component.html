@@ -22,4 +22,7 @@
         {{ 'products.backToTheCategories' | translate }}</button>
 </div>
 
-<button *ngIf="(emptyCollection !== true)" class="floating-button" (click)="goToCreateProduct()">+</button>
+<button *ngIf="(emptyCollection === true)" class="floating-button" (click)="goToCreateProduct()">
+    +
+    <span class="floating-label">Add Product</span>
+</button>

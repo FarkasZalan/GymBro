@@ -88,7 +88,7 @@ nb-layout-footer nav {
 .floating-button {
     position: fixed;
     bottom: 13%;
-    right: 20px;
+    right: 40px;
     border: none;
     border-radius: 50% !important;
     width: 60px;
@@ -105,6 +105,7 @@ nb-layout-footer nav {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease !important;
 
+    display: flex;
     align-items: center;
     justify-content: center;
     outline: none;
@@ -124,6 +125,34 @@ nb-layout-footer nav {
         color: rgb(112, 112, 112) !important;
         border-color: #b8b8b8 !important;
     }
+}
+
+/* Style for the floating label */
+.floating-label {
+    position: absolute;
+    bottom: 70px;
+    /* Position the label above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0b8e92;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transform: translate(-50%, 20px);
+    /* Move label down for initial hidden state */
+}
+
+/* Show the label on hover */
+.floating-button:hover .floating-label {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    /* Move the label to its original position */
 }
 
 app-header {
