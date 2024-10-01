@@ -141,6 +141,9 @@
       "blog": "Publications"
    },
    "products": {
-      "pcs": "pcs"
+      "pcs": "pcs",
+      "noProducts": "There are no products to display!",
+      "addFirstProduct": "Add the first product",
+      "backToTheCategories": "Back to the catetegories"
    }
 }

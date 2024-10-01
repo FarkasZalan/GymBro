@@ -18,9 +18,11 @@ import { AdminRoutingModule } from './admin-profile-routing.module';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProfileModule } from '../profile/profile.module';
 import { StatisticsComponent } from './statistics/statistics.component';
-import { ProductsListComponent } from './products-list/products-list.component';
+import { ProductsListComponent } from './products-categories/products-list/products-list.component';
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { OrderListComponent } from './order-list/order-list.component';
+import { ProductsCategoriesComponent } from './products-categories/products-categories.component';
+import { CreateProductComponent } from './products-categories/create-product/create-product.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -44,7 +46,9 @@ import { OrderListComponent } from './order-list/order-list.component';
         StatisticsComponent,
         ProductsListComponent,
         BlogListComponent,
-        OrderListComponent
+        OrderListComponent,
+        ProductsCategoriesComponent,
+        CreateProductComponent
     ],
 })
 export class AdminProfileModule {

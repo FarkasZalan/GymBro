@@ -4,7 +4,6 @@ export interface HealthyProduct {
     productnName: string;
     productCategory: string[]; // forexample cereals, snacks, drink...
     description: string;
-    productImage: string;
 
     // Dosage form and flavors
     dosageForm: string;
@@ -42,11 +41,15 @@ export interface HealthyProduct {
     allergens: string[];
     freeFrom: string[];
 
-    // Weights, amounts and priceing
-    weights: number[];
-    amounts: number[];
-    pricePerKg: number;
-    pricePerAmount: number;
+    // key = weight/piece  
+    // stringValue = prodzct image to this amount of weight/piece
+    // numberValue = the price for this product
+    weights: Map<number, [string, number]>;
+
+    // numberKey = weight/piece amount for this product
+    // numberValue = amount of discount
+    discountByWeightProduct: Map<number, [number]>;
+    priceByWeight: boolean; // proudct priced by weight (kg) or pieces (pcs)
 
     // for male or female
     male: boolean;

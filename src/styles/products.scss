@@ -1,0 +1,349 @@
+.container-collapse-component {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 16px;
+
+
+    nb-card-body {
+        padding: 16px;
+    }
+}
+
+.header-collapse-component {
+    display: flex;
+    justify-content: center;
+    /* Center initially */
+    align-items: center;
+    cursor: pointer;
+
+    h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: #333;
+        flex-grow: 1;
+    }
+
+    .toggle-button-collapse-component {
+        background-color: white;
+        color: #0b8e92;
+        border-radius: 10px;
+        font-size: 20px;
+        border: none;
+        text-transform: uppercase;
+        font-weight: bold;
+        cursor: pointer;
+    }
+}
+
+.title {
+    transition: transform 250ms ease;
+    overflow: hidden;
+
+    &.center {
+        font-size: 22px !important;
+        transform: translateX(46%); // Start from center
+    }
+
+    &.left {
+        font-size: 20px !important;
+        transform: translateX(0); // Move to left
+    }
+}
+
+.arrow {
+    /* Center vertically */
+    transform: translateY(-50%);
+    /* Adjust vertical centering */
+    color: #0b8e92;
+    /* Set the color of the arrow */
+    font-size: 23px;
+    /* Adjust size as needed */
+    animation: arrowLift 3s ease-in-out infinite;
+}
+
+@keyframes arrowLift {
+
+    0%,
+    100% {
+        transform: translateY(-50%) translateY(-2px);
+        /* Move up */
+    }
+
+    50% {
+        transform: translateY(-50%) translateY(2px);
+        /* Move down */
+    }
+}
+
+.collapse-container {
+    padding: 16px;
+    background-color: white;
+    border-top: 1px solid #0b8e92;
+}
+
+nb-card-body {
+    overflow: hidden !important;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensures the image covers the entire area without distortion */
+    border-radius: 8px;
+    /* Optional: if you want rounded corners on the image */
+    filter: grayscale(100%);
+    /* Make the image black and white */
+    transition: filter 0.3s ease, transform 0.3s ease;
+    /* Smooth transition */
+}
+
+.list-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow wrapping to the next row */
+    margin-top: 10px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    height: fit-content;
+    justify-content: center;
+}
+
+.empty-list-container {
+    margin-top: 10px;
+    max-width: 60%;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+}
+
+.rounded-card {
+    border-radius: 20px !important;
+    align-items: center;
+    /* Vertically center the image */
+    justify-content: center;
+    /* Horizontally center the image */
+    padding: 0 !important;
+}
+
+.products-button {
+    width: 330px !important;
+    font-size: 18px !important;
+}
+
+.button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.emptyCardText {
+    margin: 20px;
+    font-size: 20px;
+}
+
+.emptyCard {
+    background-color: #fff6f6;
+    margin-bottom: auto;
+    width: 800px;
+    text-align: center;
+}
+
+.emptyCardImage {
+    display: block;
+    margin: auto;
+    width: 100px;
+}
+
+.list-container p {
+    cursor: pointer;
+}
+
+.list-container nb-card-body {
+    cursor: pointer;
+}
+
+.card-header {
+    cursor: pointer;
+
+    strong,
+    span {
+        font-size: 19px !important;
+    }
+}
+
+.category-image {
+    display: flex;
+    align-items: center;
+    /* Vertically center the image */
+    justify-content: center;
+    /* Horizontally center the image */
+    padding: 0;
+    margin: 0;
+    border-radius: 20px;
+}
+
+.categoryCard {
+    // Increase the width of the address card
+    width: calc(50% - 40px);
+    /* Ensure the card takes up half of the container width */
+    max-width: 400px;
+    flex: 1 1 calc(50% - 20px);
+    /* Two columns with space between */
+    display: flex;
+    flex-direction: column;
+    /* Ensure content is stacked vertically */
+    padding: 0 !important;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 5%;
+    margin-right: 5%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: add a subtle shadow effect
+    border-radius: 8px;
+    background-color: darken(#ffffff, 10%); // Background color for the card
+    cursor: pointer;
+    // Align to the left side
+    align-self: flex-start; // Align card to the start (left) of its container
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    height: fit-content;
+    max-height: 500px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: darken(#ffffff, 5%);
+        transform: scale(1.05) !important;
+
+        strong,
+        span,
+        p {
+            color: #0b8e92 !important;
+        }
+    }
+
+    &:active {
+        cursor: pointer;
+        color: #0b8e92 !important;
+        background-color: darken(#ffffff, 20%);
+        transform: scale(0.95);
+    }
+}
+
+.categoryCard:hover .card-image {
+    filter: grayscale(0%);
+    /* Remove black and white filter on hover (full color) */
+    transform: scale(1.05);
+    /* Optional: Slightly zoom in the image when hovered */
+}
+
+@media (max-width: 768px) {
+    h2 {
+        transform: translateX(0) !important;
+        /* Adjust translate for smaller screens */
+    }
+}
+
+@media (max-width: 1500px) {
+    .title {
+        transition: transform 250ms ease;
+        overflow: hidden;
+
+        &.left {
+            transform: translateX(0); // Start from left
+        }
+
+        &.center {
+            transform: translateX(43%); // Move to center
+        }
+    }
+
+    .categoryCard {
+        max-width: 300px;
+        max-height: 400px;
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+}
+
+@media (max-width: 1650px) {
+    .categoryCard {
+        max-width: 350px;
+        max-height: 450px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 1493px) {
+    .categoryCard {
+        max-width: 290px;
+        max-height: 390px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 1400px) {
+    .categoryCard {
+        max-width: 250px;
+        max-height: 350px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 1180px) {
+    .categoryCard {
+        max-width: 400px;
+        max-height: 500px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 800px) {
+    .categoryCard {
+        max-width: 350px;
+        max-height: 450px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 680px) {
+    .categoryCard {
+        max-width: 300px;
+        max-height: 400px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+    .card-header {
+        cursor: pointer;
+
+        strong,
+        span {
+            font-size: 17px !important;
+        }
+    }
+}
+
+@media (max-width: 680px) {
+    .categoryCard {
+        max-width: 250px;
+        max-height: 350px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+
+    .card-header {
+        cursor: pointer;
+
+        strong,
+        span {
+            font-size: 15px !important;
+        }
+    }
+}

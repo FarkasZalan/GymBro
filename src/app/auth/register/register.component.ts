@@ -7,6 +7,7 @@ import { User } from '../../user/user.model';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { DocumentHandlerService } from '../../document.handler.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +24,7 @@ export class RegisterComponent {
   public errorMessage = false;
   errorMessagePassword: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog, private documentHandler: DocumentHandlerService) { }
+  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog, private documentHandler: DocumentHandlerService, private location: Location) { }
 
   // Method to handle user registration
   register() {
@@ -80,6 +81,7 @@ export class RegisterComponent {
 
   // Navigate to login page
   goToLogin() {
+    this.location.back();
     this.router.navigate(['/auth/login']);
   }
 

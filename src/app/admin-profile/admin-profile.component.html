@@ -18,7 +18,7 @@
     </nb-card-body>
 </nb-card>
 
-<!-- product list -->
+<!-- product categories -->
 <nb-card class="container-collapse-component">
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()">
@@ -32,7 +32,7 @@
         </div>
 
         <div *ngIf="!isCollapsedItemsDetails" [@collapseComponent] class="collapse-container">
-            <app-products-list></app-products-list>
+            <app-products-categories></app-products-categories>
         </div>
     </nb-card-body>
 </nb-card>

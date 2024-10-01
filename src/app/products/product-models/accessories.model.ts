@@ -6,9 +6,26 @@ export interface Accessories {
     description: string;
     productImage: string;
 
-    // color, size, type and material
-    colors: string[];
-    sizes: string[];
+    // color, size, discount type and material
+
+    // stringKey = color name
+    // stringValue = product image url
+    // numberValue = product price
+    colors: Map<string, [string, number]>;
+
+    // stringKey = size name
+    // stringValue = product image url
+    // numberValue = product price
+    sizes: Map<string, [string, number]>;
+
+    // stringKey = color name for this product
+    // numberValue = amount of discount
+    discountByColorProduct: Map<string, [number]>;
+
+    // stringKey = size name for this product
+    // numberValue = amount of discount
+    discountBySizeProduct: Map<string, [number]>;
+
     type: string; // T-shirt, short, leggings
     material: string;
 

@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { Location } from '@angular/common';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 
 @Component({
@@ -20,7 +21,7 @@ export class LoginComponent {
   // Flag for displaying login error
   public errorMessage = false;
 
-  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) { }
+  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog, private location: Location) { }
 
   // Method to handle user login
   login() {
@@ -45,6 +46,7 @@ export class LoginComponent {
   }
 
   goToItems() {
+    this.location.back();
     this.router.navigate(['/']);
   }
 
