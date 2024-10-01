@@ -1,4 +1,4 @@
-<!-- If no shipping addresses are present, display the empty card -->
+<!-- If no products, display the empty card -->
 <div *ngIf="(emptyCollection === true)" class="empty-list-container">
     <nb-card class="rounded-card emptyCard">
         <nb-card-body>
@@ -6,15 +6,17 @@
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
                 <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
             </div>
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn basic-form-btn products-button" type="submit" nbButton
+                    status="success" (click)="goToCreateProduct()">{{
+                    'products.addFirstProduct' | translate
+                    }}</button>
+            </div>
         </nb-card-body>
     </nb-card>
-    <div class="button-container">
-        <button class="btn btn-primary basic-btn basic-form-btn products-button" type="submit" nbButton status="success"
-            (click)="goToCreateProduct()">{{
-            'products.addFirstProduct' | translate
-            }}</button>
-    </div>
 </div>
+
+<!-- back button -->
 <div class="button-container">
     <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
         status="success" (click)="back()">
@@ -22,7 +24,8 @@
         {{ 'products.backToTheCategories' | translate }}</button>
 </div>
 
+<!-- add button -->
 <button *ngIf="(emptyCollection === true)" class="floating-button" (click)="goToCreateProduct()">
     +
-    <span class="floating-label">Add Product</span>
+    <span class="floating-label">{{ 'products.addProductText' | translate }}</span>
 </button>

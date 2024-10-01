@@ -145,6 +145,7 @@
                 "pcs": "db",
                 "noProducts": "Nincs egyetlen megjeleníthető termék sem!",
                 "addFirstProduct": "Add hozzá az első terméket",
-                "backToTheCategories": "Vissza a kategóriákhoz"
+                "backToTheCategories": "Vissza a kategóriákhoz",
+                "addProductText": "Új termék"
         }
 }

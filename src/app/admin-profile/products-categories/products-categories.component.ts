@@ -8,6 +8,7 @@ import { ProductService } from '../../products/product.service';
   styleUrl: '../../../styles/products.scss'
 })
 export class ProductsCategoriesComponent implements OnInit {
+  // products number by categories
   foodSuplimentsCount: number;
   healthyProductsCount: number;
   ClothesCount: number;
@@ -31,7 +32,7 @@ export class ProductsCategoriesComponent implements OnInit {
     });
   }
 
-  // go to the products by category
+  // // navigate and pass the products category to the products list component
   goToFoodSupliments() {
     this.router.navigate(['/admin-profile/pruducts', 'foodSupliments']);
   }

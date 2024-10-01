@@ -13,11 +13,12 @@ import { Accessories } from '../../../products/product-models/accessories.model'
   styleUrl: '../../../../styles/products.scss'
 })
 export class ProductsListComponent implements OnInit {
+  // store the products one of the array based on the productCategory value
   foodSupliments: FoodSupliment[];
-  productCategory: string = '';
   healthyProducts: HealthyProduct[];
   clothes: Clothes[];
   accessories: Accessories[];
+  productCategory: string = '';
 
   // if there are no products in the collection
   emptyCollection: boolean;
@@ -25,6 +26,7 @@ export class ProductsListComponent implements OnInit {
   constructor(private productServie: ProductService, private router: Router, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit() {
+    // get the category of the products from the category component
     this.route.params.subscribe(params => {
       this.productCategory = params['productCategory'];
       if (this.productCategory === 'foodSupliments') {
@@ -75,6 +77,7 @@ export class ProductsListComponent implements OnInit {
     this.router.navigate(['admin-profile']);
   }
 
+  // navigate and pass the products category to the create product component
   goToCreateProduct() {
     this.router.navigate(['admin-profile/create-product', this.productCategory])
   }
