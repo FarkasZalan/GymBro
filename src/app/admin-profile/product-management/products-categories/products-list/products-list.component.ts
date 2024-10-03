@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../../products/product.service';
+import { ProductService } from '../../../../products/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FoodSupliment } from '../../../products/product-models/food-supliment.model';
-import { HealthyProduct } from '../../../products/product-models/healthy-food.model';
-import { Clothes } from '../../../products/product-models/clothing.model';
+import { FoodSupliment } from '../../../../products/product-models/food-supliment.model';
+import { HealthyProduct } from '../../../../products/product-models/healthy-food.model';
+import { Clothes } from '../../../../products/product-models/clothing.model';
 import { Location } from '@angular/common';
-import { Accessories } from '../../../products/product-models/accessories.model';
+import { Accessories } from '../../../../products/product-models/accessories.model';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
-  styleUrl: '../../../../styles/products.scss'
+  styleUrl: '../../../../../styles/products.scss'
 })
 export class ProductsListComponent implements OnInit {
   // store the products one of the array based on the productCategory value
@@ -77,8 +77,13 @@ export class ProductsListComponent implements OnInit {
     this.router.navigate(['admin-profile']);
   }
 
-  // navigate and pass the products category to the create product component
+  // navigate and add the products category to the create product components
   goToCreateProduct() {
-    this.router.navigate(['admin-profile/create-product', this.productCategory])
+    this.router.navigate(['admin-profile/create-product/' + this.productCategory])
+  }
+
+  // navigate and add the products category to the edit product components
+  goToEditProduct() {
+    this.router.navigate(['admin-profile/edit-product/' + this.productCategory])
   }
 }

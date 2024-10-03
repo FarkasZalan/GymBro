@@ -18,11 +18,19 @@ import { AdminRoutingModule } from './admin-profile-routing.module';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProfileModule } from '../profile/profile.module';
 import { StatisticsComponent } from './statistics/statistics.component';
-import { ProductsListComponent } from './products-categories/products-list/products-list.component';
+import { ProductsListComponent } from './product-management/products-categories/products-list/products-list.component';
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { OrderListComponent } from './order-list/order-list.component';
-import { ProductsCategoriesComponent } from './products-categories/products-categories.component';
-import { CreateProductComponent } from './products-categories/create-product/create-product.component';
+import { ProductsCategoriesComponent } from './product-management/products-categories/products-categories.component';
+import { CreateFoodSupliementsComponent } from './product-management/products-create/create-food-supliements/create-food-supliements.component';
+import { CreateHealthyFoodComponent } from './product-management/products-create/create-healthy-food/create-healthy-food.component';
+import { CreateClothesComponent } from './product-management/products-create/create-clothes/create-clothes.component';
+import { CreateAccessoriesComponent } from './product-management/products-create/create-accessories/create-accessories.component';
+import { EditAccessoriesComponent } from './product-management/products-edit/edit-accessories/edit-accessories.component';
+import { EditClothesComponent } from './product-management/products-edit/edit-clothes/edit-clothes.component';
+import { EditHealthyFoodComponent } from './product-management/products-edit/edit-healthy-food/edit-healthy-food.component';
+import { EditFoodSupliementsComponent } from './product-management/products-edit/edit-food-supliements/edit-food-supliements.component';
+import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -48,7 +56,17 @@ import { CreateProductComponent } from './products-categories/create-product/cre
         BlogListComponent,
         OrderListComponent,
         ProductsCategoriesComponent,
-        CreateProductComponent
+        CreateFoodSupliementsComponent,
+        CreateHealthyFoodComponent,
+        CreateClothesComponent,
+        CreateAccessoriesComponent,
+        EditAccessoriesComponent,
+        EditClothesComponent,
+        EditHealthyFoodComponent,
+        EditFoodSupliementsComponent,
+
+        // Delete confirmation
+        DeleteConfirmationDialogComponent
     ],
 })
 export class AdminProfileModule {

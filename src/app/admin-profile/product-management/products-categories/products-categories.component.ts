@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProductService } from '../../products/product.service';
+import { ProductService } from '../../../products/product.service';
 
 @Component({
   selector: 'app-products-categories',
   templateUrl: './products-categories.component.html',
-  styleUrl: '../../../styles/products.scss'
+  styleUrl: '../../../../styles/products.scss'
 })
 export class ProductsCategoriesComponent implements OnInit {
   // products number by categories

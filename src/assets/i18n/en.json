@@ -145,6 +145,7 @@
       "noProducts": "There are no products to display!",
       "addFirstProduct": "Add the first product",
       "backToTheCategories": "Back to the catetegories",
-      "addProductText": "Add product"
+      "addProductText": "Add product",
+      "deleteProductText": "Are you sure you want to delete this product?"
    }
 }

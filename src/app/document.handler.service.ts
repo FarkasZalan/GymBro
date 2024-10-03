@@ -8,22 +8,8 @@ export class DocumentHandlerService {
 
   constructor(private db: AngularFirestore) { }
 
-  // basic document handleing
-  getAllDocument(collectionName: string) {
-    return this.db.collection(collectionName).valueChanges();
-  }
-
   getDocumentByID(collection: string, documentId: string) {
     return this.db.collection(collection).doc(documentId).valueChanges();
-  }
-
-  async deleteDocument(collectionName: string, id: string) {
-    try {
-      const deleteUserRef = this.db.collection(collectionName).doc(id);
-      await deleteUserRef.update({
-        deleted: true
-      });
-    } catch { }
   }
 
   // When register a user then it's useful for upper and lowercase handleing
@@ -50,28 +36,6 @@ export class DocumentHandlerService {
     return uppercaseText;
   }
 
-  checkForDuplication(collection: string, fieldName: string, input: string, ownId: string = "") {
-    return new Promise<boolean>((resolve, reject) => {
-      this.db.collection(collection).ref
-        .where(fieldName, '==', input)
-        .where("id", "!=", ownId) // found a match in one document which is not his own 
-        .get() // then we get the document
-        .then(document => {
-          if (!document.empty) { // if it's not empty
-            // then return true
-            resolve(true);
-          } else {
-            // not found the given input so it's return with false
-            resolve(false);
-          }
-        })
-        .catch(error => {
-          // if get error then reject the promise (so false)
-          reject(error);
-        });
-    });
-  }
-
   checkForDuplicationInnerCollection(collection: string, innerDocument: string, innerCollection: string, fieldName: string, inputString?: string, inputBoolean?: boolean, ownId: string = "") {
     return new Promise<boolean>((resolve, reject) => {
       // Determine the value of `input` based on whether inputString or inputBoolean is provided
@@ -87,7 +51,6 @@ export class DocumentHandlerService {
         .doc(innerDocument)
         .collection(innerCollection)
         .ref
-        .where("deleted", '==', false)
         .where(fieldName, '==', input)
         .where("id", "!=", ownId) // found a match in one document which is not his own 
         .get() // then we get the document

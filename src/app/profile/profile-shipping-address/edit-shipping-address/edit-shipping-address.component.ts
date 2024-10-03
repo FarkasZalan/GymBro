@@ -10,11 +10,11 @@ import { AuthService } from '../../../auth/auth.service';
 import { DocumentHandlerService } from '../../../document.handler.service';
 import { SuccessfullDialogComponent } from '../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../successfull-dialog/sucessfull-dialog-text';
-import { User } from '../../../user/user.model';
 import { AddressTypeText } from '../../profile-address-type-text';
 import { ChangeDefaultAddressConfirmDialogComponent } from '../change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
 import { ShippingAddress } from '../../../user/shipping-address.model';
-import { DeleteShippingAddressConfirmComponent } from './delete-shipping-address-confirm/delete-shipping-address-confirm.component';
+import { DeleteConfirmationText } from '../../../delete-confirmation-dialog/delete-text';
+import { DeleteConfirmationDialogComponent } from '../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-edit-shipping-address',
@@ -120,6 +120,9 @@ export class EditShippingAddressComponent {
     } else {
       this.addressName = "";
     }
+
+    this.errorMessage = false;
+    this.missingAddressNameError = false;
   }
 
   async modifyAddress() {
@@ -133,13 +136,11 @@ export class EditShippingAddressComponent {
 
       // check what is the shipping address type, name because of the duplication check
       if (this.selectedAddressType === AddressTypeText.HOME) {
-        this.addressName = AddressTypeText.HOME;
         errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
           "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.HOME, undefined, this.modifyShippingAddressId
         );
       }
       else if (this.selectedAddressType === AddressTypeText.WORK) {
-        this.addressName = AddressTypeText.WORK;
         errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
           "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.WORK, undefined, this.modifyShippingAddressId
         );
@@ -234,7 +235,11 @@ export class EditShippingAddressComponent {
   }
 
   async deleteAddress() {
-    const dialogRef = this.dialog.open(DeleteShippingAddressConfirmComponent);
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        text: DeleteConfirmationText.SHIPPING_ADDRESS_DELETE
+      }
+    });
 
     // Wait for the dialog to close and get the user's confirmation
     const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();

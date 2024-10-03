@@ -146,6 +146,7 @@
                 "noProducts": "Nincs egyetlen megjeleníthető termék sem!",
                 "addFirstProduct": "Add hozzá az első terméket",
                 "backToTheCategories": "Vissza a kategóriákhoz",
-                "addProductText": "Új termék"
+                "addProductText": "Új termék",
+                "deleteProductText": "Biztosam törölni szeretnéd ezt a terméket?"
         }
 }

@@ -19,7 +19,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdminGuard } from './admin-profile/admin-guard.service';
-import { ProductSiteComponent } from './products/product-site/product-site.component';
 
 // Factory function to create an instance of TranslateHttpLoader
 // This loader will be used to fetch translation files over HTTP using the provided HttpClient.
@@ -30,7 +29,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 @NgModule({
   declarations: [
     AppComponent,
-    ProductSiteComponent
   ],
   imports: [
     BrowserModule,

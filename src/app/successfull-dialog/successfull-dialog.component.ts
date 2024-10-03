@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './successfull-dialog.component.html',
   styleUrl: './successfull-dialog.component.scss'
 })
-export class SuccessfullDialogComponent {
+export class SuccessfullDialogComponent implements OnInit {
 
   // e.g., email sent, modification, etc.
   operation: string = "";

@@ -93,6 +93,9 @@ export class CreateShippingAddressComponent implements OnInit {
     } else {
       this.addressName = "";
     }
+
+    this.errorMessage = false;
+    this.missingAddressNameError = false;
   }
 
   async addNewAddress() {
@@ -106,13 +109,11 @@ export class CreateShippingAddressComponent implements OnInit {
 
       // check what is the shipping address type, name because of the duplication check
       if (this.selectedAddressType === AddressTypeText.HOME) {
-        this.addressName = AddressTypeText.HOME;
         errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
           "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.HOME, undefined, ""
         );
       }
       else if (this.selectedAddressType === AddressTypeText.WORK) {
-        this.addressName = AddressTypeText.WORK;
         errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
           "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.WORK, undefined, ""
         );

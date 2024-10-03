@@ -25,7 +25,6 @@ import { ProfileOrdersComponent } from './profile-orders/profile-orders.componen
 import { CreateShippingAddressComponent } from './profile-shipping-address/create-shipping-address/create-shipping-address.component';
 import { ChangeDefaultAddressConfirmDialogComponent } from './profile-shipping-address/change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
 import { EditShippingAddressComponent } from './profile-shipping-address/edit-shipping-address/edit-shipping-address.component';
-import { DeleteShippingAddressConfirmComponent } from './profile-shipping-address/edit-shipping-address/delete-shipping-address-confirm/delete-shipping-address-confirm.component';
 
 @NgModule({
     imports: [
@@ -54,8 +53,7 @@ import { DeleteShippingAddressConfirmComponent } from './profile-shipping-addres
         ProfileOrdersComponent,
         CreateShippingAddressComponent,
         ChangeDefaultAddressConfirmDialogComponent,
-        EditShippingAddressComponent,
-        DeleteShippingAddressConfirmComponent
+        EditShippingAddressComponent
     ],
     exports: [
         ProfileListComponent // To the admin profile module
