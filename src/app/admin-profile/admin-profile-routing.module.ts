@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PagesComponent } from '../pages/pages.component';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProductsListComponent } from './product-management/products-categories/products-list/products-list.component';
-import { CreateFoodSupliementsComponent } from './product-management/products-create/create-food-supliements/create-food-supliements.component';
+import { CreateFoodSuplimentsComponent } from './product-management/products-create/create-food-supliements/create-food-supliements.component';
 import { EditHealthyFoodComponent } from './product-management/products-edit/edit-healthy-food/edit-healthy-food.component';
 import { EditFoodSupliementsComponent } from './product-management/products-edit/edit-food-supliements/edit-food-supliements.component';
 import { EditAccessoriesComponent } from './product-management/products-edit/edit-accessories/edit-accessories.component';
@@ -40,7 +40,7 @@ export const routes: Routes = [
             },
             {
                 path: 'create-product/foodSupliments',
-                component: CreateFoodSupliementsComponent
+                component: CreateFoodSuplimentsComponent
             },
             {
                 path: 'create-product/healthyProducts',

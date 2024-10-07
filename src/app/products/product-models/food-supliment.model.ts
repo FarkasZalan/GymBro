@@ -2,7 +2,7 @@ export interface FoodSupliment {
     // identification and basic details
     id?: string;
     productnName: string;
-    productCategory: string[]; // forexample protein, vitamin, creatin...
+    productCategory: string; // forexample protein, vitamin, creatin...
     description: string;
 
     // Dosage form and flavors

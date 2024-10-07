@@ -22,7 +22,7 @@ import { ProductsListComponent } from './product-management/products-categories/
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { ProductsCategoriesComponent } from './product-management/products-categories/products-categories.component';
-import { CreateFoodSupliementsComponent } from './product-management/products-create/create-food-supliements/create-food-supliements.component';
+import { CreateFoodSuplimentsComponent } from './product-management/products-create/create-food-supliements/create-food-supliements.component';
 import { CreateHealthyFoodComponent } from './product-management/products-create/create-healthy-food/create-healthy-food.component';
 import { CreateClothesComponent } from './product-management/products-create/create-clothes/create-clothes.component';
 import { CreateAccessoriesComponent } from './product-management/products-create/create-accessories/create-accessories.component';
@@ -56,7 +56,7 @@ import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog
         BlogListComponent,
         OrderListComponent,
         ProductsCategoriesComponent,
-        CreateFoodSupliementsComponent,
+        CreateFoodSuplimentsComponent,
         CreateHealthyFoodComponent,
         CreateClothesComponent,
         CreateAccessoriesComponent,

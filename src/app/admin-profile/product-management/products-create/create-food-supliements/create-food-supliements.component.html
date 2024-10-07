@@ -1,1 +1,253 @@
-<p>create-food-supliements works!</p>
+<div class="container">
+    <nb-card class="container">
+        <nb-card-body class="login-col">
+            <form (ngSubmit)="addNewFoodSupplement()" #form="ngForm">
+                <!-- Product Details Section -->
+                <h3 class="section-title">Product Details</h3>
+                <div class="row">
+                    <!-- Product Name -->
+                    <div class="col-md-6 form-group">
+                        <label for="productName" class="label">Product Name</label>
+                        <input type="text" class="form-control" ngModel name="productName" required
+                            placeholder="Enter product name*" #productName="ngModel">
+                        <span class="help-block" *ngIf="productName.touched && !productName.valid">This field is
+                            required</span>
+                    </div>
+                    <!-- Product Category (Dropdown) -->
+                    <div class="col-md-6 form-group">
+                        <label for="productCategory" class="label">Product Category</label>
+                        <select class="form-control drop-down-list allow-selected-list-color" ngModel
+                            name="productCategory" required #productCategory="ngModel" [(ngModel)]="selectedCategory"
+                            (change)="isProteinSelected()">
+                            <!-- Placeholder option -->
+                            <option value="" selected disabled>Select Categories*</option>
+
+                            <!-- List of categories -->
+                            <option *ngFor="let categorie of translatedCategories" [value]="categorie">
+                                {{ categorie }}
+                            </option>
+                        </select>
+                        <span class="help-block" *ngIf="productCategory.touched && !productCategory.valid">This field is
+                            required</span>
+                    </div>
+                </div>
+
+                <!-- Dosage and Description Section -->
+                <div class="row">
+                    <!-- Dosage -->
+                    <div class="col-md-6 form-group">
+                        <label for="dosageForm" class="label">Daily Dosage</label>
+                        <div class="input-group">
+                            <input type="number" min="0" class="form-control" ngModel name="dosageForm" required
+                                placeholder="Daily dosage*" #dosageForm="ngModel">
+                            <span class="help-block" *ngIf="dosageForm.touched && !dosageForm.valid">This field is
+                                required</span>
+
+                            <!-- daily dosage unit -->
+                            <select class="form-control drop-down-list allow-selected-list-color selection" ngModel
+                                name="unit" required #dosageUnit="ngModel">
+                                <option value="" disabled selected>Select unit*</option>
+                                <option value="gramm">Gramm</option>
+                                <option value="pcs">Pieces</option>
+                            </select>
+                            <span class="help-block" *ngIf="dosageUnit.touched && !dosageUnit.valid">This field is
+                                required</span>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-md-6 form-group">
+                        <label for="description" class="label">Description</label>
+                        <textarea class="form-control" ngModel name="description" required
+                            placeholder="Enter product description*" #description="ngModel"></textarea>
+                        <span class="help-block" *ngIf="description.touched && !description.valid">This field is
+                            required</span>
+                    </div>
+                </div>
+
+                <!-- Ingredients and Allergens Section -->
+                <h3 class="section-title">Ingredients and Allergens</h3>
+
+                <div *ngIf="isProtein" [@collapseField] class="row">
+                    <!-- Protein Type -->
+                    <div class="col-md-12 form-group">
+                        <label for="proteinType" class="label">Protein type</label>
+                        <select class="form-control drop-down-list allow-selected-list-color selection" ngModel
+                            name="proteinType" required #proteinType="ngModel">
+                            <option value="" disabled selected>Select protein type*</option>
+                            <option value="isolate">Isolate</option>
+                            <option value="concentrate">Concentratum</option>
+                            <option value="beef">Beef</option>
+                            <option value="pcs">Concentratum</option>
+                        </select>
+                        <span class="help-block" *ngIf="proteinType.touched && !proteinType.valid">This field is
+                            required</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Flavors Section -->
+                    <div class="col-md-6 form-group">
+                        <label for="flavors" class="label">Flavors</label>
+                        <div class="multi-select-container">
+                            <select class="form-control allow-selected-list-color" multiple="multiple"
+                                [(ngModel)]="selectedFlavors" #flavorSelect="ngModel">
+                                <option *ngFor="let flavor of availableFlavors" [value]="flavor"
+                                    [ngClass]="{'active': selectedFlavors.includes(flavor) && selectedFlavors.length > 0}"
+                                    (click)="selectionOfTheList(productViewText.FLAVORS, flavor)">
+                                    {{ flavor }}
+                                </option>
+                            </select>
+                            <span class="help-block" *ngIf="flavorSelect.touched && !flavorSelect.valid">This field is
+                                required</span>
+                        </div>
+                        <div *ngIf="selectedFlavors.length > 0">
+                            <div class="selected-items-display" *ngFor="let selected of selectedFlavors"
+                                (click)="removeItemFromTheList(productViewText.FLAVORS, selected)">
+                                {{ selected }}
+                                <span style="cursor: pointer; color: red;">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Allergenes Section -->
+                    <div class="col-md-6 form-group">
+                        <label for="flavors" class="label">Allergenes</label>
+                        <div class="multi-select-container">
+                            <select class="form-control allow-selected-list-color" multiple="multiple"
+                                [(ngModel)]="selectedAllergenes" #allergeneSelect="ngModel">
+                                <option *ngFor="let allergene of availableAllergenes" [value]="allergene"
+                                    [ngClass]="{'active': selectedAllergenes.includes(allergene) && selectedAllergenes.length > 0}"
+                                    (click)="selectionOfTheList(productViewText.ALLERGENES, allergene)">
+                                    {{ allergene }}
+                                </option>
+                            </select>
+                            <span class="help-block" *ngIf="allergeneSelect.touched && !allergeneSelect.valid">This
+                                field is
+                                required</span>
+                        </div>
+                        <div *ngIf="selectedAllergenes.length > 0">
+                            <div class="selected-items-display" *ngFor="let selected of selectedAllergenes"
+                                (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)">
+                                {{ selected }}
+                                <span style="cursor: pointer; color: red;">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nutritional Information Section -->
+                <div class="nutrition-table">
+                    <h3>Nutritional Information</h3>
+                    <div class="row">
+                        <!-- Energy (kJ) -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueEnergyKj" class="label">Energy (kJ)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueEnergyKj"
+                                placeholder="Enter energy (kJ)" #nutritionalValueEnergyKj="ngModel">
+                        </div>
+                        <!-- Energy (kcal) -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueEnergyCal" class="label">Energy (kcal)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueEnergyCal"
+                                placeholder="Enter energy (kcal)" #nutritionalValueEnergyCal="ngModel">
+                        </div>
+                        <!-- Fats -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueFats" class="label">Fats (g)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueFats"
+                                placeholder="Enter fats" #nutritionalValueFats="ngModel">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Fatty Acids -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueFattyAcids" class="label">Fatty Acids (g)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueFattyAcids"
+                                placeholder="Enter fatty acids" #nutritionalValueFattyAcids="ngModel">
+                        </div>
+                        <!-- Carbohydrates -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueCarbohydrates" class="label">Carbohydrates (g)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueCarbohydrates"
+                                placeholder="Enter carbohydrates" #nutritionalValueCarbohydrates="ngModel">
+                        </div>
+                        <!-- Sugars -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueSugar" class="label">Sugars (g)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueSugar"
+                                placeholder="Enter sugars" #nutritionalValueSugar="ngModel">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Fiber -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueFiber" class="label">Fiber (g)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueFiber"
+                                placeholder="Enter fiber" #nutritionalValueFiber="ngModel">
+                        </div>
+                        <!-- Proteins -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueProteins" class="label">Proteins (g)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueProteins"
+                                placeholder="Enter proteins" #nutritionalValueProteins="ngModel">
+                        </div>
+                        <!-- Salt -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueSalt" class="label">Salt (g)</label>
+                            <input type="number" class="form-control" ngModel name="nutritionalValueSalt"
+                                placeholder="Enter salt" #nutritionalValueSalt="ngModel">
+                        </div>
+                    </div>
+
+                    <!-- Other nutritional information -->
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="description" class="label">Other nutritional information</label>
+                            <textarea class="form-control" ngModel name="description"
+                                placeholder="Other nutritional information" #description="ngModel"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety Section -->
+                <h3 class="section-title">Safety Information</h3>
+                <div class="row chechkbox-row">
+                    <!-- Safe for Pregnancy -->
+                    <div class="col-md-4 form-group">
+                        <label class="checkbox-container">
+                            Safe for Pregnancy
+                            <input type="checkbox" [(ngModel)]="safeForConsumptionDuringPregnancy"
+                                name="safeForConsumptionDuringPregnancy">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <!-- Safe for Breastfeeding -->
+                    <div class="col-md-4 form-group">
+                        <label class="checkbox-container">
+                            Safe for Breastfeeding
+                            <input type="checkbox" [(ngModel)]="safeForConsumptionDuringBreastfeeding"
+                                name="safeForConsumptionDuringBreastfeeding">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        [disabled]="!form.valid">{{
+                        'profileMenu.shippingAddressForm.addAddress' | translate
+                        }}</button>
+                </div><br>
+            </form>
+            <!-- back button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                    status="success" (click)="back()">
+                    <span class="arrow">&#9664;</span>
+                    {{ 'loginPage.back' | translate }}</button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

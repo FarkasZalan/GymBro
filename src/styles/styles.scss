@@ -41,6 +41,35 @@ nb-layout-footer nav {
     /* Default fill color */
 }
 
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+    margin-bottom: 1% !important;
+}
+
+
+// error check
+input.ng-valid {
+    border: 1px solid green !important;
+}
+
+select.ng-invalid.ng-touched {
+    border: 1px solid red;
+    margin-bottom: 1% !important;
+}
+
+select.ng-valid {
+    border: 1px solid green !important;
+}
+
+textarea.ng-invalid.ng-touched {
+    border: 1px solid red;
+    margin-bottom: 1% !important;
+}
+
+textarea.ng-valid {
+    border: 1px solid green !important;
+}
+
 /* On mouse-over, add a grey background color */
 .checkbox-container:hover input~.checkmark {
     background-color: #ccc;
@@ -82,6 +111,35 @@ nb-layout-footer nav {
     border: solid white;
     transform: rotate(45deg);
     border-width: 0 3px 3px 0;
+}
+
+.drop-down-list {
+    cursor: pointer !important;
+
+    // Active and focus color change
+    &:focus,
+    &:active {
+        border-color: #0b8e92 !important;
+        outline: none;
+
+        // Change the color of selected option
+        option:checked {
+            background-color: #0b8e92;
+            color: #fff; // Makes sure the text is readable on the colored background
+        }
+
+        // Hover state for dropdown options
+        option:hover {
+            background-color: #0b8e92 !important;
+            cursor: pointer !important;
+            color: #fff;
+        }
+
+        option:active {
+            background-color: #0b8e92 !important;
+            color: #fff;
+        }
+    }
 }
 
 // create product and filter dialog open button

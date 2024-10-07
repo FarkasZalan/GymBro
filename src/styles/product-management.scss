@@ -1,0 +1,337 @@
+input[type='text'] {
+    cursor: text;
+}
+
+.button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.forgot-password-text {
+    font-weight: bold;
+    margin-top: 3%;
+    text-align: center;
+    cursor: pointer;
+    color: #0b8e92;
+    font-size: 17px !important;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        color: #15b2b8 !important;
+        transform: scale(1.1) !important;
+    }
+
+    &:active {
+        color: darken(#0b8e92, 15%);
+        transform: scale(0.95);
+    }
+}
+
+.fa-user {
+    color: #0b8e92;
+}
+
+p {
+    font-size: 18px !important;
+    cursor: auto;
+}
+
+input[type='email'] {
+    cursor: text;
+    margin-bottom: 7px;
+}
+
+input[type='password'] {
+    cursor: text;
+    margin-bottom: 7px;
+}
+
+.container {
+    margin-top: 20px;
+    padding: 16px;
+}
+
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    /* Space between cards */
+    width: 100%;
+    /* Full width for the row */
+}
+
+.list-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow wrapping to the next row */
+    margin-top: 10px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+    height: fit-content;
+    justify-content: center;
+}
+
+.empty-list-container {
+    margin-top: 10px;
+    max-width: 60%;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+}
+
+.rounded-card {
+    border-radius: 20px !important;
+}
+
+.container-profile {
+    margin-top: 30px;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 40%;
+    justify-content: center;
+}
+
+.help-block-login-error {
+    display: flex;
+    align-items: center;
+    background-color: #f8d7da;
+    /* Light red background */
+    color: #721c24;
+    /* Dark red text color */
+    border: 1px solid #f5c6cb;
+    /* Red border */
+    border-radius: 4px;
+    /* Rounded corners */
+    padding: 10px;
+    margin: 15px 0;
+    /* Margin around the error block */
+    font-size: 16px !important;
+    /* Adjust font size as needed */
+}
+
+.help-block-login-error .icon {
+    margin-right: 10px;
+    /* Space between the icon and text */
+    font-size: 1.5em;
+    /* Adjust icon size */
+}
+
+.help-block {
+    color: #721c24;
+    font-size: 15px !important;
+}
+
+.title {
+    margin-top: 3%;
+    margin-bottom: 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 28px !important;
+}
+
+button {
+    font-size: 15px !important;
+}
+
+.register-div {
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: flex-start;
+    /* Align to top */
+    position: relative;
+    /* Needed if you use absolute positioning */
+    font-size: 30px;
+    /* Adjust the size of the icon */
+    color: #333;
+}
+
+.col {
+    margin-bottom: 1%;
+}
+
+.no-border-container {
+    border: none;
+}
+
+.justify-content-center {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1rem; // Adjust as needed
+}
+
+/* General Styles */
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1200px;
+    border-radius: 4% !important;
+}
+
+.nb-theme-default nb-card {
+    border-radius: 4% !important;
+}
+
+h1.title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: left;
+}
+
+/* Form Group Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.input-group {
+    display: flex;
+    /* Use flexbox for horizontal alignment */
+}
+
+.input-group .form-control {
+    margin-right: 10px;
+    /* Space between input and select */
+    flex: 1;
+    /* Allow input to take up available space */
+}
+
+.selection {
+    cursor: pointer !important;
+}
+
+//multi select list
+
+.multi-select-container {
+    position: relative;
+}
+
+.drop-down-list {
+    height: fit-content;
+    /* Allow height to adjust for multiple selections */
+}
+
+option {
+    padding: 3px;
+    /* Adjust padding for options */
+}
+
+/* Styles for active (selected) options */
+option.active {
+    background-color: #0b8e92 !important;
+    /* Bootstrap primary color */
+    color: white;
+    /* Text color for active option */
+}
+
+.allow-selected-list-color {
+    cursor: pointer !important;
+
+    // Active and focus color change
+    &:focus,
+    &:active {
+        border-color: #0b8e92 !important;
+        outline: none;
+    }
+
+    // Change the color of selected option
+    option:checked {
+        background-color: #0b8e92 !important;
+        color: #fff; // Makes sure the text is readable on the colored background
+    }
+
+    option:target {
+        background-color: #0b8e92 !important;
+        color: #fff; // Makes sure the text is readable on the colored background
+    }
+
+    option:focus {
+        background-color: #0b8e92 !important;
+        color: #fff; // Makes sure the text is readable on the colored background
+    }
+
+    // Hover state for dropdown options
+    option:hover {
+        background-color: #0b8e92 !important;
+        cursor: pointer !important;
+        color: #fff;
+    }
+
+    option:active {
+        background-color: #0b8e92 !important;
+        color: #fff;
+    }
+}
+
+.selected-items-display {
+    background-color: #0b8e92;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    margin: 7px;
+    padding: 5px;
+    border-radius: 10% !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #0b8e92 !important;
+
+    &:hover {
+        color: red;
+        background-color: #fff;
+    }
+}
+
+.chechkbox-row {
+    justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .col-md-6,
+    .col-md-3,
+    .col-md-12 {
+        width: 100%;
+        padding: 0;
+    }
+}
