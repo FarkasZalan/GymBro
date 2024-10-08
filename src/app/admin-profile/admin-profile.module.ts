@@ -31,6 +31,7 @@ import { EditClothesComponent } from './product-management/products-edit/edit-cl
 import { EditHealthyFoodComponent } from './product-management/products-edit/edit-healthy-food/edit-healthy-food.component';
 import { EditFoodSupliementsComponent } from './product-management/products-edit/edit-food-supliements/edit-food-supliements.component';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { AddPriceDialogComponent } from './product-management/products-create/create-food-supliements/add-price-dialog/add-price-dialog.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -66,7 +67,10 @@ import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog
         EditFoodSupliementsComponent,
 
         // Delete confirmation
-        DeleteConfirmationDialogComponent
+        DeleteConfirmationDialogComponent,
+
+        // to add new weight/pieses, price and image
+        AddPriceDialogComponent
     ],
 })
 export class AdminProfileModule {

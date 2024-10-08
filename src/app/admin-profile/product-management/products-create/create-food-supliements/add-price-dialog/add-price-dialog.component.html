@@ -1,0 +1,63 @@
+<div class="container-all-window">
+    <!-- add price title -->
+    <h1 id="title" class="title">Add new Price</h1>
+    <!-- add price form -->
+    <div class="container">
+        <nb-card>
+            <nb-card-body>
+                <div>
+                    <form (ngSubmit)="addNewPrice()" #form="ngForm">
+                        <!-- Weight block -->
+                        <div class="form-group">
+                            <label for="weight" class="label">{{ unitText }}</label>
+                            <input type="number" class="form-control" ngModel name="weight" fullWidth
+                                placeholder="{{ unitText }} ({{ selectedUnit}})" required #weight="ngModel" />
+                            <!-- weight error block -->
+                            <span class="help-block" *ngIf="!weight.valid && weight.touched">Weight is required</span>
+                        </div><br>
+
+                        <!-- Product Image block -->
+                        <div class="form-group">
+                            <label for="productImage" class="label">Product Image</label>
+                            <input type="file" class="form-control" (change)="onFileSelected($event)" />
+                            <div *ngIf="imagePreview">
+                                <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
+                            </div>
+                        </div><br>
+
+                        <!-- Product Price block -->
+                        <div class="form-group">
+                            <label for="productPrice" class="label">Product Price</label>
+                            <input type="number" class="form-control" ngModel name="productPrice" fullWidth
+                                placeholder="Price (Huf)" required #productPrice="ngModel" />
+                            <!-- price error block -->
+                            <span class="help-block" *ngIf="!productPrice.valid && productPrice.touched">Price is
+                                required</span>
+                        </div>
+
+                        <!-- Error block -->
+                        <span *ngIf="errorMessage" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i>
+                            {{ errorMessage }}
+                        </span>
+
+                        <!-- Submit button -->
+                        <div class="send-button-container">
+                            <button class="btn btn-primary forgot-btn" type="submit" nbButton status="success"
+                                [disabled]="!form.valid">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="send-button-container">
+                        <button class="btn btn-primary forgot-btn" type="button" nbButton status="warning"
+                            (click)="back()">
+                            Back
+                        </button>
+                    </div><br />
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

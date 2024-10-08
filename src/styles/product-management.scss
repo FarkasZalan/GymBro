@@ -223,15 +223,21 @@ h1.title {
 
 .input-group {
     display: flex;
-    /* Use flexbox for horizontal alignment */
+    gap: 5px;
+    /* Space between the two input fields */
 }
 
-.input-group .form-control {
-    margin-right: 10px;
-    /* Space between input and select */
+.input-container {
+    display: flex;
+    flex-direction: column;
     flex: 1;
-    /* Allow input to take up available space */
 }
+
+.form-control {
+    margin-bottom: 5px;
+    /* Space between input field and error message */
+}
+
 
 .selection {
     cursor: pointer !important;
@@ -241,6 +247,8 @@ h1.title {
 
 .multi-select-container {
     position: relative;
+    margin-bottom: 20px;
+    /* Add spacing between sections */
 }
 
 .drop-down-list {
@@ -249,8 +257,8 @@ h1.title {
 }
 
 option {
-    padding: 3px;
-    /* Adjust padding for options */
+    padding: 10px;
+    /* Increase padding for better touch targets */
 }
 
 /* Styles for active (selected) options */
@@ -259,6 +267,38 @@ option.active {
     /* Bootstrap primary color */
     color: white;
     /* Text color for active option */
+}
+
+.allow-selected-multiple-list-color {
+    cursor: pointer !important;
+    padding: 0 !important;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    overflow-y: auto;
+
+    // Active and focus color change
+    &:focus,
+    &:active {
+        border-color: #0b8e92 !important;
+        /* Change border color on focus */
+        outline: none;
+    }
+
+    // Change the color of selected option
+    option:checked {
+        background-color: #fff;
+    }
+
+    // Hover state for dropdown options
+    option:hover {
+        background-color: #0b8e92 !important;
+        color: white !important;
+        cursor: pointer;
+    }
+
+    option:active {
+        background-color: darken(#0b8e92, 15%);
+        color: #fff;
+    }
 }
 
 .allow-selected-list-color {
@@ -305,21 +345,200 @@ option.active {
     color: #fff;
     cursor: pointer;
     display: inline-block;
-    margin: 7px;
-    padding: 5px;
-    border-radius: 10% !important;
+    margin: 7px 5px;
+    /* Space between items */
+    padding: 5px 10px;
+    /* More padding for better touch targets */
+    border-radius: 20px;
+    /* More rounded corners */
+    border: 1px solid transparent;
+    /* Border for selected items */
+    transition: background-color 0.3s;
+    border-radius: 20px !important;
     border-style: solid;
     border-width: 1px;
     border-color: #0b8e92 !important;
 
     &:hover {
         color: red;
+        transform: scale(1.05) !important;
         background-color: #fff;
+    }
+
+    &:active {
+        background-color: darken(#0b8e92, 15%);
+        transform: scale(0.95);
     }
 }
 
 .chechkbox-row {
     justify-content: center;
+}
+
+.add-price-btn {
+    font-size: 25px !important;
+    width: 40% !important;
+}
+
+.price-col {
+    display: flex;
+    justify-content: center;
+}
+
+// price cards
+.card-image {
+    width: 100%;
+    /* Image takes the full width of the card */
+    height: 300px !important;
+    object-fit: cover;
+    /* Ensures the image covers the entire area without distortion */
+    border-radius: 8px 8px 0 0;
+    /* Optional: rounded corners only at the top */
+    transition: filter 0.3s ease, transform 0.3s ease;
+    /* Smooth transition */
+}
+
+.row {
+    justify-content: center;
+}
+
+.categoryCard {
+    width: 250px;
+    /* Set a width suitable for 2 columns */
+    flex: 1 1 calc(50% - 20px);
+    /* 2 columns with space between */
+    display: flex;
+    flex-direction: column;
+    /* Ensure content is stacked vertically */
+    padding: 0 !important;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 5%;
+    margin-right: 5%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Optional: subtle shadow effect */
+    border-radius: 8px;
+    /* Rounded corners */
+    background-color: #fffcfc;
+    /* Slightly darker background for contrast */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    height: fit-content;
+    max-height: 500px;
+    align-self: flex-start;
+    /* Align card to the start (left) of its container */
+
+    &:hover {
+        cursor: pointer;
+        background-color: darken(#ffffff, 5%);
+        transform: scale(1.05) !important;
+
+        strong,
+        span,
+        h3,
+        p {
+            color: #0b8e92 !important;
+        }
+    }
+
+    &:active {
+        cursor: pointer;
+        color: #0b8e92 !important;
+        background-color: darken(#ffffff, 20%);
+        transform: scale(0.95);
+    }
+}
+
+.rounded-card {
+    border-radius: 20px !important;
+    max-width: 250px;
+    /* Vertically center the image */
+
+    /* Horizontally center the image */
+    padding: 0 !important;
+}
+
+h3 {
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.weight-text {
+    font-size: 18px;
+    margin-top: 0;
+    color: #555;
+}
+
+.image-container {
+    width: 100%;
+    /* Ensure the image container takes the full width of the card */
+    display: flex;
+    justify-content: center;
+    /* Center the image */
+}
+
+.image-container::after {
+    content: "";
+    /* Necessary for the overlay effect */
+    position: absolute;
+    /* Position it over the image */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    /* Semi-transparent black for darkening effect */
+    opacity: 0;
+    /* Start with invisible overlay */
+    transition: opacity 0.3s ease;
+    /* Smooth transition for the overlay */
+}
+
+.image-container:hover::after {
+    opacity: 0.5;
+    /* Darken the image when hovering */
+}
+
+.category-image {
+    align-items: center;
+    /* Vertically center the image */
+    justify-content: center;
+    /* Horizontally center the image */
+    padding: 0;
+    margin: 0;
+    border-radius: 20px;
+}
+
+.table {
+    margin: 30px;
+}
+
+.delete-btn {
+    border-color: #e35757 !important;
+    color: #e35757 !important;
+    margin-left: 15px;
+
+    &:hover {
+        background-color: #e35757 !important;
+        color: white !important;
+        transform: scale(1.05);
+    }
+
+    &:active {
+        background-color: darken(#e35757, 15%) !important;
+        transform: scale(0.98);
+    }
+}
+
+.btn-edit {
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.buttons {
+    display: block;
+    text-align: center;
 }
 
 /* Responsive Design */

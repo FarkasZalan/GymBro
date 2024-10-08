@@ -9,6 +9,11 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.help-block {
+    color: red;
+    font-size: 0.9rem;
+}
+
 nb-layout-footer nav {
     justify-content: space-between !important;
     display: flex;

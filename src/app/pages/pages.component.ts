@@ -49,19 +49,9 @@ export class PagesComponent {
             link: '/food-supliments/creatines',
           },
           {
-            title: this.translate.instant('menu.foodSuplimentsMenu.vitamins'),
+            title: this.translate.instant('menu.foodSuplimentsMenu.vitaminsAndMinerals'),
             icon: ' ',
             link: '/food-supliments/vitamins',
-          },
-          {
-            title: this.translate.instant('menu.foodSuplimentsMenu.minerals'),
-            icon: ' ',
-            link: '/food-supliments/minerals',
-          },
-          {
-            title: this.translate.instant('menu.foodSuplimentsMenu.healthyFats'),
-            icon: ' ',
-            link: '/food-supliments/healthy-fats',
           },
           {
             title: this.translate.instant('menu.foodSuplimentsMenu.joinSupport'),

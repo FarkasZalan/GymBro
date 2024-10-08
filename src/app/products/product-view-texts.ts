@@ -6,9 +6,7 @@ export enum ProductViewText {
     MASS_GAINERS = "menu.foodSuplimentsMenu.massGainers",
     AMINO_ACIDS = "menu.foodSuplimentsMenu.aminoAcids",
     CREATINES = "menu.foodSuplimentsMenu.creatines",
-    VITAMINS = "menu.foodSuplimentsMenu.vitamins",
-    MINERALS = "menu.foodSuplimentsMenu.minerals",
-    HEALTHY_FATS = "menu.foodSuplimentsMenu.healthyFats",
+    VITAMINS_AND_MINERALS = "menu.foodSuplimentsMenu.vitaminsAndMinerals",
     JOIN_SUPPORT = "menu.foodSuplimentsMenu.joinSupport",
     FAT_BURNERS = "menu.foodSuplimentsMenu.fatBurners",
 
@@ -26,5 +24,11 @@ export enum ProductViewText {
     // ACCessories categories
     SHAKERS = "menu.accessoriesMenu.shakers",
     WEIGHT_LIFTING = "menu.accessoriesMenu.weightLifting",
-    OTHER_ACCESSORIES = "menu.accessoriesMenu.other"
+    OTHER_ACCESSORIES = "menu.accessoriesMenu.other",
+
+    // pieces, weight or pound
+
+    PIECES = "products.pieces",
+    GRAM = "products.gram",
+    POUNDS = "products.pound"
 }

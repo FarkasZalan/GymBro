@@ -37,10 +37,8 @@ export interface FoodSupliment {
     nutritionalValueSalt: number;
 
     // Ingredients and Allergens
-    containsVitamins: string[];
     proteinType: string; // example isolate, concentrate, beef...
     allergens: string[];
-    freeFrom: string[];
 
     // key = weight/piece  
     // stringValue = prodzct image to this amount of weight/piece
