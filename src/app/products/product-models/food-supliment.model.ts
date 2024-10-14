@@ -1,12 +1,15 @@
+import { ProductPrice } from "./product-price.model";
+
 export interface FoodSupliment {
     // identification and basic details
     id?: string;
-    productnName: string;
+    productName: string;
     productCategory: string; // forexample protein, vitamin, creatin...
     description: string;
 
     // Dosage form and flavors
-    dosageForm: string;
+    dosageUnit: string;
+    dailyDosage: number;
     flavors: string[];
 
     // Pregnancy and breastfeeding safety
@@ -43,17 +46,5 @@ export interface FoodSupliment {
     // key = weight/piece  
     // stringValue = prodzct image to this amount of weight/piece
     // numberValue = the price for this product
-    weights: Map<number, [string, number]>;
-
-    // numberKey = weight/piece amount for this product
-    // numberValue = amount of discount
-    discountByWeightProduct: Map<number, [number]>;
-
-    priceByWeight: boolean; // proudct priced by weight (kg) or pieces (pcs)
-
-    // for male or female
-    male: boolean;
-
-    // Stock information
-    stock: number;
+    prices: ProductPrice[];
 }

@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ForgotPasswordComponent } from '../../../../../auth/forgot-password/forgot-password.component';
@@ -11,18 +11,16 @@ import { ProductViewText } from '../../../../../products/product-view-texts';
   templateUrl: './add-price-dialog.component.html',
   styleUrl: './add-price-dialog.component.scss'
 })
-export class AddPriceDialogComponent {
+export class AddPriceDialogComponent implements OnInit {
   @ViewChild('form') priceForm: NgForm;  // Reference to the form for validation
 
   // error handleing
   public errorMessage = false;
 
-  weight: number;
-  productImage: string;
-  productPrice: number;
+  imageBase64: string;
+  imagePreview: string;
 
-  imageBase64: string | null = null;
-  imagePreview: string | null = null;
+  editText: boolean = false;
 
   selectedUnit: string = '';
   newPrice: ProductPrice;
@@ -30,6 +28,8 @@ export class AddPriceDialogComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
     this.selectedUnit = data.unit;
+    this.editText = data.editText;
+
     if (this.translate.instant(ProductViewText.GRAM) === this.selectedUnit) {
       this.unitText = this.translate.instant('products.weight');
     } else if (this.translate.instant(ProductViewText.POUNDS) === this.selectedUnit) {
@@ -38,6 +38,30 @@ export class AddPriceDialogComponent {
     } else {
       this.unitText = this.translate.instant(ProductViewText.PIECES);
       this.selectedUnit = this.translate.instant('products.pcs')
+    }
+  }
+
+  ngOnInit(): void {
+    this.newPrice = {
+      quantityInProduct: null,
+      productImage: '',
+      productPrice: null,
+      productStock: null
+    }
+
+    if (this.data.selectedPrice !== null && this.data.selectedPrice !== undefined) {
+      this.newPrice = { ...this.data.selectedPrice };
+      this.imageBase64 = this.newPrice.productImage;
+      this.imagePreview = this.imageBase64;
+    } else {
+      this.newPrice = {
+        quantityInProduct: null,
+        productImage: '',
+        productPrice: null,
+        productStock: null
+      }
+      this.imageBase64 = '';
+      this.imagePreview = '';
     }
   }
 
@@ -58,9 +82,10 @@ export class AddPriceDialogComponent {
   // Method to initiate password recovery
   addNewPrice() {
     this.newPrice = {
-      weight: this.priceForm.value.weight,
+      quantityInProduct: this.priceForm.value.quantityInProduct,
       productImage: this.imageBase64,
       productPrice: this.priceForm.value.productPrice,
+      productStock: this.priceForm.value.productStock
     };
 
     // Close the dialog and return the new product price object

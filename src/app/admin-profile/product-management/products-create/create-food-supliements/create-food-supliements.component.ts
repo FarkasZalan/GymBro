@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChangeDetectorRef } from '@angular/core';
 import { Vitamin } from '../../../../products/product-models/vitamin.model';
 import { NgForm } from '@angular/forms';
+import { FoodSupliment } from '../../../../products/product-models/food-supliment.model';
 
 @Component({
   selector: 'app-create-food-supliements',
@@ -36,142 +37,292 @@ import { NgForm } from '@angular/forms';
 })
 export class CreateFoodSuplimentsComponent implements OnInit {
   @ViewChild('form') createFoodSuplimentForm: NgForm;  // Reference to the form for validation
-  errorMessage: boolean;
-  safeForConsumptionDuringPregnancy: boolean;
-  safeForConsumptionDuringBreastfeeding: boolean;
-  priceByWeight: boolean;
-  male: boolean;
+
+  // Form-related properties
+  errorMessage: boolean = false;
+  isSafeForConsumptionDuringPregnancy: boolean = false;
+  isSafeForConsumptionDuringBreastfeeding: boolean = false;
 
   selectedUnit: string = '';
-
   selectedCategory: string = '';
   selectedVitaminUnit: string = '';
+
+  // if true then display protein type select
   isProtein: boolean = false;
+
+  // if these true then the flavor can be only unflavored
   isJoinSupport: boolean = false;
   isVitamin: boolean = false;
 
+
+  // Vitamin-related properties
   vitaminList: Vitamin[] = [];
   vitaminName: string = '';
-  vitaminQuantity: number;
-  vitaminMissingFieldsError = false;
+  vitaminQuantity: number = null;
 
+  availableGenders: string[] = [
+    ProductViewText.MALE,
+    ProductViewText.FEMALE
+  ];
+  translatedGenders: string[] = [];
+  selectedGenders: string[] = [];
+
+  selectedVitamin: Vitamin;
+
+  // if true then display the vitamin edit and cancel buttons
+  vitaminModificationIsInProgress: boolean = false;
+  modifiedVitaminId: number;
+  vitaminMissingFieldsError: boolean = false;
+
+  // Product categories
   productViewText = ProductViewText;
-
-  productCategories: string[] = [ProductViewText.PROTEINS, ProductViewText.MASS_GAINERS, ProductViewText.AMINO_ACIDS, ProductViewText.CREATINES, ProductViewText.VITAMINS_AND_MINERALS, ProductViewText.JOIN_SUPPORT, ProductViewText.FAT_BURNERS];
+  productCategories: string[] = [
+    ProductViewText.PROTEINS,
+    ProductViewText.MASS_GAINERS,
+    ProductViewText.AMINO_ACIDS,
+    ProductViewText.CREATINES,
+    ProductViewText.VITAMINS_AND_MINERALS,
+    ProductViewText.JOIN_SUPPORT,
+    ProductViewText.FAT_BURNERS
+  ];
   translatedCategories: string[] = [];
 
-  // Available flavors
-  availableFlavors: string[] = ['Unflavored', 'Vanilla', 'Chocolate', 'Strawberry', 'Mint', 'Peanut Butter'];
-
-  // Selected flavors
+  // Flavors and Allergens
+  availableFlavors: string[] = [
+    ProductViewText.UNFLAVORED,
+    ProductViewText.VANILLA_FLAVOR,
+    ProductViewText.CHOCOLATE_FLAVOR,
+    ProductViewText.STRAWBERRY_FLAVOR,
+    ProductViewText.PINEAPPLE_MANGO_FLAVOR,
+    ProductViewText.COCONUT_FLAVOR,
+    ProductViewText.TIRAMISU_FLAVOR,
+    ProductViewText.COOKIES_AND_CREAM_FLAVOR,
+    ProductViewText.PEANUT_BUTTER_FLAVOR,
+    ProductViewText.WHITE_CHOCOLATE_FLAVOR,
+    ProductViewText.PISTACHIO_FLAVOR,
+    ProductViewText.CHOCOLATE_TOFFEE_FLAVOR,
+    ProductViewText.BANANA_FLAVOR,
+    ProductViewText.COFFEE_FLAVOR,
+    ProductViewText.SALT_CARAMEL_FLAVOR,
+    ProductViewText.MINT_CHOCOLATE_FLAVOR,
+    ProductViewText.MOCHA_FLAVOR,
+    ProductViewText.CINNAMON_ROLL_FLAVOR,
+    ProductViewText.BLUEBERRY_FLAVOR,
+    ProductViewText.PUMPKIN_SPICE_FLAVOR,
+    ProductViewText.CHOCOLATE_PEANUT_BUTTER_FLAVOR,
+    ProductViewText.APPLE_PIE_FLAVOR,
+    ProductViewText.LEMON_CHEESECAKE_FLAVOR,
+    ProductViewText.BLACK_BISCUIT_FLAVOR
+  ];
+  translatedFlavors: string[] = [];
   selectedFlavors: string[] = [];
 
-  // Available allergenes
-  availableAllergenes: string[] = ['Lactose', 'Gluten', 'Soy', 'Eggs', 'Added Sugars', 'Peanuts', 'Fish'];
-
-  // Selected allergenes
+  availableAllergens: string[] = [
+    ProductViewText.LACTOSE_ALLERGEN,
+    ProductViewText.GLUTEN_ALLERGEN,
+    ProductViewText.SOY_ALLERGEN,
+    ProductViewText.EGGS_ALLERGEN,
+    ProductViewText.ADDED_SUGARS_ALLERGEN,
+    ProductViewText.PEANUTS_ALLERGEN,
+    ProductViewText.FISH_ALLERGEN
+  ];
+  translatedAllergens: string[] = [];
   selectedAllergenes: string[] = [];
 
+  // Protein type
+  availableProteins: string[] = [
+    ProductViewText.CASEIN,
+    ProductViewText.PLANT_BASED_PROTEIN,
+    ProductViewText.DAIRY_FREE_PROTEIN,
+    ProductViewText.WHEY_PROTEIN,
+    ProductViewText.ANIMAL_BASED_PROTEIN
+  ];
+  translatedProteins: string[] = [];
+  selectedProteinType: string = '';
+
+  // Prices
   productPrices: ProductPrice[] = [];
+
+  // New supplement to be created
+  newFoodSupliment: FoodSupliment;
 
   constructor(private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    // Subscribe to language change events to re-translate categories
+    // Listen for language change and re-translate categories
     this.translate.onLangChange.subscribe(() => {
       this.translateAndSortItems();
     });
     this.translateAndSortItems();
-
-    this.selectedFlavors = [];
   }
 
-  // Method to translate and sort items by name
+  // Translate and sort product categories, genders, flavors, proteins and allergies
   translateAndSortItems(): void {
-    // Translate each item in the array
+    // categories
     this.translatedCategories = this.productCategories.map(item => this.translate.instant(item));
-
-    // Sort the translated items alphabetically
     this.translatedCategories.sort((a, b) => a.localeCompare(b));
+
+    // Genders
+    this.translatedGenders = this.availableGenders.map(item => this.translate.instant(item));
+    this.translatedGenders.sort((a, b) => a.localeCompare(b));
+
+    // Flavors
+    this.translatedFlavors = this.availableFlavors.map(item => this.translate.instant(item));
+    this.translatedFlavors.sort((a, b) => a.localeCompare(b));
+
+    // Proteins
+    this.translatedProteins = this.availableProteins.map(item => this.translate.instant(item));
+    this.translatedProteins.sort((a, b) => a.localeCompare(b));
+
+    // Allergens
+    this.translatedAllergens = this.availableAllergens.map(item => this.translate.instant(item));
+    this.translatedAllergens.sort((a, b) => a.localeCompare(b));
   }
 
+  // Update UI based on selected category
+  // If the selected category is vitamins or join supports then the product must be unflavored otherwise flavored
   isCategorySelected() {
-    if (this.translate.instant(ProductViewText.PROTEINS) === this.selectedCategory) {
-      this.isProtein = true;
-      this.availableFlavors = ['Unflavored', 'Vanilla', 'Chocolate', 'Strawberry', 'Mint', 'Peanut Butter'];
-      this.selectedFlavors = [];
-      this.isVitamin = false;
-      this.isJoinSupport = false;
-    } else if (this.translate.instant(ProductViewText.JOIN_SUPPORT) === this.selectedCategory) {
-      this.availableFlavors = ['Unflavored'];
-      this.selectedFlavors = [this.availableFlavors[0]];
-      this.isJoinSupport = true;
-      this.isProtein = false;
-    } else if (this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS) === this.selectedCategory) {
-      this.availableFlavors = ['Unflavored'];
-      this.selectedFlavors = [this.availableFlavors[0]];
-      this.isVitamin = true;
-      this.isProtein = false;
-    } else {
-      this.isProtein = false;
-      this.isJoinSupport = false;
-      this.isVitamin = false;
-      this.availableFlavors = ['Unflavored', 'Vanilla', 'Chocolate', 'Strawberry', 'Mint', 'Peanut Butter'];
-      this.selectedFlavors = [];
+    switch (this.selectedCategory) {
+      case this.translate.instant(ProductViewText.PROTEINS):
+        this.isProtein = true;
+        this.resetFlavors(
+          [
+            ProductViewText.UNFLAVORED,
+            ProductViewText.VANILLA_FLAVOR,
+            ProductViewText.CHOCOLATE_FLAVOR,
+            ProductViewText.STRAWBERRY_FLAVOR,
+            ProductViewText.PINEAPPLE_MANGO_FLAVOR,
+            ProductViewText.COCONUT_FLAVOR,
+            ProductViewText.TIRAMISU_FLAVOR,
+            ProductViewText.COOKIES_AND_CREAM_FLAVOR,
+            ProductViewText.PEANUT_BUTTER_FLAVOR,
+            ProductViewText.WHITE_CHOCOLATE_FLAVOR,
+            ProductViewText.PISTACHIO_FLAVOR,
+            ProductViewText.CHOCOLATE_TOFFEE_FLAVOR,
+            ProductViewText.BANANA_FLAVOR,
+            ProductViewText.COFFEE_FLAVOR,
+            ProductViewText.SALT_CARAMEL_FLAVOR,
+            ProductViewText.MINT_CHOCOLATE_FLAVOR,
+            ProductViewText.MOCHA_FLAVOR,
+            ProductViewText.CINNAMON_ROLL_FLAVOR,
+            ProductViewText.BLUEBERRY_FLAVOR,
+            ProductViewText.PUMPKIN_SPICE_FLAVOR,
+            ProductViewText.CHOCOLATE_PEANUT_BUTTER_FLAVOR,
+            ProductViewText.APPLE_PIE_FLAVOR,
+            ProductViewText.LEMON_CHEESECAKE_FLAVOR,
+            ProductViewText.BLACK_BISCUIT_FLAVOR
+          ]);
+        this.isVitamin = this.isJoinSupport = false;
+        break;
+      case this.translate.instant(ProductViewText.JOIN_SUPPORT):
+        this.isJoinSupport = true;
+        this.isProtein = this.isVitamin = false;
+        this.resetFlavors([ProductViewText.UNFLAVORED], true);
+        break;
+      case this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS):
+        this.isVitamin = true;
+        this.isProtein = this.isJoinSupport = false;
+        this.resetFlavors([ProductViewText.UNFLAVORED], true);
+        break;
+      default:
+        this.isProtein = this.isVitamin = this.isJoinSupport = false;
+        this.resetFlavors(
+          [
+            ProductViewText.UNFLAVORED,
+            ProductViewText.VANILLA_FLAVOR,
+            ProductViewText.CHOCOLATE_FLAVOR,
+            ProductViewText.STRAWBERRY_FLAVOR,
+            ProductViewText.PINEAPPLE_MANGO_FLAVOR,
+            ProductViewText.COCONUT_FLAVOR,
+            ProductViewText.TIRAMISU_FLAVOR,
+            ProductViewText.COOKIES_AND_CREAM_FLAVOR,
+            ProductViewText.PEANUT_BUTTER_FLAVOR,
+            ProductViewText.WHITE_CHOCOLATE_FLAVOR,
+            ProductViewText.PISTACHIO_FLAVOR,
+            ProductViewText.CHOCOLATE_TOFFEE_FLAVOR,
+            ProductViewText.BANANA_FLAVOR,
+            ProductViewText.COFFEE_FLAVOR,
+            ProductViewText.SALT_CARAMEL_FLAVOR,
+            ProductViewText.MINT_CHOCOLATE_FLAVOR,
+            ProductViewText.MOCHA_FLAVOR,
+            ProductViewText.CINNAMON_ROLL_FLAVOR,
+            ProductViewText.BLUEBERRY_FLAVOR,
+            ProductViewText.PUMPKIN_SPICE_FLAVOR,
+            ProductViewText.CHOCOLATE_PEANUT_BUTTER_FLAVOR,
+            ProductViewText.APPLE_PIE_FLAVOR,
+            ProductViewText.LEMON_CHEESECAKE_FLAVOR,
+            ProductViewText.BLACK_BISCUIT_FLAVOR
+          ]);
     }
+  }
 
-    // to detect the changes immidiately on the UI and update the flavors list
+  // Helper to reset and update the flavor list
+  resetFlavors(flavors: string[], selectFirst = false) {
+    this.availableFlavors = flavors;
+    this.selectedFlavors = selectFirst ? [this.translate.instant(flavors[0])] : [];
+    this.translateAndSortItems();
     this.changeDetector.detectChanges();
   }
 
+  // Handle selection of flavors, allergens, and genders
   selectionOfTheList(type: string, item: string): void {
-    if (type === ProductViewText.FLAVORS) {
-      const index = this.selectedFlavors.indexOf(item);
-      if (index > -1) {
-        this.selectedFlavors.splice(index, 1); // Remove item if it is selected
-      } else {
-        this.selectedFlavors.push(item); // Add item if it is not selected
-      }
-    }
-
-    if (type === ProductViewText.ALLERGENES) {
-      const index = this.selectedAllergenes.indexOf(item);
-      if (index > -1) {
-        this.selectedAllergenes.splice(index, 1); // Remove item if it is selected
-      } else {
-        this.selectedAllergenes.push(item); // Add item if it is not selected
-      }
+    switch (type) {
+      case ProductViewText.FLAVORS:
+        this.toggleSelection(this.selectedFlavors, item);
+        break;
+      case ProductViewText.ALLERGENES:
+        this.toggleSelection(this.selectedAllergenes, item);
+        break;
+      case ProductViewText.GENDER:
+        this.toggleSelection(this.selectedGenders, item);
+        break;
     }
   }
 
-  // Function to remove selected item
+  // Helper function to toggle item selection in an array
+  toggleSelection(list: string[], item: string): void {
+    const index = list.indexOf(item);
+
+    // remove item from the list if it's selected othervise add to the list
+    index > -1 ? list.splice(index, 1) : list.push(item);
+  }
+
+  // Remove selected item
   removeItemFromTheList(type: string, item: string): void {
-    if ((this.translate.instant(ProductViewText.JOIN_SUPPORT) !== this.selectedCategory) && (this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS) !== this.selectedCategory)) {
-      if (type === ProductViewText.FLAVORS) {
-        const index = this.selectedFlavors.indexOf(item);
-        if (index > -1) {
-          this.selectedFlavors.splice(index, 1); // Remove item
-        }
-      }
+    if (type === ProductViewText.FLAVORS && this.isCategorySelectableForFlavors()) {
+      this.removeItem(this.selectedFlavors, item);
     }
-
     if (type === ProductViewText.ALLERGENES) {
-      const index = this.selectedAllergenes.indexOf(item);
-      if (index > -1) {
-        this.selectedAllergenes.splice(index, 1); // Remove item
-      }
+      this.removeItem(this.selectedAllergenes, item);
+    }
+    if (type === ProductViewText.GENDER) {
+      this.removeItem(this.selectedGenders, item);
     }
   }
 
+  // Check if flavors can be deselected for the category
+  isCategorySelectableForFlavors() {
+    return !(this.isJoinSupport || this.isVitamin);
+  }
+
+  // Helper function to remove item from array
+  removeItem(list: string[], item: string): void {
+    const index = list.indexOf(item);
+    if (index > -1) list.splice(index, 1);
+  }
+
+  // Open dialog to add new price
   addNewPrice() {
     const dialogRef = this.dialog.open(AddPriceDialogComponent, {
       data: {
-        unit: this.selectedUnit
+        unit: this.selectedUnit,
+        editText: false
       }
     });
 
     dialogRef.afterClosed().subscribe((newPrice: ProductPrice) => {
       if (newPrice) {
+        // Ensure product image is not null
         if (newPrice.productImage === null || newPrice.productImage === undefined) {
           newPrice.productImage = "";
         }
@@ -180,52 +331,145 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     });
   }
 
-  addVitamin() {
-    // Validate inputs
-    if (!this.vitaminName || !this.vitaminQuantity || !this.selectedVitaminUnit) {
+  // Open dialog to edit price
+  editPrice(id: number) {
+    const dialogRef = this.dialog.open(AddPriceDialogComponent, {
+      data: {
+        unit: this.selectedUnit,
+        selectedPrice: this.productPrices[id],
+        editText: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((editedPrice: ProductPrice) => {
+      if (editedPrice) {
+        // Ensure product image is not null
+        if (editedPrice.productImage === null || editedPrice.productImage === undefined) {
+          editedPrice.productImage = "";
+        }
+        this.productPrices[id] = editedPrice;
+      }
+    });
+  }
+
+  // Handle vitamin list addition or update
+  handleVitaminList(editVitamin: boolean) {
+    if (!this.vitaminName || !this.vitaminQuantity || this.selectedGenders.length === 0 || !this.selectedVitaminUnit) {
       this.vitaminMissingFieldsError = true;
       return;
     }
+
+    this.vitaminMissingFieldsError = false;
 
     // Check if the vitamin already exists in the list
     const existingVitaminIndex = this.vitaminList.findIndex(vitamin => vitamin.name.toLowerCase() === this.vitaminName.toLowerCase());
 
     if (existingVitaminIndex !== -1) {
-      // If it exists, update the existing vitamin entry
+      // If it exists, update the existing vitamin
       this.vitaminList[existingVitaminIndex] = {
         name: this.vitaminName,
-        quantity: this.vitaminQuantity,
+        stock: this.vitaminQuantity,
+        gender: this.selectedGenders,
         unit: this.selectedVitaminUnit,
       };
     } else {
       // If it does not exist, push a new vitamin object
-      this.vitaminList.push({
-        name: this.vitaminName,
-        quantity: this.vitaminQuantity,
-        unit: this.selectedVitaminUnit,
-      });
+      if (!editVitamin) {
+        this.vitaminList.push({
+          name: this.vitaminName,
+          stock: this.vitaminQuantity,
+          gender: this.selectedGenders,
+          unit: this.selectedVitaminUnit,
+        });
+      } else { // if the user want to edit the selected vitamin
+        this.vitaminList[this.modifiedVitaminId] = {
+          name: this.vitaminName,
+          stock: this.vitaminQuantity,
+          gender: this.selectedGenders,
+          unit: this.selectedVitaminUnit,
+        }
+      }
+
     }
 
-    // Reset inputs
+    this.resetVitaminFields();
+  }
+
+  // Reset vitamin input fields
+  resetVitaminFields(): void {
+    this.vitaminName = '';
+    this.vitaminQuantity = null;
+    this.selectedGenders = [];
+    this.selectedVitaminUnit = '';
+    this.vitaminModificationIsInProgress = false;
+  }
+
+  // Method to display the edit form with existing vitamin data
+  displayEditVitamin(id: number) {
+    this.modifiedVitaminId = id;
+    this.vitaminModificationIsInProgress = true;
+    this.selectedVitamin = { ...this.vitaminList[id] };  // Deep copy to avoid object reference issues
+
+    // Assign values to the fields
+    this.vitaminName = this.selectedVitamin.name;
+    this.vitaminQuantity = this.selectedVitamin.stock;
+    this.selectedVitaminUnit = this.selectedVitamin.unit;
+    this.selectedGenders = [...this.selectedVitamin.gender];  // Make a copy of the gender array
+  }
+
+  // Method to cancel the vitamin modification
+  cancelVitaminModification() {
+    // reset input fields
+    this.vitaminModificationIsInProgress = false;
     this.vitaminName = '';
     this.vitaminQuantity = null;
     this.selectedVitaminUnit = '';
     this.vitaminMissingFieldsError = false;
+    this.selectedGenders = [];
+
+    // Reassign the original vitamin object back into the vitamin list
+    this.vitaminList[this.modifiedVitaminId] = this.selectedVitamin;
   }
 
-  editVitamin(index: number) {
-    const vitamin = this.vitaminList[index];
-    this.vitaminName = vitamin.name;
-    this.vitaminQuantity = vitamin.quantity;
-    this.selectedVitaminUnit = vitamin.unit;
-  }
-
+  // Remove vitamin from list by index
   deleteVitamin(index: number) {
     this.vitaminList.splice(index, 1);
   }
 
   addNewFoodSupplement() {
+    // create new Food supliment object
+    this.newFoodSupliment = {
+      id: "",
+      productName: this.createFoodSuplimentForm.value.productName,
+      productCategory: this.selectedCategory,
+      description: this.createFoodSuplimentForm.value.description,
+      dosageUnit: this.selectedUnit,
+      dailyDosage: this.createFoodSuplimentForm.value.dailyDosage,
+      flavors: this.selectedFlavors,
 
+      safeForConsumptionDuringBreastfeeding: this.isSafeForConsumptionDuringBreastfeeding,
+      safeForConsumptionDuringPregnancy: this.isSafeForConsumptionDuringPregnancy,
+
+      nutritionalValueEnergyKj: this.createFoodSuplimentForm.value.nutritionalValueEnergyKj,
+      nutritionalValueEnergyCal: this.createFoodSuplimentForm.value.nutritionalValueEnergyCal,
+
+      nutritionalValueFats: this.createFoodSuplimentForm.value.nutritionalValueFats,
+      nutritionalValueFattyAcids: this.createFoodSuplimentForm.value.nutritionalValueFattyAcids,
+
+      nutritionalValueCarbohydrates: this.createFoodSuplimentForm.value.nutritionalValueCarbohydrates,
+      nutritionalValueSugar: this.createFoodSuplimentForm.value.nutritionalValueSugar,
+
+      nutritionalValueFiber: this.createFoodSuplimentForm.value.nutritionalValueFiber,
+
+      nutritionalValueProteins: this.createFoodSuplimentForm.value.nutritionalValueProteins,
+
+      nutritionalValueSalt: this.createFoodSuplimentForm.value.nutritionalValueSalt,
+
+      proteinType: this.selectedProteinType,
+      allergens: this.selectedAllergenes,
+
+      prices: this.productPrices
+    }
   }
 
   back() {

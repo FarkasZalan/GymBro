@@ -1,38 +1,64 @@
 <div class="container-all-window">
     <!-- add price title -->
-    <h1 id="title" class="title">Add new Price</h1>
+    <h1 *ngIf="!editText" id="title" class="title">{{ 'products.addNewPrice' | translate
+        }}</h1>
+    <h1 *ngIf="editText" id="title" class="title">{{ 'products.editPrice' | translate
+        }}</h1>
     <!-- add price form -->
     <div class="container">
         <nb-card>
             <nb-card-body>
                 <div>
                     <form (ngSubmit)="addNewPrice()" #form="ngForm">
-                        <!-- Weight block -->
+                        <!-- quantity in product (lbs, gram, pcs) block -->
                         <div class="form-group">
-                            <label for="weight" class="label">{{ unitText }}</label>
-                            <input type="number" class="form-control" ngModel name="weight" fullWidth
-                                placeholder="{{ unitText }} ({{ selectedUnit}})" required #weight="ngModel" />
-                            <!-- weight error block -->
-                            <span class="help-block" *ngIf="!weight.valid && weight.touched">Weight is required</span>
+                            <label for="quantityInProduct" class="label">{{ 'products.quantityInProduct' | translate
+                                }}</label>
+                            <input type="number" class="form-control" name="quantityInProduct" fullWidth
+                                placeholder="{{ unitText }} ({{ selectedUnit}})" required #quantityInProduct="ngModel"
+                                [(ngModel)]="newPrice.quantityInProduct" />
+                            <!-- quantity in product error block -->
+                            <span class="help-block" *ngIf="!quantityInProduct.valid && quantityInProduct.touched">{{
+                                'register.fieldRequired' | translate }}</span>
                         </div><br>
 
                         <!-- Product Image block -->
                         <div class="form-group">
-                            <label for="productImage" class="label">Product Image</label>
+                            <label for="productImage" class="label">{{ 'products.productImage' | translate
+                                }}</label>
                             <input type="file" class="form-control" (change)="onFileSelected($event)" />
                             <div *ngIf="imagePreview">
                                 <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
+                            </div>
+
+                            <div *ngIf="imagePreview === ''">
+                                <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+                                    class="image-preview" />
                             </div>
                         </div><br>
 
                         <!-- Product Price block -->
                         <div class="form-group">
-                            <label for="productPrice" class="label">Product Price</label>
-                            <input type="number" class="form-control" ngModel name="productPrice" fullWidth
-                                placeholder="Price (Huf)" required #productPrice="ngModel" />
+                            <label for="productPrice" class="label">{{ 'products.productPrice' | translate
+                                }}</label>
+                            <input type="number" class="form-control" name="productPrice" fullWidth placeholder="{{ 'products.price' | translate
+                                }} ({{ 'products.huf' | translate }})" required #productPrice="ngModel"
+                                [(ngModel)]="newPrice.productPrice" />
                             <!-- price error block -->
-                            <span class="help-block" *ngIf="!productPrice.valid && productPrice.touched">Price is
-                                required</span>
+                            <span class="help-block" *ngIf="!productPrice.valid && productPrice.touched">{{
+                                'register.fieldRequired' | translate }}</span>
+                        </div><br>
+
+                        <!-- Product Stock block -->
+                        <div class="form-group">
+                            <label for="productStock" class="label">{{ 'products.productStock' | translate
+                                }}</label>
+                            <input type="number" class="form-control" name="productStock" fullWidth placeholder="{{ 'products.stock' | translate
+                                }} ({{ selectedUnit}})" required #productStock="ngModel"
+                                [(ngModel)]="newPrice.productStock" />
+                            <!-- stock error block -->
+                            <span class="help-block" *ngIf="!productStock.valid && productStock.touched">{{
+                                'register.fieldRequired' | translate }}</span>
                         </div>
 
                         <!-- Error block -->
@@ -45,7 +71,7 @@
                         <div class="send-button-container">
                             <button class="btn btn-primary forgot-btn" type="submit" nbButton status="success"
                                 [disabled]="!form.valid">
-                                Submit
+                                {{ 'products.add' | translate }}
                             </button>
                         </div>
                     </form>
@@ -53,7 +79,7 @@
                     <div class="send-button-container">
                         <button class="btn btn-primary forgot-btn" type="button" nbButton status="warning"
                             (click)="back()">
-                            Back
+                            {{ 'loginPage.back' | translate }}
                         </button>
                     </div><br />
                 </div>

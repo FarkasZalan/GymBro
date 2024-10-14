@@ -1,5 +1,6 @@
 export interface ProductPrice {
-    weight: number;
+    quantityInProduct: number;
     productImage: string;
     productPrice: number;
+    productStock: number;
 }
