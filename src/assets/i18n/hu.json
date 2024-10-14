@@ -203,6 +203,7 @@
                 "productImage": "Termék Képe",
                 "addNewPrice": "Új Ár Hozzáadása",
                 "editPrice": "Ár Szerkesztése",
+                "deletePriceText": "Biztosan törölni szeretnéd ezt az elemet?",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
                         "plantBased": "Növényi eredetű fehérje",

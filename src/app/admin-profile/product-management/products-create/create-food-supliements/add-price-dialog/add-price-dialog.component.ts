@@ -5,6 +5,8 @@ import { ForgotPasswordComponent } from '../../../../../auth/forgot-password/for
 import { ProductPrice } from '../../../../../products/product-models/product-price.model';
 import { TranslateService } from '@ngx-translate/core';
 import { ProductViewText } from '../../../../../products/product-view-texts';
+import { DeleteConfirmationDialogComponent } from '../../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { DeleteConfirmationText } from '../../../../../delete-confirmation-dialog/delete-text';
 
 @Component({
   selector: 'app-add-price-dialog',
@@ -25,10 +27,17 @@ export class AddPriceDialogComponent implements OnInit {
   selectedUnit: string = '';
   newPrice: ProductPrice;
   unitText: string = '';
+  buttonText: string = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
     this.selectedUnit = data.unit;
     this.editText = data.editText;
+
+    if (this.editText) {
+      this.buttonText = this.translate.instant('profilePage.modify');
+    } else {
+      this.buttonText = this.translate.instant('products.add');
+    }
 
     if (this.translate.instant(ProductViewText.GRAM) === this.selectedUnit) {
       this.unitText = this.translate.instant('products.weight');
@@ -90,6 +99,22 @@ export class AddPriceDialogComponent implements OnInit {
 
     // Close the dialog and return the new product price object
     this.dialogRef.close(this.newPrice);
+  }
+
+  async deletePrice() {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        text: DeleteConfirmationText.PRICE_DELETE
+      }
+    });
+
+    // Wait for the dialog to close and get the user's confirmation
+    const confirmToDeletePrice = await dialogRef.afterClosed().toPromise();
+
+    if (confirmToDeletePrice) {
+      // Close the dialog and return to with boolean to delete this price
+      this.dialogRef.close(true);
+    }
   }
 
   // Close all dialogs

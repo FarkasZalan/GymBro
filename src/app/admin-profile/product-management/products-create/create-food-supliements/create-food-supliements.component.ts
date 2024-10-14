@@ -341,8 +341,12 @@ export class CreateFoodSuplimentsComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe((editedPrice: ProductPrice) => {
-      if (editedPrice) {
+    dialogRef.afterClosed().subscribe((editedPrice: ProductPrice | boolean) => {
+      if (editedPrice === true) {
+        // If true is returned, delete the price
+        this.deletePrice(id);
+      } else if (editedPrice && typeof editedPrice === 'object') {
+        // If an edited price is returned, update the productPrices array
         // Ensure product image is not null
         if (editedPrice.productImage === null || editedPrice.productImage === undefined) {
           editedPrice.productImage = "";
@@ -350,6 +354,10 @@ export class CreateFoodSuplimentsComponent implements OnInit {
         this.productPrices[id] = editedPrice;
       }
     });
+  }
+
+  deletePrice(id: number) {
+    this.productPrices.splice(id, 1);
   }
 
   // Handle vitamin list addition or update

@@ -71,10 +71,17 @@
                         <div class="send-button-container">
                             <button class="btn btn-primary forgot-btn" type="submit" nbButton status="success"
                                 [disabled]="!form.valid">
-                                {{ 'products.add' | translate }}
+                                {{ buttonText }}
                             </button>
                         </div>
                     </form>
+
+                    <div *ngIf="editText" class="send-button-container">
+                        <button class="btn btn-primary forgot-btn btn delete-btn" type="button" nbButton
+                            status="warning" (click)="deletePrice()">
+                            {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}
+                        </button>
+                    </div>
 
                     <div class="send-button-container">
                         <button class="btn btn-primary forgot-btn" type="button" nbButton status="warning"
