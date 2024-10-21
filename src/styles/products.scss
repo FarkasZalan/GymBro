@@ -9,6 +9,10 @@
     }
 }
 
+.default-label {
+    text-align: center;
+}
+
 .header-collapse-component {
     display: flex;
     justify-content: center;
@@ -87,6 +91,17 @@ nb-card-body {
 
 .card-image {
     width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    /* Ensures the image covers the entire area without distortion */
+    border-radius: 8px;
+    /* Optional: if you want rounded corners on the image */
+    transition: filter 0.3s ease, transform 0.3s ease;
+    /* Smooth transition */
+}
+
+.card-image-category {
+    width: 100%;
     height: 100%;
     object-fit: cover;
     /* Ensures the image covers the entire area without distortion */
@@ -103,10 +118,11 @@ nb-card-body {
     flex-wrap: wrap;
     /* Allow wrapping to the next row */
     margin-top: 10px;
-    max-width: 80%;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
+    padding: 16px;
     height: fit-content;
     justify-content: center;
 }
@@ -121,7 +137,7 @@ nb-card-body {
     padding: 16px;
 }
 
-.rounded-card {
+.rounded-card-category {
     border-radius: 20px !important;
     align-items: center;
     /* Vertically center the image */
@@ -129,6 +145,17 @@ nb-card-body {
     /* Horizontally center the image */
     padding: 0 !important;
 }
+
+.rounded-card {
+    border-radius: 20px !important;
+    max-width: 300px !important;
+}
+
+.rounded-product-card {
+    border-radius: 20px !important;
+    max-width: 300px !important;
+}
+
 
 .products-button {
     width: 330px !important;
@@ -142,6 +169,16 @@ nb-card-body {
     text-align: center;
 }
 
+h4 {
+    margin-bottom: 8px !important;
+}
+
+h5 {
+    margin-bottom: 0px !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}
+
 .emptyCardText {
     margin: 20px;
     font-size: 20px;
@@ -152,6 +189,7 @@ nb-card-body {
     margin-bottom: auto;
     width: 800px;
     text-align: center;
+    border-radius: 20px !important;
 }
 
 .emptyCardImage {
@@ -177,8 +215,47 @@ nb-card-body {
     }
 }
 
+.image-container {
+    width: 100%;
+    /* Ensure the image container takes the full width of the card */
+    display: flex;
+    justify-content: center;
+    /* Center the image */
+}
+
+.image-container::after {
+    content: "";
+    /* Necessary for the overlay effect */
+    position: absolute;
+    /* Position it over the image */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Semi-transparent black for darkening effect */
+    opacity: 0;
+    /* Start with invisible overlay */
+    transition: opacity 0.3s ease;
+    /* Smooth transition for the overlay */
+}
+
+.image-container:hover::after {
+    opacity: 0.5;
+    /* Darken the image when hovering */
+}
+
 .category-image {
     display: flex;
+    align-items: center;
+    /* Vertically center the image */
+    justify-content: center;
+    /* Horizontally center the image */
+    padding: 0;
+    margin: 0;
+    border-radius: 20px;
+}
+
+.product-image {
     align-items: center;
     /* Vertically center the image */
     justify-content: center;
@@ -233,11 +310,58 @@ nb-card-body {
     }
 }
 
-.categoryCard:hover .card-image {
+.categoryCard:hover .card-image-category {
     filter: grayscale(0%);
     /* Remove black and white filter on hover (full color) */
     transform: scale(1.05);
     /* Optional: Slightly zoom in the image when hovered */
+}
+
+.productCard {
+    // Increase the width of the address card
+    width: calc(50% - 40px);
+    /* Ensure the card takes up half of the container width */
+    max-width: 280px;
+    height: 450px !important;
+    flex: 1 1 calc(50% - 20px);
+    /* Two columns with space between */
+    display: flex;
+    flex-direction: column;
+    /* Ensure content is stacked vertically */
+    padding: 0 !important;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 5%;
+    margin-right: 5%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: add a subtle shadow effect
+    border-radius: 8px;
+    cursor: pointer;
+    // Align to the left side
+    align-self: flex-start; // Align card to the start (left) of its container
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    height: fit-content;
+    max-height: 500px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: darken(#ffffff, 5%);
+        transform: scale(1.05) !important;
+
+        strong,
+        span,
+        h4,
+        h5,
+        p {
+            color: #0b8e92 !important;
+        }
+    }
+
+    &:active {
+        cursor: pointer;
+        color: #0b8e92 !important;
+        background-color: darken(#ffffff, 20%);
+        transform: scale(0.95);
+    }
 }
 
 @media (max-width: 768px) {

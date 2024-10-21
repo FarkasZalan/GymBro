@@ -6,6 +6,7 @@ import { HealthyProduct } from '../../../../products/product-models/healthy-food
 import { Clothes } from '../../../../products/product-models/clothing.model';
 import { Location } from '@angular/common';
 import { Accessories } from '../../../../products/product-models/accessories.model';
+import { ProductViewText } from '../../../../products/product-view-texts';
 
 @Component({
   selector: 'app-products-list',
@@ -29,7 +30,7 @@ export class ProductsListComponent implements OnInit {
     // get the category of the products from the category component
     this.route.params.subscribe(params => {
       this.productCategory = params['productCategory'];
-      if (this.productCategory === 'foodSupliments') {
+      if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((foodSuplimentsCollection: FoodSupliment[]) => {
           this.foodSupliments = foodSuplimentsCollection;
 
@@ -39,7 +40,7 @@ export class ProductsListComponent implements OnInit {
           }
         });
       }
-      if (this.productCategory === 'healthyProducts') {
+      if (this.productCategory === ProductViewText.HEALTHY_FOOD) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((healthyProductsCollection: HealthyProduct[]) => {
           this.healthyProducts = healthyProductsCollection;
 
@@ -49,7 +50,7 @@ export class ProductsListComponent implements OnInit {
           }
         });
       }
-      if (this.productCategory === 'clothes') {
+      if (this.productCategory === ProductViewText.CLOTHES) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((clothesCollection: Clothes[]) => {
           this.clothes = clothesCollection;
 
@@ -59,7 +60,7 @@ export class ProductsListComponent implements OnInit {
           }
         });
       }
-      if (this.productCategory === 'accessories') {
+      if (this.productCategory === ProductViewText.ACCESSORIES) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((accessoriesCollection: Accessories[]) => {
           this.accessories = accessoriesCollection;
 
@@ -70,6 +71,11 @@ export class ProductsListComponent implements OnInit {
         });
       }
     });
+  }
+
+  // Method to get the default price for a specific food supplement
+  getDefaultPrice(foodSupliment: FoodSupliment) {
+    return foodSupliment.prices.find(price => price.setAsDefaultPrice);
   }
 
   back() {
@@ -83,7 +89,7 @@ export class ProductsListComponent implements OnInit {
   }
 
   // navigate and add the products category to the edit product components
-  goToEditProduct() {
-    this.router.navigate(['admin-profile/edit-product/' + this.productCategory])
+  goToEditProduct(productId: string) {
+    this.router.navigate(['admin-profile/edit-product/' + this.productCategory + '/' + productId])
   }
 }

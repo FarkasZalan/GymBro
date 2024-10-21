@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../../../products/product.service';
+import { ProductViewText } from '../../../products/product-view-texts';
 
 @Component({
   selector: 'app-products-categories',
@@ -18,34 +19,34 @@ export class ProductsCategoriesComponent implements OnInit {
 
   // get the products count by the categories
   ngOnInit(): void {
-    this.productServie.getAllProductByCategory('foodSupliments').subscribe(foodSuplimentsLenth => {
+    this.productServie.getAllProductByCategory(ProductViewText.FOOD_SUPLIMENTS).subscribe(foodSuplimentsLenth => {
       this.foodSuplimentsCount = foodSuplimentsLenth.length;
     });
-    this.productServie.getAllProductByCategory('healthyProducts').subscribe(healthyFoodsLenth => {
+    this.productServie.getAllProductByCategory(ProductViewText.HEALTHY_FOOD).subscribe(healthyFoodsLenth => {
       this.healthyProductsCount = healthyFoodsLenth.length;
     });
-    this.productServie.getAllProductByCategory('clothes').subscribe(clothesLength => {
+    this.productServie.getAllProductByCategory(ProductViewText.CLOTHES).subscribe(clothesLength => {
       this.ClothesCount = clothesLength.length;
     });
-    this.productServie.getAllProductByCategory('accessories').subscribe(accessoriesLenth => {
+    this.productServie.getAllProductByCategory(ProductViewText.ACCESSORIES).subscribe(accessoriesLenth => {
       this.accessoriesCount = accessoriesLenth.length;
     });
   }
 
   // // navigate and pass the products category to the products list component
   goToFoodSupliments() {
-    this.router.navigate(['/admin-profile/pruducts', 'foodSupliments']);
+    this.router.navigate(['/admin-profile/pruducts', ProductViewText.FOOD_SUPLIMENTS]);
   }
 
   goToHealthyProducts() {
-    this.router.navigate(['/admin-profile/pruducts', 'healthyProducts']);
+    this.router.navigate(['/admin-profile/pruducts', ProductViewText.HEALTHY_FOOD]);
   }
 
   goToClothes() {
-    this.router.navigate(['/admin-profile/pruducts', 'clothes']);
+    this.router.navigate(['/admin-profile/pruducts', ProductViewText.CLOTHES]);
   }
 
   goToAccessories() {
-    this.router.navigate(['/admin-profile/pruducts', 'accessories']);
+    this.router.navigate(['/admin-profile/pruducts', ProductViewText.ACCESSORIES]);
   }
 }

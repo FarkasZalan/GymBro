@@ -2,51 +2,53 @@
 
 <div class="list-container">
     <!-- Food supliments card -->
-    <nb-card class="rounded-card categoryCard" (click)="goToFoodSupliments()">
-        <nb-card-header class="card-header">
-            <strong class="default-label">{{ 'menu.foodSuplimentsMenu.foodSupliments' | translate }} ({{
+    <nb-card class="rounded-card-category categoryCard" (click)="goToFoodSupliments()">
+        <nb-card-header class="card-header default-label">
+            <strong class="default-label">{{ 'menu.foodSuplimentsMenu.foodSupliments' | translate }} <br> ({{
                 foodSuplimentsCount }} {{ 'products.pcs'
                 | translate }})</strong>
         </nb-card-header>
         <nb-card-body class="category-image">
-            <img src="../../../assets/images/food-supliments-image.jpg" alt="Food supliments" class="card-image" />
+            <img src="../../../assets/images/food-supliments-image.jpg" alt="Food supliments"
+                class="card-image-category" />
         </nb-card-body>
     </nb-card>
 
     <!-- Healthy food card -->
-    <nb-card class="rounded-card categoryCard" (click)="goToHealthyProducts()">
-        <nb-card-header class="card-header">
-            <strong class="default-label">{{ 'menu.healthyFoodsMenu.healthyFoods' | translate }} ({{
+    <nb-card class="rounded-card-category categoryCard" (click)="goToHealthyProducts()">
+        <nb-card-header class="card-header default-label">
+            <strong class="default-label">{{ 'menu.healthyFoodsMenu.healthyFoods' | translate }} <br> ({{
                 healthyProductsCount }} {{ 'products.pcs' |
                 translate }})</strong>
         </nb-card-header>
         <nb-card-body class="category-image">
-            <img src="../../../assets/images/healthy-food-image.jpg" alt="Healthy foof" class="card-image" />
+            <img src="../../../assets/images/healthy-food-image.jpg" alt="Healthy foof" class="card-image-category" />
         </nb-card-body>
     </nb-card>
 
     <!-- Clothing card -->
-    <nb-card class="rounded-card categoryCard" (click)="goToClothes()">
-        <nb-card-header class="card-header">
-            <strong class="default-label">{{ 'menu.clothingMenu.clothing' | translate }} ({{ ClothesCount }} {{
+    <nb-card class="rounded-card-category categoryCard" (click)="goToClothes()">
+        <nb-card-header class="card-header default-label">
+            <strong class="default-label">{{ 'menu.clothingMenu.clothing' | translate }} <br> ({{ ClothesCount }} {{
                 'products.pcs' | translate
                 }})</strong>
         </nb-card-header>
         <nb-card-body class="category-image">
-            <img src="../../../assets/images/clothing-image.jpg" alt="Clothing" class="card-image" />
+            <img src="../../../assets/images/clothing-image.jpg" alt="Clothing" class="card-image-category" />
         </nb-card-body>
     </nb-card>
 
     <!-- Accessories-->
-    <nb-card class="rounded-card categoryCard" (click)="goToAccessories()">
-        <nb-card-header class="card-header">
-            <strong class="default-label">{{ 'menu.accessoriesMenu.accessories' | translate }} ({{ accessoriesCount }}
+    <nb-card class="rounded-card-category categoryCard" (click)="goToAccessories()">
+        <nb-card-header class="card-header default-label">
+            <strong class="default-label">{{ 'menu.accessoriesMenu.accessories' | translate }} <br> ({{ accessoriesCount
+                }}
                 {{
                 'products.pcs' |
                 translate }})</strong>
         </nb-card-header>
         <nb-card-body class="category-image">
-            <img src="../../../assets/images/gym-accessories-image.jpg" alt="Accessories" class="card-image" />
+            <img src="../../../assets/images/gym-accessories-image.jpg" alt="Accessories" class="card-image-category" />
         </nb-card-body>
     </nb-card>
 </div>

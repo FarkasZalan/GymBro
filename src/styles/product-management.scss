@@ -211,6 +211,15 @@ h1.title {
     font-size: 1rem;
 }
 
+.card-header {
+    cursor: pointer;
+
+    strong,
+    span {
+        font-size: 24px !important;
+    }
+}
+
 .checkbox-container {
     display: flex;
     align-items: center;
@@ -518,7 +527,7 @@ h3 {
     margin: 30px;
 }
 
-.delete-btn {
+.delete-table-btn {
     border-color: #e35757 !important;
     color: #e35757 !important;
     margin-left: 15px;

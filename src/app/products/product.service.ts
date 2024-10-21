@@ -10,7 +10,7 @@ import { AuthService } from "../auth/auth.service";
 export class ProductService {
     constructor(private auth: AngularFireAuth, private db: AngularFirestore, private router: Router, private authService: AuthService) { }
 
-    getAllProductByCategory(documentName: string) {
-        return this.db.collection("products").doc(documentName).collection('items').valueChanges();
+    getAllProductByCategory(categoryName: string) {
+        return this.db.collection("products").doc(categoryName).collection('allProduct').valueChanges();
     }
 }

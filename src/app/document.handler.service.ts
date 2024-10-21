@@ -8,8 +8,12 @@ export class DocumentHandlerService {
 
   constructor(private db: AngularFirestore) { }
 
-  getDocumentByID(collection: string, documentId: string) {
-    return this.db.collection(collection).doc(documentId).valueChanges();
+  getDocumentByID(mainCollection: string, mainDocumentId: string) {
+    return this.db.collection(mainCollection).doc(mainDocumentId).valueChanges();
+  }
+
+  getInnerDocumentByID(mainCollection: string, mainDocumentId: string, innerCollection: string, innerDocumentId: string) {
+    return this.db.collection(mainCollection).doc(mainDocumentId).collection(innerCollection).doc(innerDocumentId).valueChanges();
   }
 
   // When register a user then it's useful for upper and lowercase handleing

@@ -1,4 +1,11 @@
 export enum ProductViewText {
+    // Product categories
+    FOOD_SUPLIMENTS = "foodSupliments",
+    CLOTHES = "clothes",
+    ACCESSORIES = "accessories",
+    HEALTHY_FOOD = "healthyFood",
+
+
     // Food supliments categories
     FLAVORS = "Flavors",
     ALLERGENES = "Allergenes",

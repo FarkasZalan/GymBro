@@ -8,8 +8,9 @@
                     <!-- Product Name -->
                     <div class="col-md-6 form-group">
                         <label for="productName" class="label">{{ 'products.productName' | translate }}</label>
-                        <input type="text" class="form-control" ngModel name="productName" required
-                            placeholder="{{ 'products.enterProductName' | translate }}" #productName="ngModel">
+                        <input type="text" class="form-control" [(ngModel)]="newFoodSupliment.productName"
+                            name="productName" required placeholder="{{ 'products.enterProductName' | translate }}"
+                            #productName="ngModel">
                         <span class="help-block" *ngIf="productName.touched && !productName.valid">{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
@@ -42,7 +43,8 @@
                         <div class="input-group">
                             <!-- Daily dosage input -->
                             <div class="input-container">
-                                <input type="number" min="0" class="form-control" ngModel name="dailyDosage" required
+                                <input type="number" min="0" class="form-control"
+                                    [(ngModel)]="newFoodSupliment.dailyDosage" name="dailyDosage" required
                                     placeholder="{{ 'products.enterDailyDosage' | translate }}" #dailyDosage="ngModel">
                                 <span class="help-block" *ngIf="dailyDosage.touched && !dailyDosage.valid">{{
                                     'register.fieldRequired' | translate }}</span>
@@ -69,8 +71,8 @@
                     <!-- Description -->
                     <div class="col-md-6 form-group">
                         <label for="description" class="label">{{ 'products.description' | translate }}</label>
-                        <textarea class="form-control" ngModel name="description" required
-                            placeholder="{{ 'products.enterProductDescription' | translate }}"
+                        <textarea class="form-control" [(ngModel)]="newFoodSupliment.description" name="description"
+                            required placeholder="{{ 'products.enterProductDescription' | translate }}"
                             #description="ngModel"></textarea>
                         <span class="help-block" *ngIf="description.touched && !description.valid">{{
                             'register.fieldRequired' | translate }}</span>
@@ -99,6 +101,13 @@
 
                                     <!-- Product Details (Price and Weight) below the image -->
                                     <div class="details-container text-center">
+                                        <!-- show 'default' text if the current address is the default -->
+                                        <nb-card-header class="card-header">
+                                            <span *ngIf="price.setAsDefaultPrice">{{
+                                                'profileMenu.shippingAddressForm.defaultShippingAddress' | translate
+                                                }}</span>
+                                        </nb-card-header>
+
                                         <h3>{{ 'products.price' | translate }}: {{ price.productPrice }} {{
                                             'products.huf' | translate }}</h3>
                                         <p class="weight-text"><strong></strong> {{
@@ -267,7 +276,7 @@
                                         <button class="btn btn-primary basic-btn basic-form-btn btn-edit"
                                             (click)="displayEditVitamin(i)">{{ 'profilePage.modify' | translate
                                             }}</button>
-                                        <button class="btn delete-btn" (click)="deleteVitamin(i)">{{
+                                        <button class="btn delete-table-btn" (click)="deleteVitamin(i)">{{
                                             'profileMenu.shippingAddressForm.deleteAddress' | translate }}</button>
                                     </div>
                                 </td>
@@ -368,17 +377,6 @@
                                 placeholder="{{ 'products.saltGram' | translate }}*" #nutritionalValueSalt="ngModel">
                         </div>
                     </div>
-
-                    <!-- Other nutritional information -->
-                    <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label for="description" class="label">{{ 'products.otherNutritionalInformation' | translate
-                                }}</label>
-                            <textarea class="form-control" ngModel name="description"
-                                placeholder="{{ 'products.otherNutritionalInformation' | translate }}"
-                                #description="ngModel"></textarea>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Safety Section -->
@@ -450,12 +448,24 @@
                     {{ 'basicErrorMessage' | translate }}
                 </span>
 
-                <!-- Submit Button -->
-                <div class="button-container">
+                <!-- Create Button -->
+                <div *ngIf="!isProductEdit" class="button-container">
                     <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
                         (click)="addNewFoodSupplement()" [disabled]="!form.valid">{{ 'products.add' | translate
                         }}</button>
-                </div><br>
+                </div>
+
+                <div *ngIf="isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        (click)="editFoodSupliment()" [disabled]="!form.valid">{{ 'profilePage.modify' | translate
+                        }}</button>
+                </div>
+                <div *ngIf="isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn delete-btn basic-form-btn" type="submit" nbButton
+                        status="success" (click)="deleteFoodSupliment()">{{
+                        'profileMenu.shippingAddressForm.deleteAddress' | translate
+                        }}</button>
+                </div>
             </form>
             <!-- back button -->
             <div class="button-container">

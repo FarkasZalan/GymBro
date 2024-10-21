@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-change-default-address-confirm-dialog',
   templateUrl: './change-default-address-confirm-dialog.component.html',
-  styleUrl: './change-default-address-confirm-dialog.component.scss'
+  styleUrl: '../../../../styles/confirm-dialog.scss'
 })
 export class ChangeDefaultAddressConfirmDialogComponent {
 

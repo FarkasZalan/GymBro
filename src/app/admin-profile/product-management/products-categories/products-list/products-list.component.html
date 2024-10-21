@@ -1,6 +1,6 @@
 <!-- If no products, display the empty card -->
 <div *ngIf="(emptyCollection === true)" class="empty-list-container">
-    <nb-card class="rounded-card emptyCard">
+    <nb-card class="emptyCard">
         <nb-card-body>
             <div>
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
@@ -16,6 +16,35 @@
     </nb-card>
 </div>
 
+<div class="row">
+    <!-- Display product prices dynamically in a 2-column layout -->
+    <div class="list-container">
+        <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of foodSupliments">
+            <nb-card-body class="product-image" (click)="goToEditProduct(foodSupliment.id)">
+
+
+                <div *ngIf="getDefaultPrice(foodSupliment) as defaultPrice" class="details-container text-center">
+                    <div class="image-container text-center">
+                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                            alt="Product Image" class="card-image" />
+                        <img *ngIf="defaultPrice.productImage === ''"
+                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                            class="card-image" />
+                    </div>
+
+
+                    <h4>{{ foodSupliment.productName }}</h4>
+                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
+                        'products.huf' | translate }}</h5>
+                    <h5 class="price-display">{{
+                        'products.stock' | translate }}: {{
+                        defaultPrice.quantityInProduct }} {{ foodSupliment.dosageUnit }}</h5>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>
+
 <!-- back button -->
 <div class="button-container">
     <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
@@ -25,7 +54,9 @@
 </div>
 
 <!-- add button -->
-<button *ngIf="(emptyCollection === true)" class="floating-button" (click)="goToCreateProduct()">
-    +
-    <span class="floating-label">{{ 'products.addProductText' | translate }}</span>
-</button>
+<div class="floating-button-container">
+    <button class="floating-button" (click)="goToCreateProduct()">
+        +
+        <span class="floating-label">{{ 'products.addProductText' | translate }}</span>
+    </button>
+</div>

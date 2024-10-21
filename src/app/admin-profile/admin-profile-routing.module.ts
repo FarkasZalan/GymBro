@@ -62,19 +62,19 @@ export const routes: Routes = [
                 component: AdminProfileComponent
             },
             {
-                path: 'edit-product/foodSupliments',
-                component: EditFoodSupliementsComponent
+                path: 'edit-product/foodSupliments/:productId',
+                component: CreateFoodSuplimentsComponent
             },
             {
-                path: 'edit-product/healthyProducts',
+                path: 'edit-product/healthyProducts/:productId',
                 component: EditHealthyFoodComponent
             },
             {
-                path: 'edit-product/clothes',
+                path: 'edit-product/clothes/:productId',
                 component: EditClothesComponent
             },
             {
-                path: 'edit-product/accessories',
+                path: 'edit-product/accessories/:productId',
                 component: EditAccessoriesComponent
             },
 

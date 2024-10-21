@@ -15,6 +15,9 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { NutritionalTable } from '../../../../products/product-models/nutritional-table.model';
+import { ActivatedRoute } from '@angular/router';
+import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 
 @Component({
   selector: 'app-create-food-supliements',
@@ -166,9 +169,93 @@ export class CreateFoodSuplimentsComponent implements OnInit {
   // New supplement to be created
   newFoodSupliment: FoodSupliment;
 
-  constructor(private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
+  // create or modify an existing product
+  isProductEdit: boolean = false;
+  foodSuplimentId: string = '';
+
+  constructor(private route: ActivatedRoute, private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
 
   ngOnInit(): void {
+    this.newFoodSupliment = {
+      id: "",
+      productName: "",
+      productCategory: "",
+      description: "",
+      dosageUnit: "",
+      dailyDosage: null,
+      flavors: [],
+
+      safeForConsumptionDuringBreastfeeding: true,
+      safeForConsumptionDuringPregnancy: true,
+
+      nutritionalTable: null,
+
+      proteinType: "",
+      allergens: [],
+
+      vitaminList: [],
+      genderList: [],
+
+      prices: []
+    }
+    this.route.params.subscribe(params => {
+      // get the food supliment product by id
+      this.documentumHandler.getInnerDocumentByID("products", ProductViewText.FOOD_SUPLIMENTS, "allProduct", params['productId']).subscribe((foodSupliment: FoodSupliment) => {
+        // make a copy from the object
+        this.newFoodSupliment = { ...foodSupliment };
+
+        // if it's not undefinied (so the user want to edit a specified product not create a new)
+        if (this.newFoodSupliment.productName !== undefined) {
+          this.foodSuplimentId = this.newFoodSupliment.id;
+          this.isProductEdit = true;
+          // pass the value to the object
+          this.selectedCategory = this.newFoodSupliment.productCategory;
+          if (this.selectedCategory === this.translate.instant(ProductViewText.PROTEINS)) {
+            this.isProtein = true;
+          }
+          this.selectedUnit = this.newFoodSupliment.dosageUnit;
+
+          // prices
+          this.productPrices = this.newFoodSupliment.prices;
+
+          // flavor and allergies list
+          this.selectedProteinType = this.newFoodSupliment.proteinType;
+          this.selectedFlavors = this.newFoodSupliment.flavors;
+          this.selectedAllergenes = this.newFoodSupliment.allergens;
+
+          // safety
+          this.isSafeForConsumptionDuringBreastfeeding = this.newFoodSupliment.safeForConsumptionDuringBreastfeeding;
+          this.isSafeForConsumptionDuringPregnancy = this.newFoodSupliment.safeForConsumptionDuringPregnancy;
+
+          // genders
+          if ((this.selectedCategory === this.translate.instant(ProductViewText.JOIN_SUPPORT) || (this.selectedCategory === this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)))) {
+            this.selectedGenders = this.newFoodSupliment.genderList;
+          }
+
+          //vitamin
+          this.vitaminList = this.newFoodSupliment.vitaminList;
+          if (this.selectedCategory === this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)) {
+            this.isJoinSupport = true;
+            this.isProtein = this.isVitamin = false;
+            this.resetFlavors([ProductViewText.UNFLAVORED], true);
+          }
+
+          if (this.selectedCategory === this.translate.instant(ProductViewText.JOIN_SUPPORT)) {
+            this.isVitamin = true;
+            this.isProtein = this.isJoinSupport = false;
+            this.resetFlavors([ProductViewText.UNFLAVORED], true);
+          }
+
+
+          // nutritional table
+          if ((this.selectedCategory !== this.translate.instant(ProductViewText.JOIN_SUPPORT) && (this.selectedCategory !== this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)))) {
+            this.nutritionalTable = this.newFoodSupliment.nutritionalTable;
+          }
+
+
+        }
+      });
+    });
     // Listen for language change and re-translate categories
     this.translate.onLangChange.subscribe(() => {
       this.translateAndSortItems();
@@ -340,7 +427,9 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPriceDialogComponent, {
       data: {
         unit: this.selectedUnit,
-        editText: false
+        allPrices: this.productPrices,
+        editText: false,
+        productCategory: ProductViewText.FOOD_SUPLIMENTS
       }
     });
 
@@ -350,6 +439,16 @@ export class CreateFoodSuplimentsComponent implements OnInit {
         if (newPrice.productImage === null || newPrice.productImage === undefined) {
           newPrice.productImage = "";
         }
+
+        // if new price is the default then change the old default value to false
+        if (newPrice.setAsDefaultPrice) {
+          this.productPrices.forEach(price => {
+            if (price.setAsDefaultPrice) {
+              price.setAsDefaultPrice = false;
+            }
+          })
+        }
+
         this.productPrices.push(newPrice);
       }
     });
@@ -360,8 +459,10 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPriceDialogComponent, {
       data: {
         unit: this.selectedUnit,
+        allPrices: this.productPrices,
         selectedPrice: this.productPrices[id],
-        editText: true
+        editText: true,
+        productCategory: ProductViewText.FOOD_SUPLIMENTS
       }
     });
 
@@ -375,6 +476,16 @@ export class CreateFoodSuplimentsComponent implements OnInit {
         if (editedPrice.productImage === null || editedPrice.productImage === undefined) {
           editedPrice.productImage = "";
         }
+
+        // if edited price is the default then change the old default value to false
+        if (editedPrice.setAsDefaultPrice) {
+          this.productPrices.forEach(price => {
+            if (price.setAsDefaultPrice) {
+              price.setAsDefaultPrice = false;
+            }
+          })
+        }
+
         this.productPrices[id] = editedPrice;
       }
     });
@@ -479,7 +590,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     }
 
     const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", "foodSupliments", "allFoodSupliment", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName), undefined, ""
+      "products", ProductViewText.FOOD_SUPLIMENTS, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName), undefined, ""
     );
 
     if (checkForDuplication) {
@@ -500,6 +611,12 @@ export class CreateFoodSuplimentsComponent implements OnInit {
         nutritionalValueProteins: 0,
         nutritionalValueSalt: 0
       }
+    }
+
+    const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
+
+    if (!hasDefaultPrice) {
+      this.productPrices[0].setAsDefaultPrice = true;
     }
 
     // create new Food supliment object
@@ -526,12 +643,9 @@ export class CreateFoodSuplimentsComponent implements OnInit {
       prices: this.productPrices
     }
 
-    console.log(this.newFoodSupliment)
-
-
     // Add the new food supliment product
     try {
-      const documentumRef = await this.db.collection("products").doc("foodSupliments").collection("allFoodSupliment").add(this.newFoodSupliment);
+      const documentumRef = await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").add(this.newFoodSupliment);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
       this.errorMessage = false;
@@ -546,8 +660,120 @@ export class CreateFoodSuplimentsComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.log(error);
       this.errorMessage = true;
+    }
+  }
+
+  async editFoodSupliment() {
+    // error handleing
+    if (this.selectedFlavors.length === 0) {
+      this.selectedFlavors.push(this.translate.instant(this.availableFlavors[0]));
+    }
+
+    if (this.selectedGenders.length === 0) {
+      this.selectedGenders = this.translatedGenders;
+    }
+
+    if (this.productPrices.length === 0) {
+      this.missingPricesErrorMessage = true;
+    } else {
+      this.missingPricesErrorMessage = false;
+    }
+
+    const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
+      "products", ProductViewText.FOOD_SUPLIMENTS, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName), undefined, this.newFoodSupliment.id
+    );
+
+    if (checkForDuplication) {
+      this.productNameExistsError = true;
+
+      return;
+    }
+
+    if (this.nutritionalTable.nutritionalValueEnergyCal === null) {
+      this.nutritionalTable = {
+        nutritionalValueEnergyKj: 0,
+        nutritionalValueEnergyCal: 0,
+        nutritionalValueFats: 0,
+        nutritionalValueFattyAcids: 0,
+        nutritionalValueCarbohydrates: 0,
+        nutritionalValueSugar: 0,
+        nutritionalValueFiber: 0,
+        nutritionalValueProteins: 0,
+        nutritionalValueSalt: 0
+      }
+    }
+
+    const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
+
+    if (!hasDefaultPrice) {
+      this.productPrices[0].setAsDefaultPrice = true;
+    }
+
+    // create new Food supliment object
+    this.newFoodSupliment = {
+      id: this.foodSuplimentId,
+      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName),
+      productCategory: this.selectedCategory,
+      description: this.createFoodSuplimentForm.value.description,
+      dosageUnit: this.selectedUnit,
+      dailyDosage: this.createFoodSuplimentForm.value.dailyDosage,
+      flavors: this.selectedFlavors,
+
+      safeForConsumptionDuringBreastfeeding: this.isSafeForConsumptionDuringBreastfeeding,
+      safeForConsumptionDuringPregnancy: this.isSafeForConsumptionDuringPregnancy,
+
+      nutritionalTable: this.nutritionalTable,
+
+      proteinType: this.selectedProteinType,
+      allergens: this.selectedAllergenes,
+
+      vitaminList: this.vitaminList,
+      genderList: this.selectedGenders,
+
+      prices: this.productPrices
+    }
+
+    // Edit the food supliment product
+    try {
+      await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").doc(this.foodSuplimentId).update(this.newFoodSupliment);
+      this.errorMessage = false;
+      this.productNameExistsError = false;
+      this.missingPricesErrorMessage = false;
+      this.vitaminMissingFieldsError = false;
+      // if everything was succes then open successfull dialog
+      this.dialog.open(SuccessfullDialogComponent, {
+        data: {
+          text: SuccessFullDialogText.MODIFIED_TEXT,
+          needToGoPrevoiusPage: true
+        }
+      });
+    } catch (error) {
+      this.errorMessage = true;
+    }
+  }
+
+  async deleteFoodSupliment() {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        text: DeleteConfirmationText.PRODUCT_DELETE
+      }
+    });
+
+    // Wait for the dialog to close and get the user's confirmation
+    const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
+
+    if (confirmToDeleteAddress) {
+      try {
+        const deleteAddressRef = this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").doc(this.foodSuplimentId);
+        await deleteAddressRef.delete();
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.DELETED_TEXT,
+            needToGoPrevoiusPage: true
+          }
+        });
+      } catch { }
     }
   }
 

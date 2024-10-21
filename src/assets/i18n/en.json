@@ -206,6 +206,7 @@
       "deletePriceText": "Are you sure you want to delete this element?",
       "missingPricesError": "At least one price must be provided for the product!",
       "productNameExistsError": "A product with this name already exists!",
+      "changeDefaultPriceText": "Are you changing the default price and quantity for this product?",
       "proteins": {
          "casein": "Protein containing casein",
          "vegan": "Vegan protein",

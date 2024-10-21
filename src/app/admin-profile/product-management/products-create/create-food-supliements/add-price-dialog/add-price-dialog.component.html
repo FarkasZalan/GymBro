@@ -59,7 +59,19 @@
                             <!-- stock error block -->
                             <span class="help-block" *ngIf="!productStock.valid && productStock.touched">{{
                                 'register.fieldRequired' | translate }}</span>
-                        </div>
+                        </div><br>
+
+                        <!-- set too default address Checkbox -->
+                        <div class="form-group">
+                            <label for="setToDefaultAddress" class="checkbox-container">
+                                <label for="setToDefaultAddress">{{ 'profileMenu.shippingAddressForm.setToDefault' |
+                                    translate }}
+                                </label>
+                                <input type="checkbox" [(ngModel)]="isSetAsDefaultPrice" name="setToDefaultAddress"
+                                    id="setToDefaultAddress" #admin="ngModel">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div><br>
 
                         <!-- Error block -->
                         <span *ngIf="errorMessage" class="help-block-login-error">

@@ -207,6 +207,7 @@
                 "deletePriceText": "Biztosan törölni szeretnéd ezt az elemet?",
                 "missingPricesError": "Legalább egy árat kötelező megadni a termékhez!",
                 "productNameExistsError": "Már létezik ilyen nevű termék!",
+                "changeDefaultPriceText": "Megváltoztatod erre a termék alapértelmezett árát, mennyiségét?",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
                         "vegan": "Növényi eredetű fehérje",

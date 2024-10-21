@@ -3,4 +3,5 @@ export interface ProductPrice {
     productImage: string;
     productPrice: number;
     productStock: number;
+    setAsDefaultPrice: boolean;
 }

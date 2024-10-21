@@ -7,6 +7,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProductViewText } from '../../../../../products/product-view-texts';
 import { DeleteConfirmationDialogComponent } from '../../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../../delete-confirmation-dialog/delete-text';
+import { DocumentHandlerService } from '../../../../../document.handler.service';
+import { ChangeDefaultPriceConfirmDialogComponent } from '../../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-add-price-dialog',
@@ -28,10 +31,15 @@ export class AddPriceDialogComponent implements OnInit {
   newPrice: ProductPrice;
   unitText: string = '';
   buttonText: string = '';
+  isSetAsDefaultPrice: boolean = false;
+  productCategory: string;
+  allPricesForProduct: ProductPrice[] = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService, private documentumHandler: DocumentHandlerService, private db: AngularFirestore) {
     this.selectedUnit = data.unit;
     this.editText = data.editText;
+    this.productCategory = data.productCategory;
+    this.allPricesForProduct = data.allPrices;
 
     if (this.editText) {
       this.buttonText = this.translate.instant('profilePage.modify');
@@ -55,19 +63,22 @@ export class AddPriceDialogComponent implements OnInit {
       quantityInProduct: null,
       productImage: '',
       productPrice: null,
-      productStock: null
+      productStock: null,
+      setAsDefaultPrice: false
     }
 
     if (this.data.selectedPrice !== null && this.data.selectedPrice !== undefined) {
       this.newPrice = { ...this.data.selectedPrice };
       this.imageBase64 = this.newPrice.productImage;
       this.imagePreview = this.imageBase64;
+      this.isSetAsDefaultPrice = this.newPrice.setAsDefaultPrice;
     } else {
       this.newPrice = {
         quantityInProduct: null,
         productImage: '',
         productPrice: null,
-        productStock: null
+        productStock: null,
+        setAsDefaultPrice: false
       }
       this.imageBase64 = '';
       this.imagePreview = '';
@@ -89,13 +100,36 @@ export class AddPriceDialogComponent implements OnInit {
   }
 
   // Method to initiate password recovery
-  addNewPrice() {
+  async addNewPrice() {
     this.newPrice = {
       quantityInProduct: this.priceForm.value.quantityInProduct,
       productImage: this.imageBase64,
       productPrice: this.priceForm.value.productPrice,
-      productStock: this.priceForm.value.productStock
+      productStock: this.priceForm.value.productStock,
+      setAsDefaultPrice: this.isSetAsDefaultPrice
     };
+
+
+    let hasDefaultPrice = false;
+    if (this.allPricesForProduct.length > 0 && this.isSetAsDefaultPrice) {
+      // check if a default price already has been added before
+      hasDefaultPrice = this.allPricesForProduct.some(productPrice => productPrice.setAsDefaultPrice === true);
+    }
+    // If there's a default price already set, we need to handle it
+    if (hasDefaultPrice) {
+      const dialogRef = this.dialog.open(ChangeDefaultPriceConfirmDialogComponent);
+
+      // Wait for the dialog to close and get the user's confirmation
+      const confirmToSetDefault = await dialogRef.afterClosed().toPromise();
+
+      if (confirmToSetDefault) {
+        // Find the price where isSetAsDefaultAddress is true
+        this.newPrice.setAsDefaultPrice = true;
+      } else {
+        // User did not confirm, exit the method
+        return;
+      }
+    }
 
     // Close the dialog and return the new product price object
     this.dialogRef.close(this.newPrice);
