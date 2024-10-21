@@ -39,7 +39,7 @@ export enum ProductViewText {
 
     // Protein
     CASEIN = "products.proteins.casein",
-    PLANT_BASED_PROTEIN = "products.proteins.plantBased",
+    PLANT_BASED_PROTEIN = "products.proteins.vegan",
     DAIRY_FREE_PROTEIN = "products.proteins.dairyFree",
     WHEY_PROTEIN = "products.proteins.whey",
     ANIMAL_BASED_PROTEIN = "products.proteins.animalBased",

@@ -1,7 +1,7 @@
 <div class="container">
     <nb-card class="container">
         <nb-card-body class="login-col">
-            <form (ngSubmit)="addNewFoodSupplement()" #form="ngForm">
+            <form #form="ngForm">
                 <!-- Product Details Section -->
                 <h3>{{ 'products.productDetails' | translate }}</h3>
                 <div class="row">
@@ -194,14 +194,14 @@
                     <h3>{{ 'products.vitamins' | translate }}</h3>
                     <div class="row">
                         <!-- Vitamin name input -->
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="vitaminName" class="label">{{ 'products.vitaminName' | translate }}</label>
                             <input type="text" class="form-control" [(ngModel)]="vitaminName" name="vitaminName"
                                 placeholder="{{ 'products.vitaminName' | translate }}*">
                         </div>
 
                         <!-- Vitamin quantity in one capsule input -->
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="vitaminQuantity" class="label">{{ 'products.vitaminQuantityPerCapsule' |
                                 translate }}</label>
                             <input type="number" min="0" class="form-control" [(ngModel)]="vitaminQuantity"
@@ -210,7 +210,7 @@
                         </div>
 
                         <!-- Vitamin unit input -->
-                        <div class="col-md-3 form-group">
+                        <div class="col-md-4 form-group">
                             <label for="vitaminUnit" class="label">{{ 'products.vitaminUnit' | translate }}</label>
                             <select class="form-control drop-down-list allow-selected-list-color selection"
                                 name="vitaminUnit" [(ngModel)]="selectedVitaminUnit">
@@ -220,30 +220,6 @@
                                 </option>
                                 <option value="mg">mg</option>
                             </select>
-                        </div>
-
-                        <!-- Vitamin gender input -->
-                        <div class="col-md-3 form-group">
-                            <label for="vitaminGender" class="label">{{ 'products.gender' | translate }}*</label>
-                            <div class="multi-select-container">
-                                <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
-                                    [(ngModel)]="selectedGenders" #genderSelect="ngModel">
-                                    <option *ngFor="let gender of translatedGenders" [value]="gender"
-                                        [ngClass]="{'active': selectedGenders.includes(gender) && selectedGenders.length > 0}"
-                                        (click)="selectionOfTheList(productViewText.GENDER, gender)">
-                                        {{ gender }}
-                                    </option>
-                                </select>
-                            </div>
-
-                            <!-- display the selected genders -->
-                            <div *ngIf="selectedGenders.length > 0">
-                                <div class="selected-items-display" *ngFor="let selected of selectedGenders"
-                                    (click)="removeItemFromTheList(productViewText.GENDER, selected)">
-                                    {{ selected }}
-                                    <span style="cursor: pointer; color: red;">&times;</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <!-- missing vitamin fields error block -->
@@ -278,7 +254,6 @@
                                 <th>{{ 'products.vitaminName' | translate }}</th>
                                 <th>{{ 'products.vitaminQuantityPerCapsule' | translate }}</th>
                                 <th>{{ 'products.vitaminUnit' | translate }}</th>
-                                <th>{{ 'products.gender' | translate }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -287,7 +262,6 @@
                                 <td>{{ vitamin.name }}</td>
                                 <td>{{ vitamin.stock }}</td>
                                 <td>{{ vitamin.unit }}</td>
-                                <td>{{ vitamin.gender }}</td>
                                 <td>
                                     <div class="buttons">
                                         <button class="btn btn-primary basic-btn basic-form-btn btn-edit"
@@ -312,23 +286,26 @@
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueEnergyKj" class="label">{{ 'products.energyKj' | translate
                                 }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueEnergyKj"
-                                placeholder="{{ 'products.energyKj' | translate }}*"
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueEnergyKj" name="nutritionalValueEnergyKj"
+                                placeholder="{{ 'products.energyKj' | translate }}*" required
                                 #nutritionalValueEnergyKj="ngModel">
                         </div>
                         <!-- Energy (kcal) -->
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueEnergyCal" class="label">{{ 'products.energyKcal' | translate
                                 }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueEnergyCal"
-                                placeholder="{{ 'products.energyKcal' | translate }}*"
-                                #nutritionalValueEnergyCal="ngModel">
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueEnergyCal"
+                                name="nutritionalValueEnergyCal" placeholder="{{ 'products.energyKcal' | translate }}*"
+                                required #nutritionalValueEnergyCal="ngModel">
                         </div>
                         <!-- Fats -->
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueFats" class="label">{{ 'products.fatsGram' | translate
                                 }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueFats"
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueFats" name="nutritionalValueFats" required
                                 placeholder="{{ 'products.fatsGram' | translate }}*" #nutritionalValueFats="ngModel">
                         </div>
                     </div>
@@ -337,24 +314,30 @@
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueFattyAcids" class="label">{{ 'products.fattyAcidsGram' |
                                 translate }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueFattyAcids"
-                                placeholder="{{ 'products.fattyAcidsGram' | translate }}*"
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueFattyAcids"
+                                name="nutritionalValueFattyAcids"
+                                placeholder="{{ 'products.fattyAcidsGram' | translate }}*" required
                                 #nutritionalValueFattyAcids="ngModel">
                         </div>
                         <!-- Carbohydrates -->
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueCarbohydrates" class="label">{{ 'products.carbohydratesGram' |
                                 translate }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueCarbohydrates"
-                                placeholder="{{ 'products.carbohydratesGram' | translate }}*"
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueCarbohydrates"
+                                name="nutritionalValueCarbohydrates"
+                                placeholder="{{ 'products.carbohydratesGram' | translate }}*" required
                                 #nutritionalValueCarbohydrates="ngModel">
                         </div>
                         <!-- Sugars -->
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueSugar" class="label">{{ 'products.sugarsGram' | translate
                                 }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueSugar"
-                                placeholder="{{ 'products.sugarsGram' | translate }}*" #nutritionalValueSugar="ngModel">
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueSugar" name="nutritionalValueSugar"
+                                placeholder="{{ 'products.sugarsGram' | translate }}*" #nutritionalValueSugar="ngModel"
+                                required>
                         </div>
                     </div>
                     <div class="row">
@@ -362,22 +345,26 @@
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueFiber" class="label">{{ 'products.fiberGram' | translate
                                 }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueFiber"
-                                placeholder="{{ 'products.fiberGram' | translate }}*" #nutritionalValueFiber="ngModel">
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueFiber" name="nutritionalValueFiber"
+                                required placeholder="{{ 'products.fiberGram' | translate }}*"
+                                #nutritionalValueFiber="ngModel">
                         </div>
                         <!-- Proteins -->
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueProteins" class="label">{{ 'products.proteinsGram' | translate
                                 }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueProteins"
-                                placeholder="{{ 'products.proteinsGram' | translate }}*"
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueProteins" name="nutritionalValueProteins"
+                                placeholder="{{ 'products.proteinsGram' | translate }}*" required
                                 #nutritionalValueProteins="ngModel">
                         </div>
                         <!-- Salt -->
                         <div class="col-md-4 form-group">
                             <label for="nutritionalValueSalt" class="label">{{ 'products.saltGram' | translate
                                 }}</label>
-                            <input type="number" class="form-control" ngModel name="nutritionalValueSalt"
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueSalt" name="nutritionalValueSalt" required
                                 placeholder="{{ 'products.saltGram' | translate }}*" #nutritionalValueSalt="ngModel">
                         </div>
                     </div>
@@ -407,6 +394,7 @@
                             <span class="checkmark"></span>
                         </label>
                     </div>
+
                     <!-- Safe for Breastfeeding -->
                     <div class="col-md-4 form-group">
                         <label class="checkbox-container">
@@ -416,18 +404,57 @@
                             <span class="checkmark"></span>
                         </label>
                     </div>
+
+                    <!-- Gender input -->
+                    <div *ngIf="(isJoinSupport || isVitamin) && (selectedCategory !== '')" [@collapseField]>
+                        <div class="col-md-12 form-group ">
+                            <label for="vitaminGender" class="label">{{ 'products.gender' | translate }}</label>
+                            <div class="multi-select-container">
+                                <select class="form-control allow-selected-multiple-list-color gender-select"
+                                    multiple="multiple" [(ngModel)]="selectedGenders" #genderSelect="ngModel">
+                                    <option *ngFor="let gender of translatedGenders" [value]="gender"
+                                        [ngClass]="{'active': selectedGenders.includes(gender) && selectedGenders.length > 0}"
+                                        (click)="selectionOfTheList(productViewText.GENDER, gender)">
+                                        {{ gender }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- display the selected genders -->
+                            <div *ngIf="selectedGenders.length > 0">
+                                <div class="selected-items-display" *ngFor="let selected of selectedGenders"
+                                    (click)="removeItemFromTheList(productViewText.GENDER, selected)">
+                                    {{ selected }}
+                                    <span style="cursor: pointer; color: red;">&times;</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Prices missing block -->
+                <span *ngIf="missingPricesErrorMessage" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'products.missingPricesError' | translate }}
+                </span>
+
+                <!-- Product name exists block -->
+                <span *ngIf="productNameExistsError" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'products.productNameExistsError' | translate }}
+                </span>
 
                 <!-- Error block -->
                 <span *ngIf="errorMessage" class="help-block-login-error">
                     <i class="fas fa-exclamation-triangle icon"></i>
-                    {{ errorMessage }}
+                    {{ 'basicErrorMessage' | translate }}
                 </span>
 
                 <!-- Submit Button -->
                 <div class="button-container">
                     <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
-                        [disabled]="!form.valid">{{ 'products.add' | translate }}</button>
+                        (click)="addNewFoodSupplement()" [disabled]="!form.valid">{{ 'products.add' | translate
+                        }}</button>
                 </div><br>
             </form>
             <!-- back button -->

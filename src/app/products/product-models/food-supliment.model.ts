@@ -1,4 +1,6 @@
+import { NutritionalTable } from "./nutritional-table.model";
 import { ProductPrice } from "./product-price.model";
+import { Vitamin } from "./vitamin.model";
 
 export interface FoodSupliment {
     // identification and basic details
@@ -18,26 +20,12 @@ export interface FoodSupliment {
 
     // Nutritional informations
 
-    // Energy
-    nutritionalValueEnergyKj: number;
-    nutritionalValueEnergyCal: number;
+    nutritionalTable: NutritionalTable;
 
-    //Fats
-    nutritionalValueFats: number;
-    nutritionalValueFattyAcids: number;
+    // Vitamins
 
-    // Carbohydrates
-    nutritionalValueCarbohydrates: number;
-    nutritionalValueSugar: number;
-
-    // Fiber
-    nutritionalValueFiber: number;
-
-    // Proteins
-    nutritionalValueProteins: number;
-
-    // Salt
-    nutritionalValueSalt: number;
+    vitaminList: Vitamin[];
+    genderList: string[];
 
     // Ingredients and Allergens
     proteinType: string; // example isolate, concentrate, beef...

@@ -1,4 +1,5 @@
 {
+        "basicErrorMessage": "Váratlan hiba történt!",
         "menu": {
                 "mainPage": "Kezdőlap",
                 "foodSuplimentsMenu": {
@@ -204,9 +205,11 @@
                 "addNewPrice": "Új Ár Hozzáadása",
                 "editPrice": "Ár Szerkesztése",
                 "deletePriceText": "Biztosan törölni szeretnéd ezt az elemet?",
+                "missingPricesError": "Legalább egy árat kötelező megadni a termékhez!",
+                "productNameExistsError": "Már létezik ilyen nevű termék!",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
-                        "plantBased": "Növényi eredetű fehérje",
+                        "vegan": "Növényi eredetű fehérje",
                         "dairyFree": "Tejmentes fehérje",
                         "whey": "Tejsavó fehérje",
                         "animalBased": "Állati eredetű fehérje"

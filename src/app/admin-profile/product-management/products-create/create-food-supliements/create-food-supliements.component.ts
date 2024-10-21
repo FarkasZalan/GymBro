@@ -10,6 +10,11 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Vitamin } from '../../../../products/product-models/vitamin.model';
 import { NgForm } from '@angular/forms';
 import { FoodSupliment } from '../../../../products/product-models/food-supliment.model';
+import { DocumentHandlerService } from '../../../../document.handler.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
+import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
+import { NutritionalTable } from '../../../../products/product-models/nutritional-table.model';
 
 @Component({
   selector: 'app-create-food-supliements',
@@ -40,8 +45,9 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
   // Form-related properties
   errorMessage: boolean = false;
-  isSafeForConsumptionDuringPregnancy: boolean = false;
-  isSafeForConsumptionDuringBreastfeeding: boolean = false;
+  productNameExistsError: boolean = false;
+  isSafeForConsumptionDuringPregnancy: boolean = true;
+  isSafeForConsumptionDuringBreastfeeding: boolean = true;
 
   selectedUnit: string = '';
   selectedCategory: string = '';
@@ -142,11 +148,25 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
   // Prices
   productPrices: ProductPrice[] = [];
+  missingPricesErrorMessage: boolean = false;
+
+  // Nutritional table
+  nutritionalTable: NutritionalTable = {
+    nutritionalValueEnergyKj: null,
+    nutritionalValueEnergyCal: null,
+    nutritionalValueFats: null,
+    nutritionalValueFattyAcids: null,
+    nutritionalValueCarbohydrates: null,
+    nutritionalValueSugar: null,
+    nutritionalValueFiber: null,
+    nutritionalValueProteins: null,
+    nutritionalValueSalt: null,
+  };
 
   // New supplement to be created
   newFoodSupliment: FoodSupliment;
 
-  constructor(private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef) { }
+  constructor(private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
 
   ngOnInit(): void {
     // Listen for language change and re-translate categories
@@ -269,6 +289,9 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     switch (type) {
       case ProductViewText.FLAVORS:
         this.toggleSelection(this.selectedFlavors, item);
+        if ((this.isVitamin || this.isJoinSupport) && (this.selectedFlavors.length === 0)) {
+          this.selectedFlavors.push(this.translate.instant(this.availableFlavors[0]))
+        }
         break;
       case ProductViewText.ALLERGENES:
         this.toggleSelection(this.selectedAllergenes, item);
@@ -313,6 +336,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
   // Open dialog to add new price
   addNewPrice() {
+    this.missingPricesErrorMessage = false;
     const dialogRef = this.dialog.open(AddPriceDialogComponent, {
       data: {
         unit: this.selectedUnit,
@@ -362,7 +386,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
   // Handle vitamin list addition or update
   handleVitaminList(editVitamin: boolean) {
-    if (!this.vitaminName || !this.vitaminQuantity || this.selectedGenders.length === 0 || !this.selectedVitaminUnit) {
+    if (!this.vitaminName || !this.vitaminQuantity || !this.selectedVitaminUnit) {
       this.vitaminMissingFieldsError = true;
       return;
     }
@@ -375,25 +399,22 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     if (existingVitaminIndex !== -1) {
       // If it exists, update the existing vitamin
       this.vitaminList[existingVitaminIndex] = {
-        name: this.vitaminName,
+        name: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.vitaminName),
         stock: this.vitaminQuantity,
-        gender: this.selectedGenders,
         unit: this.selectedVitaminUnit,
       };
     } else {
       // If it does not exist, push a new vitamin object
       if (!editVitamin) {
         this.vitaminList.push({
-          name: this.vitaminName,
+          name: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.vitaminName),
           stock: this.vitaminQuantity,
-          gender: this.selectedGenders,
           unit: this.selectedVitaminUnit,
         });
       } else { // if the user want to edit the selected vitamin
         this.vitaminList[this.modifiedVitaminId] = {
-          name: this.vitaminName,
+          name: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.vitaminName),
           stock: this.vitaminQuantity,
-          gender: this.selectedGenders,
           unit: this.selectedVitaminUnit,
         }
       }
@@ -407,7 +428,6 @@ export class CreateFoodSuplimentsComponent implements OnInit {
   resetVitaminFields(): void {
     this.vitaminName = '';
     this.vitaminQuantity = null;
-    this.selectedGenders = [];
     this.selectedVitaminUnit = '';
     this.vitaminModificationIsInProgress = false;
   }
@@ -422,7 +442,6 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     this.vitaminName = this.selectedVitamin.name;
     this.vitaminQuantity = this.selectedVitamin.stock;
     this.selectedVitaminUnit = this.selectedVitamin.unit;
-    this.selectedGenders = [...this.selectedVitamin.gender];  // Make a copy of the gender array
   }
 
   // Method to cancel the vitamin modification
@@ -433,7 +452,6 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     this.vitaminQuantity = null;
     this.selectedVitaminUnit = '';
     this.vitaminMissingFieldsError = false;
-    this.selectedGenders = [];
 
     // Reassign the original vitamin object back into the vitamin list
     this.vitaminList[this.modifiedVitaminId] = this.selectedVitamin;
@@ -444,11 +462,50 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     this.vitaminList.splice(index, 1);
   }
 
-  addNewFoodSupplement() {
+  async addNewFoodSupplement() {
+    // error handleing
+    if (this.selectedFlavors.length === 0) {
+      this.selectedFlavors.push(this.translate.instant(this.availableFlavors[0]));
+    }
+
+    if (this.selectedGenders.length === 0) {
+      this.selectedGenders = this.translatedGenders;
+    }
+
+    if (this.productPrices.length === 0) {
+      this.missingPricesErrorMessage = true;
+    } else {
+      this.missingPricesErrorMessage = false;
+    }
+
+    const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
+      "products", "foodSupliments", "allFoodSupliment", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName), undefined, ""
+    );
+
+    if (checkForDuplication) {
+      this.productNameExistsError = true;
+
+      return;
+    }
+
+    if (this.nutritionalTable.nutritionalValueEnergyCal === null) {
+      this.nutritionalTable = {
+        nutritionalValueEnergyKj: 0,
+        nutritionalValueEnergyCal: 0,
+        nutritionalValueFats: 0,
+        nutritionalValueFattyAcids: 0,
+        nutritionalValueCarbohydrates: 0,
+        nutritionalValueSugar: 0,
+        nutritionalValueFiber: 0,
+        nutritionalValueProteins: 0,
+        nutritionalValueSalt: 0
+      }
+    }
+
     // create new Food supliment object
     this.newFoodSupliment = {
       id: "",
-      productName: this.createFoodSuplimentForm.value.productName,
+      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName),
       productCategory: this.selectedCategory,
       description: this.createFoodSuplimentForm.value.description,
       dosageUnit: this.selectedUnit,
@@ -458,25 +515,39 @@ export class CreateFoodSuplimentsComponent implements OnInit {
       safeForConsumptionDuringBreastfeeding: this.isSafeForConsumptionDuringBreastfeeding,
       safeForConsumptionDuringPregnancy: this.isSafeForConsumptionDuringPregnancy,
 
-      nutritionalValueEnergyKj: this.createFoodSuplimentForm.value.nutritionalValueEnergyKj,
-      nutritionalValueEnergyCal: this.createFoodSuplimentForm.value.nutritionalValueEnergyCal,
-
-      nutritionalValueFats: this.createFoodSuplimentForm.value.nutritionalValueFats,
-      nutritionalValueFattyAcids: this.createFoodSuplimentForm.value.nutritionalValueFattyAcids,
-
-      nutritionalValueCarbohydrates: this.createFoodSuplimentForm.value.nutritionalValueCarbohydrates,
-      nutritionalValueSugar: this.createFoodSuplimentForm.value.nutritionalValueSugar,
-
-      nutritionalValueFiber: this.createFoodSuplimentForm.value.nutritionalValueFiber,
-
-      nutritionalValueProteins: this.createFoodSuplimentForm.value.nutritionalValueProteins,
-
-      nutritionalValueSalt: this.createFoodSuplimentForm.value.nutritionalValueSalt,
+      nutritionalTable: this.nutritionalTable,
 
       proteinType: this.selectedProteinType,
       allergens: this.selectedAllergenes,
 
+      vitaminList: this.vitaminList,
+      genderList: this.selectedGenders,
+
       prices: this.productPrices
+    }
+
+    console.log(this.newFoodSupliment)
+
+
+    // Add the new food supliment product
+    try {
+      const documentumRef = await this.db.collection("products").doc("foodSupliments").collection("allFoodSupliment").add(this.newFoodSupliment);
+      // id the document created then save the document id in the field
+      await documentumRef.update({ id: documentumRef.id });
+      this.errorMessage = false;
+      this.productNameExistsError = false;
+      this.missingPricesErrorMessage = false;
+      this.vitaminMissingFieldsError = false;
+      // if everything was succes then open successfull dialog
+      this.dialog.open(SuccessfullDialogComponent, {
+        data: {
+          text: SuccessFullDialogText.CREATED_TEXT,
+          needToGoPrevoiusPage: true
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      this.errorMessage = true;
     }
   }
 

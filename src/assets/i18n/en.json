@@ -1,4 +1,5 @@
 {
+   "basicErrorMessage": "An unexpected error occurred!",
    "menu": {
       "mainPage": "Home",
       "foodSuplimentsMenu": {
@@ -203,9 +204,11 @@
       "addNewPrice": "Add New Price",
       "editPrice": "Edit Price",
       "deletePriceText": "Are you sure you want to delete this element?",
+      "missingPricesError": "At least one price must be provided for the product!",
+      "productNameExistsError": "A product with this name already exists!",
       "proteins": {
          "casein": "Protein containing casein",
-         "plantBased": "Plant-based protein",
+         "vegan": "Vegan protein",
          "dairyFree": "Dairy-free protein",
          "whey": "Whey protein",
          "animalBased": "Animal-based protein"
