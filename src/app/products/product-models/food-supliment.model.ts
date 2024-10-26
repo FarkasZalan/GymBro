@@ -31,8 +31,9 @@ export interface FoodSupliment {
     proteinType: string; // example isolate, concentrate, beef...
     allergens: string[];
 
-    // key = weight/piece  
-    // stringValue = prodzct image to this amount of weight/piece
-    // numberValue = the price for this product
+    // weight/piece  
+    // product image to this amount of weight/piece
+    // the price for this product
+    // stock
     prices: ProductPrice[];
 }

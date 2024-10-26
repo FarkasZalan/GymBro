@@ -1,40 +1,24 @@
+import { ProductPrice } from "./product-price.model";
+
 export interface Accessories {
     // identification and basic details
     id?: string;
     productnName: string;
-    productCategory: string[]; // forexample cereals, snacks, drink...
+    productCategory: string[]; // forexample shakers, belts...
     description: string;
-    productImage: string;
 
-    // color, size, discount type and material
+    // color
+    color: string;
 
-    // stringKey = color name
-    // stringValue = product image url
-    // numberValue = product price
-    colors: Map<string, [string, number]>;
+    // size
+    size: string;
 
-    // stringKey = size name
-    // stringValue = product image url
-    // numberValue = product price
-    sizes: Map<string, [string, number]>;
-
-    // stringKey = color name for this product
-    // numberValue = amount of discount
-    discountByColorProduct: Map<string, [number]>;
-
-    // stringKey = size name for this product
-    // numberValue = amount of discount
-    discountBySizeProduct: Map<string, [number]>;
-
-    type: string; // T-shirt, short, leggings
-    material: string;
-
-    // price per amount
-    price: number;
+    // weight/piece  
+    // product image to this amount of weight/piece
+    // the price for this product
+    // stock
+    prices: ProductPrice[];
 
     // for male or female
-    male: boolean;
-
-    // Stock information
-    stock: number;
+    genderList: string[];
 }
