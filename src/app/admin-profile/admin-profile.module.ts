@@ -22,17 +22,13 @@ import { ProductsListComponent } from './product-management/products-categories/
 import { BlogListComponent } from './blog-list/blog-list.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { ProductsCategoriesComponent } from './product-management/products-categories/products-categories.component';
-import { CreateFoodSuplimentsComponent } from './product-management/products-create/create-food-supliements/create-food-supliements.component';
-import { CreateHealthyFoodComponent } from './product-management/products-create/create-healthy-food/create-healthy-food.component';
-import { CreateClothesComponent } from './product-management/products-create/create-clothes/create-clothes.component';
-import { CreateAccessoriesComponent } from './product-management/products-create/create-accessories/create-accessories.component';
-import { EditAccessoriesComponent } from './product-management/products-edit/edit-accessories/edit-accessories.component';
-import { EditClothesComponent } from './product-management/products-edit/edit-clothes/edit-clothes.component';
-import { EditHealthyFoodComponent } from './product-management/products-edit/edit-healthy-food/edit-healthy-food.component';
-import { EditFoodSupliementsComponent } from './product-management/products-edit/edit-food-supliements/edit-food-supliements.component';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { AddPriceDialogComponent } from './product-management/products-create/create-food-supliements/add-price-dialog/add-price-dialog.component';
-import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/products-create/change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
+import { AddPriceDialogComponent } from './product-management/product-actions/add-price-dialog/add-price-dialog.component';
+import { HandleFoodSuplimentsComponent } from './product-management/product-actions/handle-food-supliments/handle-food-supliments.component';
+import { HandleHealtyProductsComponent } from './product-management/product-actions/handle-healty-products/handle-healty-products.component';
+import { HandleAccessoriesComponent } from './product-management/product-actions/handle-accessories/handle-accessories.component';
+import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
+import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/product-actions/change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -58,21 +54,17 @@ import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/p
         BlogListComponent,
         OrderListComponent,
         ProductsCategoriesComponent,
-        CreateFoodSuplimentsComponent,
-        CreateHealthyFoodComponent,
-        CreateClothesComponent,
-        CreateAccessoriesComponent,
-        EditAccessoriesComponent,
-        EditClothesComponent,
-        EditHealthyFoodComponent,
-        EditFoodSupliementsComponent,
 
         // Delete confirmation
         DeleteConfirmationDialogComponent,
 
         // to add new weight/pieses, price and image
         AddPriceDialogComponent,
-          ChangeDefaultPriceConfirmDialogComponent
+        ChangeDefaultPriceConfirmDialogComponent,
+        HandleFoodSuplimentsComponent,
+        HandleHealtyProductsComponent,
+        HandleAccessoriesComponent,
+        HandleClothesComponent
     ],
 })
 export class AdminProfileModule {

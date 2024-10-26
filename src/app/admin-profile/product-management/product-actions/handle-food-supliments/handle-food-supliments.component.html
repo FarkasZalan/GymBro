@@ -8,7 +8,7 @@
                     <!-- Product Name -->
                     <div class="col-md-6 form-group">
                         <label for="productName" class="label">{{ 'products.productName' | translate }}</label>
-                        <input type="text" class="form-control" [(ngModel)]="newFoodSupliment.productName"
+                        <input type="text" class="form-control" [(ngModel)]="foodSuplimentObject.productName"
                             name="productName" required placeholder="{{ 'products.enterProductName' | translate }}"
                             #productName="ngModel">
                         <span class="help-block" *ngIf="productName.touched && !productName.valid">{{
@@ -44,7 +44,7 @@
                             <!-- Daily dosage input -->
                             <div class="input-container">
                                 <input type="number" min="0" class="form-control"
-                                    [(ngModel)]="newFoodSupliment.dailyDosage" name="dailyDosage" required
+                                    [(ngModel)]="foodSuplimentObject.dailyDosage" name="dailyDosage" required
                                     placeholder="{{ 'products.enterDailyDosage' | translate }}" #dailyDosage="ngModel">
                                 <span class="help-block" *ngIf="dailyDosage.touched && !dailyDosage.valid">{{
                                     'register.fieldRequired' | translate }}</span>
@@ -71,7 +71,7 @@
                     <!-- Description -->
                     <div class="col-md-6 form-group">
                         <label for="description" class="label">{{ 'products.description' | translate }}</label>
-                        <textarea class="form-control" [(ngModel)]="newFoodSupliment.description" name="description"
+                        <textarea class="form-control" [(ngModel)]="foodSuplimentObject.description" name="description"
                             required placeholder="{{ 'products.enterProductDescription' | translate }}"
                             #description="ngModel"></textarea>
                         <span class="help-block" *ngIf="description.touched && !description.valid">{{

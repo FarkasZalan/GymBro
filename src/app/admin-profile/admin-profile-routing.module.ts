@@ -3,14 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { PagesComponent } from '../pages/pages.component';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProductsListComponent } from './product-management/products-categories/products-list/products-list.component';
-import { CreateFoodSuplimentsComponent } from './product-management/products-create/create-food-supliements/create-food-supliements.component';
-import { EditHealthyFoodComponent } from './product-management/products-edit/edit-healthy-food/edit-healthy-food.component';
-import { EditFoodSupliementsComponent } from './product-management/products-edit/edit-food-supliements/edit-food-supliements.component';
-import { EditAccessoriesComponent } from './product-management/products-edit/edit-accessories/edit-accessories.component';
-import { EditClothesComponent } from './product-management/products-edit/edit-clothes/edit-clothes.component';
-import { CreateAccessoriesComponent } from './product-management/products-create/create-accessories/create-accessories.component';
-import { CreateClothesComponent } from './product-management/products-create/create-clothes/create-clothes.component';
-import { CreateHealthyFoodComponent } from './product-management/products-create/create-healthy-food/create-healthy-food.component';
+import { HandleFoodSuplimentsComponent } from './product-management/product-actions/handle-food-supliments/handle-food-supliments.component';
+import { HandleHealtyProductsComponent } from './product-management/product-actions/handle-healty-products/handle-healty-products.component';
+import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
+import { HandleAccessoriesComponent } from './product-management/product-actions/handle-accessories/handle-accessories.component';
 
 export const routes: Routes = [
     {
@@ -40,19 +36,19 @@ export const routes: Routes = [
             },
             {
                 path: 'create-product/foodSupliments',
-                component: CreateFoodSuplimentsComponent
+                component: HandleFoodSuplimentsComponent
             },
             {
                 path: 'create-product/healthyProducts',
-                component: CreateHealthyFoodComponent
+                component: HandleHealtyProductsComponent
             },
             {
                 path: 'create-product/clothes',
-                component: CreateClothesComponent
+                component: HandleClothesComponent
             },
             {
                 path: 'create-product/accessories',
-                component: CreateAccessoriesComponent
+                component: HandleAccessoriesComponent
             },
 
             // edit products
@@ -63,19 +59,19 @@ export const routes: Routes = [
             },
             {
                 path: 'edit-product/foodSupliments/:productId',
-                component: CreateFoodSuplimentsComponent
+                component: HandleFoodSuplimentsComponent
             },
             {
                 path: 'edit-product/healthyProducts/:productId',
-                component: EditHealthyFoodComponent
+                component: HandleHealtyProductsComponent
             },
             {
                 path: 'edit-product/clothes/:productId',
-                component: EditClothesComponent
+                component: HandleClothesComponent
             },
             {
                 path: 'edit-product/accessories/:productId',
-                component: EditAccessoriesComponent
+                component: HandleAccessoriesComponent
             },
 
         ]

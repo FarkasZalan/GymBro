@@ -1,28 +1,28 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Location } from '@angular/common';
-import { ProductViewText } from '../../../../products/product-view-texts';
-import { TranslateService } from '@ngx-translate/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { AddPriceDialogComponent } from './add-price-dialog/add-price-dialog.component';
-import { ProductPrice } from '../../../../products/product-models/product-price.model';
-import { MatDialog } from '@angular/material/dialog';
-import { ChangeDetectorRef } from '@angular/core';
-import { Vitamin } from '../../../../products/product-models/vitamin.model';
-import { NgForm } from '@angular/forms';
-import { FoodSupliment } from '../../../../products/product-models/food-supliment.model';
-import { DocumentHandlerService } from '../../../../document.handler.service';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
-import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
-import { NutritionalTable } from '../../../../products/product-models/nutritional-table.model';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { DocumentHandlerService } from '../../../../document.handler.service';
+import { FoodSupliment } from '../../../../products/product-models/food-supliment.model';
+import { NutritionalTable } from '../../../../products/product-models/nutritional-table.model';
+import { ProductPrice } from '../../../../products/product-models/product-price.model';
+import { Vitamin } from '../../../../products/product-models/vitamin.model';
+import { ProductViewText } from '../../../../products/product-view-texts';
+import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
+import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
+import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
+import { AdminService } from '../../../admin.service';
 
 @Component({
-  selector: 'app-create-food-supliements',
-  templateUrl: './create-food-supliements.component.html',
+  selector: 'app-handle-food-supliments',
+  templateUrl: './handle-food-supliments.component.html',
   styleUrl: '../../../../../styles/product-management.scss',
   animations: [
     // name of tha animation what can call in html
@@ -44,7 +44,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
     ])
   ]
 })
-export class CreateFoodSuplimentsComponent implements OnInit {
+export class HandleFoodSuplimentsComponent implements OnInit {
   @ViewChild('form') createFoodSuplimentForm: NgForm;  // Reference to the form for validation
 
   // Form-related properties
@@ -167,17 +167,17 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     nutritionalValueSalt: null,
   };
 
-  // New supplement to be created
-  newFoodSupliment: FoodSupliment;
+  // Food suppliment object to handle the product
+  foodSuplimentObject: FoodSupliment;
 
   // create or modify an existing product
   isProductEdit: boolean = false;
   foodSuplimentId: string = '';
 
-  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
+  constructor(private adminService: AdminService, private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
 
   ngOnInit(): void {
-    this.newFoodSupliment = {
+    this.foodSuplimentObject = {
       id: "",
       productName: "",
       productCategory: "",
@@ -203,38 +203,38 @@ export class CreateFoodSuplimentsComponent implements OnInit {
       // get the food supliment product by id
       this.documentumHandler.getInnerDocumentByID("products", ProductViewText.FOOD_SUPLIMENTS, "allProduct", params['productId']).subscribe((foodSupliment: FoodSupliment) => {
         // make a copy from the object
-        this.newFoodSupliment = { ...foodSupliment };
+        this.foodSuplimentObject = { ...foodSupliment };
 
         // if it's not undefinied (so the user want to edit a specified product not create a new)
-        if (this.newFoodSupliment.productName !== undefined) {
-          this.foodSuplimentId = this.newFoodSupliment.id;
+        if (this.foodSuplimentObject.productName !== undefined) {
+          this.foodSuplimentId = this.foodSuplimentObject.id;
           this.isProductEdit = true;
           // pass the value to the object
-          this.selectedCategory = this.newFoodSupliment.productCategory;
+          this.selectedCategory = this.foodSuplimentObject.productCategory;
           if (this.selectedCategory === this.translate.instant(ProductViewText.PROTEINS)) {
             this.isProtein = true;
           }
-          this.selectedUnit = this.newFoodSupliment.dosageUnit;
+          this.selectedUnit = this.foodSuplimentObject.dosageUnit;
 
           // prices
-          this.productPrices = this.newFoodSupliment.prices;
+          this.productPrices = this.foodSuplimentObject.prices;
 
           // flavor and allergies list
-          this.selectedProteinType = this.newFoodSupliment.proteinType;
-          this.selectedFlavors = this.newFoodSupliment.flavors;
-          this.selectedAllergenes = this.newFoodSupliment.allergens;
+          this.selectedProteinType = this.foodSuplimentObject.proteinType;
+          this.selectedFlavors = this.foodSuplimentObject.flavors;
+          this.selectedAllergenes = this.foodSuplimentObject.allergens;
 
           // safety
-          this.isSafeForConsumptionDuringBreastfeeding = this.newFoodSupliment.safeForConsumptionDuringBreastfeeding;
-          this.isSafeForConsumptionDuringPregnancy = this.newFoodSupliment.safeForConsumptionDuringPregnancy;
+          this.isSafeForConsumptionDuringBreastfeeding = this.foodSuplimentObject.safeForConsumptionDuringBreastfeeding;
+          this.isSafeForConsumptionDuringPregnancy = this.foodSuplimentObject.safeForConsumptionDuringPregnancy;
 
           // genders
           if ((this.selectedCategory === this.translate.instant(ProductViewText.JOIN_SUPPORT) || (this.selectedCategory === this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)))) {
-            this.selectedGenders = this.newFoodSupliment.genderList;
+            this.selectedGenders = this.foodSuplimentObject.genderList;
           }
 
           //vitamin
-          this.vitaminList = this.newFoodSupliment.vitaminList;
+          this.vitaminList = this.foodSuplimentObject.vitaminList;
           if (this.selectedCategory === this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)) {
             this.isJoinSupport = true;
             this.isProtein = this.isVitamin = false;
@@ -250,7 +250,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
           // nutritional table
           if ((this.selectedCategory !== this.translate.instant(ProductViewText.JOIN_SUPPORT) && (this.selectedCategory !== this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)))) {
-            this.nutritionalTable = this.newFoodSupliment.nutritionalTable;
+            this.nutritionalTable = this.foodSuplimentObject.nutritionalTable;
           }
 
 
@@ -451,6 +451,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
         }
 
         this.productPrices.push(newPrice);
+        this.sortPrices();
       }
     });
   }
@@ -488,12 +489,18 @@ export class CreateFoodSuplimentsComponent implements OnInit {
         }
 
         this.productPrices[id] = editedPrice;
+        this.sortPrices();
       }
     });
   }
 
   deletePrice(id: number) {
     this.productPrices.splice(id, 1);
+    this.sortPrices();
+  }
+
+  sortPrices() {
+    this.productPrices = this.productPrices.sort((a, b) => a.productPrice - b.productPrice);
   }
 
   // Handle vitamin list addition or update
@@ -658,7 +665,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     }
 
     // create new Food supliment object
-    this.newFoodSupliment = {
+    this.foodSuplimentObject = {
       id: "",
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName),
       productCategory: this.selectedCategory,
@@ -683,7 +690,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
     // Add the new food supliment product
     try {
-      const documentumRef = await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").add(this.newFoodSupliment);
+      const documentumRef = await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").add(this.foodSuplimentObject);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
       await this.uploadImagesAndSaveProduct(documentumRef.id);
@@ -721,7 +728,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     }
 
     const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.FOOD_SUPLIMENTS, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName), undefined, this.newFoodSupliment.id
+      "products", ProductViewText.FOOD_SUPLIMENTS, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName), undefined, this.foodSuplimentObject.id
     );
 
     if (checkForDuplication) {
@@ -752,7 +759,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     await this.uploadImagesAndSaveProduct(this.foodSuplimentId);
 
     // create new Food supliment object
-    this.newFoodSupliment = {
+    this.foodSuplimentObject = {
       id: this.foodSuplimentId,
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName),
       productCategory: this.selectedCategory,
@@ -777,7 +784,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
     // Edit the food supliment product
     try {
-      await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").doc(this.foodSuplimentId).update(this.newFoodSupliment);
+      await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").doc(this.foodSuplimentId).update(this.foodSuplimentObject);
 
       this.errorMessage = false;
       this.productNameExistsError = false;

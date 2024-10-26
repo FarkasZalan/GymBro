@@ -1,15 +1,15 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ForgotPasswordComponent } from '../../../../../auth/forgot-password/forgot-password.component';
-import { ProductPrice } from '../../../../../products/product-models/product-price.model';
+import { ForgotPasswordComponent } from '../../../../auth/forgot-password/forgot-password.component';
+import { ProductPrice } from '../../../../products/product-models/product-price.model';
 import { TranslateService } from '@ngx-translate/core';
-import { ProductViewText } from '../../../../../products/product-view-texts';
-import { DeleteConfirmationDialogComponent } from '../../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { DeleteConfirmationText } from '../../../../../delete-confirmation-dialog/delete-text';
-import { DocumentHandlerService } from '../../../../../document.handler.service';
-import { ChangeDefaultPriceConfirmDialogComponent } from '../../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
+import { ProductViewText } from '../../../../products/product-view-texts';
+import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
+import { DocumentHandlerService } from '../../../../document.handler.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { ChangeDefaultPriceConfirmDialogComponent } from '../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
 
 @Component({
   selector: 'app-add-price-dialog',

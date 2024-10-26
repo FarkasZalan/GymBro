@@ -7,6 +7,8 @@ import { Clothes } from '../../../../products/product-models/clothing.model';
 import { Location } from '@angular/common';
 import { Accessories } from '../../../../products/product-models/accessories.model';
 import { ProductViewText } from '../../../../products/product-view-texts';
+import { AdminService } from '../../../admin.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-products-list',
@@ -24,7 +26,7 @@ export class ProductsListComponent implements OnInit {
   // if there are no products in the collection
   emptyCollection: boolean;
 
-  constructor(private productServie: ProductService, private router: Router, private route: ActivatedRoute, private location: Location) { }
+  constructor(private productServie: ProductService, private adminService: AdminService, private router: Router, private route: ActivatedRoute, private location: Location, private translate: TranslateService) { }
 
   ngOnInit() {
     // get the category of the products from the category component
@@ -33,7 +35,10 @@ export class ProductsListComponent implements OnInit {
       if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((foodSuplimentsCollection: FoodSupliment[]) => {
           this.foodSupliments = foodSuplimentsCollection;
-          console.log(this.foodSupliments)
+
+          // Sort default by name
+          this.foodSupliments = this.adminService.sortFoodSuplimentsByNameASC(this.foodSupliments);
+
           // if the collection doesn't have any products
           if (this.foodSupliments.length === 0) {
             this.emptyCollection = true;

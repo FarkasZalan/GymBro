@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CreateFoodSuplimentsComponent } from '../create-food-supliements/create-food-supliements.component';
+import { HandleFoodSuplimentsComponent } from '../handle-food-supliments/handle-food-supliments.component';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,7 +8,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrl: '../../../../../styles/confirm-dialog.scss'
 })
 export class ChangeDefaultPriceConfirmDialogComponent {
-  constructor(public dialogRef: MatDialogRef<CreateFoodSuplimentsComponent>) { }
+  constructor(public dialogRef: MatDialogRef<HandleFoodSuplimentsComponent>) { }
 
   // Handle user actions, 
   // if true then can override the old default price 
