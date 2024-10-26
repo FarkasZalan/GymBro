@@ -45,7 +45,7 @@ export class ProductsListComponent implements OnInit {
           }
         });
       }
-      if (this.productCategory === ProductViewText.HEALTHY_FOOD) {
+      if (this.productCategory === ProductViewText.HEALTHY_PRODUCT) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((healthyProductsCollection: HealthyProduct[]) => {
           this.healthyProducts = healthyProductsCollection;
 

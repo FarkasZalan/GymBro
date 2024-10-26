@@ -3,7 +3,7 @@ export enum ProductViewText {
     FOOD_SUPLIMENTS = "foodSupliments",
     CLOTHES = "clothes",
     ACCESSORIES = "accessories",
-    HEALTHY_FOOD = "healthyFood",
+    HEALTHY_PRODUCT = "healthyProducts",
 
 
     // Food supliments categories

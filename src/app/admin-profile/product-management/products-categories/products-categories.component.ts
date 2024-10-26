@@ -22,7 +22,7 @@ export class ProductsCategoriesComponent implements OnInit {
     this.productServie.getAllProductByCategory(ProductViewText.FOOD_SUPLIMENTS).subscribe(foodSuplimentsLenth => {
       this.foodSuplimentsCount = foodSuplimentsLenth.length;
     });
-    this.productServie.getAllProductByCategory(ProductViewText.HEALTHY_FOOD).subscribe(healthyFoodsLenth => {
+    this.productServie.getAllProductByCategory(ProductViewText.HEALTHY_PRODUCT).subscribe(healthyFoodsLenth => {
       this.healthyProductsCount = healthyFoodsLenth.length;
     });
     this.productServie.getAllProductByCategory(ProductViewText.CLOTHES).subscribe(clothesLength => {
@@ -39,7 +39,7 @@ export class ProductsCategoriesComponent implements OnInit {
   }
 
   goToHealthyProducts() {
-    this.router.navigate(['/admin-profile/pruducts', ProductViewText.HEALTHY_FOOD]);
+    this.router.navigate(['/admin-profile/pruducts', ProductViewText.HEALTHY_PRODUCT]);
   }
 
   goToClothes() {
