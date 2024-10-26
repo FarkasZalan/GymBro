@@ -33,7 +33,7 @@ export class ProductsListComponent implements OnInit {
       if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((foodSuplimentsCollection: FoodSupliment[]) => {
           this.foodSupliments = foodSuplimentsCollection;
-
+          console.log(this.foodSupliments)
           // if the collection doesn't have any products
           if (this.foodSupliments.length === 0) {
             this.emptyCollection = true;

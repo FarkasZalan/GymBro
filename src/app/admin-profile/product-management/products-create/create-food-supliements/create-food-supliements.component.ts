@@ -18,6 +18,7 @@ import { NutritionalTable } from '../../../../products/product-models/nutritiona
 import { ActivatedRoute } from '@angular/router';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Component({
   selector: 'app-create-food-supliements',
@@ -173,7 +174,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
   isProductEdit: boolean = false;
   foodSuplimentId: string = '';
 
-  constructor(private route: ActivatedRoute, private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
+  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
 
   ngOnInit(): void {
     this.newFoodSupliment = {
@@ -573,6 +574,43 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     this.vitaminList.splice(index, 1);
   }
 
+  async uploadImagesAndSaveProduct(productId: string) {
+    const uploadPromises = this.productPrices.map(async (price: ProductPrice) => {
+      // Check if productImage is a Base64 string (indicating a new upload) or a URL (existing image)
+      if (price.productImage && price.productImage.startsWith("data:image")) {
+        const base64Data = price.productImage;
+        const blob = this.base64ToBlob(base64Data);
+
+        // Define the path in Firebase Storage
+        const filePath = `ProductsImages/${productId}/${productId}_price_of_the_product: ${price.productPrice}`;
+        const fileRef = this.storage.ref(filePath);
+        const task = this.storage.upload(filePath, blob);
+
+        // Wait for upload to complete and get the download URL
+        await task.snapshotChanges().toPromise();
+        const url = await fileRef.getDownloadURL().toPromise();
+        price.productImage = url; // Set productImage to the download URL
+      }
+      // If productImage is already a URL, skip uploading
+    });
+
+    // Wait for all images to finish uploading
+    await Promise.all(uploadPromises);
+  }
+
+
+  // Helper function to convert Base64 string to Blob
+  base64ToBlob(base64Data: string): Blob {
+    const byteString = atob(base64Data.split(',')[1]);
+    const mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  }
+
   async addNewFoodSupplement() {
     // error handleing
     if (this.selectedFlavors.length === 0) {
@@ -640,7 +678,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
       vitaminList: this.vitaminList,
       genderList: this.selectedGenders,
 
-      prices: this.productPrices
+      prices: []
     }
 
     // Add the new food supliment product
@@ -648,6 +686,8 @@ export class CreateFoodSuplimentsComponent implements OnInit {
       const documentumRef = await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").add(this.newFoodSupliment);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
+      await this.uploadImagesAndSaveProduct(documentumRef.id);
+      await documentumRef.update({ prices: this.productPrices });
       this.errorMessage = false;
       this.productNameExistsError = false;
       this.missingPricesErrorMessage = false;
@@ -709,6 +749,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     if (!hasDefaultPrice) {
       this.productPrices[0].setAsDefaultPrice = true;
     }
+    await this.uploadImagesAndSaveProduct(this.foodSuplimentId);
 
     // create new Food supliment object
     this.newFoodSupliment = {
@@ -737,6 +778,7 @@ export class CreateFoodSuplimentsComponent implements OnInit {
     // Edit the food supliment product
     try {
       await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").doc(this.foodSuplimentId).update(this.newFoodSupliment);
+
       this.errorMessage = false;
       this.productNameExistsError = false;
       this.missingPricesErrorMessage = false;
@@ -765,6 +807,20 @@ export class CreateFoodSuplimentsComponent implements OnInit {
 
     if (confirmToDeleteAddress) {
       try {
+        // Delete images from Firebase Storage
+        const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
+          if (price.productImage) {
+            console.log(price.productImage)
+            // Reference the file by its URL
+            const fileRef = this.storage.refFromURL(price.productImage);
+            return fileRef.delete().toPromise();  // Returns a promise to delete the image
+          }
+        });
+
+        // Await all delete promises
+        await Promise.all(deleteImagePromises);
+
+        // Delete the product from firestore
         const deleteAddressRef = this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").doc(this.foodSuplimentId);
         await deleteAddressRef.delete();
         this.dialog.open(SuccessfullDialogComponent, {

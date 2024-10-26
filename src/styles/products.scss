@@ -473,3 +473,9 @@ h5 {
         }
     }
 }
+
+@media(min-height: 800px) {
+    .empty-list-container {
+        height: 500px !important;
+    }
+}
