@@ -15,8 +15,8 @@
                             <label for="quantityInProduct" class="label">{{ 'products.quantityInProduct' | translate
                                 }}</label>
                             <input type="number" class="form-control" name="quantityInProduct" fullWidth
-                                placeholder="{{ unitText }} ({{ selectedUnit}})" required #quantityInProduct="ngModel"
-                                [(ngModel)]="newPrice.quantityInProduct" />
+                                placeholder="{{ unitText }} ({{ selectedUnit | translate }})" required
+                                #quantityInProduct="ngModel" [(ngModel)]="newPrice.quantityInProduct" />
                             <!-- quantity in product error block -->
                             <span class="help-block" *ngIf="!quantityInProduct.valid && quantityInProduct.touched">{{
                                 'register.fieldRequired' | translate }}</span>
@@ -54,7 +54,7 @@
                             <label for="productStock" class="label">{{ 'products.productStock' | translate
                                 }}</label>
                             <input type="number" class="form-control" name="productStock" fullWidth placeholder="{{ 'products.stock' | translate
-                                }} ({{ selectedUnit}})" required #productStock="ngModel"
+                                }} ({{ selectedUnit | translate }})" required #productStock="ngModel"
                                 [(ngModel)]="newPrice.productStock" />
                             <!-- stock error block -->
                             <span class="help-block" *ngIf="!productStock.valid && productStock.touched">{{

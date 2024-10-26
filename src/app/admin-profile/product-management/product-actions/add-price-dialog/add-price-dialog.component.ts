@@ -7,8 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProductViewText } from '../../../../products/product-view-texts';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
-import { DocumentHandlerService } from '../../../../document.handler.service';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ChangeDefaultPriceConfirmDialogComponent } from '../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
 
 @Component({
@@ -35,7 +33,7 @@ export class AddPriceDialogComponent implements OnInit {
   productCategory: string;
   allPricesForProduct: ProductPrice[] = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService, private documentumHandler: DocumentHandlerService, private db: AngularFirestore) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
     this.selectedUnit = data.unit;
     this.editText = data.editText;
     this.productCategory = data.productCategory;
@@ -47,14 +45,14 @@ export class AddPriceDialogComponent implements OnInit {
       this.buttonText = this.translate.instant('products.add');
     }
 
-    if (this.translate.instant(ProductViewText.GRAM) === this.selectedUnit) {
+    if (ProductViewText.GRAM === this.selectedUnit) {
       this.unitText = this.translate.instant('products.weight');
-    } else if (this.translate.instant(ProductViewText.POUNDS) === this.selectedUnit) {
+    } else if (ProductViewText.POUNDS === this.selectedUnit) {
       this.unitText = this.translate.instant('products.weight');
-      this.selectedUnit = this.translate.instant('products.lbs')
+      this.selectedUnit = ProductViewText.LBS;
     } else {
       this.unitText = this.translate.instant(ProductViewText.PIECES);
-      this.selectedUnit = this.translate.instant('products.pcs')
+      this.selectedUnit = ProductViewText.PCS;
     }
   }
 

@@ -38,6 +38,8 @@ export enum ProductViewText {
     PIECES = "products.pieces",
     GRAM = "products.gram",
     POUNDS = "products.pound",
+    PCS = "products.pcs",
+    LBS = "products.lbs",
 
     // Gender
     GENDER = "Gender",

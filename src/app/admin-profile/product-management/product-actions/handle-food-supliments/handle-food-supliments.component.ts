@@ -6,7 +6,6 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { DocumentHandlerService } from '../../../../document.handler.service';
@@ -18,7 +17,6 @@ import { ProductViewText } from '../../../../products/product-view-texts';
 import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
-import { AdminService } from '../../../admin.service';
 
 @Component({
   selector: 'app-handle-food-supliments',
@@ -54,6 +52,11 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   isSafeForConsumptionDuringBreastfeeding: boolean = true;
 
   selectedUnit: string = '';
+  availableDosageUnits: string[] = [
+    ProductViewText.GRAM,
+    ProductViewText.PIECES,
+    ProductViewText.POUNDS
+  ]
   selectedCategory: string = '';
   selectedVitaminUnit: string = '';
 
@@ -74,7 +77,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     ProductViewText.MALE,
     ProductViewText.FEMALE
   ];
-  translatedGenders: string[] = [];
   selectedGenders: string[] = [];
 
   selectedVitamin: Vitamin;
@@ -95,7 +97,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     ProductViewText.JOIN_SUPPORT,
     ProductViewText.FAT_BURNERS
   ];
-  translatedCategories: string[] = [];
 
   // Flavors and Allergens
   availableFlavors: string[] = [
@@ -124,7 +125,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     ProductViewText.LEMON_CHEESECAKE_FLAVOR,
     ProductViewText.BLACK_BISCUIT_FLAVOR
   ];
-  translatedFlavors: string[] = [];
   selectedFlavors: string[] = [];
 
   availableAllergens: string[] = [
@@ -136,7 +136,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     ProductViewText.PEANUTS_ALLERGEN,
     ProductViewText.FISH_ALLERGEN
   ];
-  translatedAllergens: string[] = [];
   selectedAllergenes: string[] = [];
 
   // Protein type
@@ -147,7 +146,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     ProductViewText.WHEY_PROTEIN,
     ProductViewText.ANIMAL_BASED_PROTEIN
   ];
-  translatedProteins: string[] = [];
   selectedProteinType: string = '';
 
   // Prices
@@ -174,7 +172,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   isProductEdit: boolean = false;
   foodSuplimentId: string = '';
 
-  constructor(private adminService: AdminService, private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, private translate: TranslateService, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
+  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService) { }
 
   ngOnInit(): void {
     this.foodSuplimentObject = {
@@ -211,7 +209,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           this.isProductEdit = true;
           // pass the value to the object
           this.selectedCategory = this.foodSuplimentObject.productCategory;
-          if (this.selectedCategory === this.translate.instant(ProductViewText.PROTEINS)) {
+          if (this.selectedCategory === ProductViewText.PROTEINS) {
             this.isProtein = true;
           }
           this.selectedUnit = this.foodSuplimentObject.dosageUnit;
@@ -229,19 +227,19 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           this.isSafeForConsumptionDuringPregnancy = this.foodSuplimentObject.safeForConsumptionDuringPregnancy;
 
           // genders
-          if ((this.selectedCategory === this.translate.instant(ProductViewText.JOIN_SUPPORT) || (this.selectedCategory === this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)))) {
+          if ((this.selectedCategory === ProductViewText.JOIN_SUPPORT || (this.selectedCategory === ProductViewText.VITAMINS_AND_MINERALS))) {
             this.selectedGenders = this.foodSuplimentObject.genderList;
           }
 
           //vitamin
           this.vitaminList = this.foodSuplimentObject.vitaminList;
-          if (this.selectedCategory === this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)) {
+          if (this.selectedCategory === ProductViewText.VITAMINS_AND_MINERALS) {
             this.isJoinSupport = true;
             this.isProtein = this.isVitamin = false;
             this.resetFlavors([ProductViewText.UNFLAVORED], true);
           }
 
-          if (this.selectedCategory === this.translate.instant(ProductViewText.JOIN_SUPPORT)) {
+          if (this.selectedCategory === ProductViewText.JOIN_SUPPORT) {
             this.isVitamin = true;
             this.isProtein = this.isJoinSupport = false;
             this.resetFlavors([ProductViewText.UNFLAVORED], true);
@@ -249,49 +247,37 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
 
           // nutritional table
-          if ((this.selectedCategory !== this.translate.instant(ProductViewText.JOIN_SUPPORT) && (this.selectedCategory !== this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS)))) {
+          if ((this.selectedCategory !== ProductViewText.JOIN_SUPPORT && (this.selectedCategory !== ProductViewText.VITAMINS_AND_MINERALS))) {
             this.nutritionalTable = this.foodSuplimentObject.nutritionalTable;
           }
-
-
         }
       });
     });
-    // Listen for language change and re-translate categories
-    this.translate.onLangChange.subscribe(() => {
-      this.translateAndSortItems();
-    });
-    this.translateAndSortItems();
   }
 
-  // Translate and sort product categories, genders, flavors, proteins and allergies
-  translateAndSortItems(): void {
+  // Sort product categories, genders, flavors, proteins and allergies
+  sortItems(): void {
     // categories
-    this.translatedCategories = this.productCategories.map(item => this.translate.instant(item));
-    this.translatedCategories.sort((a, b) => a.localeCompare(b));
+    this.productCategories.sort((a, b) => a.localeCompare(b));
 
     // Genders
-    this.translatedGenders = this.availableGenders.map(item => this.translate.instant(item));
-    this.translatedGenders.sort((a, b) => a.localeCompare(b));
+    this.availableGenders.sort((a, b) => a.localeCompare(b));
 
     // Flavors
-    this.translatedFlavors = this.availableFlavors.map(item => this.translate.instant(item));
-    this.translatedFlavors.sort((a, b) => a.localeCompare(b));
+    this.availableFlavors.sort((a, b) => a.localeCompare(b));
 
     // Proteins
-    this.translatedProteins = this.availableProteins.map(item => this.translate.instant(item));
-    this.translatedProteins.sort((a, b) => a.localeCompare(b));
+    this.availableProteins.sort((a, b) => a.localeCompare(b));
 
     // Allergens
-    this.translatedAllergens = this.availableAllergens.map(item => this.translate.instant(item));
-    this.translatedAllergens.sort((a, b) => a.localeCompare(b));
+    this.availableAllergens.sort((a, b) => a.localeCompare(b));
   }
 
   // Update UI based on selected category
   // If the selected category is vitamins or join supports then the product must be unflavored otherwise flavored
   isCategorySelected() {
     switch (this.selectedCategory) {
-      case this.translate.instant(ProductViewText.PROTEINS):
+      case ProductViewText.PROTEINS:
         this.isProtein = true;
         this.resetFlavors(
           [
@@ -322,12 +308,12 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           ]);
         this.isVitamin = this.isJoinSupport = false;
         break;
-      case this.translate.instant(ProductViewText.JOIN_SUPPORT):
+      case ProductViewText.JOIN_SUPPORT:
         this.isJoinSupport = true;
         this.isProtein = this.isVitamin = false;
         this.resetFlavors([ProductViewText.UNFLAVORED], true);
         break;
-      case this.translate.instant(ProductViewText.VITAMINS_AND_MINERALS):
+      case ProductViewText.VITAMINS_AND_MINERALS:
         this.isVitamin = true;
         this.isProtein = this.isJoinSupport = false;
         this.resetFlavors([ProductViewText.UNFLAVORED], true);
@@ -367,8 +353,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   // Helper to reset and update the flavor list
   resetFlavors(flavors: string[], selectFirst = false) {
     this.availableFlavors = flavors;
-    this.selectedFlavors = selectFirst ? [this.translate.instant(flavors[0])] : [];
-    this.translateAndSortItems();
+    this.selectedFlavors = selectFirst ? [flavors[0]] : [];
+    this.sortItems();
     this.changeDetector.detectChanges();
   }
 
@@ -378,7 +364,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       case ProductViewText.FLAVORS:
         this.toggleSelection(this.selectedFlavors, item);
         if ((this.isVitamin || this.isJoinSupport) && (this.selectedFlavors.length === 0)) {
-          this.selectedFlavors.push(this.translate.instant(this.availableFlavors[0]))
+          this.selectedFlavors.push(this.availableFlavors[0])
         }
         break;
       case ProductViewText.ALLERGENES:
@@ -621,11 +607,11 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   async addNewFoodSupplement() {
     // error handleing
     if (this.selectedFlavors.length === 0) {
-      this.selectedFlavors.push(this.translate.instant(this.availableFlavors[0]));
+      this.selectedFlavors.push(this.availableFlavors[0]);
     }
 
     if (this.selectedGenders.length === 0) {
-      this.selectedGenders = this.translatedGenders;
+      this.selectedGenders = this.availableGenders;
     }
 
     if (this.productPrices.length === 0) {
@@ -714,11 +700,11 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   async editFoodSupliment() {
     // error handleing
     if (this.selectedFlavors.length === 0) {
-      this.selectedFlavors.push(this.translate.instant(this.availableFlavors[0]));
+      this.selectedFlavors.push(this.availableFlavors[0]);
     }
 
     if (this.selectedGenders.length === 0) {
-      this.selectedGenders = this.translatedGenders;
+      this.selectedGenders = this.availableGenders;
     }
 
     if (this.productPrices.length === 0) {

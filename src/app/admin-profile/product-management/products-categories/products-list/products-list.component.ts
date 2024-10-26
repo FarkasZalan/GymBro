@@ -8,7 +8,6 @@ import { Location } from '@angular/common';
 import { Accessories } from '../../../../products/product-models/accessories.model';
 import { ProductViewText } from '../../../../products/product-view-texts';
 import { AdminService } from '../../../admin.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-products-list',
@@ -26,7 +25,7 @@ export class ProductsListComponent implements OnInit {
   // if there are no products in the collection
   emptyCollection: boolean;
 
-  constructor(private productServie: ProductService, private adminService: AdminService, private router: Router, private route: ActivatedRoute, private location: Location, private translate: TranslateService) { }
+  constructor(private productServie: ProductService, private adminService: AdminService, private router: Router, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit() {
     // get the category of the products from the category component
