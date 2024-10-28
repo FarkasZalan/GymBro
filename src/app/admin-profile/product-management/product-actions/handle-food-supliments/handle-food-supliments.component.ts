@@ -123,7 +123,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     ProductViewText.CHOCOLATE_PEANUT_BUTTER_FLAVOR,
     ProductViewText.APPLE_PIE_FLAVOR,
     ProductViewText.LEMON_CHEESECAKE_FLAVOR,
-    ProductViewText.BLACK_BISCUIT_FLAVOR
+    ProductViewText.BLACK_BISCUIT_FLAVOR,
+    ProductViewText.CAPPUCINO
   ];
   selectedFlavors: string[] = [];
 
@@ -803,7 +804,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         // Delete images from Firebase Storage
         const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
           if (price.productImage) {
-            console.log(price.productImage)
             // Reference the file by its URL
             const fileRef = this.storage.refFromURL(price.productImage);
             return fileRef.delete().toPromise();  // Returns a promise to delete the image

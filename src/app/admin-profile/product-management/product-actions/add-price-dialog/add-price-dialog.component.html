@@ -54,7 +54,7 @@
                             <label for="productStock" class="label">{{ 'products.productStock' | translate
                                 }}</label>
                             <input type="number" class="form-control" name="productStock" fullWidth placeholder="{{ 'products.stock' | translate
-                                }} ({{ selectedUnit | translate }})" required #productStock="ngModel"
+                                }} ({{ productViewText.PIECES | translate }})" required #productStock="ngModel"
                                 [(ngModel)]="newPrice.productStock" />
                             <!-- stock error block -->
                             <span class="help-block" *ngIf="!productStock.valid && productStock.touched">{{

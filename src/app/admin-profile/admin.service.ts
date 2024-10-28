@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { User } from "../user/user.model";
 import { AuthService } from "../auth/auth.service";
 import { FoodSupliment } from "../products/product-models/food-supliment.model";
+import { HealthyProduct } from "../products/product-models/healthy-food.model";
 
 @Injectable({
     providedIn: 'root'
@@ -70,6 +71,47 @@ export class AdminService {
 
     sortFoodSuplimentsByNameDESC(foodSupliments: FoodSupliment[]) {
         return foodSupliments.sort((a, b) => {
+
+            // Sort in ascending order based on product name
+            return b.productName.localeCompare(a.productName);
+        });
+    }
+
+    // Sort healthy products
+    sortHealthyProductsPriceByASC(healthyProducts: HealthyProduct[]) {
+        // Sort default by defaul price desc
+        return healthyProducts.sort((a, b) => {
+            // Find the default price for the food supplement
+            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+
+            // Sort in ascending order based on the default price
+            return defaultPriceB - defaultPriceA;
+        });
+    }
+
+    sortHealthyProductsPriceByDESC(healthyProducts: HealthyProduct[]) {
+        // Sort default by defaul price desc
+        return healthyProducts.sort((a, b) => {
+            // Find the default price for the food supplement
+            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+
+            // Sort in ascending order based on the default price
+            return defaultPriceA - defaultPriceB;
+        });
+    }
+
+    sortHealthyProductsByNameASC(healthyProducts: HealthyProduct[]) {
+        return healthyProducts.sort((a, b) => {
+
+            // Sort in ascending order based on product name
+            return a.productName.localeCompare(b.productName);
+        });
+    }
+
+    sortHealthyProductsByNameDESC(healthyProducts: HealthyProduct[]) {
+        return healthyProducts.sort((a, b) => {
 
             // Sort in ascending order based on product name
             return b.productName.localeCompare(a.productName);

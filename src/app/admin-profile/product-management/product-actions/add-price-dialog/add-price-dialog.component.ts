@@ -32,6 +32,7 @@ export class AddPriceDialogComponent implements OnInit {
   isSetAsDefaultPrice: boolean = false;
   productCategory: string;
   allPricesForProduct: ProductPrice[] = [];
+  productViewText = ProductViewText;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
     this.selectedUnit = data.unit;
@@ -50,6 +51,9 @@ export class AddPriceDialogComponent implements OnInit {
     } else if (ProductViewText.POUNDS === this.selectedUnit) {
       this.unitText = this.translate.instant('products.weight');
       this.selectedUnit = ProductViewText.LBS;
+    } else if (ProductViewText.ML === this.selectedUnit) {
+      this.unitText = this.translate.instant('products.quantity');
+      this.selectedUnit = ProductViewText.ML;
     } else {
       this.unitText = this.translate.instant(ProductViewText.PIECES);
       this.selectedUnit = ProductViewText.PCS;

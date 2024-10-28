@@ -16,7 +16,6 @@
                         "healthyFoods": "Egészséges élelmiszerek",
                         "cereals": "Gabonafélék",
                         "healthySnacks": "Egészséges nasi",
-                        "flavorsAndSweeteners": "Ízesítők és édesítők",
                         "cookingIngredients": "Hozzávalók főzéshez",
                         "drinks": "Italok"
                 },
@@ -199,6 +198,7 @@
                 "productStock": "Termék Készlet",
                 "productPrice": "Termék Ára",
                 "stock": "Készlet",
+                "quantity": "Mennyiség",
                 "price": "Ár",
                 "huf": "Ft",
                 "productImage": "Termék Képe",

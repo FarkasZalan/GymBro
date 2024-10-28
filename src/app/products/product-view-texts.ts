@@ -20,9 +20,8 @@ export enum ProductViewText {
     // Healthy food categories
     CEREALS = "menu.healthyFoodsMenu.cereals",
     HEALTHY_SNACKS = "menu.healthyFoodsMenu.healthySnacks",
-    SWEETENERS = "menu.healthyFoodsMenu.flavorsAndSweeteners",
     COOKING_iNGREDIENTS = "menu.healthyFoodsMenu.cookingIngredients",
-    DINKS = "menu.healthyFoodsMenu.drinks",
+    DRINKS = "menu.healthyFoodsMenu.drinks",
 
     // Clothing categories
     WOMEN_CLOTHES = "menu.clothingMenu.womensClothing",
@@ -40,6 +39,7 @@ export enum ProductViewText {
     POUNDS = "products.pound",
     PCS = "products.pcs",
     LBS = "products.lbs",
+    ML = "ml",
 
     // Gender
     GENDER = "Gender",
@@ -78,6 +78,7 @@ export enum ProductViewText {
     APPLE_PIE_FLAVOR = "products.flavors.applePie",
     LEMON_CHEESECAKE_FLAVOR = "products.flavors.lemonCheesecake",
     BLACK_BISCUIT_FLAVOR = "products.flavors.blackBiscuit",
+    CAPPUCINO = "Capuccino",
 
     // Allergens
     LACTOSE_ALLERGEN = "products.allergens.lactose",

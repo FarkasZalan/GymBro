@@ -1,1 +1,311 @@
-<p>handle-healty-products works!</p>
+<div class="container">
+    <nb-card class="container">
+        <nb-card-body class="login-col">
+            <form #form="ngForm">
+                <!-- Product Details Section -->
+                <h3>{{ 'products.productDetails' | translate }}</h3>
+                <div class="row">
+                    <!-- Product Name -->
+                    <div class="col-md-6 form-group">
+                        <label for="productName" class="label">{{ 'products.productName' | translate }}</label>
+                        <input type="text" class="form-control" [(ngModel)]="healthyProductObject.productName"
+                            name="productName" required placeholder="{{ 'products.enterProductName' | translate }}"
+                            #productName="ngModel">
+                        <span class="help-block" *ngIf="productName.touched && !productName.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+
+                    <!-- Product Category (Dropdown) -->
+                    <div class="col-md-6 form-group">
+                        <label for="productCategory" class="label">{{ 'products.productCategory' | translate }}</label>
+                        <select class="form-control drop-down-list allow-selected-list-color" name="productCategory"
+                            required #productCategory="ngModel" [(ngModel)]="selectedCategory"
+                            (ngModelChange)="isCategorySelected()">
+                            <!-- Placeholder option -->
+                            <option value="" selected disabled>{{ 'products.selectProductCategory' | translate }}
+                            </option>
+
+                            <!-- List of categories -->
+                            <option *ngFor="let categorie of productCategories" [value]="categorie">
+                                {{ categorie | translate }}
+                            </option>
+                        </select>
+                        <span class="help-block" *ngIf="productCategory.touched && !productCategory.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="row">
+                    <!-- Description -->
+                    <div class="col-md-12 form-group">
+                        <label for="description" class="label">{{ 'products.description' | translate }}</label>
+                        <textarea class="form-control" [(ngModel)]="healthyProductObject.description" name="description"
+                            required placeholder="{{ 'products.enterProductDescription' | translate }}"
+                            #description="ngModel"></textarea>
+                        <span class="help-block" *ngIf="description.touched && !description.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Price and Weight/Pieces -->
+                <div *ngIf="selectedCategory !== ''" [@collapseField]>
+                    <hr>
+                    <h3>{{ 'products.priceAndQuantity' | translate }}</h3>
+
+                    <div class="row">
+                        <!-- Display product prices dynamically in a 2-column layout -->
+                        <div class="list-container">
+                            <nb-card class="rounded-card categoryCard"
+                                *ngFor="let price of productPrices; let i = index">
+                                <nb-card-body class="category-image" (click)="editPrice(i)">
+                                    <!-- Product Image at the top -->
+                                    <div class="image-container text-center">
+                                        <img *ngIf="price.productImage !== ''" [src]="price.productImage"
+                                            alt="Product Image" class="card-image" />
+                                        <img *ngIf="price.productImage === ''"
+                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                            class="card-image" />
+                                    </div>
+
+                                    <!-- Product Details (Price and Weight) below the image -->
+                                    <div class="details-container text-center">
+                                        <!-- show 'default' text if the current address is the default -->
+                                        <nb-card-header class="card-header">
+                                            <span *ngIf="price.setAsDefaultPrice">{{
+                                                'profileMenu.shippingAddressForm.defaultShippingAddress' | translate
+                                                }}</span>
+                                        </nb-card-header>
+
+                                        <h3>{{ 'products.price' | translate }}: {{ price.productPrice }} {{
+                                            'products.huf' | translate }}</h3>
+                                        <p class="weight-text"><strong></strong> {{
+                                            price.quantityInProduct }} {{ selectedUnit | translate }}</p>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                        <!-- add new price card -->
+                        <div class="col-md-12 form-group container price-col">
+                            <!-- add button -->
+                            <button class="btn btn-primary basic-btn basic-form-btn add-price-btn"
+                                (click)="addNewPrice()">
+                                {{ 'products.addNewPrice' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flavors and Allergens Section -->
+                <hr>
+                <h3>{{ 'products.flavorsAndAllergens' | translate }}</h3>
+
+
+                <div class="row">
+                    <!-- Flavor Section (Dropdown list) -->
+                    <div class="col-md-12 form-group">
+                        <label for="flavors" class="label">{{ 'products.productFlavors' | translate }}</label>
+                        <select class="form-control drop-down-list allow-selected-list-color" name="flavors" required
+                            #flavors="ngModel" [(ngModel)]="selectedFlavor">
+                            <!-- List of categories -->
+                            <option *ngFor="let flavor of availableFlavors" [value]="flavor">
+                                {{ flavor | translate }}
+                            </option>
+                        </select>
+                        <span class="help-block" *ngIf="flavors.touched && !flavors.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Allergenes Section -->
+                    <div class="col-md-12 form-group">
+                        <label for="allregenes" class="label">{{ 'products.productAllergens' | translate }}</label>
+                        <div class="multi-select-container">
+                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
+                                [(ngModel)]="selectedAllergenes" #allergeneSelect="ngModel">
+                                <option *ngFor="let allergene of availableAllergens" [value]="allergene"
+                                    [ngClass]="{'active': selectedAllergenes.includes(allergene) && selectedAllergenes.length > 0}"
+                                    (click)="selectionOfTheList(productViewText.ALLERGENES, allergene)">
+                                    {{ allergene | translate}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- display the selected allergenes -->
+                        <div *ngIf="selectedAllergenes.length > 0">
+                            <div class="selected-items-display" *ngFor="let selected of selectedAllergenes"
+                                (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)">
+                                {{ selected | translate }}
+                                <span style="cursor: pointer; color: red;">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nutritional Information Section -->
+                <div class="nutrition-table">
+                    <hr>
+                    <h3>{{ 'products.nutritionalInformation' | translate }} (100 {{ selectedUnit | translate }})
+                    </h3>
+                    <div class="row">
+                        <!-- Energy (kJ) -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueEnergyKj" class="label">{{ 'products.energyKj' | translate
+                                }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueEnergyKj" name="nutritionalValueEnergyKj"
+                                placeholder="{{ 'products.energyKj' | translate }}*" required
+                                #nutritionalValueEnergyKj="ngModel">
+                        </div>
+                        <!-- Energy (kcal) -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueEnergyCal" class="label">{{ 'products.energyKcal' | translate
+                                }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueEnergyCal"
+                                name="nutritionalValueEnergyCal" placeholder="{{ 'products.energyKcal' | translate }}*"
+                                required #nutritionalValueEnergyCal="ngModel">
+                        </div>
+                        <!-- Fats -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueFats" class="label">{{ 'products.fatsGram' | translate
+                                }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueFats" name="nutritionalValueFats" required
+                                placeholder="{{ 'products.fatsGram' | translate }}*" #nutritionalValueFats="ngModel">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Fatty Acids -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueFattyAcids" class="label">{{ 'products.fattyAcidsGram' |
+                                translate }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueFattyAcids"
+                                name="nutritionalValueFattyAcids"
+                                placeholder="{{ 'products.fattyAcidsGram' | translate }}*" required
+                                #nutritionalValueFattyAcids="ngModel">
+                        </div>
+                        <!-- Carbohydrates -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueCarbohydrates" class="label">{{ 'products.carbohydratesGram' |
+                                translate }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueCarbohydrates"
+                                name="nutritionalValueCarbohydrates"
+                                placeholder="{{ 'products.carbohydratesGram' | translate }}*" required
+                                #nutritionalValueCarbohydrates="ngModel">
+                        </div>
+                        <!-- Sugars -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueSugar" class="label">{{ 'products.sugarsGram' | translate
+                                }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueSugar" name="nutritionalValueSugar"
+                                placeholder="{{ 'products.sugarsGram' | translate }}*" #nutritionalValueSugar="ngModel"
+                                required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Fiber -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueFiber" class="label">{{ 'products.fiberGram' | translate
+                                }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueFiber" name="nutritionalValueFiber"
+                                required placeholder="{{ 'products.fiberGram' | translate }}*"
+                                #nutritionalValueFiber="ngModel">
+                        </div>
+                        <!-- Proteins -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueProteins" class="label">{{ 'products.proteinsGram' | translate
+                                }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueProteins" name="nutritionalValueProteins"
+                                placeholder="{{ 'products.proteinsGram' | translate }}*" required
+                                #nutritionalValueProteins="ngModel">
+                        </div>
+                        <!-- Salt -->
+                        <div class="col-md-4 form-group">
+                            <label for="nutritionalValueSalt" class="label">{{ 'products.saltGram' | translate
+                                }}</label>
+                            <input type="number" class="form-control"
+                                [(ngModel)]="nutritionalTable.nutritionalValueSalt" name="nutritionalValueSalt" required
+                                placeholder="{{ 'products.saltGram' | translate }}*" #nutritionalValueSalt="ngModel">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Safety Section -->
+                <hr>
+                <h3>{{ 'products.safetyInformation' | translate }}</h3>
+                <div class="row chechkbox-row">
+                    <!-- Safe for Pregnancy -->
+                    <div class="col-md-4 form-group">
+                        <label class="checkbox-container">
+                            {{ 'products.safeForPregnancy' | translate }}
+                            <input type="checkbox" [(ngModel)]="isSafeForConsumptionDuringPregnancy"
+                                name="safeForConsumptionDuringPregnancy">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <!-- Safe for Breastfeeding -->
+                    <div class="col-md-4 form-group">
+                        <label class="checkbox-container">
+                            {{ 'products.safeForBreastfeeding' | translate }}
+                            <input type="checkbox" [(ngModel)]="isSafeForConsumptionDuringBreastfeeding"
+                                name="safeForConsumptionDuringBreastfeeding">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Prices missing block -->
+                <span *ngIf="missingPricesErrorMessage" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'products.missingPricesError' | translate }}
+                </span>
+
+                <!-- Product name exists block -->
+                <span *ngIf="productNameExistsError" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'products.productNameExistsError' | translate }}
+                </span>
+
+                <!-- Error block -->
+                <span *ngIf="errorMessage" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'basicErrorMessage' | translate }}
+                </span>
+
+                <!-- Create Button -->
+                <div *ngIf="!isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        (click)="addNewHealthyProduct()" [disabled]="!form.valid">{{ 'products.add' | translate
+                        }}</button>
+                </div>
+
+                <div *ngIf="isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        (click)="editHealthyProduct()" [disabled]="!form.valid">{{ 'profilePage.modify' | translate
+                        }}</button>
+                </div>
+                <div *ngIf="isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn delete-btn basic-form-btn" type="submit" nbButton
+                        status="success" (click)="deleteHealthyProduct()">{{
+                        'profileMenu.shippingAddressForm.deleteAddress' | translate
+                        }}</button>
+                </div>
+            </form>
+            <!-- back button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                    status="success" (click)="back()">
+                    <span class="arrow">&#9664;</span>
+                    {{ 'loginPage.back' | translate }}</button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

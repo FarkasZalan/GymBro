@@ -48,6 +48,9 @@ export class ProductsListComponent implements OnInit {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((healthyProductsCollection: HealthyProduct[]) => {
           this.healthyProducts = healthyProductsCollection;
 
+          // Sort default by name
+          this.healthyProducts = this.adminService.sortHealthyProductsByNameASC(this.healthyProducts);
+
           // if the collection doesn't have any products
           if (this.healthyProducts.length === 0) {
             this.emptyCollection = true;

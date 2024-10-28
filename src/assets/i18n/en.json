@@ -16,7 +16,6 @@
          "healthyFoods": "Healthy Foods",
          "cereals": "Cereals",
          "healthySnacks": "Healthy Snacks",
-         "flavorsAndSweeteners": "Flavors",
          "cookingIngredients": "Cooking Ingredients",
          "drinks": "Drinls"
       },
@@ -198,6 +197,7 @@
       "productStock": "Product Stock",
       "productPrice": "Product Price",
       "stock": "Stock",
+      "quantity": "Quantity",
       "price": "Price",
       "huf": "Huf",
       "productImage": "Product Image",

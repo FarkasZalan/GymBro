@@ -81,11 +81,6 @@ export class PagesComponent {
             link: '/work-processes/list',
           },
           {
-            title: this.translate.instant('menu.healthyFoodsMenu.flavorsAndSweeteners'),
-            icon: ' ',
-            link: '/work-processes/list',
-          },
-          {
             title: this.translate.instant('menu.healthyFoodsMenu.cookingIngredients'),
             icon: ' ',
             link: '/work-processes/list',

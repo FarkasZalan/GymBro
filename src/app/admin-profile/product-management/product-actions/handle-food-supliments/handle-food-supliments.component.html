@@ -287,7 +287,8 @@
                 <div *ngIf="!isJoinSupport && !isVitamin && (selectedCategory !== '')" [@collapseField]
                     class="nutrition-table">
                     <hr>
-                    <h3>{{ 'products.nutritionalInformation' | translate }}</h3>
+                    <h3>{{ 'products.nutritionalInformation' | translate }} (100 {{ productViewText.GRAM | translate }})
+                    </h3>
                     <div class="row">
                         <!-- Energy (kJ) -->
                         <div class="col-md-4 form-group">
