@@ -230,6 +230,20 @@ h1.title {
     margin-right: 10px;
 }
 
+.left-checkbox {
+    justify-content: start !important;
+}
+
+.image-preview {
+    max-height: 50px;
+    width: auto;
+    margin-top: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+}
+
 .input-group {
     display: flex;
     gap: 5px;

@@ -93,7 +93,40 @@
                     <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
                         'products.huf' | translate }}</h5>
                     <h5 class="price-display">{{ 'products.clothes.size' | translate }}: {{
-                        defaultPrice.clothingSize }}</h5>
+                        defaultPrice.productSize }}</h5>
+                    <h5 class="price-display">{{
+                        'products.stock' | translate }}: {{
+                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+
+    <!-- Accessories -->
+    <div *ngIf="accessories" class="list-container">
+        <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories">
+            <nb-card-body class="product-image" (click)="goToEditProduct(accessory.id)">
+
+
+                <div *ngIf="getDefaultPrice(accessory) as defaultPrice" class="details-container text-center">
+                    <div class="image-container text-center">
+                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                            alt="Product Image" class="card-image" />
+                        <img *ngIf="defaultPrice.productImage === ''"
+                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                            class="card-image" />
+                    </div>
+
+
+                    <h4>{{ accessory.productName }}</h4>
+                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
+                        'products.huf' | translate }}</h5>
+                    <h5 *ngIf="accessory.equipmentType === productViewText.WEIGHT_LIFTING" class="price-display">{{
+                        'products.clothes.size' | translate }}: {{
+                        defaultPrice.productSize }}</h5>
+                    <h5 *ngIf="accessory.equipmentType === productViewText.SHAKERS" class="price-display">{{
+                        'products.clothes.size' | translate }}: {{
+                        defaultPrice.bottleSize }} {{ productViewText.ML | translate }}</h5>
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>

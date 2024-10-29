@@ -5,7 +5,7 @@ export interface HealthyProduct {
     // identification and basic details
     id?: string;
     productName: string;
-    productCategory: string; // forexample cereals, snacks, drink...
+    productCategory: string;
     description: string;
     dosageUnit: string;
 
@@ -27,4 +27,6 @@ export interface HealthyProduct {
     // the price for this product
     // stock
     prices: ProductPrice[];
+
+    useUnifiedImage: boolean;
 }

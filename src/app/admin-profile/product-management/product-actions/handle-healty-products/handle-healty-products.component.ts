@@ -128,6 +128,10 @@ export class HandleHealtyProductsComponent {
   isProductEdit: boolean = false;
   healthyProductId: string = '';
 
+  // use unified image to the product
+  isUnifiedImage: boolean = false;
+  unifiedImageUrl: string = null;
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -138,6 +142,8 @@ export class HandleHealtyProductsComponent {
       description: "",
       dosageUnit: "",
       flavor: "",
+
+      useUnifiedImage: this.isUnifiedImage,
 
       safeForConsumptionDuringBreastfeeding: true,
       safeForConsumptionDuringPregnancy: true,
@@ -165,6 +171,10 @@ export class HandleHealtyProductsComponent {
 
           // prices
           this.productPrices = this.healthyProductObject.prices;
+          this.isUnifiedImage = this.healthyProductObject.useUnifiedImage;
+          if (this.isUnifiedImage) {
+            this.unifiedImageUrl = this.healthyProductObject.prices[0].productImage;
+          }
 
           // flavor and allergies list
           this.selectedFlavor = this.healthyProductObject.flavor;
@@ -233,6 +243,34 @@ export class HandleHealtyProductsComponent {
     if (index > -1) list.splice(index, 1);
   }
 
+  // handle unified checkbox value
+  onUnifiedImageChange(isUnified: boolean) {
+    if (isUnified) {
+      this.unifiedImageUrl = '';
+      this.productPrices.forEach(price => {
+        price.productImage = this.unifiedImageUrl
+      });
+    } else {
+      this.unifiedImageUrl = null;
+    }
+  }
+
+  // Handle file selection and convert to Base64
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.unifiedImageUrl = reader.result as string; // Base64 string
+        this.productPrices.forEach(price => {
+          price.productImage = this.unifiedImageUrl
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   // Open dialog to add new price
   addNewPrice() {
     this.missingPricesErrorMessage = false;
@@ -241,7 +279,8 @@ export class HandleHealtyProductsComponent {
         unit: this.selectedUnit,
         allPrices: this.productPrices,
         editText: false,
-        productCategory: ProductViewText.HEALTHY_PRODUCT
+        productCategory: ProductViewText.HEALTHY_PRODUCT,
+        useUnifiedImage: this.unifiedImageUrl,
       }
     });
 
@@ -275,7 +314,8 @@ export class HandleHealtyProductsComponent {
         allPrices: this.productPrices,
         selectedPrice: this.productPrices[id],
         editText: true,
-        productCategory: ProductViewText.HEALTHY_PRODUCT
+        productCategory: ProductViewText.HEALTHY_PRODUCT,
+        useUnifiedImage: this.unifiedImageUrl,
       }
     });
 
@@ -368,7 +408,8 @@ export class HandleHealtyProductsComponent {
 
       allergens: this.selectedAllergenes,
 
-      prices: []
+      prices: [],
+      useUnifiedImage: this.isUnifiedImage
     }
 
     // Add the new healthy product
@@ -376,7 +417,7 @@ export class HandleHealtyProductsComponent {
       const documentumRef = await this.db.collection("products").doc(ProductViewText.HEALTHY_PRODUCT).collection("allProduct").add(this.healthyProductObject);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
-      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, documentumRef.id, this.productPrices);
+      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, documentumRef.id, this.unifiedImageUrl, this.productPrices);
       await documentumRef.update({ prices: this.productPrices });
       this.errorMessage = false;
       this.productNameExistsError = false;
@@ -430,7 +471,7 @@ export class HandleHealtyProductsComponent {
     if (!hasDefaultPrice) {
       this.productPrices[0].setAsDefaultPrice = true;
     }
-    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, this.healthyProductId, this.productPrices);
+    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, this.healthyProductId, this.unifiedImageUrl, this.productPrices);
 
     // create new Food supliment object
     this.healthyProductObject = {
@@ -448,7 +489,8 @@ export class HandleHealtyProductsComponent {
 
       allergens: this.selectedAllergenes,
 
-      prices: this.productPrices
+      prices: this.productPrices,
+      useUnifiedImage: this.isUnifiedImage
     }
 
     // Edit the healthy product
@@ -486,14 +528,19 @@ export class HandleHealtyProductsComponent {
         // Delete images from Firebase Storage
         const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
           if (price.productImage) {
-            // Reference the file by its URL
-            const fileRef = this.storage.refFromURL(price.productImage);
-            return fileRef.delete().toPromise();  // Returns a promise to delete the image
+            try {
+              // Reference the file by its URL
+              const fileRef = this.storage.refFromURL(price.productImage);
+              await fileRef.delete().toPromise();  // Attempt to delete the image
+            } catch (error) { }
           }
         });
 
         // Await all delete promises
         await Promise.all(deleteImagePromises);
+
+        // Delete all the images from the product storage folder
+        await this.adminService.deleteAllFilesInFolder(ProductViewText.HEALTHY_PRODUCT, this.healthyProductId);
 
         // Delete the product from firestore
         const deleteAddressRef = this.db.collection("products").doc(ProductViewText.HEALTHY_PRODUCT).collection("allProduct").doc(this.healthyProductId);

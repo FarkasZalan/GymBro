@@ -174,6 +174,10 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   isProductEdit: boolean = false;
   foodSuplimentId: string = '';
 
+  // use unified image to the product
+  isUnifiedImage: boolean = false;
+  unifiedImageUrl: string = null;
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -197,7 +201,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       vitaminList: [],
       genderList: [],
 
-      prices: []
+      prices: [],
+      useUnifiedImage: this.isUnifiedImage,
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -218,6 +223,10 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
           // prices
           this.productPrices = this.foodSuplimentObject.prices;
+          this.isUnifiedImage = this.foodSuplimentObject.useUnifiedImage;
+          if (this.isUnifiedImage) {
+            this.unifiedImageUrl = this.foodSuplimentObject.prices[0].productImage;
+          }
 
           // flavor and allergies list
           this.selectedProteinType = this.foodSuplimentObject.proteinType;
@@ -410,6 +419,34 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     if (index > -1) list.splice(index, 1);
   }
 
+  // handle unified checkbox value
+  onUnifiedImageChange(isUnified: boolean) {
+    if (isUnified) {
+      this.unifiedImageUrl = '';
+      this.productPrices.forEach(price => {
+        price.productImage = this.unifiedImageUrl
+      });
+    } else {
+      this.unifiedImageUrl = null;
+    }
+  }
+
+  // Handle file selection and convert to Base64
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.unifiedImageUrl = reader.result as string; // Base64 string
+        this.productPrices.forEach(price => {
+          price.productImage = this.unifiedImageUrl
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   // Open dialog to add new price
   addNewPrice() {
     this.missingPricesErrorMessage = false;
@@ -418,6 +455,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         unit: this.selectedUnit,
         allPrices: this.productPrices,
         editText: false,
+        useUnifiedImage: this.unifiedImageUrl,
         productCategory: ProductViewText.FOOD_SUPLIMENTS
       }
     });
@@ -452,6 +490,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         allPrices: this.productPrices,
         selectedPrice: this.productPrices[id],
         editText: true,
+        useUnifiedImage: this.unifiedImageUrl,
         productCategory: ProductViewText.FOOD_SUPLIMENTS
       }
     });
@@ -636,7 +675,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       vitaminList: this.vitaminList,
       genderList: this.selectedGenders,
 
-      prices: []
+      prices: [],
+      useUnifiedImage: this.isUnifiedImage,
     }
 
     // Add the new food supliment product
@@ -644,7 +684,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       const documentumRef = await this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").add(this.foodSuplimentObject);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
-      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.FOOD_SUPLIMENTS, documentumRef.id, this.productPrices);
+      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.FOOD_SUPLIMENTS, documentumRef.id, this.unifiedImageUrl, this.productPrices);
       await documentumRef.update({ prices: this.productPrices });
       this.errorMessage = false;
       this.productNameExistsError = false;
@@ -707,7 +747,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     if (!hasDefaultPrice) {
       this.productPrices[0].setAsDefaultPrice = true;
     }
-    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.FOOD_SUPLIMENTS, this.foodSuplimentId, this.productPrices);
+    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.FOOD_SUPLIMENTS, this.foodSuplimentId, this.unifiedImageUrl, this.productPrices);
 
     // create new Food supliment object
     this.foodSuplimentObject = {
@@ -730,7 +770,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       vitaminList: this.vitaminList,
       genderList: this.selectedGenders,
 
-      prices: this.productPrices
+      prices: this.productPrices,
+      useUnifiedImage: this.isUnifiedImage
     }
 
     // Edit the food supliment product
@@ -768,14 +809,19 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         // Delete images from Firebase Storage
         const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
           if (price.productImage) {
-            // Reference the file by its URL
-            const fileRef = this.storage.refFromURL(price.productImage);
-            return fileRef.delete().toPromise();  // Returns a promise to delete the image
+            try {
+              // Reference the file by its URL
+              const fileRef = this.storage.refFromURL(price.productImage);
+              await fileRef.delete().toPromise();  // Attempt to delete the image
+            } catch (error) { }
           }
         });
 
         // Await all delete promises
         await Promise.all(deleteImagePromises);
+
+        // Delete all the images from the product storage folder
+        await this.adminService.deleteAllFilesInFolder(ProductViewText.FOOD_SUPLIMENTS, this.foodSuplimentId);
 
         // Delete the product from firestore
         const deleteAddressRef = this.db.collection("products").doc(ProductViewText.FOOD_SUPLIMENTS).collection("allProduct").doc(this.foodSuplimentId);

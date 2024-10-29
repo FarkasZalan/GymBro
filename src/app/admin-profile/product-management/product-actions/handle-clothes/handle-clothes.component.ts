@@ -16,8 +16,8 @@ import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull
 import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
 import { Clothes } from '../../product-models/clothing.model';
 import { AdminService } from '../../../admin.service';
-import { ClothingColor } from '../../product-models/clothing-color.model';
 import { AddColorDialogComponent } from '../add-color-dialog/add-color-dialog.component';
+import { ProductColor } from '../../product-models/product-color.model';
 
 @Component({
   selector: 'app-handle-clothes',
@@ -44,7 +44,7 @@ import { AddColorDialogComponent } from '../add-color-dialog/add-color-dialog.co
   ]
 })
 export class HandleClothesComponent {
-  @ViewChild('form') createHealthyProductForm: NgForm;  // Reference to the form for validation
+  @ViewChild('form') createClothesForm: NgForm;  // Reference to the form for validation
 
   // Form-related properties
   errorMessage: boolean = false;
@@ -78,7 +78,7 @@ export class HandleClothesComponent {
   selectedMaterial: string = '';
 
   // Colors
-  clothingColors: ClothingColor[] = [];
+  clothingColors: ProductColor[] = [];
 
   // Prices
   productPrices: ProductPrice[] = [];
@@ -138,16 +138,16 @@ export class HandleClothesComponent {
 
     this.productPrices.forEach(price => {
       // Check if the color is already in the uniqueColors object
-      if (!uniqueColors[price.clothingColor]) {
+      if (!uniqueColors[price.productColor]) {
         // If it's not, add it to uniqueColors
-        uniqueColors[price.clothingColor] = price.productImage; // Assuming productImage is available
+        uniqueColors[price.productColor] = price.productImage; // Assuming productImage is available
 
         // Check if the color already exists in the clothingColors array
-        const existingColorIndex = this.clothingColors.findIndex(color => color.color === price.clothingColor);
+        const existingColorIndex = this.clothingColors.findIndex(color => color.color === price.productColor);
         if (existingColorIndex === -1) {
           // If not found, push the unique color and its imageUrl to the clothingColors array
           this.clothingColors.push({
-            color: price.clothingColor,
+            color: price.productColor,
             imageUrl: price.productImage || '' // Use an empty string if no image
           });
         }
@@ -178,7 +178,7 @@ export class HandleClothesComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe((newColor: ClothingColor) => {
+    dialogRef.afterClosed().subscribe((newColor: ProductColor) => {
       if (newColor) {
         // Ensure color product image is not null
         if (newColor.imageUrl === null || newColor.imageUrl === undefined) {
@@ -209,7 +209,7 @@ export class HandleClothesComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe((editedColor: ClothingColor | boolean) => {
+    dialogRef.afterClosed().subscribe((editedColor: ProductColor | boolean) => {
       if (editedColor === true) {
         // If true is returned, delete the color
         this.deleteColor(id);
@@ -236,9 +236,9 @@ export class HandleClothesComponent {
 
         // Update corresponding productPrices for all entries that have the same color
         this.productPrices.forEach(price => {
-          if (price.clothingColor === editedColor.color) {
+          if (price.productColor === editedColor.color) {
             // Update the color and imageUrl as needed
-            price.clothingColor = editedColor.color; // This is probably redundant
+            price.productColor = editedColor.color; // This is probably redundant
             price.productImage = editedColor.imageUrl; // Update to new image URL
           }
         });
@@ -251,7 +251,7 @@ export class HandleClothesComponent {
 
   deleteColor(id: number) {
     // Remove all prices associated with the deleted color
-    this.productPrices = this.productPrices.filter(price => price.clothingColor !== this.clothingColors[id].color);
+    this.productPrices = this.productPrices.filter(price => price.productColor !== this.clothingColors[id].color);
     this.clothingColors.splice(id, 1);
     this.sortColors();
   }
@@ -269,6 +269,7 @@ export class HandleClothesComponent {
         allColors: this.clothingColors,
         allPrices: this.productPrices,
         editText: false,
+        useUnifiedImage: null,
         productCategory: ProductViewText.CLOTHES
       }
     });
@@ -291,8 +292,8 @@ export class HandleClothesComponent {
 
         // Check for duplicates before adding
         const existingIndex = this.productPrices.findIndex(price =>
-          price.clothingColor === newPrice.clothingColor &&
-          price.clothingSize === newPrice.clothingSize
+          price.productColor === newPrice.productColor &&
+          price.productSize === newPrice.productSize
         );
 
         if (existingIndex !== -1) {
@@ -316,10 +317,11 @@ export class HandleClothesComponent {
         unit: '',
         allColors: this.clothingColors,
         allPrices: this.productPrices,
-        size: this.productPrices[id].clothingSize,
-        selectedColor: this.productPrices[id].clothingColor,
+        size: this.productPrices[id].productSize,
+        selectedColor: this.productPrices[id].productColor,
         selectedPrice: this.productPrices[id],
         editText: true,
+        useUnifiedImage: null,
         productCategory: ProductViewText.CLOTHES
       }
     });
@@ -346,16 +348,16 @@ export class HandleClothesComponent {
 
         // Check if a price with the same color and size already exists
         const existingIndex = this.productPrices.findIndex(price =>
-          price.clothingColor === editedPrice.clothingColor &&
-          price.clothingSize === editedPrice.clothingSize
+          price.productColor === editedPrice.productColor &&
+          price.productSize === editedPrice.productSize
         );
 
         if (existingIndex !== -1 && existingIndex !== id) {
           // Update the existing entry and remove duplicates
           this.productPrices[existingIndex] = editedPrice;
           this.productPrices = this.productPrices.filter((price, index) =>
-            !(price.clothingColor === editedPrice.clothingColor &&
-              price.clothingSize === editedPrice.clothingSize && index !== existingIndex)
+            !(price.productColor === editedPrice.productColor &&
+              price.productSize === editedPrice.productSize && index !== existingIndex)
           );
         } else {
           // If no duplicate, update the price at the specified id
@@ -386,7 +388,7 @@ export class HandleClothesComponent {
     }
 
     const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName), undefined, ""
+      "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName), undefined, ""
     );
 
     if (checkForDuplication) {
@@ -404,9 +406,9 @@ export class HandleClothesComponent {
     // create new Clothes object
     this.clothingObject = {
       id: "",
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName),
+      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createHealthyProductForm.value.description,
+      description: this.createClothesForm.value.description,
 
       clothingType: this.selectedClothingType,
       material: this.selectedMaterial,
@@ -419,7 +421,7 @@ export class HandleClothesComponent {
       const documentumRef = await this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").add(this.clothingObject);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
-      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, documentumRef.id, this.productPrices);
+      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, documentumRef.id, null, this.productPrices);
       await documentumRef.update({ prices: this.productPrices });
       this.errorMessage = false;
       this.productNameExistsError = false;
@@ -446,7 +448,7 @@ export class HandleClothesComponent {
     }
 
     const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName), undefined, this.clothingObject.id
+      "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName), undefined, this.clothingObject.id
     );
 
     if (checkForDuplication) {
@@ -460,14 +462,14 @@ export class HandleClothesComponent {
     if (!hasDefaultPrice) {
       this.productPrices[0].setAsDefaultPrice = true;
     }
-    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, this.clothingId, this.productPrices);
+    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, this.clothingId, null, this.productPrices);
 
     // create new Clothing object
     this.clothingObject = {
       id: this.clothingId,
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName),
+      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createHealthyProductForm.value.description,
+      description: this.createClothesForm.value.description,
 
       clothingType: this.selectedClothingType,
       material: this.selectedMaterial,
@@ -510,14 +512,19 @@ export class HandleClothesComponent {
         // Delete images from Firebase Storage
         const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
           if (price.productImage) {
-            // Reference the file by its URL
-            const fileRef = this.storage.refFromURL(price.productImage);
-            return fileRef.delete().toPromise();  // Returns a promise to delete the image
+            try {
+              // Reference the file by its URL
+              const fileRef = this.storage.refFromURL(price.productImage);
+              await fileRef.delete().toPromise();  // Attempt to delete the image
+            } catch (error) { }
           }
         });
 
         // Await all delete promises
         await Promise.all(deleteImagePromises);
+
+        // Delete all the images from the product storage folder
+        await this.adminService.deleteAllFilesInFolder(ProductViewText.CLOTHES, this.clothingId);
 
         // Delete the product from firestore
         const deleteAddressRef = this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").doc(this.clothingId);

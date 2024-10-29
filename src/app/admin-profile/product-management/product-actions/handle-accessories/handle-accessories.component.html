@@ -1,1 +1,237 @@
-<p>handle-accessories works!</p>
+<div class="container">
+    <nb-card class="container">
+        <nb-card-body class="login-col">
+            <form #form="ngForm">
+                <!-- Product Details Section -->
+                <h3>{{ 'products.productDetails' | translate }}</h3>
+                <div class="row">
+                    <!-- Product Name -->
+                    <div class="col-md-6 form-group">
+                        <label for="productName" class="label">{{ 'products.productName' | translate }}</label>
+                        <input type="text" class="form-control" [(ngModel)]="accessoryObject.productName"
+                            name="productName" required placeholder="{{ 'products.enterProductName' | translate }}"
+                            #productName="ngModel">
+                        <span class="help-block" *ngIf="productName.touched && !productName.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+
+                    <!-- Product Category (Dropdown) -->
+                    <div class="col-md-6 form-group">
+                        <label for="productCategory" class="label">{{ 'products.productCategory' | translate }}</label>
+                        <select class="form-control drop-down-list allow-selected-list-color" name="productCategory"
+                            required #productCategory="ngModel" [(ngModel)]="selectedCategory">
+                            <!-- Placeholder category -->
+                            <option [value]="selectedCategory" selected>{{ selectedCategory | translate }}
+                            </option>
+                        </select>
+                        <span class="help-block" *ngIf="productCategory.touched && !productCategory.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="row">
+                    <!-- Description -->
+                    <div class="col-md-12 form-group">
+                        <label for="description" class="label">{{ 'products.description' | translate }}</label>
+                        <textarea class="form-control" [(ngModel)]="accessoryObject.description" name="description"
+                            required placeholder="{{ 'products.enterProductDescription' | translate }}"
+                            #description="ngModel"></textarea>
+                        <span class="help-block" *ngIf="description.touched && !description.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Accessory type Section -->
+                <div class="row">
+                    <!-- Clothing type Section (Dropdown list) -->
+                    <div class="col-md-12 form-group">
+                        <label for="accessoriesType" class="label">{{ 'products.accessories.accessoriesType' | translate
+                            }}</label>
+                        <select class="form-control drop-down-list allow-selected-list-color" name="accessoriesType"
+                            required #accessoriesType="ngModel" [(ngModel)]="selectedAccessoryType"
+                            (ngModelChange)="isTypeSelected()">
+                            <!-- Placeholder option -->
+                            <option value="" selected disabled>{{ 'products.accessories.selectAccessoriesType' |
+                                translate
+                                }}
+                            </option>
+
+                            <!-- List of accessories types -->
+                            <option *ngFor="let accessoriesType of availableAccessoriesTypes" [value]="accessoriesType">
+                                {{ accessoriesType | translate }}
+                            </option>
+                        </select>
+                        <span class="help-block" *ngIf="accessoriesType.touched && !accessoriesType.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Color and image -->
+                <div *ngIf="selectedAccessoryType === productViewText.SHAKERS" [@collapseField]>
+                    <hr>
+                    <h3>{{ 'products.clothes.color' | translate }}</h3>
+
+                    <div class="row">
+                        <!-- Display product colors, images dynamically in a 2-column layout -->
+                        <div class="list-container">
+                            <nb-card class="rounded-card categoryCard"
+                                *ngFor="let color of accessoryColors; let i = index">
+                                <nb-card-body class="category-image" (click)="editColor(i)">
+                                    <!-- Product Image at the top -->
+                                    <div class="image-container text-center">
+                                        <img *ngIf="color.imageUrl !== ''" [src]="color.imageUrl" alt="Product Image"
+                                            class="card-image" />
+                                        <img *ngIf="color.imageUrl === ''"
+                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                            class="card-image" />
+                                    </div>
+
+                                    <!-- Product Details (Color) below the image -->
+                                    <div class="details-container text-center">
+                                        <h3>{{ 'products.clothes.color' | translate }}: {{ color.color | translate }}
+                                        </h3>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                        <!-- add new color card -->
+                        <div class="col-md-12 form-group container price-col">
+                            <!-- add button -->
+                            <button class="btn btn-primary basic-btn basic-form-btn add-price-btn"
+                                (click)="addNewColor()">
+                                {{ 'products.clothes.addNewColor' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+                <!-- Price, size and stock -->
+                <div *ngIf="selectedAccessoryType === productViewText.WEIGHT_LIFTING || (selectedAccessoryType === productViewText.SHAKERS && accessoryColors.length !== 0)"
+                    [@collapseField]>
+                    <h3>{{ 'products.priceAndQuantity' | translate }}</h3>
+
+                    <!-- Use unified image -->
+                    <div *ngIf="selectedAccessoryType === productViewText.WEIGHT_LIFTING"
+                        class="row chechkbox-row left-checkbox">
+                        <!-- Unified image checkbox -->
+                        <div class="col-md-3 form-group">
+                            <label class="checkbox-container">
+                                {{ 'products.unifiedImage' | translate }}
+                                <input type="checkbox" [(ngModel)]="isUnifiedImage" name="isUnifiedImage"
+                                    (ngModelChange)="onUnifiedImageChange($event)">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- unified image upload input -->
+                    <div *ngIf="isUnifiedImage" [@collapseField] class="form-group">
+                        <label for="productImage" class="label">{{ 'products.productImage' | translate
+                            }}</label>
+                        <input type="file" class="form-control" (change)="onFileSelected($event)" />
+                        <div *ngIf="unifiedImageUrl">
+                            <img [src]="unifiedImageUrl" alt="Image Preview" class="image-preview" />
+                        </div>
+                        <div *ngIf="unifiedImageUrl === ''">
+                            <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+                                class="image-preview" />
+                        </div>
+                        <br>
+                    </div>
+
+                    <div class="row">
+                        <!-- Display product prices dynamically in a 2-column layout -->
+                        <div class="list-container">
+                            <nb-card class="rounded-card categoryCard"
+                                *ngFor="let price of productPrices; let i = index">
+                                <nb-card-body class="category-image" (click)="editPrice(i)">
+                                    <!-- Product Image at the top -->
+                                    <div class="image-container text-center">
+                                        <img *ngIf="price.productImage !== ''" [src]="price.productImage"
+                                            alt="Product Image" class="card-image" />
+                                        <img *ngIf="price.productImage === ''"
+                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                            class="card-image" />
+                                    </div>
+
+                                    <!-- Product Details (Price and size) below the image -->
+                                    <div class="details-container text-center">
+                                        <!-- show 'default' text if the current address is the default -->
+                                        <nb-card-header class="card-header">
+                                            <span *ngIf="price.setAsDefaultPrice">{{
+                                                'profileMenu.shippingAddressForm.defaultShippingAddress' | translate
+                                                }}</span>
+                                        </nb-card-header>
+
+                                        <h3>{{ price.productPrice }} {{ 'products.huf' | translate }}</h3>
+                                        <p *ngIf="selectedAccessoryType === productViewText.WEIGHT_LIFTING"
+                                            class="weight-text">{{ 'products.clothes.size' | translate }}: {{
+                                            price.productSize }}</p>
+                                        <p *ngIf="selectedAccessoryType === productViewText.SHAKERS"
+                                            class="weight-text">{{ 'products.clothes.size' | translate }}: {{
+                                            price.bottleSize }} {{ productViewText.ML | translate }}</p>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                        <!-- add new price card -->
+                        <div class="col-md-12 form-group container price-col">
+                            <!-- add button -->
+                            <button class="btn btn-primary basic-btn basic-form-btn add-price-btn"
+                                (click)="addNewPrice()">
+                                {{ 'products.addNewPrice' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+                <!-- Prices missing block -->
+                <span *ngIf="missingPricesErrorMessage" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'products.missingPricesError' | translate }}
+                </span>
+
+                <!-- Product name exists block -->
+                <span *ngIf="productNameExistsError" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'products.productNameExistsError' | translate }}
+                </span>
+
+                <!-- Error block -->
+                <span *ngIf="errorMessage" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'basicErrorMessage' | translate }}
+                </span>
+
+                <!-- Create Button -->
+                <div *ngIf="!isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        (click)="addNewAccessory()" [disabled]="!form.valid">{{ 'products.add' | translate
+                        }}</button>
+                </div>
+
+                <div *ngIf="isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        (click)="editAccessory()" [disabled]="!form.valid">{{ 'profilePage.modify' | translate
+                        }}</button>
+                </div>
+                <div *ngIf="isProductEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn delete-btn basic-form-btn" type="submit" nbButton
+                        status="success" (click)="deleteAccessory()">{{
+                        'profileMenu.shippingAddressForm.deleteAddress' | translate
+                        }}</button>
+                </div>
+            </form>
+            <!-- back button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                    status="success" (click)="back()">
+                    <span class="arrow">&#9664;</span>
+                    {{ 'loginPage.back' | translate }}</button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

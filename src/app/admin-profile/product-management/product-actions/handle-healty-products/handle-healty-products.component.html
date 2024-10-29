@@ -53,6 +53,35 @@
                     <hr>
                     <h3>{{ 'products.priceAndQuantity' | translate }}</h3>
 
+                    <!-- Use unified image -->
+                    <div class="row chechkbox-row left-checkbox">
+                        <!-- Unified image checkbox -->
+                        <div class="col-md-3 form-group">
+                            <label class="checkbox-container">
+                                {{ 'products.unifiedImage' | translate }}
+                                <input type="checkbox" [(ngModel)]="isUnifiedImage" name="isUnifiedImage"
+                                    (ngModelChange)="onUnifiedImageChange($event)">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- unified image upload input -->
+                    <div *ngIf="isUnifiedImage" [@collapseField] class="form-group">
+                        <label for="productImage" class="label">{{ 'products.productImage' | translate
+                            }}</label>
+                        <input type="file" class="form-control" (change)="onFileSelected($event)" />
+                        <div *ngIf="unifiedImageUrl">
+                            <img [src]="unifiedImageUrl" alt="Image Preview" class="image-preview" />
+                        </div>
+                        <div *ngIf="unifiedImageUrl === ''">
+                            <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+                                class="image-preview" />
+                        </div>
+                        <br>
+                    </div>
+
+
                     <div class="row">
                         <!-- Display product prices dynamically in a 2-column layout -->
                         <div class="list-container">

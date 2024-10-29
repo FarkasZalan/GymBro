@@ -209,6 +209,7 @@
                 "productNameExistsError": "Már létezik ilyen nevű termék!",
                 "changeDefaultPriceText": "Megváltoztatod erre a termék alapértelmezett árát, mennyiségét?",
                 "changeDefaultColorText": "Megváltoztatod erre a termék alapértelmezett színét?",
+                "unifiedImage": "Egységes kép használata",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
                         "vegan": "Növényi eredetű fehérje",
@@ -290,6 +291,13 @@
                                 "selectColor": "Válassza ki a színt*",
                                 "colorAlreadyAdded": "Ez a szín már hozzá lett adva a termékhez"
                         }
+                },
+                "accessories": {
+                        "shakers": "Shakerek, kulacsok",
+                        "weightLifting": "Súlyemelés",
+                        "accessoriesType": "Kiegészítő típusa",
+                        "selectAccessoriesType": "Válasszon típust*",
+                        "selectSize": "Add meg a palack méretet*"
                 }
         }
 }

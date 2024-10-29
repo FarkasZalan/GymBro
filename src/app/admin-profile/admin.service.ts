@@ -10,6 +10,13 @@ import { ProductPrice } from "./product-management/product-models/product-price.
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { Clothes } from "./product-management/product-models/clothing.model";
 import { ProductViewText } from "./product-management/product-view-texts";
+import { Accessories } from "./product-management/product-models/accessories.model";
+import {
+    getStorage,
+    ref,
+    listAll,
+    deleteObject
+} from "firebase/storage";
 
 @Injectable({
     providedIn: 'root'
@@ -40,20 +47,39 @@ export class AdminService {
             .valueChanges();
     }
 
-    async uploadImagesAndSaveProduct(productCategory: string, productId: string, productPrices?: ProductPrice[]) {
+    async uploadImagesAndSaveProduct(productCategory: string, productId: string, unifiedImageUrl: string, productPrices?: ProductPrice[], accessoryType?: string) {
         const uploadPromises = productPrices.map(async (price: ProductPrice) => {
             // Check if productImage is a Base64 string (indicating a new upload) or a URL (existing image)
             if (price.productImage && price.productImage.startsWith("data:image")) {
-                const base64Data = price.productImage;
-                const blob = this.base64ToBlob(base64Data);
+                let base64Data = price.productImage;
+                let blob = this.base64ToBlob(base64Data);
+                if (unifiedImageUrl === null) {
+                    base64Data = price.productImage;
+                    blob = this.base64ToBlob(base64Data);
+                } else {
+                    base64Data = unifiedImageUrl;
+                    blob = this.base64ToBlob(base64Data);
+                }
 
                 // Define the path in Firebase Storage
                 let filePath;
-                if (productCategory === ProductViewText.CLOTHES) {
-                    filePath = `ProductsImages/${productCategory}/${productId}/${productId}_color_of_the_product: ${price.clothingColor}`;
-                } else {
-                    filePath = `ProductsImages/${productCategory}/${productId}/${productId}_price_of_the_product: ${price.productPrice}`;
+                if (productCategory === ProductViewText.CLOTHES || (productCategory === ProductViewText.ACCESSORIES && accessoryType === ProductViewText.SHAKERS)) {
+                    filePath = `ProductsImages/${productCategory}/${productId}/${productId}_color_of_the_product: ${price.productColor}`;
+                } else if (productCategory === ProductViewText.ACCESSORIES && accessoryType === ProductViewText.WEIGHT_LIFTING) {
+                    if (unifiedImageUrl === null) {
+                        filePath = `ProductsImages/${productCategory}/${productId}/${productId}_price_of_the_product: ${price.productPrice}_size_of_the_product: ${price.productSize}`;
+                    } else {
+                        filePath = `ProductsImages/${productCategory}/${productId}/${productId}_unifiend_image`;
+                    }
                 }
+                else {
+                    if (unifiedImageUrl === null) {
+                        filePath = `ProductsImages/${productCategory}/${productId}/${productId}_price_of_the_product: ${price.productPrice}_quantity_in_product: ${price.quantityInProduct}`;
+                    } else {
+                        filePath = `ProductsImages/${productCategory}/${productId}/${productId}_unifiend_image`;
+                    }
+                }
+
                 const fileRef = this.storage.ref(filePath);
                 const task = this.storage.upload(filePath, blob);
 
@@ -81,6 +107,26 @@ export class AdminService {
             ia[i] = byteString.charCodeAt(i);
         }
         return new Blob([ab], { type: mimeString });
+    }
+
+    // Function to delete all files in a folder before uploading new images
+    async deleteAllFilesInFolder(productCategory: string, productId: string) {
+        const folderRef = ref(getStorage(), `ProductsImages/${productCategory}/${productId}`);
+
+        try {
+            // List all items in the folder
+            listAll(folderRef)
+                .then(async (listResults) => {
+                    // Create delete promises for each file
+                    const promises = listResults.items.map((item) => {
+                        return deleteObject(item);
+                    });
+                    await Promise.all(promises);
+                });
+            console.log(`All files in the folder ProductsImages/${productId} have been deleted.`);
+        } catch (error) {
+            console.error("Error deleting files in folder:", error);
+        }
     }
 
     // Sort food supliments
@@ -165,7 +211,7 @@ export class AdminService {
         });
     }
 
-    // Sort heclothes
+    // Sort clothes
     sortClothesPriceByASC(clothes: Clothes[]) {
         // Sort default by defaul price desc
         return clothes.sort((a, b) => {
@@ -200,6 +246,47 @@ export class AdminService {
 
     sortClothesByNameDESC(clothes: Clothes[]) {
         return clothes.sort((a, b) => {
+
+            // Sort in ascending order based on product name
+            return b.productName.localeCompare(a.productName);
+        });
+    }
+
+    // Sort accessories
+    sortAccessoriesPriceByASC(accessories: Accessories[]) {
+        // Sort default by defaul price desc
+        return accessories.sort((a, b) => {
+            // Find the default price for the food supplement
+            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+
+            // Sort in ascending order based on the default price
+            return defaultPriceB - defaultPriceA;
+        });
+    }
+
+    sortAccessoriesPriceByDESC(accessories: Accessories[]) {
+        // Sort default by defaul price desc
+        return accessories.sort((a, b) => {
+            // Find the default price for the food supplement
+            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+
+            // Sort in ascending order based on the default price
+            return defaultPriceA - defaultPriceB;
+        });
+    }
+
+    sortAccessoriesByNameASC(accessories: Accessories[]) {
+        return accessories.sort((a, b) => {
+
+            // Sort in ascending order based on product name
+            return a.productName.localeCompare(b.productName);
+        });
+    }
+
+    sortAccessoriesByNameDESC(accessories: Accessories[]) {
+        return accessories.sort((a, b) => {
 
             // Sort in ascending order based on product name
             return b.productName.localeCompare(a.productName);

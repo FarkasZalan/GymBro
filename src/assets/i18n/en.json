@@ -208,6 +208,7 @@
       "productNameExistsError": "A product with this name already exists!",
       "changeDefaultPriceText": "Are you changing the default price and quantity for this product?",
       "changeDefaultColorText": "Are you changing the default color for this product?",
+      "unifiedImage": "Use unified image",
       "proteins": {
          "casein": "Protein containing casein",
          "vegan": "Vegan protein",
@@ -288,6 +289,13 @@
             "selectColor": "Select the color*",
             "colorAlreadyAdded": "This color has already been added to the product"
          }
+      },
+      "accessories": {
+         "shakers": "Shakers, water bottles",
+         "weightLifting": "Weight lifting",
+         "accessoriesType": "Accessory Type",
+         "selectAccessoriesType": "Select a type*",
+         "selectSize": "Enter the bottle size*"
       }
    }
 }

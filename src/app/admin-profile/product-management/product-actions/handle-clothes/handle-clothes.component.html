@@ -132,7 +132,6 @@
                 <!-- Price, size and stock -->
                 <div *ngIf="clothingColors.length !== 0" [@collapseField]>
                     <h3>{{ 'products.priceAndQuantity' | translate }}</h3>
-
                     <div class="row">
                         <!-- Display product prices dynamically in a 2-column layout -->
                         <div class="list-container">
@@ -159,7 +158,7 @@
 
                                         <h3>{{ price.productPrice }} {{ 'products.huf' | translate }}</h3>
                                         <p class="weight-text">{{ 'products.clothes.size' | translate }}: {{
-                                            price.clothingSize }}</p>
+                                            price.productSize }}</p>
                                     </div>
                                 </nb-card-body>
                             </nb-card>

@@ -36,4 +36,6 @@ export interface FoodSupliment {
     // the price for this product
     // stock
     prices: ProductPrice[];
+
+    useUnifiedImage: boolean;
 }

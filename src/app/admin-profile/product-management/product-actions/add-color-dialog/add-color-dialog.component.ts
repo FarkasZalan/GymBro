@@ -6,8 +6,7 @@ import { ForgotPasswordComponent } from '../../../../auth/forgot-password/forgot
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { ProductViewText } from '../../product-view-texts';
-import { ChangeDefaultPriceConfirmDialogComponent } from '../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
-import { ClothingColor } from '../../product-models/clothing-color.model';
+import { ProductColor } from '../../product-models/product-color.model';
 
 @Component({
   selector: 'app-add-color-dialog',
@@ -25,10 +24,10 @@ export class AddColorDialogComponent {
 
   editText: boolean = false;
 
-  newColor: ClothingColor;
+  newColor: ProductColor;
   buttonText: string = '';
   productCategory: string;
-  allColorsForProduct: ClothingColor[] = [];
+  allColorsForProduct: ProductColor[] = [];
   productViewText = ProductViewText;
 
   availableClothingColors: string[] = [

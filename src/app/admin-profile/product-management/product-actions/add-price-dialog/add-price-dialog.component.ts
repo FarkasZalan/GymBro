@@ -8,8 +8,8 @@ import { ProductViewText } from '../../product-view-texts';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { ChangeDefaultPriceConfirmDialogComponent } from '../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
-import { ClothingColor } from '../../product-models/clothing-color.model';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ProductColor } from '../../product-models/product-color.model';
 
 @Component({
   selector: 'app-add-price-dialog',
@@ -27,10 +27,10 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
         overflow: 'hidden'
       })),
       transition('void => *', [
-        animate('50ms ease-out') // Expands smoothly
+        animate('150ms ease-out') // Expands smoothly
       ]),
       transition('* => void', [
-        animate('50ms ease-in') // Collapses smoothly
+        animate('150ms ease-in') // Collapses smoothly
       ])
     ])
   ]
@@ -55,8 +55,11 @@ export class AddPriceDialogComponent implements OnInit {
   allPricesForProduct: ProductPrice[] = [];
   productViewText = ProductViewText;
 
-  // For clothing prices
-  availableClothingSizes: string[] = [
+  // use unified image
+  unifiedImageUrl: string = '';
+
+  // For clothing and accessories prices
+  availableProductSizes: string[] = [
     ProductViewText.XS,
     ProductViewText.S,
     ProductViewText.M,
@@ -67,17 +70,30 @@ export class AddPriceDialogComponent implements OnInit {
   ];
   selectedSize: string = '';
 
-  availableClothingColors: ClothingColor[] = [];
+  availableProductColors: ProductColor[] = [];
   selectedColor: string = '';
+
+  // for accessories handle
+  accessoriesType: string = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
     this.selectedUnit = data.unit;
     this.editText = data.editText;
     this.productCategory = data.productCategory;
     this.allPricesForProduct = data.allPrices;
+    this.unifiedImageUrl = data.useUnifiedImage;
+
+    // if parent page was the clothing page
     if (this.productCategory === ProductViewText.CLOTHES) {
-      this.availableClothingColors = Object.values(this.data.allColors);
-      this.availableClothingColors.sort((a, b) => a.color.localeCompare(b.color));
+      this.availableProductColors = Object.values(this.data.allColors);
+      this.availableProductColors.sort((a, b) => a.color.localeCompare(b.color));
+    }
+
+    // if parent page was the accessories page
+    if (this.productCategory === ProductViewText.ACCESSORIES) {
+      this.availableProductColors = Object.values(this.data.allColors);
+      this.availableProductColors.sort((a, b) => a.color.localeCompare(b.color));
+      this.accessoriesType = data.accessoriesType;
     }
 
     if (this.editText) {
@@ -103,7 +119,7 @@ export class AddPriceDialogComponent implements OnInit {
   ngOnInit(): void {
     this.newPrice = {
       quantityInProduct: null,
-      clothingColor: '',
+      productColor: '',
       productImage: '',
       productPrice: null,
       productStock: null,
@@ -113,13 +129,28 @@ export class AddPriceDialogComponent implements OnInit {
     if (this.data.selectedPrice !== null && this.data.selectedPrice !== undefined) {
       this.newPrice = { ...this.data.selectedPrice };
       if (this.productCategory === ProductViewText.CLOTHES) {
-        this.availableClothingColors = Object.values(this.data.allColors);
-        this.availableClothingColors.sort((a, b) => a.color.localeCompare(b.color));
+        this.availableProductColors = Object.values(this.data.allColors);
+        this.availableProductColors.sort((a, b) => a.color.localeCompare(b.color));
         this.selectedSize = this.data.size;
         this.selectedColor = this.data.selectedColor;
       }
 
-      this.imageBase64 = this.newPrice.productImage;
+      if (this.productCategory === ProductViewText.ACCESSORIES) {
+        this.availableProductColors = Object.values(this.data.allColors);
+        this.availableProductColors.sort((a, b) => a.color.localeCompare(b.color));
+        this.accessoriesType = this.data.accessoriesType;
+        if (this.accessoriesType === this.productViewText.SHAKERS) {
+          this.selectedColor = this.data.selectedColor;
+        } else {
+          this.selectedSize = this.data.size;
+        }
+      }
+
+      if (this.unifiedImageUrl !== null) {
+        this.imageBase64 = this.unifiedImageUrl;
+      } else {
+        this.imageBase64 = this.newPrice.productImage;
+      }
       this.imagePreview = this.imageBase64;
       this.isSetAsDefaultPrice = this.newPrice.setAsDefaultPrice;
     } else {
@@ -130,14 +161,19 @@ export class AddPriceDialogComponent implements OnInit {
         productStock: null,
         setAsDefaultPrice: false
       }
-      this.imageBase64 = '';
-      this.imagePreview = '';
+      if (this.unifiedImageUrl === null) {
+        this.imageBase64 = '';
+        this.imagePreview = '';
+      } else {
+        this.imageBase64 = this.unifiedImageUrl;
+        this.imagePreview = this.imageBase64;
+      }
     }
   }
 
   isColorSelected() {
     // Find the color object in the array by the color name
-    const color = this.availableClothingColors.find(item => item.color === this.selectedColor);
+    const color = this.availableProductColors.find(item => item.color === this.selectedColor);
     this.imageBase64 = color.imageUrl;
     this.imagePreview = this.imageBase64;
   }
@@ -156,20 +192,31 @@ export class AddPriceDialogComponent implements OnInit {
     }
   }
 
-  // Method to initiate password recovery
+  // Method to create new price and return to the parent page
   async addNewPrice() {
-    let quantity = 0
+    let quantity = 0;
     if (this.priceForm.value.quantityInProduct !== undefined) {
       quantity = this.priceForm.value.quantityInProduct;
     }
+
+    let bottleSize = 0;
+    if (this.priceForm.value.bottleSize !== undefined) {
+      bottleSize = this.priceForm.value.bottleSize;
+    }
+
+    if (this.unifiedImageUrl !== null) {
+      this.imageBase64 = this.unifiedImageUrl;
+    }
+
     this.newPrice = {
       quantityInProduct: quantity,
       productImage: this.imageBase64,
       productPrice: this.priceForm.value.productPrice,
       productStock: this.priceForm.value.productStock,
+      bottleSize: bottleSize,
       setAsDefaultPrice: this.isSetAsDefaultPrice,
-      clothingSize: this.selectedSize,
-      clothingColor: this.selectedColor
+      productSize: this.selectedSize,
+      productColor: this.selectedColor
     };
 
 

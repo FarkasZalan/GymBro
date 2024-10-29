@@ -27,10 +27,12 @@ export enum ProductViewText {
     WOMEN_CLOTHES = "menu.clothingMenu.womensClothing",
     MAN_CLOTHES = "menu.clothingMenu.mansClothing",
 
-    // ACCessories categories
-    SHAKERS = "menu.accessoriesMenu.shakers",
-    WEIGHT_LIFTING = "menu.accessoriesMenu.weightLifting",
-    OTHER_ACCESSORIES = "menu.accessoriesMenu.other",
+    // Accessories categories
+    SHAKERS_AND_SPORTS_EQUIPMENTS = "menu.accessoriesMenu.shakersAndSportEquipment",
+
+    // Accessories type
+    SHAKERS = "products.accessories.shakers",
+    WEIGHT_LIFTING = "products.accessories.weightLifting",
 
     // Clothing sizes
     XS = "XS",

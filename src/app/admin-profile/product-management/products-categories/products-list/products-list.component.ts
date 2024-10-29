@@ -75,6 +75,9 @@ export class ProductsListComponent implements OnInit {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((accessoriesCollection: Accessories[]) => {
           this.accessories = accessoriesCollection;
 
+          // Sort default by name
+          this.accessories = this.adminService.sortAccessoriesByNameASC(this.accessories);
+
           // if the collection doesn't have any products
           if (this.accessories.length === 0) {
             this.emptyCollection = true;

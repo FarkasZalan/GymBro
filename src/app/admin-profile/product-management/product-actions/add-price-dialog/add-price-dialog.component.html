@@ -11,7 +11,8 @@
                 <div>
                     <form (ngSubmit)="addNewPrice()" #form="ngForm">
                         <!-- quantity in product (lbs, gram, pcs) block -->
-                        <div *ngIf="productCategory !== productViewText.CLOTHES" class="form-group">
+                        <div *ngIf="productCategory !== productViewText.CLOTHES && productCategory !== productViewText.ACCESSORIES"
+                            class="form-group">
                             <label for="quantityInProduct" class="label">{{ 'products.quantityInProduct' | translate
                                 }}</label>
                             <input type="number" class="form-control" name="quantityInProduct" fullWidth
@@ -20,15 +21,17 @@
                             <!-- quantity in product error block -->
                             <span class="help-block" *ngIf="!quantityInProduct.valid && quantityInProduct.touched">{{
                                 'register.fieldRequired' | translate }}</span>
-                        </div><br>
+                            <br>
+                        </div>
 
                         <!-- Product color (Dropdown) -->
-                        <div *ngIf="productCategory === productViewText.CLOTHES" class="row">
+                        <div *ngIf="productCategory === productViewText.CLOTHES || (productCategory === productViewText.ACCESSORIES && accessoriesType === productViewText.SHAKERS)"
+                            class="row">
                             <div class="col-md-12 form-group">
-                                <label for="clothingColor" class="label">{{ 'products.clothes.color' | translate
+                                <label for="productColor" class="label">{{ 'products.clothes.color' | translate
                                     }}</label>
                                 <select class="form-control drop-down-list allow-selected-list-color"
-                                    name="clothingColor" required #clothingColor="ngModel" [(ngModel)]="selectedColor"
+                                    name="productColor" required #productColor="ngModel" [(ngModel)]="selectedColor"
                                     (ngModelChange)="isColorSelected()">
                                     <!-- Placeholder option -->
                                     <option value="" selected disabled>{{ 'products.clothes.colors.selectColor' |
@@ -36,45 +39,49 @@
                                     </option>
 
                                     <!-- List of available colors -->
-                                    <option *ngFor="let colorElement of availableClothingColors"
+                                    <option *ngFor="let colorElement of availableProductColors"
                                         [value]="colorElement.color">
                                         {{ colorElement.color | translate }}
                                     </option>
                                 </select>
-                                <span class="help-block" *ngIf="clothingColor.touched && !clothingColor.valid">{{
+                                <span class="help-block" *ngIf="productColor.touched && !productColor.valid">{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
-                        </div><br>
+                            <br>
+                        </div>
 
-                        <!-- Cloth size (Dropdown) -->
-                        <div *ngIf="productCategory === productViewText.CLOTHES" class="row">
+                        <!-- Product size (Dropdown) -->
+                        <div *ngIf="(productCategory === productViewText.CLOTHES) || (productCategory === productViewText.ACCESSORIES && accessoriesType === productViewText.WEIGHT_LIFTING)"
+                            class="row">
                             <div class="col-md-12 form-group">
-                                <label for="clothingSize" class="label">{{ 'products.clothes.size' | translate
+                                <label for="productSize" class="label">{{ 'products.clothes.size' | translate
                                     }}</label>
-                                <select class="form-control drop-down-list allow-selected-list-color"
-                                    name="clothingSize" required #clothingSize="ngModel" [(ngModel)]="selectedSize">
+                                <select class="form-control drop-down-list allow-selected-list-color" name="productSize"
+                                    required #productSize="ngModel" [(ngModel)]="selectedSize">
                                     <!-- Placeholder option -->
                                     <option value="" selected disabled>{{ 'products.clothes.selectSize' |
                                         translate }}
                                     </option>
 
                                     <!-- List of sizes -->
-                                    <option *ngFor="let size of availableClothingSizes" [value]="size">
+                                    <option *ngFor="let size of availableProductSizes" [value]="size">
                                         {{ size }}
                                     </option>
                                 </select>
-                                <span class="help-block" *ngIf="clothingSize.touched && !clothingSize.valid">{{
+                                <span class="help-block" *ngIf="productSize.touched && !productSize.valid">{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
-                        </div><br>
+                            <br>
+                        </div>
 
                         <!-- Product Image block -->
-                        <div *ngIf="productCategory !== productViewText.CLOTHES || (selectedColor !== '')"
+                        <div *ngIf="(productCategory === productViewText.FOOD_SUPLIMENTS) || (productCategory === productViewText.HEALTHY_PRODUCT) || ( accessoriesType === productViewText.WEIGHT_LIFTING) || ( accessoriesType === productViewText.SHAKERS && selectedColor !== '') || ((productCategory === productViewText.CLOTHES) && (selectedColor !== ''))"
                             [@collapseField] class="form-group">
                             <label for="productImage" class="label">{{ 'products.productImage' | translate
                                 }}</label>
-                            <input *ngIf="productCategory !== productViewText.CLOTHES" type="file" class="form-control"
-                                (change)="onFileSelected($event)" />
+                            <input
+                                *ngIf="(unifiedImageUrl === null) && (productCategory !== productViewText.CLOTHES) && (accessoriesType !== null && accessoriesType !== undefinied && accessoriesType !== productViewText.SHAKERS)"
+                                type="file" class="form-control" (change)="onFileSelected($event)" />
                             <div *ngIf="imagePreview">
                                 <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
                             </div>
@@ -85,6 +92,18 @@
                             </div>
                             <br>
                         </div>
+
+                        <!-- Water Bottle/Shaker size in ml block -->
+                        <div *ngIf="accessoriesType === productViewText.SHAKERS" class="form-group">
+                            <label for="bottleSize" class="label">{{ 'products.clothes.size' | translate
+                                }}</label>
+                            <input type="number" class="form-control" name="bottleSize" fullWidth placeholder="{{ 'products.accessories.selectSize' | translate
+                                }} ({{ productViewText.ML }})" required #bottleSize="ngModel"
+                                [(ngModel)]="newPrice.bottleSize" />
+                            <!-- price error block -->
+                            <span class="help-block" *ngIf="!bottleSize.valid && bottleSize.touched">{{
+                                'register.fieldRequired' | translate }}</span>
+                        </div><br>
 
                         <!-- Product Price block -->
                         <div class="form-group">

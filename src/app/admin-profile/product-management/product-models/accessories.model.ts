@@ -3,22 +3,18 @@ import { ProductPrice } from "./product-price.model";
 export interface Accessories {
     // identification and basic details
     id?: string;
-    productnName: string;
-    productCategory: string[]; // forexample shakers, belts...
+    productName: string;
+    productCategory: string;
     description: string;
 
+    equipmentType: string;
+
+    useUnifiedImage: boolean;
+
+    // size  
     // color
-    color: string;
-
-    // size
-    size: string;
-
-    // weight/piece  
-    // product image to this amount of weight/piece
-    // the price for this product
+    // image
+    // price
     // stock
     prices: ProductPrice[];
-
-    // for male or female
-    genderList: string[];
 }
