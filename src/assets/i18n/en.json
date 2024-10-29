@@ -26,9 +26,7 @@
       },
       "accessoriesMenu": {
          "accessories": "Accessories",
-         "shakers": "Shakers",
-         "weightLifting": "Weight-lifting",
-         "other": "Others"
+         "shakersAndSportEquipment": "Shakers & Equipments"
       },
       "blog": "Blog"
    },

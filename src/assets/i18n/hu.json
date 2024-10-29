@@ -26,9 +26,7 @@
                 },
                 "accessoriesMenu": {
                         "accessories": "Kiegészítők",
-                        "shakers": "Shakerek",
-                        "weightLifting": "Súlyemelés",
-                        "other": "Egyéb"
+                        "shakersAndSportEquipment": "Shakerek, Sporteszközök"
                 },
                 "blog": "Blog"
         },

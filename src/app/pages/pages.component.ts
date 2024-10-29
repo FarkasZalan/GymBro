@@ -117,20 +117,10 @@ export class PagesComponent {
         expanded: false,
         children: [
           {
-            title: this.translate.instant('menu.accessoriesMenu.shakers'),
+            title: this.translate.instant('menu.accessoriesMenu.shakersAndSportEquipment'),
             icon: ' ',
             link: '/users/list',
           },
-          {
-            title: this.translate.instant('menu.accessoriesMenu.weightLifting'),
-            icon: ' ',
-            link: '/work-processes/list',
-          },
-          {
-            title: this.translate.instant('menu.accessoriesMenu.other'),
-            icon: ' ',
-            link: '/work-processes/list',
-          }
         ]
       },
       {
