@@ -1,0 +1,90 @@
+<div class="container-all-window">
+    <!-- add price title -->
+    <h1 *ngIf="!editText && productCategory !== productViewText.CLOTHES" id="title" class="title">{{
+        'products.addNewPrice' | translate
+        }}</h1>
+    <h1 *ngIf="editText && productCategory !== productViewText.CLOTHES" id="title" class="title">{{ 'products.editPrice'
+        | translate
+        }}</h1>
+    <h1 *ngIf="!editText && productCategory === productViewText.CLOTHES" id="title" class="title">{{
+        'products.addNewColor' | translate
+        }}</h1>
+    <h1 *ngIf="editText && productCategory === productViewText.CLOTHES" id="title" class="title">{{ 'products.editColor'
+        | translate
+        }}</h1>
+    <!-- add price form -->
+    <div class="container">
+        <nb-card>
+            <nb-card-body>
+                <div>
+                    <form (ngSubmit)="addNewPrice()" #form="ngForm">
+                        <div class="row">
+                            <!-- Product color (Dropdown) -->
+                            <div class="col-md-12 form-group">
+                                <label for="clothingColor" class="label">{{ 'products.clothes.color' | translate
+                                    }}</label>
+                                <select class="form-control drop-down-list allow-selected-list-color"
+                                    name="clothingColor" required #clothingColor="ngModel" [(ngModel)]="selectedColor">
+                                    <!-- Placeholder option -->
+                                    <option value="" selected disabled>{{ 'products.clothes.colors.selectColor' |
+                                        translate }}
+                                    </option>
+
+                                    <!-- List of colors -->
+                                    <option *ngFor="let color of availableClothingColors" [value]="color">
+                                        {{ color | translate }}
+                                    </option>
+                                </select>
+                                <span class="help-block" *ngIf="clothingColor.touched && !clothingColor.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div><br>
+
+                        <!-- Product Image block -->
+                        <div class="form-group">
+                            <label for="productImage" class="label">{{ 'products.productImage' | translate
+                                }}</label>
+                            <input type="file" class="form-control" (change)="onFileSelected($event)" />
+                            <div *ngIf="imagePreview">
+                                <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
+                            </div>
+
+                            <div *ngIf="imagePreview === ''">
+                                <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+                                    class="image-preview" />
+                            </div>
+                        </div><br>
+
+                        <!-- Error block -->
+                        <span *ngIf="errorMessage" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i>
+                            {{ 'products.clothes.colors.colorAlreadyAdded' | translate }}
+                        </span>
+
+                        <!-- Submit button -->
+                        <div class="send-button-container">
+                            <button class="btn btn-primary forgot-btn" type="submit" nbButton status="success"
+                                [disabled]="!form.valid">
+                                {{ buttonText }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <div *ngIf="editText" class="send-button-container">
+                        <button class="btn btn-primary forgot-btn btn delete-btn" type="button" nbButton
+                            status="warning" (click)="deleteColor()">
+                            {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}
+                        </button>
+                    </div>
+
+                    <div class="send-button-container">
+                        <button class="btn btn-primary forgot-btn" type="button" nbButton status="warning"
+                            (click)="back()">
+                            {{ 'loginPage.back' | translate }}
+                        </button>
+                    </div><br />
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

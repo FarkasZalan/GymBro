@@ -32,8 +32,44 @@ export enum ProductViewText {
     WEIGHT_LIFTING = "menu.accessoriesMenu.weightLifting",
     OTHER_ACCESSORIES = "menu.accessoriesMenu.other",
 
-    // pieces, weight or pound
+    // Clothing sizes
+    XS = "XS",
+    S = "S",
+    M = "M",
+    L = "L",
+    XL = "XL",
+    XXL = "XXL",
+    XXXL = "XXXL",
 
+    // Clothing types
+    COAT = "products.clothes.coat",
+    PANTS = "products.clothes.pants",
+    SWEATER = "products.clothes.sweater",
+    T_SHIRT = "products.clothes.tShirt",
+    SPORTS_BRA = "products.clothes.sportsBra",
+    TANK_TOP = "products.clothes.tankTop",
+
+    //Clothing material
+    BLENDED_FIBER = "products.clothes.material.blendedFiber",
+    COTTON = "products.clothes.material.cotton",
+
+    // Clothing color
+    BROWN = "products.clothes.colors.brown",
+    BURGUNDY = "products.clothes.colors.burgundy",
+    WHITE = "products.clothes.colors.white",
+    BLACK = "products.clothes.colors.black",
+    BLUE = "products.clothes.colors.blue",
+    PURPLE = "products.clothes.colors.purple",
+    RED = "products.clothes.colors.red",
+    PINK = "products.clothes.colors.pink",
+    GRAY = "products.clothes.colors.gray",
+    YELLOW = "products.clothes.colors.yellow",
+    ORANGE = "products.clothes.colors.orange",
+    GREEN = "products.clothes.colors.green",
+    BEIGE = "products.clothes.colors.beige",
+    MAUVE = "products.clothes.colors.mauve",
+
+    // pieces, weight or pound
     PIECES = "products.pieces",
     GRAM = "products.gram",
     POUNDS = "products.pound",

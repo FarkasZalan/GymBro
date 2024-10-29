@@ -40,7 +40,7 @@
                         'products.huf' | translate }}</h5>
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
-                        defaultPrice.quantityInProduct }} {{ foodSupliment.dosageUnit | translate }}</h5>
+                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
                 </div>
             </nb-card-body>
         </nb-card>
@@ -67,7 +67,36 @@
                         'products.huf' | translate }}</h5>
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
-                        defaultPrice.quantityInProduct }} {{ healthyProduct.dosageUnit | translate }}</h5>
+                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+
+    <!-- Clothes -->
+    <div *ngIf="clothes" class="list-container">
+        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes">
+            <nb-card-body class="product-image" (click)="goToEditProduct(cloth.id)">
+
+
+                <div *ngIf="getDefaultPrice(cloth) as defaultPrice" class="details-container text-center">
+                    <div class="image-container text-center">
+                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                            alt="Product Image" class="card-image" />
+                        <img *ngIf="defaultPrice.productImage === ''"
+                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                            class="card-image" />
+                    </div>
+
+
+                    <h4>{{ cloth.productName }}</h4>
+                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
+                        'products.huf' | translate }}</h5>
+                    <h5 class="price-display">{{ 'products.clothes.size' | translate }}: {{
+                        defaultPrice.clothingSize }}</h5>
+                    <h5 class="price-display">{{
+                        'products.stock' | translate }}: {{
+                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
                 </div>
             </nb-card-body>
         </nb-card>

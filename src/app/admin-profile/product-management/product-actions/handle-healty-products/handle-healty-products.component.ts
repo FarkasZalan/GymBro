@@ -9,13 +9,14 @@ import { ActivatedRoute } from '@angular/router';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { DocumentHandlerService } from '../../../../document.handler.service';
-import { NutritionalTable } from '../../../../products/product-models/nutritional-table.model';
-import { ProductPrice } from '../../../../products/product-models/product-price.model';
-import { ProductViewText } from '../../../../products/product-view-texts';
+import { NutritionalTable } from '../../product-models/nutritional-table.model';
+import { ProductPrice } from '../../product-models/product-price.model';
+import { ProductViewText } from '../../product-view-texts';
 import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
-import { HealthyProduct } from '../../../../products/product-models/healthy-food.model';
+import { HealthyProduct } from '../../product-models/healthy-food.model';
+import { AdminService } from '../../../admin.service';
 
 @Component({
   selector: 'app-handle-healty-products',
@@ -127,7 +128,7 @@ export class HandleHealtyProductsComponent {
   isProductEdit: boolean = false;
   healthyProductId: string = '';
 
-  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService) { }
+  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.healthyProductObject = {
@@ -313,43 +314,6 @@ export class HandleHealtyProductsComponent {
     this.productPrices = this.productPrices.sort((a, b) => a.productPrice - b.productPrice);
   }
 
-  async uploadImagesAndSaveProduct(productId: string) {
-    const uploadPromises = this.productPrices.map(async (price: ProductPrice) => {
-      // Check if productImage is a Base64 string (indicating a new upload) or a URL (existing image)
-      if (price.productImage && price.productImage.startsWith("data:image")) {
-        const base64Data = price.productImage;
-        const blob = this.base64ToBlob(base64Data);
-
-        // Define the path in Firebase Storage
-        const filePath = `ProductsImages/${productId}/${productId}_price_of_the_product: ${price.productPrice}`;
-        const fileRef = this.storage.ref(filePath);
-        const task = this.storage.upload(filePath, blob);
-
-        // Wait for upload to complete and get the download URL
-        await task.snapshotChanges().toPromise();
-        const url = await fileRef.getDownloadURL().toPromise();
-        price.productImage = url; // Set productImage to the download URL
-      }
-      // If productImage is already a URL, skip uploading
-    });
-
-    // Wait for all images to finish uploading
-    await Promise.all(uploadPromises);
-  }
-
-
-  // Helper function to convert Base64 string to Blob
-  base64ToBlob(base64Data: string): Blob {
-    const byteString = atob(base64Data.split(',')[1]);
-    const mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: mimeString });
-  }
-
   async addNewHealthyProduct() {
     // error handleing
     if (this.productPrices.length === 0) {
@@ -412,7 +376,7 @@ export class HandleHealtyProductsComponent {
       const documentumRef = await this.db.collection("products").doc(ProductViewText.HEALTHY_PRODUCT).collection("allProduct").add(this.healthyProductObject);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
-      await this.uploadImagesAndSaveProduct(documentumRef.id);
+      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, documentumRef.id, this.productPrices);
       await documentumRef.update({ prices: this.productPrices });
       this.errorMessage = false;
       this.productNameExistsError = false;
@@ -466,7 +430,7 @@ export class HandleHealtyProductsComponent {
     if (!hasDefaultPrice) {
       this.productPrices[0].setAsDefaultPrice = true;
     }
-    await this.uploadImagesAndSaveProduct(this.healthyProductId);
+    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, this.healthyProductId, this.productPrices);
 
     // create new Food supliment object
     this.healthyProductObject = {

@@ -180,6 +180,8 @@
                 "safeForPregnancy": "Biztonságos terhesség alatt",
                 "safeForBreastfeeding": "Biztonságos szoptatás alatt",
                 "addProduct": "Termék hozzáadása",
+                "addNewColor": "Új szín hozzáadása",
+                "editColor": "Szín módosítása",
                 "addVitamin": "Vitamin hozzáadása",
                 "proteinType": "Fehérje típus",
                 "selectProteinType": "Válassza ki a fehérje típusát*",
@@ -208,6 +210,7 @@
                 "missingPricesError": "Legalább egy árat kötelező megadni a termékhez!",
                 "productNameExistsError": "Már létezik ilyen nevű termék!",
                 "changeDefaultPriceText": "Megváltoztatod erre a termék alapértelmezett árát, mennyiségét?",
+                "changeDefaultColorText": "Megváltoztatod erre a termék alapértelmezett színét?",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
                         "vegan": "Növényi eredetű fehérje",
@@ -251,6 +254,44 @@
                         "addedSugars": "Hozzáadott cukrok",
                         "peanuts": "Mogyoró",
                         "fish": "Hal"
+                },
+                "clothes": {
+                        "coat": "Kabát",
+                        "pants": "Nadrág",
+                        "sweater": "Pulóver",
+                        "tShirt": "Póló",
+                        "sportsBra": "Sport melltartó",
+                        "tankTop": "Trikó",
+                        "material": {
+                                "blendedFiber": "Kevertszálas",
+                                "cotton": "Pamut"
+                        },
+                        "selectClothingType": "Válassza ki a ruha típusát*",
+                        "clothingType": "Ruha típusa",
+                        "selectClothingMaterial": "Válaszd ki a ruha anyagát*",
+                        "clothingMaterial": "Ruha anyaga",
+                        "size": "Méret",
+                        "selectSize": "Válassz ki egy méretet*",
+                        "color": "Szín",
+                        "addNewColor": "Új szín hozzáadása",
+                        "colors": {
+                                "brown": "Barna",
+                                "burgundy": "Bordó",
+                                "white": "Fehér",
+                                "black": "Fekete",
+                                "blue": "Kék",
+                                "purple": "Lila",
+                                "red": "Piros",
+                                "pink": "Rózsaszín",
+                                "gray": "Szürke",
+                                "yellow": "Sárga",
+                                "orange": "Narancs sárga",
+                                "green": "Zöld",
+                                "beige": "Bézs",
+                                "mauve": "Mályva",
+                                "selectColor": "Válassza ki a színt*",
+                                "colorAlreadyAdded": "Ez a szín már hozzá lett adva a termékhez"
+                        }
                 }
         }
 }

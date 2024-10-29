@@ -178,6 +178,8 @@
       "safeForPregnancy": "Safe for Pregnancy",
       "safeForBreastfeeding": "Safe for Breastfeeding",
       "addProduct": "Add Product",
+      "addNewColor": "Add new color",
+      "editColor": "Edit color",
       "addVitamin": "Add Vitamin",
       "selectVitaminUnit": "Select unit*",
       "proteinType": "Protein Type",
@@ -207,6 +209,7 @@
       "missingPricesError": "At least one price must be provided for the product!",
       "productNameExistsError": "A product with this name already exists!",
       "changeDefaultPriceText": "Are you changing the default price and quantity for this product?",
+      "changeDefaultColorText": "Are you changing the default color for this product?",
       "proteins": {
          "casein": "Protein containing casein",
          "vegan": "Vegan protein",
@@ -249,6 +252,44 @@
          "addedSugars": "Added Sugars",
          "peanuts": "Peanuts",
          "fish": "Fish"
+      },
+      "clothes": {
+         "coat": "Coat",
+         "pants": "Pants",
+         "sweater": "Sweater",
+         "tShirt": "T-shirt",
+         "sportsBra": "Sports bra",
+         "tankTop": "Tank top",
+         "material": {
+            "blendedFiber": "Blended fiber",
+            "cotton": "Cotton"
+         },
+         "selectClothingType": "Select clothing type*",
+         "clothingType": "Cloth type",
+         "selectClothingMaterial": "Select clothing material*",
+         "clothingMaterial": "Cloth material",
+         "size": "Size",
+         "selectSize": "Select size*",
+         "color": "Color",
+         "addNewColor": "Add new color",
+         "colors": {
+            "brown": "Brown",
+            "burgundy": "Burgundy",
+            "white": "White",
+            "black": "Black",
+            "blue": "Blue",
+            "purple": "Purple",
+            "red": "Red",
+            "pink": "Pink",
+            "gray": "Gray",
+            "yellow": "Yellow",
+            "orange": "Orange",
+            "green": "Green",
+            "beige": "Beige",
+            "mauve": "Mauve",
+            "selectColor": "Select the color*",
+            "colorAlreadyAdded": "This color has already been added to the product"
+         }
       }
    }
 }

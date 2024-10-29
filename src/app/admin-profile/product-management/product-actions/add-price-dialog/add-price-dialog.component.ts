@@ -2,17 +2,38 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ForgotPasswordComponent } from '../../../../auth/forgot-password/forgot-password.component';
-import { ProductPrice } from '../../../../products/product-models/product-price.model';
+import { ProductPrice } from '../../product-models/product-price.model';
 import { TranslateService } from '@ngx-translate/core';
-import { ProductViewText } from '../../../../products/product-view-texts';
+import { ProductViewText } from '../../product-view-texts';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { ChangeDefaultPriceConfirmDialogComponent } from '../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
+import { ClothingColor } from '../../product-models/clothing-color.model';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-add-price-dialog',
   templateUrl: './add-price-dialog.component.html',
-  styleUrl: './add-price-dialog.component.scss'
+  styleUrl: '../../../../../styles/add-dialog.scss',
+  animations: [
+    // name of tha animation what can call in html
+    trigger('collapseField', [
+      state('void', style({
+        height: '0px', // Initially collapsed
+        overflow: 'hidden'
+      })),
+      state('*', style({
+        height: '*', // Expands to the full height of the content
+        overflow: 'hidden'
+      })),
+      transition('void => *', [
+        animate('50ms ease-out') // Expands smoothly
+      ]),
+      transition('* => void', [
+        animate('50ms ease-in') // Collapses smoothly
+      ])
+    ])
+  ]
 })
 export class AddPriceDialogComponent implements OnInit {
   @ViewChild('form') priceForm: NgForm;  // Reference to the form for validation
@@ -34,11 +55,30 @@ export class AddPriceDialogComponent implements OnInit {
   allPricesForProduct: ProductPrice[] = [];
   productViewText = ProductViewText;
 
+  // For clothing prices
+  availableClothingSizes: string[] = [
+    ProductViewText.XS,
+    ProductViewText.S,
+    ProductViewText.M,
+    ProductViewText.L,
+    ProductViewText.XL,
+    ProductViewText.XXL,
+    ProductViewText.XXXL,
+  ];
+  selectedSize: string = '';
+
+  availableClothingColors: ClothingColor[] = [];
+  selectedColor: string = '';
+
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
     this.selectedUnit = data.unit;
     this.editText = data.editText;
     this.productCategory = data.productCategory;
     this.allPricesForProduct = data.allPrices;
+    if (this.productCategory === ProductViewText.CLOTHES) {
+      this.availableClothingColors = Object.values(this.data.allColors);
+      this.availableClothingColors.sort((a, b) => a.color.localeCompare(b.color));
+    }
 
     if (this.editText) {
       this.buttonText = this.translate.instant('profilePage.modify');
@@ -63,6 +103,7 @@ export class AddPriceDialogComponent implements OnInit {
   ngOnInit(): void {
     this.newPrice = {
       quantityInProduct: null,
+      clothingColor: '',
       productImage: '',
       productPrice: null,
       productStock: null,
@@ -71,6 +112,13 @@ export class AddPriceDialogComponent implements OnInit {
 
     if (this.data.selectedPrice !== null && this.data.selectedPrice !== undefined) {
       this.newPrice = { ...this.data.selectedPrice };
+      if (this.productCategory === ProductViewText.CLOTHES) {
+        this.availableClothingColors = Object.values(this.data.allColors);
+        this.availableClothingColors.sort((a, b) => a.color.localeCompare(b.color));
+        this.selectedSize = this.data.size;
+        this.selectedColor = this.data.selectedColor;
+      }
+
       this.imageBase64 = this.newPrice.productImage;
       this.imagePreview = this.imageBase64;
       this.isSetAsDefaultPrice = this.newPrice.setAsDefaultPrice;
@@ -85,6 +133,13 @@ export class AddPriceDialogComponent implements OnInit {
       this.imageBase64 = '';
       this.imagePreview = '';
     }
+  }
+
+  isColorSelected() {
+    // Find the color object in the array by the color name
+    const color = this.availableClothingColors.find(item => item.color === this.selectedColor);
+    this.imageBase64 = color.imageUrl;
+    this.imagePreview = this.imageBase64;
   }
 
   // Handle file selection and convert to Base64
@@ -103,12 +158,18 @@ export class AddPriceDialogComponent implements OnInit {
 
   // Method to initiate password recovery
   async addNewPrice() {
+    let quantity = 0
+    if (this.priceForm.value.quantityInProduct !== undefined) {
+      quantity = this.priceForm.value.quantityInProduct;
+    }
     this.newPrice = {
-      quantityInProduct: this.priceForm.value.quantityInProduct,
+      quantityInProduct: quantity,
       productImage: this.imageBase64,
       productPrice: this.priceForm.value.productPrice,
       productStock: this.priceForm.value.productStock,
-      setAsDefaultPrice: this.isSetAsDefaultPrice
+      setAsDefaultPrice: this.isSetAsDefaultPrice,
+      clothingSize: this.selectedSize,
+      clothingColor: this.selectedColor
     };
 
 

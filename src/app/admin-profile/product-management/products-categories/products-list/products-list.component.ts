@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../../products/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FoodSupliment } from '../../../../products/product-models/food-supliment.model';
-import { HealthyProduct } from '../../../../products/product-models/healthy-food.model';
-import { Clothes } from '../../../../products/product-models/clothing.model';
+import { FoodSupliment } from '../../product-models/food-supliment.model';
+import { HealthyProduct } from '../../product-models/healthy-food.model';
+import { Clothes } from '../../product-models/clothing.model';
 import { Location } from '@angular/common';
-import { Accessories } from '../../../../products/product-models/accessories.model';
-import { ProductViewText } from '../../../../products/product-view-texts';
+import { Accessories } from '../../product-models/accessories.model';
+import { ProductViewText } from '../../product-view-texts';
 import { AdminService } from '../../../admin.service';
 
 @Component({
@@ -21,6 +21,7 @@ export class ProductsListComponent implements OnInit {
   clothes: Clothes[];
   accessories: Accessories[];
   productCategory: string = '';
+  productViewText = ProductViewText;
 
   // if there are no products in the collection
   emptyCollection: boolean;
@@ -60,6 +61,9 @@ export class ProductsListComponent implements OnInit {
       if (this.productCategory === ProductViewText.CLOTHES) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe((clothesCollection: Clothes[]) => {
           this.clothes = clothesCollection;
+
+          // Sort default by name
+          this.clothes = this.adminService.sortClothesByNameASC(this.clothes);
 
           // if the collection doesn't have any products
           if (this.clothes.length === 0) {

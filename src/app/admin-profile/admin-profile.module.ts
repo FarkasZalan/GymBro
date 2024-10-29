@@ -29,6 +29,7 @@ import { HandleHealtyProductsComponent } from './product-management/product-acti
 import { HandleAccessoriesComponent } from './product-management/product-actions/handle-accessories/handle-accessories.component';
 import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
 import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/product-actions/change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
+import { AddColorDialogComponent } from './product-management/product-actions/add-color-dialog/add-color-dialog.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -64,7 +65,8 @@ import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/p
         HandleFoodSuplimentsComponent,
         HandleHealtyProductsComponent,
         HandleAccessoriesComponent,
-        HandleClothesComponent
+        HandleClothesComponent,
+        AddColorDialogComponent
     ],
 })
 export class AdminProfileModule {

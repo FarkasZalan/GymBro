@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../../../products/product.service';
-import { ProductViewText } from '../../../products/product-view-texts';
+import { ProductViewText } from '../product-view-texts';
 
 @Component({
   selector: 'app-products-categories',

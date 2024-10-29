@@ -8,11 +8,12 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrl: '../../../../../styles/confirm-dialog.scss'
 })
 export class ChangeDefaultPriceConfirmDialogComponent {
+  openFromColorDialog: boolean = false;
   constructor(public dialogRef: MatDialogRef<HandleFoodSuplimentsComponent>) { }
 
   // Handle user actions, 
-  // if true then can override the old default price 
-  // and the curremt price will be the new default
+  // if true then can override the old default price/color 
+  // and the curremt price/color will be the new default
   confirm() {
     this.dialogRef.close(true);
   }
