@@ -357,6 +357,8 @@
                 "tagAlreadyExists": "Ez a címke már hozzá van adva a listához!",
                 "language": "Nyelv:",
                 "date": "Dátum:",
-                "deleteBlogText": "Biztosan törölni szeretnéd ezt a blog bejegyzést?"
+                "deleteBlogText": "Biztosan törölni szeretnéd ezt a blog bejegyzést?",
+                "goToBlogList": "Blog bejegyzések",
+                "addBlog": "Új blog"
         }
 }

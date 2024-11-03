@@ -355,6 +355,8 @@
       "tagAlreadyExists": "This tag is already in use!",
       "language": "Language:",
       "date": "Date:",
-      "deleteBlogText": "Are you sure you want to delete this blog?"
+      "deleteBlogText": "Are you sure you want to delete this blog?",
+      "goToBlogList": "Blog posts",
+      "addBlog": "New blog"
    }
 }

@@ -5,19 +5,19 @@ import { FormGroup, NgForm } from '@angular/forms';
 import { Blog } from '../blog.model';
 import { Location } from '@angular/common';
 import { Editor, Toolbar } from 'ngx-editor';
-import { DocumentHandlerService } from '../../../document.handler.service';
-import { ProductViewText } from '../../product-management/product-view-texts';
+import { DocumentHandlerService } from '../../../../document.handler.service';
+import { ProductViewText } from '../../../product-management/product-view-texts';
 import { MatDialog } from '@angular/material/dialog';
-import { SuccessfullDialogComponent } from '../../../successfull-dialog/successfull-dialog.component';
-import { SuccessFullDialogText } from '../../../successfull-dialog/sucessfull-dialog-text';
+import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
+import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { ActivatedRoute, Route } from '@angular/router';
-import { DeleteConfirmationDialogComponent } from '../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { DeleteConfirmationText } from '../../../delete-confirmation-dialog/delete-text';
+import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 
 @Component({
   selector: 'app-handle-blogs',
   templateUrl: './handle-blogs.component.html',
-  styleUrl: '../../../../styles/product-management.scss',
+  styleUrl: '../../../../../styles/product-management.scss',
 })
 export class HandleBlogsComponent implements OnInit {
   @ViewChild('form') createBlogForm: NgForm;  // Reference to the form for validation

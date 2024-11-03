@@ -7,8 +7,9 @@ import { HandleFoodSuplimentsComponent } from './product-management/product-acti
 import { HandleHealtyProductsComponent } from './product-management/product-actions/handle-healty-products/handle-healty-products.component';
 import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
 import { HandleAccessoriesComponent } from './product-management/product-actions/handle-accessories/handle-accessories.component';
-import { BlogListComponent } from './blog-list/blog-list.component';
-import { HandleBlogsComponent } from './blog-list/handle-blogs/handle-blogs.component';
+import { BlogListComponent } from './blog/blog-list/blog-list.component';
+import { HandleBlogsComponent } from './blog/blog-list/handle-blogs/handle-blogs.component';
+import { BlogComponent } from './blog/blog.component';
 
 export const routes: Routes = [
     {
@@ -21,10 +22,15 @@ export const routes: Routes = [
             },
 
             // Blog
+            {
+                path: 'blog',
+                redirectTo: '',
+                component: BlogComponent
+            },
+
             // list of the blogs
             {
                 path: 'blog-list',
-                redirectTo: '',
                 component: BlogListComponent
             },
 

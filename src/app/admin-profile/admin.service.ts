@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { Router } from "@angular/router";
 import { User } from "../user/user.model";
 import { AuthService } from "../auth/auth.service";
 import { FoodSupliment } from "./product-management/product-models/food-supliment.model";
@@ -39,11 +38,9 @@ export class AdminService {
         });
     }
 
-    getAllFoodSupliments() {
+    getAllBlog() {
         this.db
-            .collection("products")
-            .doc("foodSupliments")
-            .collection("allFoodSupliment")
+            .collection("blog")
             .valueChanges();
     }
 

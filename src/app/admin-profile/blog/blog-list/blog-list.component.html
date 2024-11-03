@@ -1,10 +1,16 @@
 <!-- If no shipping addresses are present, display the empty card -->
-<div *ngIf="blogList.length === 0" class="empty-list-container-blog">
+<div *ngIf="blogList.length === 0" class="empty-list-container">
     <nb-card class="emptyCard">
         <nb-card-body>
             <div>
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
                 <p class="emptyCardText">{{ 'blog.noBlogs' | translate }}</p>
+            </div>
+            <!-- open new blog button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn basic-form-btn products-button" type="submit" nbButton
+                    status="success" (click)="goToAddNewBlog()">{{
+                    'blog.adNewBlog' | translate }}</button>
             </div>
         </nb-card-body>
     </nb-card>
@@ -28,8 +34,18 @@
     </nb-card>
 </div>
 
-<!-- open new blog button -->
+<!-- back button -->
 <div class="button-container">
-    <button class="btn btn-primary basic-btn" type="submit" nbButton status="success" (click)="goToAddNewBlog()">{{
-        'blog.adNewBlog' | translate }}</button>
+    <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
+        status="success" (click)="back()">
+        <span class="arrow">&#9664;</span>
+        {{ 'products.backToTheCategories' | translate }}</button>
+</div>
+
+<!-- add button -->
+<div class="floating-button-container">
+    <button class="floating-button" (click)="goToAddNewBlog()">
+        +
+        <span class="floating-label">{{ 'blog.addBlog' | translate }}</span>
+    </button>
 </div>

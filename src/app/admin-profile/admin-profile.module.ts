@@ -19,7 +19,7 @@ import { AdminProfileComponent } from './admin-profile.component';
 import { ProfileModule } from '../profile/profile.module';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { ProductsListComponent } from './product-management/products-categories/products-list/products-list.component';
-import { BlogListComponent } from './blog-list/blog-list.component';
+import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { ProductsCategoriesComponent } from './product-management/products-categories/products-categories.component';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
@@ -30,11 +30,12 @@ import { HandleAccessoriesComponent } from './product-management/product-actions
 import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
 import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/product-actions/change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
 import { AddColorDialogComponent } from './product-management/product-actions/add-color-dialog/add-color-dialog.component';
-import { HandleBlogsComponent } from './blog-list/handle-blogs/handle-blogs.component';
+import { HandleBlogsComponent } from './blog/blog-list/handle-blogs/handle-blogs.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgxEditorModule } from 'ngx-editor';
+import { BlogComponent } from './blog/blog.component';
 
 @NgModule({
     imports: [
@@ -78,7 +79,8 @@ import { NgxEditorModule } from 'ngx-editor';
         HandleAccessoriesComponent,
         HandleClothesComponent,
         AddColorDialogComponent,
-        HandleBlogsComponent
+        HandleBlogsComponent,
+        BlogComponent
     ],
 })
 export class AdminProfileModule {
