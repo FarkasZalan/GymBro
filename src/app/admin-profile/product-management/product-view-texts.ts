@@ -127,4 +127,7 @@ export enum ProductViewText {
     PEANUTS_ALLERGEN = "products.allergens.peanuts",
     FISH_ALLERGEN = "products.allergens.fish",
 
+    // Languages
+    HUNGARIAN = "blog.languages.hungarian",
+    ENGLISH = "blog.languages.english"
 }

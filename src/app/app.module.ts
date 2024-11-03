@@ -20,6 +20,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdminGuard } from './admin-profile/admin-guard.service';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+// Angular Material Modules
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { NGX_EDITOR_CONFIG_TOKEN, NgxEditorModule } from 'ngx-editor';
+import { ngxEditorConfigFactory } from './editor.header';
 
 // Factory function to create an instance of TranslateHttpLoader
 // This loader will be used to fetch translation files over HTTP using the provided HttpClient.
@@ -46,6 +52,12 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     NbIconModule,
     MatIconModule,
     ReactiveFormsModule,
+    // Import Angular Material modules here
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    // text editor module
+    NgxEditorModule.forRoot(),
     // Firebase
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
@@ -72,7 +84,12 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     AdminGuard,
 
     // To the translate
-    TranslateService
+    TranslateService,
+    {
+      useFactory: ngxEditorConfigFactory,
+      provide: NGX_EDITOR_CONFIG_TOKEN,
+      deps: [TranslateService],
+    },
   ],
   bootstrap: [AppComponent]
 })

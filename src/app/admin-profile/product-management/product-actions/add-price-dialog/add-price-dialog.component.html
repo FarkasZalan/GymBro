@@ -76,17 +76,31 @@
 
                         <!-- Product Image block -->
                         <div *ngIf="(productCategory === productViewText.FOOD_SUPLIMENTS) || (productCategory === productViewText.HEALTHY_PRODUCT) || ( accessoriesType === productViewText.WEIGHT_LIFTING) || ( accessoriesType === productViewText.SHAKERS && selectedColor !== '') || ((productCategory === productViewText.CLOTHES) && (selectedColor !== ''))"
-                            [@collapseField] class="form-group">
+                            class="form-group">
                             <label for="productImage" class="label">{{ 'products.productImage' | translate
                                 }}</label>
+                            <!-- Button to Trigger Image Upload -->
+                            <div class="send-button-container">
+                                <button
+                                    *ngIf="(unifiedImageUrl === null) && (productCategory !== productViewText.CLOTHES) && (accessoriesType !== null && accessoriesType !== undefinied && accessoriesType !== productViewText.SHAKERS)"
+                                    class="btn btn-primary forgot-btn" type="button" nbButton
+                                    (click)="triggerImageUpload()">
+                                    {{ 'products.uploadProductImage' | translate }}
+                                </button>
+                            </div>
+
+                            <!-- Hidden file input for Image Upload -->
                             <input
                                 *ngIf="(unifiedImageUrl === null) && (productCategory !== productViewText.CLOTHES) && (accessoriesType !== null && accessoriesType !== undefinied && accessoriesType !== productViewText.SHAKERS)"
-                                type="file" class="form-control" (change)="onFileSelected($event)" />
-                            <div *ngIf="imagePreview">
+                                type="file" #fileInput accept="image/*" style="display: none"
+                                (change)="onFileSelected($event)" />
+
+
+                            <div [@collapseField] *ngIf="imagePreview" (click)="triggerImageUpload()">
                                 <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
                             </div>
 
-                            <div *ngIf="imagePreview === ''">
+                            <div [@collapseField] (click)="triggerImageUpload()" *ngIf="imagePreview === ''">
                                 <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
                                     class="image-preview" />
                             </div>

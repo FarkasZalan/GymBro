@@ -210,6 +210,7 @@
                 "changeDefaultPriceText": "Megváltoztatod erre a termék alapértelmezett árát, mennyiségét?",
                 "changeDefaultColorText": "Megváltoztatod erre a termék alapértelmezett színét?",
                 "unifiedImage": "Egységes kép használata",
+                "uploadProductImage": "Kép feltöltése",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
                         "vegan": "Növényi eredetű fehérje",
@@ -299,5 +300,63 @@
                         "selectAccessoriesType": "Válasszon típust*",
                         "selectSize": "Add meg a palack méretet*"
                 }
+        },
+        "blog": {
+                "noBlogs": "Nincs egyetlen megjeleníthető blog sem!",
+                "blogImage": "Bejegyzés képe",
+                "adNewBlog": "Új blog hozzáadása",
+                "blogTitleText": "Blog címe",
+                "blogText": "Blog szövege",
+                "enterBlogText": "Add meg a bejegyzés szövegét*",
+                "enterBlogTitle": "Add meg a bejegyzés címét*",
+                "blogTags": "Blog címkéi",
+                "enterBlogTags": "Blog címkék megadása",
+                "editor": {
+                        "bold": "Félkövér",
+                        "italic": "Dőlt",
+                        "underline": "Aláhúzott",
+                        "strike": "Áthúzott",
+                        "blockquote": "Idézet",
+                        "orderedList": "Számozott lista",
+                        "bulletList": "Pontozott lista",
+                        "link": "Hivatkozás",
+                        "alignLeft": "Balra igazítás",
+                        "alignCenter": "Középre igazítás",
+                        "alignRight": "Jobbra igazítás",
+                        "alignJustify": "Sorkizárt",
+                        "insertLink": "Hivatkozás megadása",
+                        "enterValidUrl": "Érvénytelen Url",
+                        "remove": "Eltávolítás",
+                        "text": "Szöveg",
+                        "insert": "Beillesztés",
+                        "openInNewTab": "Megnyitás új lapon",
+                        "heading": "Címsor",
+                        "headingValues": {
+                                "h1": "Címsor 1",
+                                "h2": "Címsor 2",
+                                "h3": "Címsor 3",
+                                "h4": "Címsor 4",
+                                "h5": "Címsor 5",
+                                "h6": "Címsor 6"
+                        },
+                        "undo": "Visszavonás",
+                        "redo": "Újra",
+                        "horizontalRule": "Vízszintes vonal",
+                        "incraseIndent": "Behúzás nővelése",
+                        "decraseIndent": "Behúzás csökkentése",
+                        "removeLink": "Hivatkozás eltávolítása"
+                },
+                "selectBlogLanguageText": "Blog nyelve",
+                "selectBlogLanguage": "Válaszd ki a blog nyelvét*",
+                "languages": {
+                        "hungarian": "Magyar",
+                        "english": "Angol"
+                },
+                "emptyTextBlog": "Nem adtál meg szöveget a bejegyzéshez!",
+                "titleAlreadyInUse": "Ezzel a címmel már létezik bejegyzés!",
+                "tagAlreadyExists": "Ez a címke már hozzá van adva a listához!",
+                "language": "Nyelv:",
+                "date": "Dátum:",
+                "deleteBlogText": "Biztosan törölni szeretnéd ezt a blog bejegyzést?"
         }
 }

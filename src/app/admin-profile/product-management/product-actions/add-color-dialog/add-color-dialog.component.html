@@ -44,12 +44,25 @@
                         <div class="form-group">
                             <label for="productImage" class="label">{{ 'products.productImage' | translate
                                 }}</label>
-                            <input type="file" class="form-control" (change)="onFileSelected($event)" />
-                            <div *ngIf="imagePreview">
+
+
+                            <!-- Button to Trigger Image Upload -->
+                            <div class="send-button-container">
+                                <button class="btn btn-primary forgot-btn" type="button" nbButton
+                                    (click)="triggerImageUpload()">
+                                    {{ 'products.uploadProductImage' | translate }}
+                                </button>
+                            </div>
+
+                            <!-- Hidden file input for Image Upload -->
+                            <input type="file" #fileInput accept="image/*" style="display: none"
+                                (change)="onFileSelected($event)" />
+
+                            <div (click)="triggerImageUpload()" *ngIf="imagePreview">
                                 <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
                             </div>
 
-                            <div *ngIf="imagePreview === ''">
+                            <div (click)="triggerImageUpload()" *ngIf="imagePreview === ''">
                                 <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
                                     class="image-preview" />
                             </div>

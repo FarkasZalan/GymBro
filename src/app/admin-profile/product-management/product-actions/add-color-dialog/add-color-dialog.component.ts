@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,6 +15,7 @@ import { ProductColor } from '../../product-models/product-color.model';
 })
 export class AddColorDialogComponent {
   @ViewChild('form') priceForm: NgForm;  // Reference to the form for validation
+  @ViewChild('fileInput') fileInput!: ElementRef; // To the upload image button management
 
   // error handleing
   public errorMessage = false;
@@ -80,6 +81,11 @@ export class AddColorDialogComponent {
       this.imageBase64 = '';
       this.imagePreview = '';
     }
+  }
+
+  // handle upload image button
+  triggerImageUpload() {
+    this.fileInput.nativeElement.click();
   }
 
   // Handle file selection and convert to Base64

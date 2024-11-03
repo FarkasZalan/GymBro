@@ -40,6 +40,38 @@ export class DocumentHandlerService {
     return uppercaseText;
   }
 
+  checkForDuplication(collection: string, fieldName: string, inputString?: string, inputBoolean?: boolean, ownId: string = "") {
+    return new Promise<boolean>((resolve, reject) => {
+      // Determine the value of `input` based on whether inputString or inputBoolean is provided
+      let input: string | boolean;
+
+      if (inputString !== undefined && inputString !== null) {
+        input = inputString;  // If inputString is valid, use its value
+      } else if (inputBoolean !== undefined && inputBoolean !== null) {
+        input = inputBoolean;  // If inputBoolean is valid, use its value as a boolean
+      }
+      this.db
+        .collection(collection)
+        .ref
+        .where(fieldName, '==', input)
+        .where("id", "!=", ownId) // found a match in one document which is not his own 
+        .get() // then we get the document
+        .then(document => {
+          if (!document.empty) { // if it's not empty
+            // then return true
+            resolve(true);
+          } else {
+            // not found the given input so it's return with false
+            resolve(false);
+          }
+        })
+        .catch(error => {
+          // if get error then reject the promise (so false)
+          reject(error);
+        });
+    });
+  }
+
   checkForDuplicationInnerCollection(collection: string, innerDocument: string, innerCollection: string, fieldName: string, inputString?: string, inputBoolean?: boolean, ownId: string = "") {
     return new Promise<boolean>((resolve, reject) => {
       // Determine the value of `input` based on whether inputString or inputBoolean is provided

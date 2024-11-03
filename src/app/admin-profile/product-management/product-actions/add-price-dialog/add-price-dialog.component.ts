@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ForgotPasswordComponent } from '../../../../auth/forgot-password/forgot-password.component';
@@ -30,13 +30,14 @@ import { ProductColor } from '../../product-models/product-color.model';
         animate('150ms ease-out') // Expands smoothly
       ]),
       transition('* => void', [
-        animate('150ms ease-in') // Collapses smoothly
+        animate('100ms ease-in') // Collapses smoothly
       ])
     ])
   ]
 })
 export class AddPriceDialogComponent implements OnInit {
   @ViewChild('form') priceForm: NgForm;  // Reference to the form for validation
+  @ViewChild('fileInput') fileInput!: ElementRef; // To the upload image button management
 
   // error handleing
   public errorMessage = false;
@@ -176,6 +177,11 @@ export class AddPriceDialogComponent implements OnInit {
     const color = this.availableProductColors.find(item => item.color === this.selectedColor);
     this.imageBase64 = color.imageUrl;
     this.imagePreview = this.imageBase64;
+  }
+
+  // handle upload image button
+  triggerImageUpload() {
+    this.fileInput.nativeElement.click();
   }
 
   // Handle file selection and convert to Base64

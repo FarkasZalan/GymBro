@@ -11,7 +11,6 @@ import { DocumentHandlerService } from '../../../../document.handler.service';
 import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { AdminService } from '../../../admin.service';
-import { Clothes } from '../../product-models/clothing.model';
 import { ProductPrice } from '../../product-models/product-price.model';
 import { ProductViewText } from '../../product-view-texts';
 import { AddColorDialogComponent } from '../add-color-dialog/add-color-dialog.component';
@@ -466,7 +465,6 @@ export class HandleAccessoriesComponent {
         }
       });
     } catch (error) {
-      console.log(error)
       this.errorMessage = true;
     }
   }

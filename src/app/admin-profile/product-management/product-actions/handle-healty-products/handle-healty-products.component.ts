@@ -213,7 +213,7 @@ export class HandleHealtyProductsComponent {
     }
   }
 
-  // Handle selection of flavors, allergens, and genders
+  // Handle selection of allergens
   selectionOfTheList(type: string, item: string): void {
     switch (type) {
       case ProductViewText.ALLERGENES:

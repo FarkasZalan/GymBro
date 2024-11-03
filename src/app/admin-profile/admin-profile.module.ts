@@ -30,6 +30,12 @@ import { HandleAccessoriesComponent } from './product-management/product-actions
 import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
 import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/product-actions/change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
 import { AddColorDialogComponent } from './product-management/product-actions/add-color-dialog/add-color-dialog.component';
+import { HandleBlogsComponent } from './blog-list/handle-blogs/handle-blogs.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NgxEditorModule } from 'ngx-editor';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -45,7 +51,12 @@ import { AddColorDialogComponent } from './product-management/product-actions/ad
         AdminRoutingModule,
         NbAuthModule,
         TranslateModule,
-        ProfileModule
+        ProfileModule,
+        // Import Angular Material modules
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        NgxEditorModule
     ],
     declarations: [
         // Declaring components that belong to the Profile module
@@ -66,7 +77,8 @@ import { AddColorDialogComponent } from './product-management/product-actions/ad
         HandleHealtyProductsComponent,
         HandleAccessoriesComponent,
         HandleClothesComponent,
-        AddColorDialogComponent
+        AddColorDialogComponent,
+        HandleBlogsComponent
     ],
 })
 export class AdminProfileModule {

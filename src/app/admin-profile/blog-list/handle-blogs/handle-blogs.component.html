@@ -1,0 +1,148 @@
+<div class="container">
+    <nb-card class="container">
+        <nb-card-body class="login-col">
+            <form #form="ngForm">
+                <!-- Product Details Section -->
+                <h3>{{ 'products.productDetails' | translate }}</h3>
+                <div class="row">
+                    <!-- Blog title -->
+                    <div class="col-md-8 form-group">
+                        <label for="blogTitle" class="label">{{ 'blog.blogTitleText' | translate }}</label>
+                        <input type="text" class="form-control" [(ngModel)]="blogObject.title" name="blogTitle" required
+                            placeholder="{{ 'blog.enterBlogTitle' | translate }}" #blogTitle="ngModel">
+                        <span class="help-block" *ngIf="blogTitle.touched && !blogTitle.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+
+                    <!-- Blog language (Dropdown) -->
+                    <div class="col-md-4 form-group">
+                        <label for="selectLanguage" class="label">{{ 'blog.selectBlogLanguageText' | translate
+                            }}</label>
+                        <select class="form-control drop-down-list allow-selected-list-color" name="selectLanguage"
+                            required #selectLanguage="ngModel" [(ngModel)]="selectedLanguage">
+                            <!-- Placeholder option -->
+                            <option value="" selected disabled>{{ 'blog.selectBlogLanguage' | translate }}
+                            </option>
+
+                            <!-- List of languages -->
+                            <option *ngFor="let categorie of availableLanguages" [value]="categorie">
+                                {{ categorie | translate }}
+                            </option>
+                        </select>
+                        <span class="help-block" *ngIf="selectLanguage.touched && !selectLanguage.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Blog Image block -->
+                <div class="form-group">
+                    <label for="productImage" class="label">{{ 'blog.blogImage' | translate
+                        }}</label>
+
+
+                    <!-- Button to Trigger Image Upload -->
+                    <div class="send-button-container blog-btn-container">
+                        <button class="btn btn-primary forgot-btn blog-btn" type="button" nbButton
+                            (click)="triggerImageUpload()">
+                            {{ 'products.uploadProductImage' | translate }}
+                        </button>
+                    </div>
+
+                    <!-- Hidden file input for Image Upload -->
+                    <input type="file" #fileInput accept="image/*" style="display: none"
+                        (change)="onFileSelected($event)" />
+
+                    <div (click)="triggerImageUpload()" *ngIf="imagePreview">
+                        <img [src]="imagePreview" alt="Image Preview" class="blog-image-preview" />
+                    </div>
+
+                    <div (click)="triggerImageUpload()" *ngIf="imagePreview === ''">
+                        <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+                            class="blog-image-preview" />
+                    </div>
+                </div>
+
+                <!-- blog text section -->
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="blogText" class="label">{{ 'blog.blogText' | translate }}</label>
+                        <div class="NgxEditor__Wrapper">
+                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                            <ngx-editor [editor]="editor" [(ngModel)]="blogText" name="blogText"
+                                placeholder="{{ 'blog.enterBlogText' | translate }}"></ngx-editor>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog tags section -->
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="blogTags" class="label">{{ 'blog.blogTags' | translate }}</label>
+                        <div class="d-flex align-items-center">
+                            <input type="text" class="form-control" [(ngModel)]="tagInput" name="blogTags" minlength="1"
+                                placeholder="{{ 'blog.enterBlogTags' | translate }}" #blogTags="ngModel">
+                            <button class="btn btn-primary basic-btn basic-form-btn tag-btn" type="submit" nbButton
+                                status="success" (click)="addTag()" [disabled]="tagInput===''">{{ 'products.add' |
+                                translate }}</button>
+                        </div>
+                        <!-- tag already is in use error block -->
+                        <span *ngIf="tagAlreadyExists" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i>
+                            {{ 'blog.tagAlreadyExists' | translate }}
+                        </span>
+
+                        <div *ngIf="selectedTags.length > 0">
+                            <div class="selected-items-display" *ngFor="let selected of selectedTags"
+                                (click)="removeItemFromTheList( selected)">
+                                {{ selected | translate }}
+                                <span style="cursor: pointer; color: red;">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- empty blog text error block -->
+                <span *ngIf="noTextError" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'blog.emptyTextBlog' | translate }}
+                </span>
+                <!-- title already is in use error block -->
+                <span *ngIf="titleAlreadyInUse" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'blog.titleAlreadyInUse' | translate }}
+                </span>
+                <!-- Error block -->
+                <span *ngIf="errorMessage" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'basicErrorMessage' | translate }}
+                </span>
+
+                <!-- Create Button -->
+                <div *ngIf="!isBlogEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        (click)="addBlog()" [disabled]="!form.valid">{{ 'products.add' | translate
+                        }}</button>
+                </div>
+
+                <div *ngIf="isBlogEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                        (click)="editBlog()" [disabled]="!form.valid">{{ 'profilePage.modify' | translate
+                        }}</button>
+                </div>
+                <div *ngIf="isBlogEdit" class="button-container">
+                    <button class="btn btn-primary basic-btn delete-btn basic-form-btn" type="submit" nbButton
+                        status="success" (click)="deleteBlog()">{{
+                        'profileMenu.shippingAddressForm.deleteAddress' | translate
+                        }}</button>
+                </div>
+            </form>
+            <!-- back button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                    status="success" (click)="back()">
+                    <span class="arrow">&#9664;</span>
+                    {{ 'loginPage.back' | translate }}</button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

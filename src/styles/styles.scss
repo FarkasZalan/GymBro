@@ -250,11 +250,13 @@ app-header {
         background-color: #0b8e92 !important;
         color: white !important;
         transform: scale(1.05) !important;
+        border-radius: 10px !important;
     }
 
     &:active {
         background-color: darken(#0b8e92, 15%);
         transform: scale(0.95);
+        border-radius: 10px !important;
     }
 
     &:disabled {
@@ -263,6 +265,106 @@ app-header {
         border-color: #b8b8b8 !important;
     }
 }
+
+// blog edit text
+.NgxEditor__Popup {
+    padding: 15px !important;
+    font-size: 17px !important;
+}
+
+.NgxEditor__MenuBar button {
+    cursor: pointer !important;
+
+    &:hover {
+        background-color: #0b8e92 !important;
+        color: white !important;
+        transform: scale(1.05) !important;
+        border-radius: 5px !important;
+        cursor: pointer;
+    }
+
+    &:active {
+        background-color: darken(#0b8e92, 15%);
+        transform: scale(0.95);
+        border-radius: 5px !important;
+        cursor: pointer;
+    }
+}
+
+.NgxEditor__MenuItem .NgxEditor__MenuItem--Active {
+    transform: scale(1.1) !important;
+    background-color: #ccdedf !important;
+    color: #0b8e92 !important;
+    border-radius: 5px !important;
+    cursor: pointer;
+}
+
+.NgxEditor__Dropdown .NgxEditor__Dropdown--Selected {
+    background-color: #ccdedf !important;
+    color: #0b8e92 !important;
+    transform: scale(1.05) !important;
+    cursor: pointer;
+}
+
+.NgxEditor__Dropdown .NgxEditor__Dropdown--Active {
+    background-color: #ccdedf !important;
+    color: #0b8e92 !important;
+    transform: scale(1.05) !important;
+    cursor: pointer;
+}
+
+.NgxEditor__Popup button {
+    display: flex;
+    text-align: center;
+    justify-content: center !important;
+    background-color: white !important;
+    color: #0b8e92 !important;
+    border-radius: 10px !important;
+    font-size: 18px;
+    padding: 10px;
+    margin: auto;
+    border-color: #0b8e92 !important;
+    border-style: solid;
+    border-width: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    &:hover {
+        background-color: #0b8e92 !important;
+        color: white !important;
+        transform: scale(1.05) !important;
+        border-radius: 10px !important;
+        cursor: pointer;
+    }
+
+    &:active {
+        background-color: darken(#0b8e92, 15%);
+        transform: scale(0.95);
+        border-radius: 10px !important;
+        cursor: pointer;
+    }
+
+    &:disabled {
+        background-color: rgb(216, 208, 208) !important;
+        color: rgb(112, 112, 112) !important;
+        transform: scale(1) !important;
+        border-color: #b8b8b8 !important;
+        align-items: center;
+        cursor: default;
+    }
+}
+
+.ProseMirror.NgxEditor__Content {
+    min-height: 300px !important;
+}
+
+// until here is the style of the blog ngx-edit text
 
 .btn-logout {
     background-color: #e35757 !important;

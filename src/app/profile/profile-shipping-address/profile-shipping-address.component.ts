@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { ShippingAddress } from '../../user/shipping-address.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateShippingAddressComponent } from './create-shipping-address/create-shipping-address.component';

@@ -1,1 +1,35 @@
-<p>blog-list works!</p>
+<!-- If no shipping addresses are present, display the empty card -->
+<div *ngIf="blogList.length === 0" class="empty-list-container-blog">
+    <nb-card class="emptyCard">
+        <nb-card-body>
+            <div>
+                <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                <p class="emptyCardText">{{ 'blog.noBlogs' | translate }}</p>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+
+<!-- Display each blogs as an nb-card -->
+<div class="list-container">
+    <nb-card *ngFor="let blog of blogList" class="rounded-card productCard" (click)="editBlogs(blog.id)">
+        <nb-card-body class="product-image">
+            <div class="details-container text-center">
+                <div class="image-container text-center">
+                    <img *ngIf="blog.headerImageUrl !== ''" [src]="blog.headerImageUrl" alt="Product Image"
+                        class="card-image" />
+                    <img *ngIf="blog.headerImageUrl === ''" src="../../../../../assets/images/gym-bro-logo.png"
+                        alt="Product Image" class="card-image" />
+                </div>
+                <h4>{{ blog.title }}</h4>
+                <p class="blog-date">{{ 'blog.language' | translate }} {{ blog.language | translate }}</p>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+
+<!-- open new blog button -->
+<div class="button-container">
+    <button class="btn btn-primary basic-btn" type="submit" nbButton status="success" (click)="goToAddNewBlog()">{{
+        'blog.adNewBlog' | translate }}</button>
+</div>

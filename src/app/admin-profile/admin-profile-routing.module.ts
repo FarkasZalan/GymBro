@@ -7,6 +7,8 @@ import { HandleFoodSuplimentsComponent } from './product-management/product-acti
 import { HandleHealtyProductsComponent } from './product-management/product-actions/handle-healty-products/handle-healty-products.component';
 import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
 import { HandleAccessoriesComponent } from './product-management/product-actions/handle-accessories/handle-accessories.component';
+import { BlogListComponent } from './blog-list/blog-list.component';
+import { HandleBlogsComponent } from './blog-list/handle-blogs/handle-blogs.component';
 
 export const routes: Routes = [
     {
@@ -17,11 +19,39 @@ export const routes: Routes = [
                 path: '',
                 component: AdminProfileComponent
             },
+
+            // Blog
+            // list of the blogs
+            {
+                path: 'blog-list',
+                redirectTo: '',
+                component: BlogListComponent
+            },
+
+            // create blog
+            {
+                path: 'create-blog',
+                component: HandleBlogsComponent
+            },
+
+            // edit blog posts
+            {
+                path: 'edit-blog',
+                redirectTo: '',
+                component: AdminProfileComponent
+            },
+            {
+                path: 'edit-blog/:blogId',
+                component: HandleBlogsComponent
+            },
+
+            // Products
             {
                 path: 'pruducts',
                 redirectTo: '',
                 component: AdminProfileComponent
             },
+
             // list of the products
             {
                 path: 'pruducts/:productCategory',
