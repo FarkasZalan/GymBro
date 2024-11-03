@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormGroup, NgForm } from '@angular/forms';
-import { Blog } from '../blog.model';
+import { Blog } from '../../blog.model';
 import { Location } from '@angular/common';
 import { Editor, Toolbar } from 'ngx-editor';
 import { DocumentHandlerService } from '../../../../document.handler.service';
@@ -51,6 +51,8 @@ export class HandleBlogsComponent implements OnInit {
   blogObject: Blog;
   blogId: string = '';
 
+  descriptionLength: number = 0;
+
   constructor(
     private storage: AngularFireStorage,
     private db: AngularFirestore,
@@ -85,6 +87,7 @@ export class HandleBlogsComponent implements OnInit {
       date: "",
       language: "",
       blogTags: [],
+      description: ""
     }
 
     this.route.params.subscribe(params => {
@@ -100,12 +103,13 @@ export class HandleBlogsComponent implements OnInit {
           // pass the value to the object
           this.selectedLanguage = this.blogObject.language;
 
-          // tags, image and blog text
+          // tags, image, description and blog text
           this.selectedTags = this.blogObject.blogTags;
           this.currentDate = this.blogObject.date;
           this.imageBase64 = this.blogObject.headerImageUrl;
           this.imagePreview = this.imageBase64;
           this.blogText = this.blogObject.htmlText;
+          this.descriptionLength = this.blogObject.description.length;
         }
       });
     });
@@ -208,6 +212,7 @@ export class HandleBlogsComponent implements OnInit {
       blogTags: this.selectedTags,
       htmlText: this.blogText,
       date: this.currentDate,
+      description: this.createBlogForm.value.description
     };
 
     // Add the new blog
@@ -273,6 +278,7 @@ export class HandleBlogsComponent implements OnInit {
       blogTags: this.selectedTags,
       htmlText: this.blogText,
       date: this.currentDate,
+      description: this.createBlogForm.value.description
     };
 
     // Add the new blog

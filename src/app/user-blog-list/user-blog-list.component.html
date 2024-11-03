@@ -1,0 +1,39 @@
+<!-- If no shipping addresses are present, display the empty card -->
+<div *ngIf="blogList.length === 0" class="empty-list-container">
+    <nb-card class="emptyCard">
+        <nb-card-body>
+            <div>
+                <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                <p class="emptyCardText">{{ 'blog.noBlogs' | translate }}</p>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+
+<!-- Display each blogs as an nb-card -->
+<div class="list-container">
+    <nb-card *ngFor="let blog of blogList" class="rounded-card productCardBlog" (click)="openBlog(blog.id)">
+        <nb-card-body class="product-image">
+            <div class="details-container text-center">
+                <div class="image-container text-center">
+                    <img *ngIf="blog.headerImageUrl !== ''" [src]="blog.headerImageUrl" alt="Product Image"
+                        class="card-image" />
+                    <img *ngIf="blog.headerImageUrl === ''" src="../../../../../assets/images/gym-bro-logo.png"
+                        alt="Product Image" class="card-image" />
+                </div>
+                <p class="blog-title">{{ blog.title }}</p>
+                <div class="description-container">
+                    <p class="description">{{ blog.description }}</p>
+                </div>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+
+<!-- back button -->
+<div class="button-container">
+    <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
+        status="success" (click)="back()">
+        <span class="arrow">&#9664;</span>
+        {{ 'notFoundPage.backTohome' | translate }}</button>
+</div>

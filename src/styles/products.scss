@@ -13,6 +13,36 @@
     text-align: center;
 }
 
+.description-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 40px;
+    /* Fixed width */
+    overflow: hidden;
+    /* Prevents overflow beyond container width */
+    text-align: start;
+}
+
+.description {
+    word-wrap: break-word;
+    /* Breaks long words to fit within the container */
+    overflow-wrap: break-word;
+    /* Ensures word breaks if needed */
+    white-space: normal;
+    /* Allows the text to wrap onto the next line */
+    max-height: auto;
+    /* Allows dynamic height expansion */
+}
+
+.blog-title {
+    font-size: 18px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    font-weight: 700;
+    text-align: start;
+}
+
 .header-collapse-component {
     display: flex;
     justify-content: center;
@@ -342,6 +372,52 @@ h5 {
     transition: background-color 0.3s ease, transform 0.3s ease !important;
     height: fit-content;
     max-height: 500px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: darken(#ffffff, 5%);
+        transform: scale(1.05) !important;
+
+        strong,
+        span,
+        h4,
+        h5,
+        p {
+            color: #0b8e92 !important;
+        }
+    }
+
+    &:active {
+        cursor: pointer;
+        color: #0b8e92 !important;
+        background-color: darken(#ffffff, 20%);
+        transform: scale(0.95);
+    }
+}
+
+.productCardBlog {
+    // Increase the width of the address card
+    width: calc(50% - 40px);
+    /* Ensure the card takes up half of the container width */
+    max-width: 280px;
+    height: 520px !important;
+    flex: 1 1 calc(50% - 20px);
+    /* Two columns with space between */
+    display: flex;
+    flex-direction: column;
+    /* Ensure content is stacked vertically */
+    padding: 0 !important;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 5%;
+    margin-right: 5%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional: add a subtle shadow effect
+    border-radius: 8px;
+    cursor: pointer;
+    // Align to the left side
+    align-self: flex-start; // Align card to the start (left) of its container
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    height: fit-content;
 
     &:hover {
         cursor: pointer;

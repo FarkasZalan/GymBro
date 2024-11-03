@@ -1,0 +1,101 @@
+.list-container {
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: auto;
+    padding: 16px;
+    height: fit-content;
+    justify-content: center;
+    display: flex;
+}
+
+.empty-list-container {
+    margin-top: 10px;
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+}
+
+.blog-content {
+    position: relative;
+}
+
+.rounded-card {
+    border-radius: 20px !important;
+    width: 80%
+}
+
+.blogCard {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+    padding-bottom: 20px !important;
+    margin: 25px 5%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    height: fit-content;
+    /* Allow the card to grow with content */
+    position: relative;
+}
+
+.image {
+    padding: 0;
+    margin: 0;
+    border-radius: 20px;
+}
+
+.image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.blog-date {
+    /* Align to the top with some padding */
+    font-size: 1.1em;
+    /* Smaller font size */
+    color: gray;
+    /* Color for the date */
+    z-index: 1;
+    /* Ensure date appears above the image */
+}
+
+.blog-text {
+    margin-top: 20px;
+    /* Space between the date and the blog text */
+}
+
+.details-container {
+    padding: 30px;
+}
+
+.parallax {
+    height: 300px;
+    /* Fixed height */
+    background-attachment: fixed;
+    background-position: center;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Prevent image repetition */
+    background-size: cover;
+    /* Cover the entire area */
+    border-radius: 20px;
+    /* Rounded corners */
+    overflow: hidden;
+    /* Prevent overflow if the image is too large */
+    background-color: #f0f0f0;
+    /* Fallback background color */
+}
+
+.button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.blog-back-button {
+    width: 330px !important;
+    font-size: 18px !important;
+    margin-top: 20px;
+    margin-bottom: 30px
+}

@@ -126,6 +126,7 @@ export class PagesComponent {
       {
         title: this.translate.instant('menu.blog'),
         icon: 'book-outline',
+        link: '/blog'
       }
     ];
   }

@@ -1,24 +1,21 @@
 import { NgModule } from '@angular/core';
 import { NbActionsModule, NbButtonModule, NbCardModule, NbContextMenuModule, NbIconModule, NbLayoutModule, NbMenuModule, NbSearchModule, NbSelectModule, NbSidebarModule, NbUserModule } from '@nebular/theme';
-import { PagesComponent } from './pages.component';
-import { PagesRoutingModule } from './pages-routing.module';
 import { CommonModule } from '@angular/common';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { FooterComponent } from '../layouts/footer/footer.component';
-import { HeaderComponent } from '../layouts/header/header.component';
-import { NotFoundComponent } from '../not-found/not-found.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { UserBlogListComponent } from '../user-blog-list/user-blog-list.component';
+import { BlogPageViewComponent } from '../user-blog-list/blog-page-view/blog-page-view.component';
+import { BlogRoutingModule } from './blog-routing.module';
 
 @NgModule({
     declarations: [
-        PagesComponent,
-        FooterComponent,
-        HeaderComponent,
-        NotFoundComponent,
+        // blog page on user site
+        UserBlogListComponent,
+        BlogPageViewComponent
     ],
     imports: [
-        PagesRoutingModule,
+        BlogRoutingModule,
         NbMenuModule,
         CommonModule,
         NbCardModule,
@@ -36,5 +33,5 @@ import { MatIconModule } from '@angular/material/icon';
         TranslateModule
     ]
 })
-export class PagesModule {
+export class BlogModule {
 }

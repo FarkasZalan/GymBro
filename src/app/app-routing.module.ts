@@ -22,6 +22,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'blog',
+    loadChildren: () => import('./user-blog-list/blog.module')
+      .then(m => m.BlogModule),
+  },
+  {
     path: 'admin-profile',
     loadChildren: () => import('./admin-profile/admin-profile.module')
       .then(m => m.AdminProfileModule),

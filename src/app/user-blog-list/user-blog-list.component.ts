@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { Blog } from '../blog.model';
 import { Location } from '@angular/common';
+import { Blog } from '../admin-profile/blog/blog.model';
 
 @Component({
-  selector: 'app-blog-list',
-  templateUrl: './blog-list.component.html',
-  styleUrl: '../../../../styles/products.scss'
+  selector: 'app-user-blog-list',
+  templateUrl: './user-blog-list.component.html',
+  styleUrl: '../../styles/products.scss'
 })
-export class BlogListComponent {
+export class UserBlogListComponent {
   blogId: string;
   blogList: Blog[];
 
@@ -20,14 +20,9 @@ export class BlogListComponent {
     this.getAllBlogs();
   }
 
-  // Open new blog page
-  goToAddNewBlog() {
-    this.router.navigate(['admin-profile/create-blog']);
-  }
-
-  // Go to Edit Blog page
-  editBlogs(blogId: string) {
-    this.router.navigate(['admin-profile/edit-blog', blogId]);
+  // Go to View Blog page
+  openBlog(blogId: string) {
+    this.router.navigate(['blog/blog-view/', blogId]);
   }
 
   getAllBlogs() {
@@ -46,6 +41,6 @@ export class BlogListComponent {
 
   back() {
     this.location.back();
-    this.router.navigate(['admin-profile']);
+    this.router.navigate(['']);
   }
 }

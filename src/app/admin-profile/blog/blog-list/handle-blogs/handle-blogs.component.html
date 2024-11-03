@@ -68,9 +68,30 @@
                         <label for="blogText" class="label">{{ 'blog.blogText' | translate }}</label>
                         <div class="NgxEditor__Wrapper">
                             <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
-                            <ngx-editor [editor]="editor" [(ngModel)]="blogText" name="blogText"
+                            <ngx-editor [editor]="editor" [(ngModel)]="blogText" name="blogText" [disabled]="false"
                                 placeholder="{{ 'blog.enterBlogText' | translate }}"></ngx-editor>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="row">
+                    <!-- Description -->
+                    <div class="col-md-12 form-group">
+                        <label for="description" class="label">{{ 'products.description' | translate }}</label>
+                        <textarea class="form-control" [(ngModel)]="blogObject.description" name="description"
+                            maxlength="200" required placeholder="{{ 'products.enterProductDescription' | translate }}"
+                            #description="ngModel" (keyup)="descriptionLength = blogObject.description.length">
+                        </textarea>
+
+                        <!-- Character count display with conditional red color when max limit is reached -->
+                        <small
+                            [ngClass]="{'text-danger': descriptionLength >= 200 || descriptionLength === 0, 'text-success': descriptionLength < 200 && descriptionLength > 0}">
+                            {{ descriptionLength || 0 }}/200
+                        </small>
+
+                        <span class="help-block" *ngIf="description.touched && !description.valid">{{
+                            'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
 

@@ -1,0 +1,24 @@
+<!-- Display each blog as an nb-card -->
+<div class="list-container">
+    <nb-card class="rounded-card blogCard">
+        <nb-card-body class="image">
+            <div class="details-container">
+                <h1>{{ blogObject.title }}</h1>
+                <p class="blog-date">{{ blogCreatedDate | date: 'fullDate' | translate}}</p>
+            </div>
+            <div class="parallax"
+                [ngStyle]="{'background-image': 'url(' + (blogImage || '../../../../../assets/images/gym-bro-logo.png') + ')'}">
+            </div>
+            <div class="details-container">
+                <div class="blog-text" [innerHTML]="blogHtmlText"></div>
+            </div>
+            <!-- back button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit"
+                    nbButton status="success" (click)="back()">
+                    <span class="arrow">&#9664;</span>
+                    {{ 'notFoundPage.backTohome' | translate }}</button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

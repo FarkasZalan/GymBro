@@ -26,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NGX_EDITOR_CONFIG_TOKEN, NgxEditorModule } from 'ngx-editor';
 import { ngxEditorConfigFactory } from './editor.header';
+import { ColorPickerModule } from 'ngx-color-picker'
 
 // Factory function to create an instance of TranslateHttpLoader
 // This loader will be used to fetch translation files over HTTP using the provided HttpClient.
@@ -35,7 +36,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -58,6 +59,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     MatButtonModule,
     // text editor module
     NgxEditorModule.forRoot(),
+    ColorPickerModule,
     // Firebase
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
