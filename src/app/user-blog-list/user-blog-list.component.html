@@ -12,7 +12,7 @@
 
 <!-- Display each blogs as an nb-card -->
 <div class="list-container">
-    <nb-card *ngFor="let blog of blogList" class="rounded-card productCardBlog" (click)="openBlog(blog.id)">
+    <nb-card *ngFor="let blog of blogList" class="rounded-card blogCard" (click)="openBlog(blog.id)">
         <nb-card-body class="product-image">
             <div class="details-container text-center">
                 <div class="image-container text-center">
@@ -25,6 +25,16 @@
                 <div class="description-container">
                     <p class="description">{{ blog.description }}</p>
                 </div>
+                <p class="blog-title read-more">{{ 'blog.readMore' | translate }}
+                    <span class="arrow-blog">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                            <!-- First right arrow -->
+                            <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                            <!-- Second right arrow, positioned slightly to the right -->
+                            <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                        </svg>
+                    </span>
+                </p>
             </div>
         </nb-card-body>
     </nb-card>
@@ -34,6 +44,27 @@
 <div class="button-container">
     <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
         status="success" (click)="back()">
-        <span class="arrow">&#9664;</span>
+        <span class="arrow">
+            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <!-- Filled left arrow -->
+                <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+            </svg>
+        </span>
         {{ 'notFoundPage.backTohome' | translate }}</button>
+</div>
+
+<!-- filter button -->
+<div class="floating-button-container">
+    <button class="floating-button" (click)="showFilterMenu()">
+        <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M15 10.5A3.502 3.502 0 0 0 18.355 8H21a1 1 0 1 0 0-2h-2.645a3.502 3.502 0 0 0-6.71 0H3a1 1 0 0 0 0 2h8.645A3.502 3.502 0 0 0 15 10.5zM3 16a1 1 0 1 0 0 2h2.145a3.502 3.502 0 0 0 6.71 0H21a1 1 0 1 0 0-2h-9.145a3.502 3.502 0 0 0-6.71 0H3z"
+                    fill="#0b8e92"></path>
+            </g>
+        </svg>
+        <span class="floating-label">{{ 'blog.filter' | translate }}</span>
+    </button>
 </div>

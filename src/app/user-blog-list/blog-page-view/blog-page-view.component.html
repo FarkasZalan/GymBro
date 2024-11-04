@@ -4,7 +4,7 @@
         <nb-card-body class="image">
             <div class="details-container">
                 <h1>{{ blogObject.title }}</h1>
-                <p class="blog-date">{{ blogCreatedDate | date: 'fullDate' | translate}}</p>
+                <p class="blog-date">{{ blogCreatedDate | date: 'yyyy/MM/dd' }}</p>
             </div>
             <div class="parallax"
                 [ngStyle]="{'background-image': 'url(' + (blogImage || '../../../../../assets/images/gym-bro-logo.png') + ')'}">
@@ -12,13 +12,52 @@
             <div class="details-container">
                 <div class="blog-text" [innerHTML]="blogHtmlText"></div>
             </div>
-            <!-- back button -->
-            <div class="button-container">
-                <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit"
-                    nbButton status="success" (click)="back()">
-                    <span class="arrow">&#9664;</span>
-                    {{ 'notFoundPage.backTohome' | translate }}</button>
+        </nb-card-body>
+
+        <!-- Related Blogs Section -->
+        <nb-card-body class="related-blogs-container">
+            <hr>
+            <h2>{{ 'blog.relatedBlogs' | translate }}</h2>
+            <div class="related-blogs">
+                <nb-card *ngFor="let relatedBlog of relatedBlogs" class="rounded-card relatedBlogCard"
+                    (click)="openBlog(relatedBlog.id)">
+                    <nb-card-body class="blog-image">
+                        <div class="related-details-container text-center">
+                            <div class="image-container text-center">
+                                <img *ngIf="relatedBlog.headerImageUrl !== ''" [src]="relatedBlog.headerImageUrl"
+                                    alt="Related Blog Image" class="card-image" />
+                                <img *ngIf="relatedBlog.headerImageUrl === ''"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Related Blog Image"
+                                    class="card-image" />
+                            </div>
+                            <p class="blog-title">{{ relatedBlog.title }}</p>
+                            <div class="description-container">
+                                <p class="description">{{ relatedBlog.description }}</p>
+                            </div>
+                            <p class="blog-title read-more">{{ 'blog.readMore' | translate }}
+                                <span class="arrow-blog">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                                        <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                                    </svg>
+                                </span>
+                            </p>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
             </div>
         </nb-card-body>
+        <!-- back button -->
+        <div class="button-container">
+            <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit" nbButton
+                status="success" (click)="back()">
+                <span class="arrow">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span>
+                {{ 'blog.backToList' | translate }}</button>
+        </div>
     </nb-card>
 </div>

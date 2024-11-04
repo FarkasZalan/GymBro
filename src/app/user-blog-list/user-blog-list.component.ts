@@ -43,4 +43,8 @@ export class UserBlogListComponent {
     this.location.back();
     this.router.navigate(['']);
   }
+
+  showFilterMenu() {
+
+  }
 }

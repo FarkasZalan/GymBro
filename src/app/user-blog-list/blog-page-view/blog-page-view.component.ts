@@ -17,26 +17,55 @@ export class BlogPageViewComponent implements OnInit {
   blogImage: string = '';
   blogHtmlText: string = '';
   blogNormalText: string = '';
+  relatedBlogs: Blog[] = [];
 
   constructor(private route: ActivatedRoute, private documentHandler: DocumentHandlerService, private location: Location, private router: Router) { }
 
   ngOnInit(): void {
+    this.relatedBlogs = [];
     this.route.params.subscribe(params => {
       // get the food supliment product by id
       this.documentHandler.getDocumentByID("blog", params['blogId']).subscribe((blog: Blog) => {
         // make a copy from the object
         this.blogObject = { ...blog };
 
-        // if it's not undefinied (so the user want to edit a specified product not create a new)
-        if (this.blogObject.title !== undefined) {
-          // tags, image, description and blog text
-          this.blogTags = this.blogObject.blogTags;
-          this.blogCreatedDate = this.blogObject.date;
-          this.blogImage = this.blogObject.headerImageUrl;
-          this.blogHtmlText = this.blogObject.htmlText;
-        }
+        // tags, image, description and blog text
+        this.blogTags = this.blogObject.blogTags;
+        this.blogCreatedDate = this.blogObject.date;
+        this.blogImage = this.blogObject.headerImageUrl;
+        this.blogHtmlText = this.blogObject.htmlText;
+
+        // related blogs
+        this.loadRelatedBlogs(params['blogId']);
       });
     });
+  }
+
+  // get related blog list
+  loadRelatedBlogs(currentBlogId: string): void {
+    // Fetch related blogs based on tags and language
+    this.documentHandler.getRelatedBlogs(this.blogTags, currentBlogId, this.blogObject.language).subscribe((relatedBlogs: Blog[]) => {
+      // Create a Set to track unique blog id
+      const existingIds = new Set<string>();
+
+      // Add IDs of the related blogs to the Set
+      relatedBlogs.forEach(blog => existingIds.add(blog.id!));
+
+      // Handle related blogs based on their count
+      if (relatedBlogs.length > 0) {
+        this.relatedBlogs = relatedBlogs; // Set the found related blogs
+      } else {
+        // No related blogs found, fetch six random blogs
+        this.documentHandler.getRandomBlogs(currentBlogId, 6, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
+          this.relatedBlogs = randomBlogs; // Set the random blogs as related
+        });
+      }
+    });
+  }
+
+  // Go to View Blog page
+  openBlog(blogId: string) {
+    this.router.navigate(['blog/blog-view/', blogId]);
   }
 
   back() {

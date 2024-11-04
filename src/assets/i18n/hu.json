@@ -359,6 +359,10 @@
                 "date": "Dátum:",
                 "deleteBlogText": "Biztosan törölni szeretnéd ezt a blog bejegyzést?",
                 "goToBlogList": "Blog bejegyzések",
-                "addBlog": "Új blog"
+                "addBlog": "Új blog",
+                "readMore": "Tovább olvasás",
+                "relatedBlogs": "További bejegyzések",
+                "backToList": "Vissza",
+                "filter": "Szűrés"
         }
 }

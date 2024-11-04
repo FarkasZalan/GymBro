@@ -357,6 +357,10 @@
       "date": "Date:",
       "deleteBlogText": "Are you sure you want to delete this blog?",
       "goToBlogList": "Blog posts",
-      "addBlog": "New blog"
+      "addBlog": "New blog",
+      "readMore": "Read more",
+      "relatedBlogs": "Related blogs",
+      "backToList": "Back",
+      "filter": "Filter"
    }
 }

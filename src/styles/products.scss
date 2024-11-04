@@ -16,11 +16,12 @@
 .description-container {
     padding-left: 20px;
     padding-right: 20px;
-    padding-bottom: 40px;
+    padding-bottom: 10px;
     /* Fixed width */
     overflow: hidden;
     /* Prevents overflow beyond container width */
     text-align: start;
+    flex-grow: 1
 }
 
 .description {
@@ -41,6 +42,19 @@
     padding-top: 20px;
     font-weight: 700;
     text-align: start;
+}
+
+.read-more {
+    color: #0b8e92;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    margin-top: auto;
+}
+
+.details-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .header-collapse-component {
@@ -247,7 +261,7 @@ h5 {
 
 .image-container {
     width: 100%;
-    height: 300px;
+    height: 300px !important;
     /* Ensure the image container takes the full width of the card */
     display: flex;
     justify-content: center;
@@ -395,12 +409,12 @@ h5 {
     }
 }
 
-.productCardBlog {
+.blogCard {
     // Increase the width of the address card
     width: calc(50% - 40px);
     /* Ensure the card takes up half of the container width */
     max-width: 280px;
-    height: 520px !important;
+    height: 550px !important;
     flex: 1 1 calc(50% - 20px);
     /* Two columns with space between */
     display: flex;
