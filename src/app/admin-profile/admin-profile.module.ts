@@ -36,7 +36,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgxEditorModule } from 'ngx-editor';
 import { BlogComponent } from './blog/blog.component';
-import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
     imports: [
@@ -58,8 +57,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
-        NgxEditorModule,
-        ColorPickerModule
+        NgxEditorModule
     ],
     declarations: [
         // Declaring components that belong to the Profile module

@@ -3,6 +3,9 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Blog } from '../admin-profile/blog/blog.model';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterPageComponent } from '../filter-page/filter-page.component';
+import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
 
 @Component({
   selector: 'app-user-blog-list',
@@ -13,7 +16,7 @@ export class UserBlogListComponent {
   blogId: string;
   blogList: Blog[];
 
-  constructor(private db: AngularFirestore, private router: Router, private location: Location) { }
+  constructor(private db: AngularFirestore, private router: Router, private location: Location, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     //load all the blogs
@@ -44,7 +47,11 @@ export class UserBlogListComponent {
     this.router.navigate(['']);
   }
 
-  showFilterMenu() {
-
+  openFilterMenu() {
+    const dialogRef = this.dialog.open(FilterPageComponent, {
+      data: {
+        fromPage: ProductViewText.BLOG
+      }
+    });
   }
 }

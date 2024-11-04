@@ -129,5 +129,7 @@ export enum ProductViewText {
 
     // Languages
     HUNGARIAN = "blog.languages.hungarian",
-    ENGLISH = "blog.languages.english"
+    ENGLISH = "blog.languages.english",
+
+    BLOG = "menu.blog"
 }

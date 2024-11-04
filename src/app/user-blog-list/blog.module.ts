@@ -7,12 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserBlogListComponent } from '../user-blog-list/user-blog-list.component';
 import { BlogPageViewComponent } from '../user-blog-list/blog-page-view/blog-page-view.component';
 import { BlogRoutingModule } from './blog-routing.module';
+import { FilterPageComponent } from '../filter-page/filter-page.component';
 
 @NgModule({
     declarations: [
         // blog page on user site
         UserBlogListComponent,
-        BlogPageViewComponent
+        BlogPageViewComponent,
+        FilterPageComponent
     ],
     imports: [
         BlogRoutingModule,
