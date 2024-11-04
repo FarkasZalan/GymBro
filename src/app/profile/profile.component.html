@@ -55,25 +55,6 @@
     </nb-card-body>
 </nb-card>
 
-<!-- payement methods -->
-<nb-card class="container-collapse-component">
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedPayemenetMethods()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedPayemenetMethods, 'left': !isCollapsedPayemenetMethods}">
-                {{ 'profileMenu.payementMethods' | translate }}
-            </h2>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="arrow" *ngIf="isCollapsedPayemenetMethods">▼</span>
-                <span class="arrow" *ngIf="!isCollapsedPayemenetMethods">▲</span>
-            </button>
-        </div>
-
-        <div *ngIf="!isCollapsedPayemenetMethods" [@collapseComponent] class="collapse-container">
-            <app-profile-payement-methods></app-profile-payement-methods>
-        </div>
-    </nb-card-body>
-</nb-card>
-
 <!-- loyality program -->
 <nb-card class="container-collapse-component">
     <nb-card-body>

@@ -19,7 +19,6 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { ChangeProfileComponent } from './profile-list/change-profile/change-profile.component';
 import { ProfileShippingAddressComponent } from './profile-shipping-address/profile-shipping-address.component';
 import { ProfileComponent } from './/profile.component';
-import { ProfilePayementMethodsComponent } from './profile-payement-methods/profile-payement-methods.component';
 import { ProfileLoyaltyProgramComponent } from './profile-loyalty-program/profile-loyalty-program.component';
 import { ProfileOrdersComponent } from './profile-orders/profile-orders.component';
 import { CreateShippingAddressComponent } from './profile-shipping-address/create-shipping-address/create-shipping-address.component';
@@ -48,7 +47,6 @@ import { EditShippingAddressComponent } from './profile-shipping-address/edit-sh
         ChangeProfileComponent,
         ProfileShippingAddressComponent,
         ProfileComponent,
-        ProfilePayementMethodsComponent,
         ProfileLoyaltyProgramComponent,
         ProfileOrdersComponent,
         CreateShippingAddressComponent,

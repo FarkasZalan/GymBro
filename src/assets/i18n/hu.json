@@ -95,8 +95,7 @@
         "profileMenu": {
                 "prodilDetails": "Profil adatok",
                 "orders": "Rendelések",
-                "shippingAddresses": "Szállítási cím",
-                "payementMethods": "Fizetési módok",
+                "shippingAddresses": "Szállítási címek",
                 "loyaltyProgram": "Hűségprogram",
                 "addNewShippingAddress": "Cím hozzáadása",
                 "noAddresses": "Nincs egyetlen mentett cím sem!",
@@ -355,6 +354,7 @@
                 "emptyTextBlog": "Nem adtál meg szöveget a bejegyzéshez!",
                 "titleAlreadyInUse": "Ezzel a címmel már létezik bejegyzés!",
                 "tagAlreadyExists": "Ez a címke már hozzá van adva a listához!",
+                "missingTags": "Nincs egyetlen cimke sem megadva a bloghoz!",
                 "language": "Nyelv:",
                 "date": "Dátum:",
                 "deleteBlogText": "Biztosan törölni szeretnéd ezt a blog bejegyzést?",

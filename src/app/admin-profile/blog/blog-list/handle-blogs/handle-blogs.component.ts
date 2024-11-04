@@ -27,6 +27,7 @@ export class HandleBlogsComponent implements OnInit {
   noTextError: boolean = false;
   titleAlreadyInUse: boolean = false;
   tagAlreadyExists: boolean = false;
+  missingTagError: boolean = false;
 
   isBlogEdit: boolean = false;
 
@@ -185,6 +186,12 @@ export class HandleBlogsComponent implements OnInit {
     }
     this.noTextError = false;
 
+    if (this.selectedTags.length === 0) {
+      this.missingTagError = true;
+      return;
+    }
+    this.missingTagError = false;
+
     // Check for title duplication
     const blogTitle = this.documentHandler.makeUpperCaseEveryWordFirstLetter(this.createBlogForm.value.blogTitle);
     const isDuplicate = await this.documentHandler.checkForDuplication("blog", "title", blogTitle, undefined, "");
@@ -251,6 +258,12 @@ export class HandleBlogsComponent implements OnInit {
       return;
     }
     this.noTextError = false;
+
+    if (this.selectedTags.length === 0) {
+      this.missingTagError = true;
+      return;
+    }
+    this.missingTagError = false;
 
     // Check for title duplication
     const blogTitle = this.documentHandler.makeUpperCaseEveryWordFirstLetter(this.createBlogForm.value.blogTitle);

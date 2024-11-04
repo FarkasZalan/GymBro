@@ -132,6 +132,11 @@
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'blog.titleAlreadyInUse' | translate }}
                 </span>
+                <!-- no tag added error block -->
+                <span *ngIf="missingTagError" class="help-block-login-error">
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'blog.missingTags' | translate }}
+                </span>
                 <!-- Error block -->
                 <span *ngIf="errorMessage" class="help-block-login-error">
                     <i class="fas fa-exclamation-triangle icon"></i>
