@@ -122,9 +122,10 @@ export class DocumentHandlerService {
   }
 
   // Fetch random blogs based on language
-  getRandomBlogs(limit: number, language: string) {
+  getRandomBlogs(currentBlogId: string, limit: number, language: string) {
     return this.db.collection<Blog>('blog', ref =>
       ref
+        .where('id', '!=', currentBlogId)
         .where('language', '==', language)
         .orderBy('date')
         .limit(limit)

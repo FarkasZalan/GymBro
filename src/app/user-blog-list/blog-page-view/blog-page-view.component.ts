@@ -62,7 +62,7 @@ export class BlogPageViewComponent implements OnInit {
 
           const remainingCount = 6 - relatedBlogs.length;
 
-          this.documentHandler.getRandomBlogs(remainingCount, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
+          this.documentHandler.getRandomBlogs(currentBlogId, remainingCount, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
             const uniqueRandomBlogs = randomBlogs.filter(blog => !existingIds.has(blog.id));
 
             // Add unique random blogs to the relatedBlogs array and to existingIds
@@ -75,7 +75,7 @@ export class BlogPageViewComponent implements OnInit {
       }
       else if (relatedBlogs.length === 0) {
         // No related blogs found, fetch six random blogs
-        this.documentHandler.getRandomBlogs(6, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
+        this.documentHandler.getRandomBlogs(currentBlogId, 6, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
           this.relatedBlogs = randomBlogs; // Set the random blogs as related
         });
       }

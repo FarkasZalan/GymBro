@@ -69,6 +69,10 @@ export class UserBlogListComponent {
       // If true is returned, delete the filters
       if (filterObject === true) {
         this.blogList = [...this.originalBlogList];
+        this.filterObject = {
+          language: '',
+          orderBy: ProductViewText.ORDER_BY_LATEST
+        }
       } else if (filterObject && typeof filterObject === 'object') {
         this.filterObject = filterObject;
         // Reset blogList to the original unfiltered list
