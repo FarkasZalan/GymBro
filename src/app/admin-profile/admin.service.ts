@@ -16,6 +16,8 @@ import {
     listAll,
     deleteObject
 } from "firebase/storage";
+import { Blog } from "./blog/blog.model";
+import { Timestamp } from "firebase/firestore";
 
 @Injectable({
     providedIn: 'root'
@@ -287,6 +289,34 @@ export class AdminService {
 
             // Sort in ascending order based on product name
             return b.productName.localeCompare(a.productName);
+        });
+    }
+
+    sortByDateASC(blogs: Blog[]) {
+        return blogs.sort((a, b) => {
+            // Convert `a.date` and `b.date` to Date objects if they are Firebase Timestamps
+            const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
+            const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
+
+            // Sort blogs by date in ascending order (oldest to newest)
+            return dateB.getTime() - dateA.getTime();
+        });
+    }
+
+    sortByDateDESC(blogs: Blog[]) {
+        return blogs.sort((a, b) => {
+            // Convert `a.date` and `b.date` to Date objects if they are Firebase Timestamps
+            const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
+            const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
+
+            // Sort blogs by date in ascending order (oldest to newest)
+            return dateA.getTime() - dateB.getTime();
+        });
+    }
+
+    filterBlogByLanguage(blogs: Blog[], selectedLanguage: string) {
+        return blogs.filter((a) => {
+            return a.language === selectedLanguage
         });
     }
 }

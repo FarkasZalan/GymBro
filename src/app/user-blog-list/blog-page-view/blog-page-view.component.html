@@ -4,7 +4,7 @@
         <nb-card-body class="image">
             <div class="details-container">
                 <h1>{{ blogObject.title }}</h1>
-                <p class="blog-date">{{ blogCreatedDate | date: 'yyyy/MM/dd' }}</p>
+                <p class="blog-date">{{ blogCreatedDate.toDate() | date: 'yyyy/MM/dd' }}</p>
             </div>
             <div class="parallax"
                 [ngStyle]="{'background-image': 'url(' + (blogImage || '../../../../../assets/images/gym-bro-logo.png') + ')'}">

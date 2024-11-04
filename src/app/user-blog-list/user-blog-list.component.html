@@ -10,8 +10,16 @@
     </nb-card>
 </div>
 
-<!-- Display each blogs as an nb-card -->
-<div class="list-container">
+<!-- Centered Title and Description Above Blog List -->
+<div *ngIf="blogList.length !== 0" class="text-center text-container">
+    <h1>{{ 'blog.gymBroBlogText' | translate }}</h1>
+    <p>
+        "{{ 'blog.blogPageText' | translate }}"
+    </p>
+</div>
+
+<!-- Blog list -->
+<div *ngIf="blogList.length !== 0" class="list-container">
     <nb-card *ngFor="let blog of blogList" class="rounded-card blogCard" (click)="openBlog(blog.id)">
         <nb-card-body class="product-image">
             <div class="details-container text-center">
@@ -28,9 +36,7 @@
                 <p class="blog-title read-more">{{ 'blog.readMore' | translate }}
                     <span class="arrow-blog">
                         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                            <!-- First right arrow -->
                             <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
-                            <!-- Second right arrow, positioned slightly to the right -->
                             <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
                         </svg>
                     </span>
@@ -39,6 +45,7 @@
         </nb-card-body>
     </nb-card>
 </div>
+
 
 <!-- back button -->
 <div class="button-container">

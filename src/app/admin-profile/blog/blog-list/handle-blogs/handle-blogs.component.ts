@@ -13,6 +13,7 @@ import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull
 import { ActivatedRoute, Route } from '@angular/router';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-handle-blogs',
@@ -47,7 +48,7 @@ export class HandleBlogsComponent implements OnInit {
   toolbar: Toolbar;
   blogText: string = '';
 
-  currentDate: string = '';
+  currentDate: Timestamp;
 
   blogObject: Blog;
   blogId: string = '';
@@ -85,7 +86,7 @@ export class HandleBlogsComponent implements OnInit {
       title: "",
       htmlText: "",
       headerImageUrl: "",
-      date: "",
+      date: Timestamp.now(),
       language: "",
       blogTags: [],
       description: ""
@@ -204,11 +205,7 @@ export class HandleBlogsComponent implements OnInit {
     this.titleAlreadyInUse = false;
 
     // the current date
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0
-    var yyyy = today.getFullYear();
-    this.currentDate = yyyy + '/' + mm + '/' + dd;
+    this.currentDate = Timestamp.now();
 
     // Create new blog object (without image URL initially)
     this.blogObject = {

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { Blog } from "./admin-profile/blog/blog.model";
 
 @Injectable({
@@ -122,13 +122,12 @@ export class DocumentHandlerService {
   }
 
   // Fetch random blogs based on language
-  getRandomBlogs(currentBlogId: string, limit: number, language: string): Observable<Blog[]> {
+  getRandomBlogs(limit: number, language: string) {
     return this.db.collection<Blog>('blog', ref =>
       ref
-        .where('id', '!=', currentBlogId)
         .where('language', '==', language)
-        .orderBy('date').
-        limit(limit)
+        .orderBy('date')
+        .limit(limit)
     ).valueChanges();
   }
 }

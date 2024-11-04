@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentHandlerService } from '../../document.handler.service';
 import { Blog } from '../../admin-profile/blog/blog.model';
 import { Location } from '@angular/common';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-blog-page-view',
@@ -13,7 +14,7 @@ export class BlogPageViewComponent implements OnInit {
 
   blogObject: Blog;
   blogTags: string[] = [];
-  blogCreatedDate: string = '';
+  blogCreatedDate: Timestamp;
   blogImage: string = '';
   blogHtmlText: string = '';
   blogNormalText: string = '';
@@ -54,9 +55,27 @@ export class BlogPageViewComponent implements OnInit {
       // Handle related blogs based on their count
       if (relatedBlogs.length > 0) {
         this.relatedBlogs = relatedBlogs; // Set the found related blogs
-      } else {
+
+        // if there are not found 6 related blogs
+        if (relatedBlogs.length < 6) {
+          existingIds.add(currentBlogId);
+
+          const remainingCount = 6 - relatedBlogs.length;
+
+          this.documentHandler.getRandomBlogs(remainingCount, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
+            const uniqueRandomBlogs = randomBlogs.filter(blog => !existingIds.has(blog.id));
+
+            // Add unique random blogs to the relatedBlogs array and to existingIds
+            uniqueRandomBlogs.forEach(blog => {
+              relatedBlogs.push(blog);
+              existingIds.add(blog.id);
+            });
+          });
+        }
+      }
+      else if (relatedBlogs.length === 0) {
         // No related blogs found, fetch six random blogs
-        this.documentHandler.getRandomBlogs(currentBlogId, 6, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
+        this.documentHandler.getRandomBlogs(6, this.blogObject.language).subscribe((randomBlogs: Blog[]) => {
           this.relatedBlogs = randomBlogs; // Set the random blogs as related
         });
       }

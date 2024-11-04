@@ -1,1 +1,119 @@
-<p>filter-page works!</p>
+<div class="container-all-window">
+    <!-- add filter title -->
+    <h1 id="title" class="title">{{ 'blog.filter' | translate }}</h1>
+    <!-- add price form -->
+    <div class="container">
+        <nb-card>
+            <nb-card-body>
+                <div>
+                    <form (ngSubmit)="filter()" #form="ngForm">
+                        <!-- Order by section -->
+                        <div class="row">
+                            <div class="dropdown-list-container">
+                                <div class="form-group position-relative order-by-container">
+
+                                    <!-- Dropdown container with arrow icon -->
+                                    <div class="dropdown-container" (click)="toggleOrderDropdown()">
+
+                                        <!-- Select order dropdown aligned to the right -->
+                                        <select
+                                            class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                            name="order" #order="ngModel" [(ngModel)]="selectedOrder">
+
+                                            <!-- List of order options -->
+                                            <option *ngFor="let order of availableOrders" [value]="order">
+                                                {{ order | translate }}
+                                            </option>
+                                        </select>
+
+                                        <!-- Arrow icon based on dropdown open/closed state -->
+                                        <div class="arrow-icon">
+                                            <svg *ngIf="isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 14l5-5 5 5z" />
+                                            </svg>
+                                            <svg *ngIf="!isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 10l5 5 5-5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+
+                        <!-- Blog language section -->
+                        <div *ngIf="isBlogFilter" class="row">
+                            <div class="dropdown-list-container">
+                                <div class="form-group position-relative order-by-container">
+
+                                    <!-- Dropdown container with arrow icon -->
+                                    <div class="dropdown-container" (click)="toggleLanguageDropdown()">
+
+                                        <!-- Select language dropdown aligned to the right -->
+                                        <select
+                                            class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                            name="language" #language="ngModel" [(ngModel)]="selectedLanguage">
+
+                                            <!-- Placeholder option -->
+                                            <option value="" selected disabled>{{ 'filter.selectBlog' |
+                                                translate }}
+                                            </option>
+
+                                            <!-- List of language options -->
+                                            <option *ngFor="let language of availableLanguage" [value]="language">
+                                                {{ language | translate }}
+                                            </option>
+                                        </select>
+
+                                        <!-- Arrow icon based on dropdown open/closed state -->
+                                        <div class="arrow-icon">
+                                            <svg *ngIf="isLanguageDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 14l5-5 5 5z" />
+                                            </svg>
+                                            <svg *ngIf="!isLanguageDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 10l5 5 5-5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+
+                        <!-- Error block -->
+                        <span *ngIf="errorMessage" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i>
+                            {{ 'products.clothes.colors.colorAlreadyAdded' | translate }}
+                        </span>
+
+                        <!-- Submit button -->
+                        <div class="send-button-container">
+                            <button class="btn btn-primary forgot-btn" type="submit" nbButton status="success"
+                                [disabled]="!form.valid">
+                                {{ 'filter.apply' | translate }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <div *ngIf="editFilter" class="send-button-container">
+                        <button class="btn btn-primary forgot-btn btn delete-btn" type="button" nbButton
+                            status="warning" (click)="deleteFilter()">
+                            {{ 'filter.deleteFilter' | translate }}
+                        </button>
+                    </div>
+
+                    <div class="send-button-container">
+                        <button class="btn btn-primary forgot-btn" type="button" nbButton status="warning"
+                            (click)="back()">
+                            {{ 'loginPage.back' | translate }}
+                        </button>
+                    </div><br />
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

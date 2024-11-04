@@ -361,6 +361,17 @@
       "readMore": "Read more",
       "relatedBlogs": "Related blogs",
       "backToList": "Back",
-      "filter": "Filter"
+      "filter": "Filter",
+      "blogPageText": "Success starts with self-discipline. Push through the pain today to enjoy strength tomorrow.",
+      "gymBroBlogText": "GYMBRO BLOG"
+   },
+   "filter": {
+      "orderBy": {
+         "orderByText": "Choose Sorting Order",
+         "latest": "Order by latest",
+         "oldest": "Order by oldest"
+      },
+      "apply": "Apply",
+      "deleteFilter": "Clear filters"
    }
 }

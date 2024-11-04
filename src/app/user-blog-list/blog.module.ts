@@ -4,17 +4,13 @@ import { CommonModule } from '@angular/common';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
-import { UserBlogListComponent } from '../user-blog-list/user-blog-list.component';
 import { BlogPageViewComponent } from '../user-blog-list/blog-page-view/blog-page-view.component';
 import { BlogRoutingModule } from './blog-routing.module';
-import { FilterPageComponent } from '../filter-page/filter-page.component';
 
 @NgModule({
     declarations: [
         // blog page on user site
-        UserBlogListComponent,
-        BlogPageViewComponent,
-        FilterPageComponent
+        BlogPageViewComponent
     ],
     imports: [
         BlogRoutingModule,

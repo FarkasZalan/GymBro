@@ -131,5 +131,9 @@ export enum ProductViewText {
     HUNGARIAN = "blog.languages.hungarian",
     ENGLISH = "blog.languages.english",
 
-    BLOG = "menu.blog"
+    BLOG = "menu.blog",
+
+    // Order
+    ORDER_BY_LATEST = 'filter.orderBy.latest',
+    ORDER_BY_OLDEST = 'filter.orderBy.oldest'
 }

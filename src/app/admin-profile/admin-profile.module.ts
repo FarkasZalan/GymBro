@@ -36,6 +36,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgxEditorModule } from 'ngx-editor';
 import { BlogComponent } from './blog/blog.component';
+import { UserBlogListComponent } from '../user-blog-list/user-blog-list.component';
+import { FilterPageComponent } from '../filter-page/filter-page.component';
 
 @NgModule({
     imports: [
@@ -80,7 +82,9 @@ import { BlogComponent } from './blog/blog.component';
         HandleClothesComponent,
         AddColorDialogComponent,
         HandleBlogsComponent,
-        BlogComponent
+        BlogComponent,
+        UserBlogListComponent,
+        FilterPageComponent
     ],
 })
 export class AdminProfileModule {

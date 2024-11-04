@@ -363,6 +363,18 @@
                 "readMore": "Tovább olvasás",
                 "relatedBlogs": "További bejegyzések",
                 "backToList": "Vissza",
-                "filter": "Szűrés"
+                "filter": "Szűrés",
+                "gymBroBlogText": "GYMBRO BLOG",
+                "blogPageText": "A siker az önfegyelemmel kezdődik. A mai fájdalmat győzd le, hogy holnap erősebb lehess."
+        },
+        "filter": {
+                "orderBy": {
+                        "orderByText": "Rendezési sorrend kiválasztása",
+                        "latest": "Rendezés legújabb szerint",
+                        "oldest": "Rendezés legrégebb szerint"
+                },
+                "apply": "Alkalmaz",
+                "selectBlog": "Szűrés nyelv szerint",
+                "deleteFilter": "Szűrők törlése"
         }
 }
