@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../../products/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FoodSupliment } from '../../product-models/food-supliment.model';
-import { HealthyProduct } from '../../product-models/healthy-food.model';
 import { Clothes } from '../../product-models/clothing.model';
 import { Location } from '@angular/common';
 import { Accessories } from '../../product-models/accessories.model';
 import { ProductViewText } from '../../product-view-texts';
-import { AdminService } from '../../../admin.service';
+import { OrganicFood } from '../../product-models/organic-food';
 
 @Component({
   selector: 'app-products-list',
@@ -17,7 +16,7 @@ import { AdminService } from '../../../admin.service';
 export class ProductsListComponent implements OnInit {
   // store the products one of the array based on the productCategory value
   foodSupliments: FoodSupliment[];
-  healthyProducts: HealthyProduct[];
+  organicProducts: OrganicFood[];
   clothes: Clothes[];
   accessories: Accessories[];
   productCategory: string = '';
@@ -26,7 +25,7 @@ export class ProductsListComponent implements OnInit {
   // if there are no products in the collection
   emptyCollection: boolean;
 
-  constructor(private productServie: ProductService, private adminService: AdminService, private router: Router, private route: ActivatedRoute, private location: Location) { }
+  constructor(private productServie: ProductService, private router: Router, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit() {
     // get the category of the products from the category component
@@ -37,7 +36,7 @@ export class ProductsListComponent implements OnInit {
           this.foodSupliments = foodSuplimentsCollection;
 
           // Sort default by name
-          this.foodSupliments = this.adminService.sortFoodSuplimentsByNameASC(this.foodSupliments);
+          this.foodSupliments = this.productServie.sortFoodSuplimentsByNameASC(this.foodSupliments);
 
           // if the collection doesn't have any products
           if (this.foodSupliments.length === 0) {
@@ -45,15 +44,15 @@ export class ProductsListComponent implements OnInit {
           }
         });
       }
-      if (this.productCategory === ProductViewText.HEALTHY_PRODUCT) {
-        this.productServie.getAllProductByCategory(this.productCategory).subscribe((healthyProductsCollection: HealthyProduct[]) => {
-          this.healthyProducts = healthyProductsCollection;
+      if (this.productCategory === ProductViewText.ORGANIC_FOOD) {
+        this.productServie.getAllProductByCategory(this.productCategory).subscribe((organicFoodCollection: OrganicFood[]) => {
+          this.organicProducts = organicFoodCollection;
 
           // Sort default by name
-          this.healthyProducts = this.adminService.sortHealthyProductsByNameASC(this.healthyProducts);
+          this.organicProducts = this.productServie.sortOrganicProductsByNameASC(this.organicProducts);
 
           // if the collection doesn't have any products
-          if (this.healthyProducts.length === 0) {
+          if (this.organicProducts.length === 0) {
             this.emptyCollection = true;
           }
         });
@@ -63,7 +62,7 @@ export class ProductsListComponent implements OnInit {
           this.clothes = clothesCollection;
 
           // Sort default by name
-          this.clothes = this.adminService.sortClothesByNameASC(this.clothes);
+          this.clothes = this.productServie.sortClothesByNameASC(this.clothes);
 
           // if the collection doesn't have any products
           if (this.clothes.length === 0) {
@@ -76,7 +75,7 @@ export class ProductsListComponent implements OnInit {
           this.accessories = accessoriesCollection;
 
           // Sort default by name
-          this.accessories = this.adminService.sortAccessoriesByNameASC(this.accessories);
+          this.accessories = this.productServie.sortAccessoriesByNameASC(this.accessories);
 
           // if the collection doesn't have any products
           if (this.accessories.length === 0) {
@@ -87,9 +86,9 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
-  // Method to get the default price for a specific food supplement
-  getDefaultPrice(foodSupliment: FoodSupliment) {
-    return foodSupliment.prices.find(price => price.setAsDefaultPrice);
+  // Method to get the default price for the products
+  getDefaultPrice(productObject: FoodSupliment) {
+    return productObject.prices.find(price => price.setAsDefaultPrice);
   }
 
   back() {

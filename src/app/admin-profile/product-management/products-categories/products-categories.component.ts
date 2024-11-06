@@ -11,7 +11,7 @@ import { ProductViewText } from '../product-view-texts';
 export class ProductsCategoriesComponent implements OnInit {
   // products number by categories
   foodSuplimentsCount: number;
-  healthyProductsCount: number;
+  organicProductsCount: number;
   ClothesCount: number;
   accessoriesCount: number;
 
@@ -22,8 +22,8 @@ export class ProductsCategoriesComponent implements OnInit {
     this.productServie.getAllProductByCategory(ProductViewText.FOOD_SUPLIMENTS).subscribe(foodSuplimentsLenth => {
       this.foodSuplimentsCount = foodSuplimentsLenth.length;
     });
-    this.productServie.getAllProductByCategory(ProductViewText.HEALTHY_PRODUCT).subscribe(healthyFoodsLenth => {
-      this.healthyProductsCount = healthyFoodsLenth.length;
+    this.productServie.getAllProductByCategory(ProductViewText.ORGANIC_FOOD).subscribe(organicProductLengths => {
+      this.organicProductsCount = organicProductLengths.length;
     });
     this.productServie.getAllProductByCategory(ProductViewText.CLOTHES).subscribe(clothesLength => {
       this.ClothesCount = clothesLength.length;
@@ -39,7 +39,7 @@ export class ProductsCategoriesComponent implements OnInit {
   }
 
   goToHealthyProducts() {
-    this.router.navigate(['/admin-profile/pruducts', ProductViewText.HEALTHY_PRODUCT]);
+    this.router.navigate(['/admin-profile/pruducts', ProductViewText.ORGANIC_FOOD]);
   }
 
   goToClothes() {

@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FilterPageComponent } from '../filter-page/filter-page.component';
 import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
 import { Filter } from '../filter-page/filter.model';
-import { AdminService } from '../admin-profile/admin.service';
+import { ProductService } from '../products/product.service';
 
 @Component({
   selector: 'app-user-blog-list',
@@ -23,7 +23,7 @@ export class UserBlogListComponent {
     orderBy: ProductViewText.ORDER_BY_LATEST
   };
 
-  constructor(private db: AngularFirestore, private router: Router, private location: Location, private dialog: MatDialog, private adminService: AdminService) { }
+  constructor(private db: AngularFirestore, private router: Router, private location: Location, private dialog: MatDialog, private productService: ProductService) { }
 
   ngOnInit(): void {
     //load all the blogs
@@ -48,8 +48,8 @@ export class UserBlogListComponent {
 
   // Method to sort blogs by date
   sortAddresses() {
-    this.blogList = this.adminService.sortByDateASC(this.blogList);
-    this.originalBlogList = this.adminService.sortByDateASC(this.originalBlogList);
+    this.blogList = this.productService.sortByDateASC(this.blogList);
+    this.originalBlogList = this.productService.sortByDateASC(this.originalBlogList);
   }
 
   back() {
@@ -79,14 +79,17 @@ export class UserBlogListComponent {
         this.blogList = [...this.originalBlogList];
         // Apply the selected filter on the reset list
         if (filterObject.language !== '') {
-          this.blogList = this.adminService.filterBlogByLanguage(this.blogList, filterObject.language);
+          this.blogList = this.productService.filterBlogByLanguage(this.blogList, filterObject.language);
         }
         if (filterObject.orderBy === ProductViewText.ORDER_BY_OLDEST) {
-          this.blogList = this.adminService.sortByDateDESC(this.blogList);
+          this.blogList = this.productService.sortByDateDESC(this.blogList);
         } else if (filterObject.orderBy === ProductViewText.ORDER_BY_LATEST) {
-          this.blogList = this.adminService.sortByDateASC(this.blogList);
+          this.blogList = this.productService.sortByDateASC(this.blogList);
         }
       }
     });
   }
 }
+// ötlet: a blogot megnyitva az első sorban legyen 6 legrissebb, legyen 1 kiemelt
+// illetve legyen a blogoknak is kategóriája és mint az admin oldalon is fekete-fehér animációval lehessen választani
+// illetve egy összes blog bomb

@@ -3,7 +3,7 @@ export enum ProductViewText {
     FOOD_SUPLIMENTS = "foodSupliments",
     CLOTHES = "clothes",
     ACCESSORIES = "accessories",
-    HEALTHY_PRODUCT = "healthyProducts",
+    ORGANIC_FOOD = "organicFood",
 
 
     // Food supliments categories
@@ -17,11 +17,11 @@ export enum ProductViewText {
     JOIN_SUPPORT = "menu.foodSuplimentsMenu.joinSupport",
     FAT_BURNERS = "menu.foodSuplimentsMenu.fatBurners",
 
-    // Healthy food categories
-    CEREALS = "menu.healthyFoodsMenu.cereals",
-    HEALTHY_SNACKS = "menu.healthyFoodsMenu.healthySnacks",
-    COOKING_iNGREDIENTS = "menu.healthyFoodsMenu.cookingIngredients",
-    DRINKS = "menu.healthyFoodsMenu.drinks",
+    // Organic food categories
+    CEREALS = "menu.organicFoodMenu.cereals",
+    HEALTHY_SNACKS = "menu.organicFoodMenu.healthySnacks",
+    COOKING_iNGREDIENTS = "menu.organicFoodMenu.cookingIngredients",
+    DRINKS = "menu.organicFoodMenu.drinks",
 
     // Clothing categories
     WOMEN_CLOTHES = "menu.clothingMenu.womensClothing",

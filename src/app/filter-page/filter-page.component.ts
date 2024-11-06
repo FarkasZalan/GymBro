@@ -14,19 +14,35 @@ export class FilterPageComponent {
 
   editFilter: boolean = false;
 
-  isBlogFilter: boolean = false;
-
   filterObject: Filter;
 
+  // page from
+  isBlog: boolean = false;
+  isFoodSupliments: boolean = false;
+  isOrganicFood: boolean = false;
+  isClothes: boolean = false;
+  isAccessories: boolean = false;
+
   // order by
-  availableOrders: string[] = [];
+  availableOrders: string[] = [
+    ProductViewText.ORDER_BY_LATEST,
+    ProductViewText.ORDER_BY_OLDEST
+  ];
   selectedOrder: string = ProductViewText.ORDER_BY_LATEST;
   isOrderByDropdownOpen: boolean = false;
 
   // language
-  availableLanguage: string[] = [];
+  availableLanguage: string[] = [
+    ProductViewText.HUNGARIAN,
+    ProductViewText.ENGLISH
+  ];
   selectedLanguage: string = '';
   isLanguageDropdownOpen: boolean = false;
+
+  // category
+  availableCategories: string[] = [];
+  selectedCategory: string = '';
+  isCategoryDropdownOpen: boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>) {
     this.filterObject = data.filter;
@@ -37,16 +53,38 @@ export class FilterPageComponent {
     this.selectedOrder = this.filterObject.orderBy;
 
     if (data.fromPage === ProductViewText.BLOG) {
-      this.isBlogFilter = true;
-      this.availableOrders = [
-        ProductViewText.ORDER_BY_LATEST,
-        ProductViewText.ORDER_BY_OLDEST
+      this.isBlog = true;
+    } else if (data.fromPage === ProductViewText.FOOD_SUPLIMENTS) {
+      this.isFoodSupliments = true;
+      this.availableCategories = [
+        ProductViewText.PROTEINS,
+        ProductViewText.MASS_GAINERS,
+        ProductViewText.AMINO_ACIDS,
+        ProductViewText.CREATINES,
+        ProductViewText.VITAMINS_AND_MINERALS,
+        ProductViewText.JOIN_SUPPORT,
+        ProductViewText.FAT_BURNERS
       ];
-
-      this.availableLanguage = [
-        ProductViewText.HUNGARIAN,
-        ProductViewText.ENGLISH
+    } else if (data.fromPage === ProductViewText.ORGANIC_FOOD) {
+      this.isOrganicFood = true;
+      this.availableCategories = [
+        ProductViewText.CEREALS,
+        ProductViewText.HEALTHY_SNACKS,
+        ProductViewText.COOKING_iNGREDIENTS,
+        ProductViewText.DRINKS
       ];
+    } else if (data.fromPage === ProductViewText.CLOTHES) {
+      this.isClothes = true;
+      this.availableCategories = [
+        ProductViewText.MAN_CLOTHES,
+        ProductViewText.WOMEN_CLOTHES,
+      ];
+    } else if (data.fromPage === ProductViewText.ACCESSORIES) {
+      this.isAccessories = true;
+      this.availableCategories = [
+        ProductViewText.SHAKERS_AND_SPORTS_EQUIPMENTS
+      ];
+      this.selectedCategory = ProductViewText.SHAKERS_AND_SPORTS_EQUIPMENTS
     }
   }
 
@@ -56,6 +94,10 @@ export class FilterPageComponent {
 
   toggleLanguageDropdown() {
     this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
+  }
+
+  toggleCategoryDropdown() {
+    this.isCategoryDropdownOpen = !this.isCategoryDropdownOpen;
   }
 
   filter() {

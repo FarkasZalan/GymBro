@@ -18,14 +18,12 @@ import { AdminRoutingModule } from './admin-profile-routing.module';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProfileModule } from '../profile/profile.module';
 import { StatisticsComponent } from './statistics/statistics.component';
-import { ProductsListComponent } from './product-management/products-categories/products-list/products-list.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { ProductsCategoriesComponent } from './product-management/products-categories/products-categories.component';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { AddPriceDialogComponent } from './product-management/product-actions/add-price-dialog/add-price-dialog.component';
 import { HandleFoodSuplimentsComponent } from './product-management/product-actions/handle-food-supliments/handle-food-supliments.component';
-import { HandleHealtyProductsComponent } from './product-management/product-actions/handle-healty-products/handle-healty-products.component';
 import { HandleAccessoriesComponent } from './product-management/product-actions/handle-accessories/handle-accessories.component';
 import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
 import { ChangeDefaultPriceConfirmDialogComponent } from './product-management/product-actions/change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
@@ -38,6 +36,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { BlogComponent } from './blog/blog.component';
 import { UserBlogListComponent } from '../user-blog-list/user-blog-list.component';
 import { FilterPageComponent } from '../filter-page/filter-page.component';
+import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
 
 @NgModule({
     imports: [
@@ -65,7 +64,6 @@ import { FilterPageComponent } from '../filter-page/filter-page.component';
         // Declaring components that belong to the Profile module
         AdminProfileComponent,
         StatisticsComponent,
-        ProductsListComponent,
         BlogListComponent,
         OrderListComponent,
         ProductsCategoriesComponent,
@@ -77,7 +75,7 @@ import { FilterPageComponent } from '../filter-page/filter-page.component';
         AddPriceDialogComponent,
         ChangeDefaultPriceConfirmDialogComponent,
         HandleFoodSuplimentsComponent,
-        HandleHealtyProductsComponent,
+        HandleOrganicFoodComponent,
         HandleAccessoriesComponent,
         HandleClothesComponent,
         AddColorDialogComponent,

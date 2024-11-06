@@ -1,7 +1,7 @@
 import { NutritionalTable } from "./nutritional-table.model";
 import { ProductPrice } from "./product-price.model";
 
-export interface HealthyProduct {
+export interface OrganicFood {
     // identification and basic details
     id?: string;
     productName: string;

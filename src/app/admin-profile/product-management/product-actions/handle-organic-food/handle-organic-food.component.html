@@ -8,7 +8,7 @@
                     <!-- Product Name -->
                     <div class="col-md-6 form-group">
                         <label for="productName" class="label">{{ 'products.productName' | translate }}</label>
-                        <input type="text" class="form-control" [(ngModel)]="healthyProductObject.productName"
+                        <input type="text" class="form-control" [(ngModel)]="organicFoodObject.productName"
                             name="productName" required placeholder="{{ 'products.enterProductName' | translate }}"
                             #productName="ngModel">
                         <span class="help-block" *ngIf="productName.touched && !productName.valid">{{
@@ -40,7 +40,7 @@
                     <!-- Description -->
                     <div class="col-md-12 form-group">
                         <label for="description" class="label">{{ 'products.description' | translate }}</label>
-                        <textarea class="form-control" [(ngModel)]="healthyProductObject.description" name="description"
+                        <textarea class="form-control" [(ngModel)]="organicFoodObject.description" name="description"
                             required placeholder="{{ 'products.enterProductDescription' | translate }}"
                             #description="ngModel"></textarea>
                         <span class="help-block" *ngIf="description.touched && !description.valid">{{
@@ -311,18 +311,18 @@
                 <!-- Create Button -->
                 <div *ngIf="!isProductEdit" class="button-container">
                     <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
-                        (click)="addNewHealthyProduct()" [disabled]="!form.valid">{{ 'products.add' | translate
+                        (click)="addNewOrganicFood()" [disabled]="!form.valid">{{ 'products.add' | translate
                         }}</button>
                 </div>
 
                 <div *ngIf="isProductEdit" class="button-container">
                     <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
-                        (click)="editHealthyProduct()" [disabled]="!form.valid">{{ 'profilePage.modify' | translate
+                        (click)="editOrganicFood()" [disabled]="!form.valid">{{ 'profilePage.modify' | translate
                         }}</button>
                 </div>
                 <div *ngIf="isProductEdit" class="button-container">
                     <button class="btn btn-primary basic-btn delete-btn basic-form-btn" type="submit" nbButton
-                        status="success" (click)="deleteHealthyProduct()">{{
+                        status="success" (click)="deleteOrganicFood()">{{
                         'profileMenu.shippingAddressForm.deleteAddress' | translate
                         }}</button>
                 </div>

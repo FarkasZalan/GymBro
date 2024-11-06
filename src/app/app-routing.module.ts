@@ -22,6 +22,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'product',
+    loadChildren: () => import('./products/product.module')
+      .then(m => m.ProductModule),
+  },
+  {
     path: 'blog',
     loadChildren: () => import('./user-blog-list/blog.module')
       .then(m => m.BlogModule),

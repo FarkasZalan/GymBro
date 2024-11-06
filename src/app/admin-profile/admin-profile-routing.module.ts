@@ -4,12 +4,12 @@ import { PagesComponent } from '../pages/pages.component';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProductsListComponent } from './product-management/products-categories/products-list/products-list.component';
 import { HandleFoodSuplimentsComponent } from './product-management/product-actions/handle-food-supliments/handle-food-supliments.component';
-import { HandleHealtyProductsComponent } from './product-management/product-actions/handle-healty-products/handle-healty-products.component';
 import { HandleClothesComponent } from './product-management/product-actions/handle-clothes/handle-clothes.component';
 import { HandleAccessoriesComponent } from './product-management/product-actions/handle-accessories/handle-accessories.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { HandleBlogsComponent } from './blog/blog-list/handle-blogs/handle-blogs.component';
 import { BlogComponent } from './blog/blog.component';
+import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
 
 export const routes: Routes = [
     {
@@ -75,8 +75,8 @@ export const routes: Routes = [
                 component: HandleFoodSuplimentsComponent
             },
             {
-                path: 'create-product/healthyProducts',
-                component: HandleHealtyProductsComponent
+                path: 'create-product/organicFood',
+                component: HandleOrganicFoodComponent
             },
             {
                 path: 'create-product/clothes',
@@ -98,8 +98,8 @@ export const routes: Routes = [
                 component: HandleFoodSuplimentsComponent
             },
             {
-                path: 'edit-product/healthyProducts/:productId',
-                component: HandleHealtyProductsComponent
+                path: 'edit-product/organicFood/:productId',
+                component: HandleOrganicFoodComponent
             },
             {
                 path: 'edit-product/clothes/:productId',

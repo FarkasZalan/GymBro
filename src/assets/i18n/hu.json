@@ -12,8 +12,8 @@
                         "joinSupport": "Ízületvédelem",
                         "fatBurners": "Zsírégetők"
                 },
-                "healthyFoodsMenu": {
-                        "healthyFoods": "Egészséges élelmiszerek",
+                "organicFoodMenu": {
+                        "organicFood": "Bioételek",
                         "cereals": "Gabonafélék",
                         "healthySnacks": "Egészséges nasi",
                         "cookingIngredients": "Hozzávalók főzéshez",
@@ -374,7 +374,8 @@
                         "oldest": "Rendezés legrégebb szerint"
                 },
                 "apply": "Alkalmaz",
-                "selectBlog": "Szűrés nyelv szerint",
-                "deleteFilter": "Szűrők törlése"
+                "filterBlogByLanguage": "Szűrés nyelv szerint",
+                "deleteFilter": "Szűrők törlése",
+                "selectCategory": "Szűrés kategória szerint"
         }
 }

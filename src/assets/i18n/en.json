@@ -12,8 +12,8 @@
          "joinSupport": "Join Support",
          "fatBurners": "Fat Burners"
       },
-      "healthyFoodsMenu": {
-         "healthyFoods": "Healthy Foods",
+      "organicFoodMenu": {
+         "organicFood": "Organic food",
          "cereals": "Cereals",
          "healthySnacks": "Healthy Snacks",
          "cookingIngredients": "Cooking Ingredients",
@@ -372,6 +372,8 @@
          "oldest": "Order by oldest"
       },
       "apply": "Apply",
-      "deleteFilter": "Clear filters"
+      "deleteFilter": "Clear filters",
+      "filterBlogByLanguage": "Filter by language",
+      "selectCategory": "Filter by category"
    }
 }

@@ -1,6 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
-import { Location } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { NgForm } from '@angular/forms';
@@ -9,18 +8,19 @@ import { ActivatedRoute } from '@angular/router';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { DocumentHandlerService } from '../../../../document.handler.service';
-import { NutritionalTable } from '../../product-models/nutritional-table.model';
-import { ProductPrice } from '../../product-models/product-price.model';
-import { ProductViewText } from '../../product-view-texts';
 import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
-import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
-import { HealthyProduct } from '../../product-models/healthy-food.model';
 import { AdminService } from '../../../admin.service';
+import { NutritionalTable } from '../../product-models/nutritional-table.model';
+import { OrganicFood } from '../../product-models/organic-food';
+import { ProductPrice } from '../../product-models/product-price.model';
+import { ProductViewText } from '../../product-view-texts';
+import { Location } from '@angular/common';
+import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
 
 @Component({
-  selector: 'app-handle-healty-products',
-  templateUrl: './handle-healty-products.component.html',
+  selector: 'app-handle-organic-food',
+  templateUrl: './handle-organic-food.component.html',
   styleUrl: '../../../../../styles/product-management.scss',
   animations: [
     // name of tha animation what can call in html
@@ -42,8 +42,8 @@ import { AdminService } from '../../../admin.service';
     ])
   ]
 })
-export class HandleHealtyProductsComponent {
-  @ViewChild('form') createHealthyProductForm: NgForm;  // Reference to the form for validation
+export class HandleOrganicFoodComponent {
+  @ViewChild('form') createOrganicFoodForm: NgForm;  // Reference to the form for validation
 
   // Form-related properties
   errorMessage: boolean = false;
@@ -121,12 +121,12 @@ export class HandleHealtyProductsComponent {
     nutritionalValueSalt: null,
   };
 
-  // Food suppliment object to handle the product
-  healthyProductObject: HealthyProduct;
+  // Organic food object to handle the product
+  organicFoodObject: OrganicFood;
 
   // create or modify an existing product
   isProductEdit: boolean = false;
-  healthyProductId: string = '';
+  organicFoodId: string = '';
 
   // use unified image to the product
   isUnifiedImage: boolean = false;
@@ -135,7 +135,7 @@ export class HandleHealtyProductsComponent {
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
-    this.healthyProductObject = {
+    this.organicFoodObject = {
       id: "",
       productName: "",
       productCategory: "",
@@ -155,37 +155,37 @@ export class HandleHealtyProductsComponent {
       prices: []
     }
     this.route.params.subscribe(params => {
-      // get the food supliment product by id
-      this.documentumHandler.getInnerDocumentByID("products", ProductViewText.HEALTHY_PRODUCT, "allProduct", params['productId']).subscribe((healthyProduct: HealthyProduct) => {
+      // get the organic food product by id
+      this.documentumHandler.getInnerDocumentByID("products", ProductViewText.ORGANIC_FOOD, "allProduct", params['productId']).subscribe((organicProduct: OrganicFood) => {
         // make a copy from the object
-        this.healthyProductObject = { ...healthyProduct };
+        this.organicFoodObject = { ...organicProduct };
 
         // if it's not undefinied (so the user want to edit a specified product not create a new)
-        if (this.healthyProductObject.productName !== undefined) {
-          this.healthyProductId = this.healthyProductObject.id;
+        if (this.organicFoodObject.productName !== undefined) {
+          this.organicFoodId = this.organicFoodObject.id;
           this.isProductEdit = true;
           // pass the value to the object
-          this.selectedCategory = this.healthyProductObject.productCategory;
+          this.selectedCategory = this.organicFoodObject.productCategory;
 
-          this.selectedUnit = this.healthyProductObject.dosageUnit;
+          this.selectedUnit = this.organicFoodObject.dosageUnit;
 
           // prices
-          this.productPrices = this.healthyProductObject.prices;
-          this.isUnifiedImage = this.healthyProductObject.useUnifiedImage;
+          this.productPrices = this.organicFoodObject.prices;
+          this.isUnifiedImage = this.organicFoodObject.useUnifiedImage;
           if (this.isUnifiedImage) {
-            this.unifiedImageUrl = this.healthyProductObject.prices[0].productImage;
+            this.unifiedImageUrl = this.organicFoodObject.prices[0].productImage;
           }
 
           // flavor and allergies list
-          this.selectedFlavor = this.healthyProductObject.flavor;
-          this.selectedAllergenes = this.healthyProductObject.allergens;
+          this.selectedFlavor = this.organicFoodObject.flavor;
+          this.selectedAllergenes = this.organicFoodObject.allergens;
 
           // safety
-          this.isSafeForConsumptionDuringBreastfeeding = this.healthyProductObject.safeForConsumptionDuringBreastfeeding;
-          this.isSafeForConsumptionDuringPregnancy = this.healthyProductObject.safeForConsumptionDuringPregnancy;
+          this.isSafeForConsumptionDuringBreastfeeding = this.organicFoodObject.safeForConsumptionDuringBreastfeeding;
+          this.isSafeForConsumptionDuringPregnancy = this.organicFoodObject.safeForConsumptionDuringPregnancy;
 
           // nutritional table
-          this.nutritionalTable = this.healthyProductObject.nutritionalTable;
+          this.nutritionalTable = this.organicFoodObject.nutritionalTable;
         }
       });
     });
@@ -279,7 +279,7 @@ export class HandleHealtyProductsComponent {
         unit: this.selectedUnit,
         allPrices: this.productPrices,
         editText: false,
-        productCategory: ProductViewText.HEALTHY_PRODUCT,
+        productCategory: ProductViewText.ORGANIC_FOOD,
         useUnifiedImage: this.unifiedImageUrl,
       }
     });
@@ -314,7 +314,7 @@ export class HandleHealtyProductsComponent {
         allPrices: this.productPrices,
         selectedPrice: this.productPrices[id],
         editText: true,
-        productCategory: ProductViewText.HEALTHY_PRODUCT,
+        productCategory: ProductViewText.ORGANIC_FOOD,
         useUnifiedImage: this.unifiedImageUrl,
       }
     });
@@ -354,7 +354,7 @@ export class HandleHealtyProductsComponent {
     this.productPrices = this.productPrices.sort((a, b) => a.productPrice - b.productPrice);
   }
 
-  async addNewHealthyProduct() {
+  async addNewOrganicFood() {
     // error handleing
     if (this.productPrices.length === 0) {
       this.missingPricesErrorMessage = true;
@@ -363,7 +363,7 @@ export class HandleHealtyProductsComponent {
     }
 
     const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.HEALTHY_PRODUCT, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName), undefined, ""
+      "products", ProductViewText.ORGANIC_FOOD, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createOrganicFoodForm.value.productName), undefined, ""
     );
 
     if (checkForDuplication) {
@@ -392,12 +392,12 @@ export class HandleHealtyProductsComponent {
       this.productPrices[0].setAsDefaultPrice = true;
     }
 
-    // create new Healthy product object
-    this.healthyProductObject = {
+    // create new Organic food object
+    this.organicFoodObject = {
       id: "",
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName),
+      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createOrganicFoodForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createHealthyProductForm.value.description,
+      description: this.createOrganicFoodForm.value.description,
       dosageUnit: this.selectedUnit,
       flavor: this.selectedFlavor,
 
@@ -412,12 +412,12 @@ export class HandleHealtyProductsComponent {
       useUnifiedImage: this.isUnifiedImage
     }
 
-    // Add the new healthy product
+    // Add the new Organic food
     try {
-      const documentumRef = await this.db.collection("products").doc(ProductViewText.HEALTHY_PRODUCT).collection("allProduct").add(this.healthyProductObject);
+      const documentumRef = await this.db.collection("products").doc(ProductViewText.ORGANIC_FOOD).collection("allProduct").add(this.organicFoodObject);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
-      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, documentumRef.id, this.unifiedImageUrl, this.productPrices);
+      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.ORGANIC_FOOD, documentumRef.id, this.unifiedImageUrl, this.productPrices);
       await documentumRef.update({ prices: this.productPrices });
       this.errorMessage = false;
       this.productNameExistsError = false;
@@ -434,7 +434,7 @@ export class HandleHealtyProductsComponent {
     }
   }
 
-  async editHealthyProduct() {
+  async editOrganicFood() {
     // error handleing
     if (this.productPrices.length === 0) {
       this.missingPricesErrorMessage = true;
@@ -443,7 +443,7 @@ export class HandleHealtyProductsComponent {
     }
 
     const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.HEALTHY_PRODUCT, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName), undefined, this.healthyProductObject.id
+      "products", ProductViewText.ORGANIC_FOOD, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createOrganicFoodForm.value.productName), undefined, this.organicFoodObject.id
     );
 
     if (checkForDuplication) {
@@ -471,14 +471,14 @@ export class HandleHealtyProductsComponent {
     if (!hasDefaultPrice) {
       this.productPrices[0].setAsDefaultPrice = true;
     }
-    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.HEALTHY_PRODUCT, this.healthyProductId, this.unifiedImageUrl, this.productPrices);
+    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.ORGANIC_FOOD, this.organicFoodId, this.unifiedImageUrl, this.productPrices);
 
     // create new Food supliment object
-    this.healthyProductObject = {
-      id: this.healthyProductId,
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createHealthyProductForm.value.productName),
+    this.organicFoodObject = {
+      id: this.organicFoodId,
+      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createOrganicFoodForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createHealthyProductForm.value.description,
+      description: this.createOrganicFoodForm.value.description,
       dosageUnit: this.selectedUnit,
       flavor: this.selectedFlavor,
 
@@ -493,9 +493,9 @@ export class HandleHealtyProductsComponent {
       useUnifiedImage: this.isUnifiedImage
     }
 
-    // Edit the healthy product
+    // Edit the organic food
     try {
-      await this.db.collection("products").doc(ProductViewText.HEALTHY_PRODUCT).collection("allProduct").doc(this.healthyProductId).update(this.healthyProductObject);
+      await this.db.collection("products").doc(ProductViewText.ORGANIC_FOOD).collection("allProduct").doc(this.organicFoodId).update(this.organicFoodObject);
 
       this.errorMessage = false;
       this.productNameExistsError = false;
@@ -513,7 +513,7 @@ export class HandleHealtyProductsComponent {
     }
   }
 
-  async deleteHealthyProduct() {
+  async deleteOrganicFood() {
     const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
       data: {
         text: DeleteConfirmationText.PRODUCT_DELETE
@@ -540,10 +540,10 @@ export class HandleHealtyProductsComponent {
         await Promise.all(deleteImagePromises);
 
         // Delete all the images from the product storage folder
-        await this.adminService.deleteAllFilesInFolder(ProductViewText.HEALTHY_PRODUCT, this.healthyProductId);
+        await this.adminService.deleteAllFilesInFolder(ProductViewText.ORGANIC_FOOD, this.organicFoodId);
 
         // Delete the product from firestore
-        const deleteAddressRef = this.db.collection("products").doc(ProductViewText.HEALTHY_PRODUCT).collection("allProduct").doc(this.healthyProductId);
+        const deleteAddressRef = this.db.collection("products").doc(ProductViewText.ORGANIC_FOOD).collection("allProduct").doc(this.organicFoodId);
         await deleteAddressRef.delete();
         this.dialog.open(SuccessfullDialogComponent, {
           data: {
