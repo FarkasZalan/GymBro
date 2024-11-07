@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { NgForm } from '@angular/forms';
@@ -45,6 +45,7 @@ import { Accessories } from '../../product-models/accessories.model';
 })
 export class HandleAccessoriesComponent {
   @ViewChild('form') createAccessoriesForm: NgForm;  // Reference to the form for validation
+  @ViewChild('fileInput') fileInput!: ElementRef; // To the upload image button management
 
   // Form-related properties
   errorMessage: boolean = false;
@@ -253,6 +254,11 @@ export class HandleAccessoriesComponent {
     this.accessoryColors = this.accessoryColors.sort((a, b) => a.color.localeCompare(b.color));
   }
 
+  // handle upload image button
+  triggerImageUpload() {
+    this.fileInput.nativeElement.click();
+  }
+
   // handle unified checkbox value
   onUnifiedImageChange(isUnified: boolean) {
     if (isUnified) {
@@ -279,6 +285,13 @@ export class HandleAccessoriesComponent {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  removeImage() {
+    this.unifiedImageUrl = '';
+    this.productPrices.forEach(price => {
+      price.productImage = this.unifiedImageUrl
+    });
   }
 
   // Open dialog to add new price

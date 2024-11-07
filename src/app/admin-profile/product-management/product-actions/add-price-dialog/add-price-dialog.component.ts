@@ -27,10 +27,10 @@ import { ProductColor } from '../../product-models/product-color.model';
         overflow: 'hidden'
       })),
       transition('void => *', [
-        animate('150ms ease-out') // Expands smoothly
+        animate('250ms ease-out') // Expands smoothly
       ]),
       transition('* => void', [
-        animate('100ms ease-in') // Collapses smoothly
+        animate('250ms ease-in') // Collapses smoothly
       ])
     ])
   ]
@@ -177,6 +177,7 @@ export class AddPriceDialogComponent implements OnInit {
     const color = this.availableProductColors.find(item => item.color === this.selectedColor);
     this.imageBase64 = color.imageUrl;
     this.imagePreview = this.imageBase64;
+    console.log(this.productCategory)
   }
 
   // handle upload image button
@@ -196,6 +197,11 @@ export class AddPriceDialogComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  removeImage() {
+    this.imageBase64 = '';
+    this.imagePreview = this.imageBase64;
   }
 
   // Method to create new price and return to the parent page

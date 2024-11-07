@@ -95,13 +95,21 @@
                                 type="file" #fileInput accept="image/*" style="display: none"
                                 (change)="onFileSelected($event)" />
 
+                            <!-- Display selected image -->
+                            <div [@collapseField] *ngIf="imagePreview !== null" class="image-preview-container">
+                                <button
+                                    *ngIf="imagePreview !== '' && ((unifiedImageUrl === null) && (productCategory !== productViewText.CLOTHES) && (accessoriesType !== null && accessoriesType !== undefinied && accessoriesType !== productViewText.SHAKERS))"
+                                    class="delete-image-button btn" (click)="removeImage()" type="button">X</button>
 
-                            <div [@collapseField] *ngIf="imagePreview" (click)="triggerImageUpload()">
-                                <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
-                            </div>
+                                <!-- Image display -->
+                                <img *ngIf="imagePreview" (click)="triggerImageUpload()" [src]="imagePreview"
+                                    alt="Image Preview"
+                                    [ngClass]="{'cursor-pointer': (unifiedImageUrl === null) && (productCategory !== productViewText.CLOTHES) && (accessoriesType !== null && accessoriesType !== undefined && accessoriesType !== productViewText.SHAKERS)}"
+                                    class="image-preview" />
 
-                            <div [@collapseField] (click)="triggerImageUpload()" *ngIf="imagePreview === ''">
-                                <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+                                <!-- Default image display -->
+                                <img *ngIf="unifiedImageUrl === '' || (productCategory === productViewText.CLOTHES && imagePreview === '') || (accessoriesType === productViewText.SHAKERS && imagePreview === '')"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
                                     class="image-preview" />
                             </div>
                             <br>

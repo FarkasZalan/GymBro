@@ -7,11 +7,31 @@ import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmati
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { ProductViewText } from '../../product-view-texts';
 import { ProductColor } from '../../product-models/product-color.model';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-add-color-dialog',
   templateUrl: './add-color-dialog.component.html',
-  styleUrl: '../../../../../styles/add-dialog.scss'
+  styleUrl: '../../../../../styles/add-dialog.scss',
+  animations: [
+    // name of tha animation what can call in html
+    trigger('collapseField', [
+      state('void', style({
+        height: '0px', // Initially collapsed
+        overflow: 'hidden'
+      })),
+      state('*', style({
+        height: '*', // Expands to the full height of the content
+        overflow: 'hidden'
+      })),
+      transition('void => *', [
+        animate('250ms ease-out') // Expands smoothly
+      ]),
+      transition('* => void', [
+        animate('250ms ease-in') // Collapses smoothly
+      ])
+    ])
+  ]
 })
 export class AddColorDialogComponent {
   @ViewChild('form') priceForm: NgForm;  // Reference to the form for validation
@@ -100,6 +120,11 @@ export class AddColorDialogComponent {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  removeImage() {
+    this.imageBase64 = '';
+    this.imagePreview = this.imageBase64;
   }
 
   // Method to initiate password recovery

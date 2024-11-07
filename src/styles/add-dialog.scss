@@ -20,6 +20,10 @@ input.ng-invalid.ng-touched {
     margin-top: 1% !important;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 input.ng-valid {
     border: 1px solid green;
     margin-bottom: 2% !important;
@@ -80,12 +84,50 @@ img {
     min-width: 366px;
 }
 
-.image-preview {
+.image-preview-container {
+    position: relative;
+    display: table;
     max-height: 200px;
     width: auto;
     margin-top: 15px;
-    display: block;
     margin-left: auto;
     margin-right: auto;
+
+    text-align: center;
+}
+
+.delete-image-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: red !important;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 17px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        background-color: red !important;
+        color: white !important;
+        transform: scale(1.1) !important;
+    }
+
+    &:active {
+        background-color: darken(red, 15%) !important;
+        color: white !important;
+        transform: scale(0.95) !important;
+    }
+}
+
+.image-preview {
+    max-height: 200px;
+    width: auto;
     border-radius: 20px;
+    display: block;
 }

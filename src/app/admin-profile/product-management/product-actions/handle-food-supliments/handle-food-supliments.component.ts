@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -45,6 +45,7 @@ import { AdminService } from '../../../admin.service';
 })
 export class HandleFoodSuplimentsComponent implements OnInit {
   @ViewChild('form') createFoodSuplimentForm: NgForm;  // Reference to the form for validation
+  @ViewChild('fileInput') fileInput!: ElementRef; // To the upload image button management
 
   // Form-related properties
   errorMessage: boolean = false;
@@ -419,6 +420,11 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     if (index > -1) list.splice(index, 1);
   }
 
+  // handle upload image button
+  triggerImageUpload() {
+    this.fileInput.nativeElement.click();
+  }
+
   // handle unified checkbox value
   onUnifiedImageChange(isUnified: boolean) {
     if (isUnified) {
@@ -445,6 +451,13 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  removeImage() {
+    this.unifiedImageUrl = '';
+    this.productPrices.forEach(price => {
+      price.productImage = this.unifiedImageUrl
+    });
   }
 
   // Open dialog to add new price

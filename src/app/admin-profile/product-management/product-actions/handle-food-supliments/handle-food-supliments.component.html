@@ -98,12 +98,24 @@
                     <div *ngIf="isUnifiedImage" [@collapseField] class="form-group">
                         <label for="productImage" class="label">{{ 'products.productImage' | translate
                             }}</label>
-                        <input type="file" class="form-control" (change)="onFileSelected($event)" />
-                        <div *ngIf="unifiedImageUrl">
-                            <img [src]="unifiedImageUrl" alt="Image Preview" class="image-preview" />
+
+                        <!-- Button to Trigger Image Upload -->
+                        <div class="send-button-container blog-btn-container">
+                            <button class="btn btn-primary forgot-btn blog-btn" type="button" nbButton
+                                (click)="triggerImageUpload()">
+                                {{ 'products.uploadProductImage' | translate }}
+                            </button>
                         </div>
-                        <div *ngIf="unifiedImageUrl === ''">
-                            <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+
+                        <!-- Hidden file input for Image Upload -->
+                        <input type="file" #fileInput accept="image/*" style="display: none"
+                            (change)="onFileSelected($event)" />
+
+                        <!-- Display selected image -->
+                        <div [@collapseField] *ngIf="unifiedImageUrl" class="image-preview-container">
+                            <button class="delete-image-button-unified-image btn" (click)="removeImage()"
+                                type="button">X</button>
+                            <img (click)="triggerImageUpload()" [src]="unifiedImageUrl" alt="Image Preview"
                                 class="image-preview" />
                         </div>
                         <br>

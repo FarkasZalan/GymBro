@@ -52,12 +52,10 @@
                     <input type="file" #fileInput accept="image/*" style="display: none"
                         (change)="onFileSelected($event)" />
 
-                    <div (click)="triggerImageUpload()" *ngIf="imagePreview">
-                        <img [src]="imagePreview" alt="Image Preview" class="blog-image-preview" />
-                    </div>
-
-                    <div (click)="triggerImageUpload()" *ngIf="imagePreview === ''">
-                        <img src="../../../../../../assets/images/gym-bro-logo.png" alt="Image Preview"
+                    <!-- Display selected image -->
+                    <div [@collapseField] *ngIf="imagePreview" class="image-preview-container">
+                        <button class="delete-image-button btn" (click)="removeImage()" type="button">X</button>
+                        <img (click)="triggerImageUpload()" [src]="imagePreview" alt="Image Preview"
                             class="blog-image-preview" />
                     </div>
                 </div>

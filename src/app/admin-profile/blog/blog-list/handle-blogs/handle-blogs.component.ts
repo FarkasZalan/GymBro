@@ -10,15 +10,35 @@ import { ProductViewText } from '../../../product-management/product-view-texts'
 import { MatDialog } from '@angular/material/dialog';
 import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
-import { ActivatedRoute, Route } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { Timestamp } from 'firebase/firestore';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-handle-blogs',
   templateUrl: './handle-blogs.component.html',
   styleUrl: '../../../../../styles/product-management.scss',
+  animations: [
+    // name of tha animation what can call in html
+    trigger('collapseField', [
+      state('void', style({
+        height: '0px', // Initially collapsed
+        overflow: 'hidden'
+      })),
+      state('*', style({
+        height: '*', // Expands to the full height of the content
+        overflow: 'hidden'
+      })),
+      transition('void => *', [
+        animate('250ms ease-out') // Expands smoothly
+      ]),
+      transition('* => void', [
+        animate('250ms ease-in') // Collapses smoothly
+      ])
+    ])
+  ]
 })
 export class HandleBlogsComponent implements OnInit {
   @ViewChild('form') createBlogForm: NgForm;  // Reference to the form for validation
@@ -177,6 +197,11 @@ export class HandleBlogsComponent implements OnInit {
     const task = this.storage.upload(filePath, blob, metadata); // Upload image as blob
     await task.snapshotChanges().toPromise(); // Wait for upload completion
     return fileRef.getDownloadURL().toPromise(); // Return the download URL
+  }
+
+  removeImage() {
+    this.imageBase64 = '';
+    this.imagePreview = this.imageBase64;
   }
 
   async addBlog() {

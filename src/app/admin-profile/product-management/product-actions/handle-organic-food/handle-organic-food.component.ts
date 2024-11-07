@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { NgForm } from '@angular/forms';
@@ -44,6 +44,7 @@ import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.co
 })
 export class HandleOrganicFoodComponent {
   @ViewChild('form') createOrganicFoodForm: NgForm;  // Reference to the form for validation
+  @ViewChild('fileInput') fileInput!: ElementRef; // To the upload image button management
 
   // Form-related properties
   errorMessage: boolean = false;
@@ -243,6 +244,11 @@ export class HandleOrganicFoodComponent {
     if (index > -1) list.splice(index, 1);
   }
 
+  // handle upload image button
+  triggerImageUpload() {
+    this.fileInput.nativeElement.click();
+  }
+
   // handle unified checkbox value
   onUnifiedImageChange(isUnified: boolean) {
     if (isUnified) {
@@ -269,6 +275,13 @@ export class HandleOrganicFoodComponent {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  removeImage() {
+    this.unifiedImageUrl = '';
+    this.productPrices.forEach(price => {
+      price.productImage = this.unifiedImageUrl
+    });
   }
 
   // Open dialog to add new price
