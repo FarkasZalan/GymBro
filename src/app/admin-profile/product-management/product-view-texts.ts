@@ -43,6 +43,18 @@ export enum ProductViewText {
     XXL = "XXL",
     XXXL = "XXXL",
 
+    // Bottle sizes
+    BOTTLE_100_ML = "100 ml",
+    BOTTLE_150_ML = "150 ml",
+    BOTTLE_300_ML = "300 ml",
+    BOTTLE_450_ML = "450 ml",
+    BOTTLE_500_ML = "500 ml",
+    BOTTLE_600_ML = "600 ml",
+    BOTTLE_700_ML = "700 ml",
+    BOTTLE_800_ML = "800 ml",
+    BOTTLE_1000_ML = "1000 ml",
+    BOTTLE_1500_ML = "1500 ml",
+
     // Clothing types
     COAT = "products.clothes.coat",
     PANTS = "products.clothes.pants",
@@ -83,6 +95,7 @@ export enum ProductViewText {
     GENDER = "Gender",
     MALE = "products.male",
     FEMALE = "products.female",
+    UNISEX = "products.unisex",
 
     // Protein
     CASEIN = "products.proteins.casein",
@@ -135,5 +148,9 @@ export enum ProductViewText {
 
     // Order
     ORDER_BY_LATEST = 'filter.orderBy.latest',
-    ORDER_BY_OLDEST = 'filter.orderBy.oldest'
+    ORDER_BY_OLDEST = 'filter.orderBy.oldest',
+    ORDER_BY_PRICE_CHEAPEST = 'filter.orderBy.cheapest',
+    ORDER_BY_PRICE_MOST_EXPENSIVE = 'filter.orderBy.mostExpensive',
+    ORDER_BY_NAME_ASC = 'filter.orderBy.nameASC',
+    ORDER_BY_NAME_DESC = 'filter.orderBy.nameDESC'
 }

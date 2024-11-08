@@ -178,12 +178,8 @@
                                         </nb-card-header>
 
                                         <h3>{{ price.productPrice }} {{ 'products.huf' | translate }}</h3>
-                                        <p *ngIf="selectedAccessoryType === productViewText.WEIGHT_LIFTING"
-                                            class="weight-text">{{ 'products.clothes.size' | translate }}: {{
+                                        <p class="weight-text">{{ 'products.clothes.size' | translate }}: {{
                                             price.productSize }}</p>
-                                        <p *ngIf="selectedAccessoryType === productViewText.SHAKERS"
-                                            class="weight-text">{{ 'products.clothes.size' | translate }}: {{
-                                            price.bottleSize }} {{ productViewText.ML | translate }}</p>
                                     </div>
                                 </nb-card-body>
                             </nb-card>

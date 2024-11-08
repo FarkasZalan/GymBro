@@ -56,7 +56,7 @@ export class HandleAccessoriesComponent {
   // Product categories
   productViewText = ProductViewText;
 
-  // clothing type
+  // accessories type
   availableAccessoriesTypes: string[] = [
     ProductViewText.SHAKERS,
     ProductViewText.WEIGHT_LIFTING
@@ -326,7 +326,7 @@ export class HandleAccessoriesComponent {
         }
 
         // Determine the property name based on accessory type
-        const sizeProperty = this.selectedAccessoryType === this.productViewText.SHAKERS ? 'bottleSize' : 'productSize';
+        const sizeProperty = 'productSize';
         const imageUrlProperty = this.selectedAccessoryType === this.productViewText.SHAKERS ? 'productColor' : 'productImage';
 
         // Check for duplicates before adding
@@ -387,7 +387,7 @@ export class HandleAccessoriesComponent {
         }
 
         // Determine the property name based on accessory type
-        const sizeProperty = this.selectedAccessoryType === this.productViewText.SHAKERS ? 'bottleSize' : 'productSize';
+        const sizeProperty = 'productSize';
         const imageUrlProperty = this.selectedAccessoryType === this.productViewText.SHAKERS ? 'productColor' : 'productImage';
 
         // Check if a price with the same color and size already exists

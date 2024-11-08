@@ -4,7 +4,7 @@ export interface Clothes {
     // identification and basic details
     id?: string;
     productName: string;
-    productCategory: string;
+    productGender: string;
     description: string;
 
     // type and material

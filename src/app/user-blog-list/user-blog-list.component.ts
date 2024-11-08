@@ -20,7 +20,19 @@ export class UserBlogListComponent {
   originalBlogList: Blog[] = []; // original, unfiltered blog list
   filterObject: Filter = {
     language: '',
-    orderBy: ProductViewText.ORDER_BY_LATEST
+    category: '',
+    orderBy: ProductViewText.ORDER_BY_LATEST,
+    flavors: [],
+    allergenes: [],
+    safeForConsumptionDuringBreastfeeding: true,
+    safeForConsumptionDuringPregnancy: true,
+    proteinType: '',
+    gender: '',
+    color: '',
+    size: '',
+    clothingType: '',
+    material: '',
+    equipmentType: ''
   };
 
   constructor(private db: AngularFirestore, private router: Router, private location: Location, private dialog: MatDialog, private productService: ProductService) { }
@@ -71,7 +83,19 @@ export class UserBlogListComponent {
         this.blogList = [...this.originalBlogList];
         this.filterObject = {
           language: '',
-          orderBy: ProductViewText.ORDER_BY_LATEST
+          category: '',
+          orderBy: ProductViewText.ORDER_BY_LATEST,
+          flavors: [],
+          allergenes: [],
+          safeForConsumptionDuringBreastfeeding: true,
+          safeForConsumptionDuringPregnancy: true,
+          proteinType: '',
+          gender: '',
+          color: '',
+          size: '',
+          clothingType: '',
+          material: '',
+          equipmentType: ''
         }
       } else if (filterObject && typeof filterObject === 'object') {
         this.filterObject = filterObject;

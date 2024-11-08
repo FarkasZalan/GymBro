@@ -107,28 +107,4 @@ export class DocumentHandlerService {
         });
     });
   }
-
-
-  // Fetch related blogs based on tags and language
-  getRelatedBlogs(tags: string[], currentBlogId: string, language: string): Observable<Blog[]> {
-    return this.db.collection<Blog>('blog', ref =>
-      ref
-        .where('id', '!=', currentBlogId)
-        .where('language', '==', language)
-        .where('blogTags', 'array-contains-any', tags)
-        .orderBy('date')
-        .limit(6)
-    ).valueChanges();
-  }
-
-  // Fetch random blogs based on language
-  getRandomBlogs(currentBlogId: string, limit: number, language: string) {
-    return this.db.collection<Blog>('blog', ref =>
-      ref
-        .where('id', '!=', currentBlogId)
-        .where('language', '==', language)
-        .orderBy('date')
-        .limit(limit)
-    ).valueChanges();
-  }
 }

@@ -7,6 +7,7 @@ export interface Accessories {
     productCategory: string;
     description: string;
 
+    // shakers or weight lifting
     equipmentType: string;
 
     useUnifiedImage: boolean;

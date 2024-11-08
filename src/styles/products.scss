@@ -191,7 +191,31 @@ nb-card-body {
     justify-content: center;
 }
 
+.product-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow wrapping to the next row */
+    margin-top: 10px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+    height: fit-content;
+    justify-content: center;
+}
+
 .empty-list-container {
+    margin-top: 10px;
+    max-width: 60%;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+}
+
+.product-empty-list-container {
     margin-top: 10px;
     max-width: 60%;
     max-width: fit-content;
@@ -588,5 +612,13 @@ h5 {
 @media(min-height: 800px) {
     .empty-list-container {
         height: 500px !important;
+    }
+
+    .product-empty-list-container {
+        height: 600px !important;
+    }
+
+    .product-list-container {
+        min-height: 600px !important;
     }
 }

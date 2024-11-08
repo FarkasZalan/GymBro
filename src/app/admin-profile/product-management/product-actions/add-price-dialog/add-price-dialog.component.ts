@@ -60,15 +60,7 @@ export class AddPriceDialogComponent implements OnInit {
   unifiedImageUrl: string = '';
 
   // For clothing and accessories prices
-  availableProductSizes: string[] = [
-    ProductViewText.XS,
-    ProductViewText.S,
-    ProductViewText.M,
-    ProductViewText.L,
-    ProductViewText.XL,
-    ProductViewText.XXL,
-    ProductViewText.XXXL,
-  ];
+  availableProductSizes: string[] = [];
   selectedSize: string = '';
 
   availableProductColors: ProductColor[] = [];
@@ -140,10 +132,31 @@ export class AddPriceDialogComponent implements OnInit {
         this.availableProductColors = Object.values(this.data.allColors);
         this.availableProductColors.sort((a, b) => a.color.localeCompare(b.color));
         this.accessoriesType = this.data.accessoriesType;
+        this.selectedSize = this.data.size;
         if (this.accessoriesType === this.productViewText.SHAKERS) {
+          this.availableProductSizes = [
+            ProductViewText.BOTTLE_100_ML,
+            ProductViewText.BOTTLE_150_ML,
+            ProductViewText.BOTTLE_300_ML,
+            ProductViewText.BOTTLE_450_ML,
+            ProductViewText.BOTTLE_500_ML,
+            ProductViewText.BOTTLE_600_ML,
+            ProductViewText.BOTTLE_700_ML,
+            ProductViewText.BOTTLE_800_ML,
+            ProductViewText.BOTTLE_1000_ML,
+            ProductViewText.BOTTLE_1500_ML,
+          ];
           this.selectedColor = this.data.selectedColor;
         } else {
-          this.selectedSize = this.data.size;
+          this.availableProductSizes = [
+            ProductViewText.XS,
+            ProductViewText.S,
+            ProductViewText.M,
+            ProductViewText.L,
+            ProductViewText.XL,
+            ProductViewText.XXL,
+            ProductViewText.XXXL,
+          ];
         }
       }
 
@@ -177,7 +190,6 @@ export class AddPriceDialogComponent implements OnInit {
     const color = this.availableProductColors.find(item => item.color === this.selectedColor);
     this.imageBase64 = color.imageUrl;
     this.imagePreview = this.imageBase64;
-    console.log(this.productCategory)
   }
 
   // handle upload image button
@@ -211,11 +223,6 @@ export class AddPriceDialogComponent implements OnInit {
       quantity = this.priceForm.value.quantityInProduct;
     }
 
-    let bottleSize = 0;
-    if (this.priceForm.value.bottleSize !== undefined) {
-      bottleSize = this.priceForm.value.bottleSize;
-    }
-
     if (this.unifiedImageUrl !== null) {
       this.imageBase64 = this.unifiedImageUrl;
     }
@@ -225,7 +232,6 @@ export class AddPriceDialogComponent implements OnInit {
       productImage: this.imageBase64,
       productPrice: this.priceForm.value.productPrice,
       productStock: this.priceForm.value.productStock,
-      bottleSize: bottleSize,
       setAsDefaultPrice: this.isSetAsDefaultPrice,
       productSize: this.selectedSize,
       productColor: this.selectedColor

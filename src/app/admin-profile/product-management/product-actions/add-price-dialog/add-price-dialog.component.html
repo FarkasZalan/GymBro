@@ -51,7 +51,7 @@
                         </div>
 
                         <!-- Product size (Dropdown) -->
-                        <div *ngIf="(productCategory === productViewText.CLOTHES) || (productCategory === productViewText.ACCESSORIES && accessoriesType === productViewText.WEIGHT_LIFTING)"
+                        <div *ngIf="(productCategory === productViewText.CLOTHES) || (productCategory === productViewText.ACCESSORIES && accessoriesType === productViewText.WEIGHT_LIFTING) || (productCategory === productViewText.ACCESSORIES && accessoriesType === productViewText.SHAKERS)"
                             class="row">
                             <div class="col-md-12 form-group">
                                 <label for="productSize" class="label">{{ 'products.clothes.size' | translate
@@ -114,18 +114,6 @@
                             </div>
                             <br>
                         </div>
-
-                        <!-- Water Bottle/Shaker size in ml block -->
-                        <div *ngIf="accessoriesType === productViewText.SHAKERS" class="form-group">
-                            <label for="bottleSize" class="label">{{ 'products.clothes.size' | translate
-                                }}</label>
-                            <input type="number" class="form-control" name="bottleSize" fullWidth placeholder="{{ 'products.accessories.selectSize' | translate
-                                }} ({{ productViewText.ML }})" required #bottleSize="ngModel"
-                                [(ngModel)]="newPrice.bottleSize" />
-                            <!-- price error block -->
-                            <span class="help-block" *ngIf="!bottleSize.valid && bottleSize.touched">{{
-                                'register.fieldRequired' | translate }}</span>
-                        </div><br>
 
                         <!-- Product Price block -->
                         <div class="form-group">

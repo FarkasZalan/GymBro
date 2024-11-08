@@ -121,12 +121,9 @@
                     <h4>{{ accessory.productName }}</h4>
                     <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
                         'products.huf' | translate }}</h5>
-                    <h5 *ngIf="accessory.equipmentType === productViewText.WEIGHT_LIFTING" class="price-display">{{
+                    <h5 class="price-display">{{
                         'products.clothes.size' | translate }}: {{
                         defaultPrice.productSize }}</h5>
-                    <h5 *ngIf="accessory.equipmentType === productViewText.SHAKERS" class="price-display">{{
-                        'products.clothes.size' | translate }}: {{
-                        defaultPrice.bottleSize }} {{ productViewText.ML | translate }}</h5>
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>

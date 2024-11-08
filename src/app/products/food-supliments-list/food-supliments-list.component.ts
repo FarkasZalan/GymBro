@@ -14,7 +14,8 @@ import { FilterPageComponent } from '../../filter-page/filter-page.component';
 })
 export class FoodSuplimentsListComponent implements OnInit {
   // store the products one of the array
-  foodSupliments: FoodSupliment[];
+  foodSupliments: FoodSupliment[] = [];
+  originalFoodSuplimentList: FoodSupliment[] = [];
   productViewText = ProductViewText;
 
   // if there are no products in the collection
@@ -22,7 +23,19 @@ export class FoodSuplimentsListComponent implements OnInit {
 
   filterObject: Filter = {
     language: '',
-    orderBy: ProductViewText.ORDER_BY_LATEST
+    category: '',
+    orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+    flavors: [],
+    allergenes: [],
+    safeForConsumptionDuringBreastfeeding: true,
+    safeForConsumptionDuringPregnancy: true,
+    proteinType: '',
+    gender: '',
+    color: '',
+    size: '',
+    clothingType: '',
+    material: '',
+    equipmentType: ''
   };
 
   constructor(private productService: ProductService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
@@ -30,9 +43,11 @@ export class FoodSuplimentsListComponent implements OnInit {
   ngOnInit(): void {
     this.productService.getAllProductByCategory(ProductViewText.FOOD_SUPLIMENTS).subscribe((foodSuplimentsCollection: FoodSupliment[]) => {
       this.foodSupliments = foodSuplimentsCollection;
+      this.originalFoodSuplimentList = foodSuplimentsCollection;
 
       // Sort default by name
       this.foodSupliments = this.productService.sortFoodSuplimentsByPriceASC(this.foodSupliments);
+      this.originalFoodSuplimentList = this.productService.sortFoodSuplimentsByPriceASC(this.originalFoodSuplimentList);
 
       // if the collection doesn't have any products
       if (this.foodSupliments.length === 0) {
@@ -60,7 +75,105 @@ export class FoodSuplimentsListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((filterObject: Filter | boolean) => {
+      // If true is returned, delete the filters
+      if (filterObject === true) {
+        this.deleteFilters();
+      } else if (filterObject && typeof filterObject === 'object') {
+        this.filterObject = filterObject;
+        this.applyFilters(); // Apply the filters to the original list
+        if (this.foodSupliments.length === 0) {
+          this.emptyCollection = true;
+        } else {
+          this.emptyCollection = false;
 
+          if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
+            this.foodSupliments = this.productService.sortFoodSuplimentsByPriceDESC(this.foodSupliments);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
+            this.foodSupliments = this.productService.sortFoodSuplimentsByPriceASC(this.foodSupliments);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
+            this.foodSupliments = this.productService.sortFoodSuplimentsByNameASC(this.foodSupliments);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
+            this.foodSupliments = this.productService.sortFoodSuplimentsByNameDESC(this.foodSupliments);
+          }
+        }
+      }
+    });
+  }
+
+  deleteFilters() {
+    this.foodSupliments = [...this.originalFoodSuplimentList];
+    this.filterObject = {
+      language: '',
+      category: '',
+      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+      flavors: [],
+      allergenes: [],
+      safeForConsumptionDuringBreastfeeding: true,
+      safeForConsumptionDuringPregnancy: true,
+      proteinType: '',
+      gender: '',
+      color: '',
+      size: '',
+      clothingType: '',
+      material: '',
+      equipmentType: ''
+    }
+    this.emptyCollection = false;
+  }
+
+  applyFilters() {
+    this.foodSupliments = this.originalFoodSuplimentList.filter((item) => {
+      // Check each filter conditionally
+
+      // Category
+      if (this.filterObject.category && item.productCategory !== this.filterObject.category) {
+        return false;
+      }
+
+      // Flavors (array contains any)
+      if (this.filterObject.flavors && this.filterObject.flavors.length > 0) {
+        if (!this.filterObject.flavors.some(flavor => item.flavors.includes(flavor))) {
+          return false;
+        }
+      }
+
+      // Allergens (array contains any)
+      if (this.filterObject.allergenes && this.filterObject.allergenes.length > 0) {
+        if (!this.filterObject.allergenes.some(allergen => item.allergens.includes(allergen))) {
+          return false;
+        }
+      }
+
+      // Safe for pregnancy
+      if (this.filterObject.safeForConsumptionDuringPregnancy !== undefined &&
+        item.safeForConsumptionDuringPregnancy !== this.filterObject.safeForConsumptionDuringPregnancy) {
+        return false;
+      }
+
+      // Safe for breastfeeding
+      if (this.filterObject.safeForConsumptionDuringBreastfeeding !== undefined &&
+        item.safeForConsumptionDuringBreastfeeding !== this.filterObject.safeForConsumptionDuringBreastfeeding) {
+        return false;
+      }
+
+      // Protein type
+      if (this.filterObject.proteinType && item.proteinType !== this.filterObject.proteinType) {
+        return false;
+      }
+
+      // Gender (array contains any)
+      if (this.filterObject.gender) {
+        if (this.filterObject.gender === ProductViewText.UNISEX) {
+          // If the selected gender is UNISEX, allow all items regardless of gender
+          return true;
+        } else if (!item.genderList.includes(this.filterObject.gender)) {
+          // Otherwise, filter based on the selected gender
+          return false;
+        }
+      }
+
+      // If all conditions are met, include this item
+      return true;
     });
   }
 }

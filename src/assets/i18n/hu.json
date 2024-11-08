@@ -153,6 +153,7 @@
                 "deleteProductText": "Biztosam törölni szeretnéd ezt a terméket?",
                 "male": "Férfi",
                 "female": "Női",
+                "unisex": "Uniszex",
                 "productDetails": "Termék részletei",
                 "productName": "Termék neve",
                 "enterProductName": "Adja meg a termék nevét*",
@@ -172,6 +173,7 @@
                 "vitaminUnit": "Vitamin mértékegység",
                 "selectVitaminUnit": "Válasszon mértékegységet*",
                 "gender": "Nem",
+                "selectGender": "Válassza ki a nemet*",
                 "allFieldsAreRequiredToAddNewVitamin": "Minden mező kitöltése kötelező új vitamin hozzáadásához",
                 "safetyInformation": "Biztonsági információk",
                 "safeForPregnancy": "Biztonságos terhesség alatt",
@@ -371,11 +373,26 @@
                 "orderBy": {
                         "orderByText": "Rendezési sorrend kiválasztása",
                         "latest": "Rendezés legújabb szerint",
-                        "oldest": "Rendezés legrégebb szerint"
+                        "oldest": "Rendezés legrégebb szerint",
+                        "cheapest": "Rendezés legolcsóbb szerint",
+                        "mostExpensive": "Rendezés legdrágább szerint",
+                        "nameASC": "Rendezés név szerint (növekvő)",
+                        "nameDESC": "Rendezés név szerint (csökkenő)"
                 },
                 "apply": "Alkalmaz",
                 "filterBlogByLanguage": "Szűrés nyelv szerint",
                 "deleteFilter": "Szűrők törlése",
-                "selectCategory": "Szűrés kategória szerint"
+                "selectCategory": "Szűrés kategória szerint",
+                "filterByGender": "Szűrés nemek szerint",
+                "filterBlogByColor": "Szűrés színek szerint",
+                "filterBlogBySize": "Szűrés méret szerint",
+                "filterBlogByMaterial": "Szűrés ruha anyaga szerint",
+                "filterBlogByClothType": "Szűrés ruha típus szerint",
+                "basicFiltersText": "Alap szűrők",
+                "filterByEquipmentType": "Szűrés kiegészítő típusa szerint",
+                "filterByProteinType": "Szűrés fehérje típus szerint",
+                "filterBySize": "Méret",
+                "filterBySizeAndColor": "Szín és méret",
+                "clothTypeAndMaterialText": "Típus és anyag"
         }
 }

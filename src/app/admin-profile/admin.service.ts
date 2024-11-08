@@ -3,21 +3,15 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { User } from "../user/user.model";
 import { AuthService } from "../auth/auth.service";
-import { FoodSupliment } from "./product-management/product-models/food-supliment.model";
-import { OrganicFood } from "./product-management/product-models/organic-food";
 import { ProductPrice } from "./product-management/product-models/product-price.model";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
-import { Clothes } from "./product-management/product-models/clothing.model";
 import { ProductViewText } from "./product-management/product-view-texts";
-import { Accessories } from "./product-management/product-models/accessories.model";
 import {
     getStorage,
     ref,
     listAll,
     deleteObject
 } from "firebase/storage";
-import { Blog } from "./blog/blog.model";
-import { Timestamp } from "firebase/firestore";
 
 @Injectable({
     providedIn: 'root'
@@ -122,9 +116,7 @@ export class AdminService {
                     });
                     await Promise.all(promises);
                 });
-            console.log(`All files in the folder ProductsImages/${productId} have been deleted.`);
         } catch (error) {
-            console.error("Error deleting files in folder:", error);
         }
     }
 }

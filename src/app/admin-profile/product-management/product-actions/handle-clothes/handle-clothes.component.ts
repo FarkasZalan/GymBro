@@ -50,13 +50,14 @@ export class HandleClothesComponent {
   errorMessage: boolean = false;
   productNameExistsError: boolean = false;
 
-  selectedCategory: string = '';
+  selectedGender: string = '';
 
   // Product categories
   productViewText = ProductViewText;
-  productCategories: string[] = [
-    ProductViewText.MAN_CLOTHES,
-    ProductViewText.WOMEN_CLOTHES,
+  availableGenders: string[] = [
+    ProductViewText.MALE,
+    ProductViewText.FEMALE,
+    ProductViewText.UNISEX
   ];
 
   // clothing type
@@ -97,7 +98,7 @@ export class HandleClothesComponent {
     this.clothingObject = {
       id: "",
       productName: "",
-      productCategory: "",
+      productGender: "",
       description: "",
 
       clothingType: "",
@@ -116,7 +117,7 @@ export class HandleClothesComponent {
           this.clothingId = this.clothingObject.id;
           this.isProductEdit = true;
           // pass the value to the object
-          this.selectedCategory = this.clothingObject.productCategory;
+          this.selectedGender = this.clothingObject.productGender;
 
           // type, material
           this.selectedClothingType = this.clothingObject.clothingType;
@@ -158,7 +159,7 @@ export class HandleClothesComponent {
   // Sort product categories, genders, flavors, proteins and allergies
   sortItems(): void {
     // categories
-    this.productCategories.sort((a, b) => a.localeCompare(b));
+    this.availableGenders.sort((a, b) => a.localeCompare(b));
 
     // CLothing types
     this.availableClothingTypes.sort((a, b) => a.localeCompare(b));
@@ -407,7 +408,7 @@ export class HandleClothesComponent {
     this.clothingObject = {
       id: "",
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
-      productCategory: this.selectedCategory,
+      productGender: this.selectedGender,
       description: this.createClothesForm.value.description,
 
       clothingType: this.selectedClothingType,
@@ -468,7 +469,7 @@ export class HandleClothesComponent {
     this.clothingObject = {
       id: this.clothingId,
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
-      productCategory: this.selectedCategory,
+      productGender: this.selectedGender,
       description: this.createClothesForm.value.description,
 
       clothingType: this.selectedClothingType,

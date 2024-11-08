@@ -15,21 +15,21 @@
                             'register.fieldRequired' | translate }}</span>
                     </div>
 
-                    <!-- Product Category (Dropdown) -->
+                    <!-- Product Gender (Dropdown) -->
                     <div class="col-md-6 form-group">
-                        <label for="productCategory" class="label">{{ 'products.productCategory' | translate }}</label>
-                        <select class="form-control drop-down-list allow-selected-list-color" name="productCategory"
-                            required #productCategory="ngModel" [(ngModel)]="selectedCategory">
+                        <label for="productGender" class="label">{{ 'products.gender' | translate }}</label>
+                        <select class="form-control drop-down-list allow-selected-list-color" name="productGender"
+                            required #productGender="ngModel" [(ngModel)]="selectedGender">
                             <!-- Placeholder option -->
-                            <option value="" selected disabled>{{ 'products.selectProductCategory' | translate }}
+                            <option value="" selected disabled>{{ 'products.selectGender' | translate }}
                             </option>
 
-                            <!-- List of categories -->
-                            <option *ngFor="let categorie of productCategories" [value]="categorie">
-                                {{ categorie | translate }}
+                            <!-- List of genders -->
+                            <option *ngFor="let gender of availableGenders" [value]="gender">
+                                {{ gender | translate }}
                             </option>
                         </select>
-                        <span class="help-block" *ngIf="productCategory.touched && !productCategory.valid">{{
+                        <span class="help-block" *ngIf="productGender.touched && !productGender.valid">{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>

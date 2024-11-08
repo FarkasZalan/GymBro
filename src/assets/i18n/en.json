@@ -152,6 +152,7 @@
       "deleteProductText": "Are you sure you want to delete this product?",
       "male": "Male",
       "female": "Female",
+      "unisex": "Unisex",
       "productDetails": "Product Details",
       "productName": "Product Name",
       "enterProductName": "Enter Product Name*",
@@ -170,6 +171,7 @@
       "vitaminQuantityPerCapsule": "Quantity per serving",
       "vitaminUnit": "Vitamin Unit",
       "gender": "Gender",
+      "selectGender": "Select gender*",
       "allFieldsAreRequiredToAddNewVitamin": "All fields are required to add a new vitamin",
       "safetyInformation": "Safety Information",
       "safeForPregnancy": "Safe for Pregnancy",
@@ -369,11 +371,26 @@
       "orderBy": {
          "orderByText": "Choose Sorting Order",
          "latest": "Order by latest",
-         "oldest": "Order by oldest"
+         "oldest": "Order by oldest",
+         "cheapest": "Order by cheapest",
+         "mostExpensive": "Order by most expensive",
+         "nameASC": "Order by name in (ascending)",
+         "nameDESC": "Order by name in (descending)"
       },
       "apply": "Apply",
       "deleteFilter": "Clear filters",
       "filterBlogByLanguage": "Filter by language",
-      "selectCategory": "Filter by category"
+      "selectCategory": "Filter by category",
+      "filterByGender": "Filter by Gender",
+      "filterBlogByColor": "Filter by Color",
+      "filterBlogBySize": "Filter by size",
+      "filterBlogByMaterial": "Filter by material",
+      "filterBlogByClothType": "Filter by clothing type",
+      "filterByEquipmentType": "Filter by accessory type",
+      "basicFiltersText": "Basic filters",
+      "filterByProteinType": "Filter by protein type",
+      "filterBySize": "Size",
+      "filterBySizeAndColor": "Size and Color",
+      "clothTypeAndMaterialText": "Type and material"
    }
 }

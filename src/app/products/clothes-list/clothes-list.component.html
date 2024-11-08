@@ -1,10 +1,16 @@
 <!-- If no products, display the empty card -->
-<div *ngIf="(emptyCollection === true)" class="empty-list-container">
+<div *ngIf="(emptyCollection === true)" class="product-empty-list-container">
     <nb-card class="emptyCard">
         <nb-card-body>
             <div>
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
                 <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
+            </div>
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn basic-form-btn products-button delete-btn" type="submit"
+                    nbButton status="success" (click)="deleteFilters()">{{
+                    'filter.deleteFilter' | translate
+                    }}</button>
             </div>
         </nb-card-body>
     </nb-card>
@@ -14,7 +20,7 @@
     <!-- Display product prices dynamically in a 2-column layout -->
 
     <!-- Clothes -->
-    <div *ngIf="clothes" class="list-container">
+    <div *ngIf="clothes" class="product-list-container">
         <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes">
             <nb-card-body class="product-image" (click)="goToEditProduct(cloth.id)">
 
@@ -32,11 +38,6 @@
                     <h4>{{ cloth.productName }}</h4>
                     <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
                         'products.huf' | translate }}</h5>
-                    <h5 class="price-display">{{ 'products.clothes.size' | translate }}: {{
-                        defaultPrice.productSize }}</h5>
-                    <h5 class="price-display">{{
-                        'products.stock' | translate }}: {{
-                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
                 </div>
             </nb-card-body>
         </nb-card>

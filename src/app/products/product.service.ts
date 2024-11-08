@@ -6,6 +6,8 @@ import { Accessories } from "../admin-profile/product-management/product-models/
 import { Clothes } from "../admin-profile/product-management/product-models/clothing.model";
 import { FoodSupliment } from "../admin-profile/product-management/product-models/food-supliment.model";
 import { OrganicFood } from "../admin-profile/product-management/product-models/organic-food";
+import { Observable } from "rxjs";
+import { ProductViewText } from "../admin-profile/product-management/product-view-texts";
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +17,29 @@ export class ProductService {
 
     getAllProductByCategory(categoryName: string) {
         return this.db.collection("products").doc(categoryName).collection('allProduct').valueChanges();
+    }
+
+    // Fetch related blogs based on tags and language
+    getRelatedBlogs(tags: string[], currentBlogId: string, language: string): Observable<Blog[]> {
+        return this.db.collection<Blog>('blog', ref =>
+            ref
+                .where('id', '!=', currentBlogId)
+                .where('language', '==', language)
+                .where('blogTags', 'array-contains-any', tags)
+                .orderBy('date')
+                .limit(6)
+        ).valueChanges();
+    }
+
+    // Fetch random blogs based on language
+    getRandomBlogs(currentBlogId: string, limit: number, language: string) {
+        return this.db.collection<Blog>('blog', ref =>
+            ref
+                .where('id', '!=', currentBlogId)
+                .where('language', '==', language)
+                .orderBy('date')
+                .limit(limit)
+        ).valueChanges();
     }
 
     // Sort food supliments

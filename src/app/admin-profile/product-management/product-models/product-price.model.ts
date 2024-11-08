@@ -3,7 +3,6 @@ export interface ProductPrice {
     productImage: string;
     productColor?: string;
     productSize?: string;
-    bottleSize?: number;
     productPrice: number;
     productStock: number;
     setAsDefaultPrice: boolean;

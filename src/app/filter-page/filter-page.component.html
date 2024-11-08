@@ -7,8 +7,9 @@
             <nb-card-body>
                 <div>
                     <form (ngSubmit)="filter()" #form="ngForm">
+                        <h3 *ngIf="!isBlog">{{ 'filter.basicFiltersText' | translate }}</h3>
                         <!-- Category section -->
-                        <div class="row">
+                        <div class="row" *ngIf="!isClothes">
                             <div class="dropdown-list-container">
                                 <div class="form-group position-relative order-by-container">
 
@@ -20,7 +21,7 @@
                                             class="form-control drop-down-list allow-selected-list-color arrow-select"
                                             name="category" #category="ngModel" [(ngModel)]="selectedCategory">
                                             <!-- Placeholder option -->
-                                            <option value="" selected disabled>{{ 'filter.selectCategory' |
+                                            <option value="" selected>{{ 'filter.selectCategory' |
                                                 translate }}
                                             </option>
 
@@ -47,44 +48,44 @@
                             <br>
                         </div>
 
-                        <!-- Blog filter section -->
-                        <div *ngIf="isBlog">
-                            <!-- Order by section -->
-                            <div class="row">
-                                <div class="dropdown-list-container">
-                                    <div class="form-group position-relative order-by-container">
+                        <!-- Order by section -->
+                        <div class="row">
+                            <div class="dropdown-list-container">
+                                <div class="form-group position-relative order-by-container">
 
-                                        <!-- Dropdown container with arrow icon -->
-                                        <div class="dropdown-container" (click)="toggleOrderDropdown()">
+                                    <!-- Dropdown container with arrow icon -->
+                                    <div class="dropdown-container" (click)="toggleOrderDropdown()">
 
-                                            <!-- Select order dropdown aligned to the right -->
-                                            <select
-                                                class="form-control drop-down-list allow-selected-list-color arrow-select"
-                                                name="order" #order="ngModel" [(ngModel)]="selectedOrder">
+                                        <!-- Select order dropdown aligned to the right -->
+                                        <select
+                                            class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                            name="order" #order="ngModel" [(ngModel)]="selectedOrder">
 
-                                                <!-- List of order options -->
-                                                <option *ngFor="let order of availableOrders" [value]="order">
-                                                    {{ order | translate }}
-                                                </option>
-                                            </select>
+                                            <!-- List of order options -->
+                                            <option *ngFor="let order of availableOrders" [value]="order">
+                                                {{ order | translate }}
+                                            </option>
+                                        </select>
 
-                                            <!-- Arrow icon based on dropdown open/closed state -->
-                                            <div class="arrow-icon">
-                                                <svg *ngIf="isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
-                                                    <path d="M7 14l5-5 5 5z" />
-                                                </svg>
-                                                <svg *ngIf="!isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
-                                                    <path d="M7 10l5 5 5-5z" />
-                                                </svg>
-                                            </div>
+                                        <!-- Arrow icon based on dropdown open/closed state -->
+                                        <div class="arrow-icon">
+                                            <svg *ngIf="isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 14l5-5 5 5z" />
+                                            </svg>
+                                            <svg *ngIf="!isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 10l5 5 5-5z" />
+                                            </svg>
                                         </div>
                                     </div>
                                 </div>
-                                <br>
                             </div>
+                            <br>
+                        </div>
 
+                        <!-- only Blog filter section -->
+                        <div *ngIf="isBlog">
                             <!-- Blog language section -->
                             <div class="row">
                                 <div class="dropdown-list-container">
@@ -99,7 +100,7 @@
                                                 name="language" #language="ngModel" [(ngModel)]="selectedLanguage">
 
                                                 <!-- Placeholder option -->
-                                                <option value="" selected disabled>{{ 'filter.filterBlogByLanguage' |
+                                                <option value="" selected>{{ 'filter.filterBlogByLanguage' |
                                                     translate }}
                                                 </option>
 
@@ -127,6 +128,411 @@
                             </div>
                         </div>
 
+                        <!-- Food supliments section -->
+                        <div *ngIf="isFoodSupliments || isClothes">
+                            <!-- gender section -->
+                            <div class="row">
+                                <div class="dropdown-list-container">
+                                    <div class="form-group position-relative order-by-container">
+
+                                        <!-- Dropdown container with arrow icon -->
+                                        <div class="dropdown-container" (click)="toggleGenderDropdown()">
+
+                                            <!-- Select gender dropdown aligned to the right -->
+                                            <select
+                                                class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                                name="gender" #gender="ngModel" [(ngModel)]="selectedGender">
+
+                                                <!-- Placeholder option -->
+                                                <option value="" selected>{{ 'filter.filterByGender' |
+                                                    translate }}
+                                                </option>
+
+                                                <!-- List of gender options -->
+                                                <option *ngFor="let gender of availableGenders" [value]="gender">
+                                                    {{ gender | translate }}
+                                                </option>
+                                            </select>
+
+                                            <!-- Arrow icon based on dropdown open/closed state -->
+                                            <div class="arrow-icon">
+                                                <svg *ngIf="isGenderDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 14l5-5 5 5z" />
+                                                </svg>
+                                                <svg *ngIf="!isGenderDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 10l5 5 5-5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+
+                        <!-- Food supliments and Organic food section -->
+                        <div *ngIf="isFoodSupliments || isOrganicFood">
+                            <!-- Flavors and Allergens Section -->
+                            <hr>
+                            <h3>{{ 'products.flavorsAndAllergens' | translate }}</h3>
+                            <div class="row">
+                                <!-- Flavors Section -->
+                                <div class="col-md-6 form-group">
+                                    <label for="flavors" class="label">{{ 'products.productFlavors' | translate
+                                        }}</label>
+                                    <div class="multi-select-container">
+                                        <select class="form-control allow-selected-multiple-list-color"
+                                            multiple="multiple" [(ngModel)]="selectedFlavors" #flavorSelect="ngModel">
+                                            <option *ngFor="let flavor of availableFlavors" [value]="flavor"
+                                                [ngClass]="{'active': selectedFlavors.includes(flavor) && selectedFlavors.length > 0}"
+                                                (click)="selectionOfTheList(productViewText.FLAVORS, flavor)">
+                                                {{ flavor | translate }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- display the selected flavors -->
+                                    <div *ngIf="selectedFlavors.length > 0">
+                                        <div class="selected-items-display" *ngFor="let selected of selectedFlavors"
+                                            (click)="removeItemFromTheList(productViewText.FLAVORS, selected)">
+                                            {{ selected | translate }}
+                                            <span style="cursor: pointer; color: red;">&times;</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Allergenes Section -->
+                                <div class="col-md-6 form-group">
+                                    <label for="allregenes" class="label">{{ 'products.productAllergens' | translate
+                                        }}</label>
+                                    <div class="multi-select-container">
+                                        <select class="form-control allow-selected-multiple-list-color"
+                                            multiple="multiple" [(ngModel)]="selectedAllergenes"
+                                            #allergeneSelect="ngModel">
+                                            <option *ngFor="let allergene of availableAllergens" [value]="allergene"
+                                                [ngClass]="{'active': selectedAllergenes.includes(allergene) && selectedAllergenes.length > 0}"
+                                                (click)="selectionOfTheList(productViewText.ALLERGENES, allergene)">
+                                                {{ allergene | translate}}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- display the selected allergenes -->
+                                    <div *ngIf="selectedAllergenes.length > 0">
+                                        <div class="selected-items-display" *ngFor="let selected of selectedAllergenes"
+                                            (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)">
+                                            {{ selected | translate }}
+                                            <span style="cursor: pointer; color: red;">&times;</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+
+                                <!-- Protein Type -->
+                                <div *ngIf="isFoodSupliments" [@collapseField] class="row">
+                                    <hr>
+                                    <div class="dropdown-list-container">
+                                        <div class="form-group position-relative order-by-container">
+
+                                            <!-- Dropdown container with arrow icon -->
+                                            <div class="dropdown-container" (click)="toggleProteinTypeDropdown()">
+
+                                                <!-- Select proteinType dropdown aligned to the right -->
+                                                <select
+                                                    class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                                    name="proteinType" #proteinType="ngModel"
+                                                    [(ngModel)]="selectedProteinType">
+
+                                                    <!-- Placeholder option -->
+                                                    <option value="" selected>{{
+                                                        'filter.filterByProteinType' |
+                                                        translate }}
+                                                    </option>
+
+                                                    <!-- List of proteinType options -->
+                                                    <option *ngFor="let proteinType of availableProteins"
+                                                        [value]="proteinType">
+                                                        {{ proteinType | translate }}
+                                                    </option>
+                                                </select>
+
+                                                <!-- Arrow icon based on dropdown open/closed state -->
+                                                <div class="arrow-icon">
+                                                    <svg *ngIf="isProteinTypeDropdownOpen"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        fill="#0b8e92" width="40px" height="50px">
+                                                        <path d="M7 14l5-5 5 5z" />
+                                                    </svg>
+                                                    <svg *ngIf="!isProteinTypeDropdownOpen"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        fill="#0b8e92" width="40px" height="50px">
+                                                        <path d="M7 10l5 5 5-5z" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+                                <br>
+                            </div>
+
+                            <!-- Safety Section -->
+                            <hr>
+                            <h3>{{ 'products.safetyInformation' | translate }}</h3>
+                            <div class="row chechkbox-row">
+                                <!-- Safe for Pregnancy -->
+                                <div class="col-md-4 form-group">
+                                    <label class="checkbox-container">
+                                        {{ 'products.safeForPregnancy' | translate }}
+                                        <input type="checkbox" [(ngModel)]="isSafeForConsumptionDuringPregnancy"
+                                            name="safeForConsumptionDuringPregnancy">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Safe for Breastfeeding -->
+                                <div class="col-md-4 form-group">
+                                    <label class="checkbox-container">
+                                        {{ 'products.safeForBreastfeeding' | translate }}
+                                        <input type="checkbox" [(ngModel)]="isSafeForConsumptionDuringBreastfeeding"
+                                            name="safeForConsumptionDuringBreastfeeding">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- only accessories section -->
+                        <div *ngIf="isAccessories">
+                            <!-- equipmentType section -->
+                            <div class="row">
+                                <div class="dropdown-list-container">
+                                    <div class="form-group position-relative order-by-container">
+
+                                        <!-- Dropdown container with arrow icon -->
+                                        <div class="dropdown-container" (click)="toggleAccessoryTypeDropdown()">
+
+                                            <!-- Select equipmentType dropdown aligned to the right -->
+                                            <select
+                                                class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                                name="equipmentType" #equipmentType="ngModel"
+                                                [(ngModel)]="selectedAccessoryType"
+                                                (ngModelChange)="isAccessoryTypeSelected()">
+
+                                                <!-- Placeholder option -->
+                                                <option value="" selected>{{ 'filter.filterByEquipmentType'
+                                                    |
+                                                    translate }}
+                                                </option>
+
+                                                <!-- List of equipmentType options -->
+                                                <option *ngFor="let equipmentType of availableAccessoriesTypes"
+                                                    [value]="equipmentType">
+                                                    {{ equipmentType | translate }}
+                                                </option>
+                                            </select>
+
+                                            <!-- Arrow icon based on dropdown open/closed state -->
+                                            <div class="arrow-icon">
+                                                <svg *ngIf="isAccessoryDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 14l5-5 5 5z" />
+                                                </svg>
+                                                <svg *ngIf="!isAccessoryDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 10l5 5 5-5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+
+                        <!-- Color and accessories filter section -->
+                        <div *ngIf="isClothes || selectedAccessoryType !== ''">
+                            <hr>
+                            <h3 *ngIf="!isShakers && fromPageFilter === productViewText.ACCESSORIES">{{
+                                'filter.filterBySize' | translate }}</h3>
+                            <h3 *ngIf="isShakers || fromPageFilter === productViewText.CLOTHES">{{
+                                'filter.filterBySizeAndColor' | translate }}</h3>
+                            <!-- Color section -->
+                            <div class="row" *ngIf="isShakers || isClothes" [@collapseField]>
+                                <div class="dropdown-list-container">
+                                    <div class="form-group position-relative order-by-container">
+
+                                        <!-- Dropdown container with arrow icon -->
+                                        <div class="dropdown-container" (click)="toggleColorDropdown()">
+
+                                            <!-- Select color dropdown aligned to the right -->
+                                            <select
+                                                class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                                name="color" #color="ngModel" [(ngModel)]="selectedColor">
+
+                                                <!-- Placeholder option -->
+                                                <option value="" selected>{{ 'filter.filterBlogByColor' |
+                                                    translate }}
+                                                </option>
+
+                                                <!-- List of color options -->
+                                                <option *ngFor="let color of availableColors" [value]="color">
+                                                    {{ color | translate }}
+                                                </option>
+                                            </select>
+
+                                            <!-- Arrow icon based on dropdown open/closed state -->
+                                            <div class="arrow-icon">
+                                                <svg *ngIf="isColorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 14l5-5 5 5z" />
+                                                </svg>
+                                                <svg *ngIf="!isColorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 10l5 5 5-5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+
+
+                            <!-- Size section -->
+                            <div *ngIf="isClothes || selectedAccessoryType !== ''" class="row" [@collapseField]>
+                                <div class="dropdown-list-container">
+                                    <div class="form-group position-relative order-by-container">
+
+                                        <!-- Dropdown container with arrow icon -->
+                                        <div class="dropdown-container" (click)="toggleSizeDropdown()">
+
+                                            <!-- Select size dropdown aligned to the right -->
+                                            <select
+                                                class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                                name="size" #size="ngModel" [(ngModel)]="selectedSize">
+
+                                                <!-- Placeholder option -->
+                                                <option value="" selected>{{ 'filter.filterBlogBySize' |
+                                                    translate }}
+                                                </option>
+
+                                                <!-- List of size options -->
+                                                <option *ngFor="let size of availableProductSizes" [value]="size">
+                                                    {{ size | translate }}
+                                                </option>
+                                            </select>
+
+                                            <!-- Arrow icon based on dropdown open/closed state -->
+                                            <div class="arrow-icon">
+                                                <svg *ngIf="isSizeDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 14l5-5 5 5z" />
+                                                </svg>
+                                                <svg *ngIf="!isSizeDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 10l5 5 5-5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- only clothing section -->
+                        <div *ngIf="isClothes">
+                            <hr>
+                            <h3>{{ 'filter.clothTypeAndMaterialText' | translate }}</h3>
+                            <!-- clothType section -->
+                            <div class="row">
+                                <div class="dropdown-list-container">
+                                    <div class="form-group position-relative order-by-container">
+
+                                        <!-- Dropdown container with arrow icon -->
+                                        <div class="dropdown-container" (click)="toggleClothingTypeDropdown()">
+
+                                            <!-- Select clothType dropdown aligned to the right -->
+                                            <select
+                                                class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                                name="clothType" #clothType="ngModel"
+                                                [(ngModel)]="selectedClothingType">
+
+                                                <!-- Placeholder option -->
+                                                <option value="" selected>{{ 'filter.filterBlogByClothType' |
+                                                    translate }}
+                                                </option>
+
+                                                <!-- List of clothType options -->
+                                                <option *ngFor="let clothType of availableColors" [value]="clothType">
+                                                    {{ clothType | translate }}
+                                                </option>
+                                            </select>
+
+                                            <!-- Arrow icon based on dropdown open/closed state -->
+                                            <div class="arrow-icon">
+                                                <svg *ngIf="isClothingTypeDropdownOpen"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 14l5-5 5 5z" />
+                                                </svg>
+                                                <svg *ngIf="!isClothingTypeDropdownOpen"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                    fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 10l5 5 5-5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+
+                            <!-- Material section -->
+                            <div class="row">
+                                <div class="dropdown-list-container">
+                                    <div class="form-group position-relative order-by-container">
+
+                                        <!-- Dropdown container with arrow icon -->
+                                        <div class="dropdown-container" (click)="toggleMaterialDropdown()">
+
+                                            <!-- Select size dropdown aligned to the right -->
+                                            <select
+                                                class="form-control drop-down-list allow-selected-list-color arrow-select"
+                                                name="material" #material="ngModel" [(ngModel)]="selectedMaterial">
+
+                                                <!-- Placeholder option -->
+                                                <option value="" selected>{{ 'filter.filterBlogByMaterial' |
+                                                    translate }}
+                                                </option>
+
+                                                <!-- List of material options -->
+                                                <option *ngFor="let material of availableMaterials" [value]="material">
+                                                    {{ material | translate }}
+                                                </option>
+                                            </select>
+
+                                            <!-- Arrow icon based on dropdown open/closed state -->
+                                            <div class="arrow-icon">
+                                                <svg *ngIf="isMaterialDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 14l5-5 5 5z" />
+                                                </svg>
+                                                <svg *ngIf="!isMaterialDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                    <path d="M7 10l5 5 5-5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+
                         <!-- Error block -->
                         <span *ngIf="errorMessage" class="help-block-login-error">
                             <i class="fas fa-exclamation-triangle icon"></i>
@@ -142,7 +548,7 @@
                         </div>
                     </form>
 
-                    <div *ngIf="editFilter" class="send-button-container">
+                    <div class="send-button-container">
                         <button class="btn btn-primary forgot-btn btn delete-btn" type="button" nbButton
                             status="warning" (click)="deleteFilter()">
                             {{ 'filter.deleteFilter' | translate }}

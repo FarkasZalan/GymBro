@@ -14,25 +14,40 @@ import { ProductService } from '../product.service';
 })
 export class AccessoriesListComponent implements OnInit {
   // store the products one of the array
-  accessories: Accessories[];
+  accessories: Accessories[] = [];
+  originalAccessories: Accessories[] = [];
   productViewText = ProductViewText;
 
   // if there are no products in the collection
   emptyCollection: boolean = false;
 
   filterObject: Filter = {
+    category: '',
     language: '',
-    orderBy: ProductViewText.ORDER_BY_LATEST
+    orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+    flavors: [],
+    allergenes: [],
+    safeForConsumptionDuringBreastfeeding: true,
+    safeForConsumptionDuringPregnancy: true,
+    proteinType: '',
+    gender: '',
+    color: '',
+    size: '',
+    clothingType: '',
+    material: '',
+    equipmentType: ''
   };
 
   constructor(private productService: ProductService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.productService.getAllProductByCategory(ProductViewText.ACCESSORIES).subscribe((organicFoodCollection: Accessories[]) => {
-      this.accessories = organicFoodCollection;
+    this.productService.getAllProductByCategory(ProductViewText.ACCESSORIES).subscribe((accessoriesCollection: Accessories[]) => {
+      this.accessories = accessoriesCollection;
+      this.originalAccessories = accessoriesCollection;
 
       // Sort default by name
       this.accessories = this.productService.sortAccessoriesPriceByASC(this.accessories);
+      this.originalAccessories = this.productService.sortAccessoriesPriceByASC(this.originalAccessories);
 
       // if the collection doesn't have any products
       if (this.accessories.length === 0) {
@@ -60,7 +75,85 @@ export class AccessoriesListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((filterObject: Filter | boolean) => {
+      // If true is returned, delete the filters
+      if (filterObject === true) {
+        this.deleteFilters();
+      } else if (filterObject && typeof filterObject === 'object') {
+        this.filterObject = filterObject;
+        this.applyFilters(); // Apply the filters to the original list
+        if (this.accessories.length === 0) {
+          this.emptyCollection = true;
+        } else {
+          this.emptyCollection = false;
 
+          if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
+            this.accessories = this.productService.sortAccessoriesPriceByDESC(this.accessories);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
+            this.accessories = this.productService.sortAccessoriesPriceByASC(this.accessories);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
+            this.accessories = this.productService.sortAccessoriesByNameASC(this.accessories);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
+            this.accessories = this.productService.sortAccessoriesByNameDESC(this.accessories);
+          }
+        }
+      }
+    });
+  }
+
+  deleteFilters() {
+    this.accessories = [...this.originalAccessories];
+    this.filterObject = {
+      language: '',
+      category: '',
+      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+      flavors: [],
+      allergenes: [],
+      safeForConsumptionDuringBreastfeeding: true,
+      safeForConsumptionDuringPregnancy: true,
+      proteinType: '',
+      gender: '',
+      color: '',
+      size: '',
+      clothingType: '',
+      material: '',
+      equipmentType: ''
+    }
+    this.emptyCollection = false;
+  }
+
+  applyFilters() {
+    this.accessories = this.originalAccessories.filter((item) => {
+      // Caterory
+      if (this.filterObject.category && item.productCategory !== this.filterObject.category) {
+        return false;
+      }
+
+      // EquipmentType
+      if (this.filterObject.equipmentType && item.equipmentType !== this.filterObject.equipmentType) {
+        return false;
+      }
+
+      // Filtering prices array based on color and size
+      const filteredPrices = item.prices.filter((price) => {
+        // 3.1 Check color filter
+        if (this.filterObject.color && price.productColor !== this.filterObject.color) {
+          return false;
+        }
+
+        // Check size filter
+        if (this.filterObject.size && price.productSize !== this.filterObject.size) {
+          return false;
+        }
+
+        return true; // Keep price entry if it matches the filters
+      });
+
+      // If no matching prices exist, exclude this item from the list
+      if (filteredPrices.length === 0) {
+        return false;
+      }
+
+      return true; // Keep the item if it passes all filter conditions
     });
   }
 
