@@ -23,13 +23,17 @@ export class AdminService {
     isAuthenticated() {
         return new Promise(resolve => {
             this.auth.onAuthStateChanged(user => {
-                this.authService.getCurrentUser(user.uid).subscribe((isAdminUser: User) => {
-                    if (isAdminUser.isAdmin) { // check if user is authenticated and is admin
-                        resolve(true);
-                    } else {
-                        resolve(false);
-                    }
-                });
+                if (user) {
+                    this.authService.getCurrentUser(user.uid).subscribe((isAdminUser: User) => {
+                        if (isAdminUser.isAdmin) { // check if user is authenticated and is admin
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    });
+                } else {
+                    resolve(false);
+                }
             });
         });
     }

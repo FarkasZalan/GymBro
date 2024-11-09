@@ -27,6 +27,26 @@ input[type='text'] {
     }
 }
 
+.not-verrified-text {
+    font-weight: bold;
+    margin-top: 3%;
+    cursor: pointer;
+    color: #0b8e92;
+    font-size: 17px !important;
+    text-align: start;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        color: #15b2b8 !important;
+        transform: scale(1.03) !important;
+    }
+
+    &:active {
+        color: darken(#0b8e92, 15%);
+        transform: scale(0.95);
+    }
+}
+
 .fa-user {
     color: #0b8e92;
 }

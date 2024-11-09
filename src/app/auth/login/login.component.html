@@ -34,6 +34,17 @@
                             <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
                             {{ 'loginPage.loginError' | translate }}
                         </span>
+
+                        <!-- Email not verrifies error -->
+                        <span *ngIf="notVerrifiedError" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
+                            {{ 'loginPage.notverrifiedError' | translate }}
+                        </span>
+                        <div *ngIf="notVerrifiedError" class="form-group not-verrified-text">
+                            <span (click)="reSendVerificationLink()" class="forgot-password-text">{{
+                                'loginPage.reSendLink' | translate }}</span>
+                        </div>
+
                         <!-- login submit button -->
                         <div class="login-button-container">
                             <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"

@@ -14,13 +14,17 @@ export class AuthService {
     isAuthenticated() {
         return new Promise(resolve => {
             this.auth.onAuthStateChanged(user => {
-                this.getCurrentUser(user.uid).subscribe((isAdminUser: User) => {
-                    if (!isAdminUser.isAdmin) { // check if user is authenticated and is not admin
-                        resolve(true);
-                    } else {
-                        resolve(false);
-                    }
-                });
+                if (user) {
+                    this.getCurrentUser(user.uid).subscribe((isAdminUser: User) => {
+                        if (!isAdminUser.isAdmin) { // check if user is authenticated and is not admin
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    });
+                } else {
+                    resolve(false);
+                }
             });
         });
     }
@@ -29,8 +33,16 @@ export class AuthService {
     async login(emailInput: string, password: string): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
             try {
-                await this.auth.signInWithEmailAndPassword(emailInput, password);
-                resolve(true);
+                await this.auth.signInWithEmailAndPassword(emailInput, password).then((loggingResponse) => {
+                    if (emailInput === 'admin@gymbro.com') {
+                        resolve(true);
+                    }
+                    if (loggingResponse.user.emailVerified) {
+                        resolve(true);
+                    } else {
+                        resolve(null);
+                    }
+                });
             } catch {
                 resolve(false);
             }
@@ -53,7 +65,7 @@ export class AuthService {
                     lastName: lastName,
                     phone: phone,
                     isAdmin: false,
-                    deleted: false
+                    deleted: false,
                 }
                 await this.db.collection('users').doc(userAuth.user.uid).set(newUser);
                 await this.sendEmailVerification();

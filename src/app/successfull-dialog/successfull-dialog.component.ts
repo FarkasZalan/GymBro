@@ -42,6 +42,10 @@ export class SuccessfullDialogComponent implements OnInit {
       this.text = this.translate.instant("succesfullDialog.verrifyEmail");
       this.buttonText = this.translate.instant("succesfullDialog.backToLogin");
     }
+    if (this.operation === SuccessFullDialogText.RE_SEND_VERIFY_EMAIL) {
+      this.text = this.translate.instant("succesfullDialog.reSendVerifyEmail");
+      this.buttonText = this.translate.instant("succesfullDialog.backToLogin");
+    }
     if (this.operation === SuccessFullDialogText.MODIFIED_TEXT) {
       this.text = this.translate.instant("succesfullDialog.modificationSuccessfull");
       this.buttonText = this.translate.instant("succesfullDialog.ok");

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { Location } from '@angular/common';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
+import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
+import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,8 @@ export class LoginComponent {
   password = "";
 
   // Flag for displaying login error
-  public errorMessage = false;
+  errorMessage: boolean = false;
+  notVerrifiedError: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private dialog: MatDialog, private location: Location) { }
 
@@ -30,12 +33,17 @@ export class LoginComponent {
 
     // Authenticate user
     this.authService.login(this.email, this.password)
-      .then(success => {
-        if (success) {
+      .then(async success => {
+        if (success === true) {
           this.errorMessage = false;
           this.router.navigate(['/']);
-        } else {
-          this.errorMessage = true; // Show error message on failure
+        } else if (success === false) {
+          this.errorMessage = true; // Show error message on bad input
+          this.notVerrifiedError = false;
+        } else if (success === null) {
+          this.notVerrifiedError = true; // Show error message on unverrified email
+          this.authService.logOut();
+          this.errorMessage = false;
         }
       });
   }
@@ -43,6 +51,20 @@ export class LoginComponent {
   // Navigate to registration page
   goToRegister() {
     this.router.navigate(['/auth/register']);
+  }
+
+  async reSendVerificationLink() {
+    await this.authService.login(this.email, this.password);
+    await this.authService.sendEmailVerification();
+    this.authService.logOut();
+
+    // Open dialog to notify user about email verification
+    this.dialog.open(SuccessfullDialogComponent, {
+      data: {
+        text: SuccessFullDialogText.RE_SEND_VERIFY_EMAIL,
+        needToGoPrevoiusPage: false
+      }
+    })
   }
 
   goToItems() {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RegisterComponent } from '../register.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { RegisterComponent } from '../register.component';
 
 @Component({
   selector: 'app-terms',

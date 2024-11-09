@@ -81,7 +81,7 @@
                                 <label (click)="goToTermsDialog()" for="dataManagementCheckBox">{{
                                     'register.acceptTerms' | translate }}
                                 </label>
-                                <input (click)="goToTermsDialog()" type="checkbox" [(ngModel)]="termsAccepted"
+                                <input [disabled]="!termsAccepted" type="checkbox" [(ngModel)]="termsAccepted"
                                     name="dataManagementCheckBox" id="dataManagementCheckBox" #admin="ngModel" required>
                                 <span disabled class="checkmark"></span>
                             </label>
@@ -99,7 +99,8 @@
                         <!-- register submit button -->
                         <div class="login-button-container">
                             <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
-                                [disabled]="!form.valid">{{ 'loginPage.register' | translate }}</button>
+                                [disabled]="!form.valid || !termsAccepted">{{ 'loginPage.register' | translate
+                                }}</button>
                         </div>
                     </form><br>
                 </div>

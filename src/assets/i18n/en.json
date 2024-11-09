@@ -60,7 +60,9 @@
       "saveDateText": "Save your data for easier shopping!",
       "register": "Register",
       "back": "Back",
-      "goToItems": "Back to the Items"
+      "goToItems": "Back to the Items",
+      "notverrifiedError": "Email address is not verified",
+      "reSendLink": "Resend verification email"
    },
    "register": {
       "firstName": "First Name",
@@ -97,6 +99,7 @@
       "modificationSuccessfull": "Modification Successful!",
       "deletionSuccessfull": "Deletion Successful!",
       "passwordEmailSent": "The link has been sent to the provided email address!",
+      "reSendVerifyEmail": "The verification link has been sent\nto the provided email address!",
       "verrifyEmail": "Registration Successful!\n\nThe verification link has been sent\nto the provided email address!",
       "creationSuccessfull": "Creation Successful!"
    },
