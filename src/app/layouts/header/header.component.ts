@@ -9,6 +9,10 @@ import { LogOutComponent } from '../../auth/log-out/log-out.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { AppComponent } from '../../app.component';
+import { Product } from '../../admin-profile/product-management/product-models/product.model';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
+import { FoodSupliment } from '../../admin-profile/product-management/product-models/food-supliment.model';
 
 @Component({
   selector: 'app-header',
@@ -22,9 +26,14 @@ export class HeaderComponent implements OnInit {
   language: string = "";
   languageSwithButtonText: string = "";
 
+  searchExpanded: boolean = false;
+  searcForProductText: string = '';
+  searchResults: Product[] = []; // Store search results
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private auth: AngularFireAuth,
+    private db: AngularFirestore,
     private router: Router,
     private authService: AuthService,
     private dialog: MatDialog,
@@ -48,6 +57,8 @@ export class HeaderComponent implements OnInit {
         this.userLoggedIn = false; // User is logged out
       }
     })
+
+
 
     // Get the current language
     this.language = this.appComponent.getBrowserLanguage();
@@ -110,6 +121,55 @@ export class HeaderComponent implements OnInit {
     this.sidebarService.toggle(true, 'menu-sidebar');
 
     return false;
+  }
+
+  openSearch() {
+    this.searchExpanded = true;
+  }
+
+  // Search Function
+  onSearchChange() {
+    const searchText = this.searcForProductText.toLowerCase();
+    console.log("Search text:", searchText);  // Check search text
+
+    if (searchText) {
+      const categories = [ProductViewText.FOOD_SUPLIMENTS, ProductViewText.ORGANIC_FOOD, ProductViewText.CLOTHES, ProductViewText.ACCESSORIES];
+      this.searchResults = []; // Clear previous results
+
+      // Iterate through each category and fetch all products once
+      categories.forEach(category => {
+        this.db.collection('products').doc(category).collection('allProduct').valueChanges().subscribe((results: Product[]) => {
+
+          // Use front-end filtering for substring match on name
+          const filteredResults = results.filter(product =>
+            product.productName.toLowerCase().includes(searchText)
+          );
+
+          // Add filtered results to searchResults array with category tracking
+          this.searchResults.push(...filteredResults.map(product => ({
+            ...product,
+            category // Track product category if needed
+          })));
+        });
+      });
+    } else {
+      this.searchResults = []; // Clear results if search is empty
+    }
+  }
+
+  closeSearch() {
+    this.searchExpanded = false;
+    this.searcForProductText
+    this.searchResults = []; // Clear results on close
+  }
+
+  // Method to get the default price for a the products
+  getDefaultPrice(foodSupliment: FoodSupliment) {
+    return foodSupliment.prices.find(price => price.setAsDefaultPrice);
+  }
+
+  onProductSelected(selectedProduct: Product) {
+    this.router.navigate(['product/' + selectedProduct.category + '/' + selectedProduct.id])
   }
 
   //click to logo and then navigate home

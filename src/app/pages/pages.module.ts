@@ -9,6 +9,7 @@ import { HeaderComponent } from '../layouts/header/header.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import { MatIconModule } from '@angular/material/icon';
         NbIconModule,
         NbEvaIconsModule,
         MatIconModule,
-        TranslateModule
+        TranslateModule,
+        FormsModule
     ]
 })
 export class PagesModule {

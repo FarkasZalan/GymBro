@@ -13,6 +13,41 @@
 
     <!-- Right Side Elements -->
     <div class="header-container-right">
+        <!-- Search bar that expands on click -->
+        <div class="search-container" [ngClass]="{ 'expanded': searchExpanded }">
+            <input *ngIf="searchExpanded" [(ngModel)]="searcForProductText" placeholder="Search..." class="search-input"
+                type="text" (ngModelChange)="onSearchChange()" />
+            <i *ngIf="!searchExpanded" class="material-icons search-icon" (click)="openSearch()">
+                search
+            </i>
+            <i *ngIf="searchExpanded" class="material-icons close-icon" (click)="closeSearch()">
+                close
+            </i>
+
+            <!-- Search Results -->
+            <div *ngIf="searchExpanded && searchResults.length > 0" class="search-results">
+                <div *ngFor="let product of searchResults" class="search-result-item"
+                    (click)="onProductSelected(product)">
+
+                    <!-- Product Image and Details -->
+                    <div *ngIf="getDefaultPrice(product) as defaultPrice" class="details-container">
+                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                            alt="Product Image" class="product-image" />
+                        <img *ngIf="defaultPrice.productImage === ''"
+                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                            class="product-image" />
+
+                        <div class="product-info">
+                            <span class="product-name">{{ product.productName }}</span>
+                            <span class="product-price">{{ defaultPrice.productPrice }} {{
+                                'products.huf' | translate }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- User information displayed if logged in -->
         <div *ngIf="userLoggedIn" class="header-container-user">
             <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
