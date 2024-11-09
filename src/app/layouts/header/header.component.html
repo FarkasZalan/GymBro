@@ -15,8 +15,9 @@
     <div class="header-container-right">
         <!-- Search bar that expands on click -->
         <div class="search-container" [ngClass]="{ 'expanded': searchExpanded }">
-            <input *ngIf="searchExpanded" [(ngModel)]="searcForProductText" placeholder="Search..." class="search-input"
-                type="text" (ngModelChange)="onSearchChange()" />
+            <input *ngIf="searchExpanded" [(ngModel)]="searcForProductText" placeholder="{{
+                                'filter.search' | translate }}" class="search-input" type="text"
+                (ngModelChange)="onSearchChange()" />
             <i *ngIf="!searchExpanded" class="material-icons search-icon" (click)="openSearch()">
                 search
             </i>

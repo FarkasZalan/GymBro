@@ -393,6 +393,7 @@
                 "filterByProteinType": "Szűrés fehérje típus szerint",
                 "filterBySize": "Méret",
                 "filterBySizeAndColor": "Szín és méret",
-                "clothTypeAndMaterialText": "Típus és anyag"
+                "clothTypeAndMaterialText": "Típus és anyag",
+                "search": "Keresés..."
         }
 }

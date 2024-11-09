@@ -391,6 +391,7 @@
       "filterByProteinType": "Filter by protein type",
       "filterBySize": "Size",
       "filterBySizeAndColor": "Size and Color",
-      "clothTypeAndMaterialText": "Type and material"
+      "clothTypeAndMaterialText": "Type and material",
+      "search": "Search..."
    }
 }
