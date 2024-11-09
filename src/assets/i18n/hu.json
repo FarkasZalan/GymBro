@@ -68,8 +68,24 @@
                 "phone": "Telefonszám",
                 "passwordAgain": "Jelszó újra",
                 "passwordsNotMatch": "Nem egyeznek a megadott jelszavak!",
-                "acceptPrivacySimpleText": "Elfogadom az",
-                "acceptPrivacyLink": "Adatkezelési tájékoztatót",
+                "acceptTerms": "Elfogadom az Adatkezelési tájékoztatót",
+                "terms": {
+                        "title": "Felhasználási feltételek",
+                        "firstParagraphTitle": "A feltételek elfogadása:",
+                        "firstParagraph": " A weboldalunk használatával beleegyezel abba, hogy betartod ezeket a feltételeket és minden vonatkozó jogszabályt.",
+                        "secondParagraphTitle": "Szellemi tulajdon:",
+                        "secondParagraph": " A GymBro minden tartalma, beleértve a szöveget, képeket, logókat és videókat, a GymBro vagy annak jogosultjai tulajdona, és szerzői jogi védelem alatt áll.",
+                        "contiuneText": "Tobább",
+                        "rejectText": "Elutasít"
+                },
+                "privacyPolicy": {
+                        "title": "Adatvédelmi szabályzat",
+                        "firstParagraphTitle": "Gyűjtött információk:",
+                        "firstParagraph": " Személyes adatokat gyűjtünk, amikor fiókot hozol létre, vásárolsz, vagy kapcsolatba lépsz velünk. Ez magában foglalja a neved, e-mail címed és fizetési információidat.",
+                        "secondParagraphTitle": "Információk használata:",
+                        "secondParagraph": " Az összegyűjtött adatokat a rendeléseid feldolgozására, a szolgáltatásaink javítására és az accountoddal kapcsolatos kommunikációra használjuk.",
+                        "acceptText": "Elfogad"
+                },
                 "emailRegistered": "Ez az email cím már használatban van!",
                 "alreadyHaveAccount": "Már van GymBro fiókod?",
                 "loginNow": "Jelentkezz be most!",

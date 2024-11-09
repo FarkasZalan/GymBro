@@ -68,8 +68,24 @@
       "phone": "Phone Number",
       "passwordAgain": "Confirm Password",
       "passwordsNotMatch": "The passwords do not match!",
-      "acceptPrivacySimpleText": "I accept the",
-      "acceptPrivacyLink": "Privacy Policy",
+      "acceptTerms": "I accept the Privacy Policy",
+      "terms": {
+         "title": "Terms of Service",
+         "firstParagraphTitle": "Acceptance of Terms:",
+         "firstParagraph": " By using our website, you agree to comply with and be bound by these Terms and all applicable laws and regulations.",
+         "secondParagraphTitle": "Intellectual Property:",
+         "secondParagraph": " All content on GymBro, including text, images, logos, and videos, is the property of GymBro or its licensors and is protected by copyright law.",
+         "contiuneText": "Contiune",
+         "rejectText": "Reject"
+      },
+      "privacyPolicy": {
+         "title": "Privacy Policy",
+         "firstParagraphTitle": "Information We Collect:",
+         "firstParagraph": " We collect personal information when you create an account, make a purchase, or contact us. This includes your name, email address, and payment information.",
+         "secondParagraphTitle": "Use of Information:",
+         "secondParagraph": " We use the information we collect to process your orders, improve our services, and communicate with you regarding your account and promotions.",
+         "acceptText": "Accept"
+      },
       "emailRegistered": "This email address is already in use!",
       "alreadyHaveAccount": "Already have a GymBro account?",
       "loginNow": "Log in now!",

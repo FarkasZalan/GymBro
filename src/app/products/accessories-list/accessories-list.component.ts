@@ -38,7 +38,7 @@ export class AccessoriesListComponent implements OnInit {
     equipmentType: ''
   };
 
-  constructor(private productService: ProductService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
+  constructor(private productService: ProductService, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.productService.getAllProductByCategory(ProductViewText.ACCESSORIES).subscribe((accessoriesCollection: Accessories[]) => {

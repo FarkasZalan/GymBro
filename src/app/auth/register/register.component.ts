@@ -8,6 +8,7 @@ import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { DocumentHandlerService } from '../../document.handler.service';
 import { Location } from '@angular/common';
+import { TermsComponent } from './terms/terms.component';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterComponent {
   newUser: User;
   password: string = "";
   passwordAgain: string = "";
+  termsAccepted: boolean = false;
 
   // error handleing
   public errorMessage = false;
@@ -85,7 +87,11 @@ export class RegisterComponent {
     this.router.navigate(['/auth/login']);
   }
 
-  goToDataManagement() {
+  goToTermsDialog() {
+    const dialogRef = this.dialog.open(TermsComponent);
 
+    dialogRef.afterClosed().subscribe((termsAccepted: boolean) => {
+      this.termsAccepted = termsAccepted;
+    });
   }
 }

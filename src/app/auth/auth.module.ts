@@ -16,6 +16,7 @@ import { LogOutComponent } from './log-out/log-out.component';
 import { SuccessfullDialogComponent } from '../successfull-dialog/successfull-dialog.component';
 import { RegisterComponent } from './register/register.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { TermsComponent } from './register/terms/terms.component';
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import { TranslateModule } from '@ngx-translate/core';
         LogOutComponent,
         SuccessfullDialogComponent,
         RegisterComponent,
+        TermsComponent,
     ],
 })
 export class AuthModule {

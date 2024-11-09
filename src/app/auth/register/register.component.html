@@ -75,16 +75,15 @@
                                     #passwordAgain="ngModel">
                             </div>
                         </div><br>
-                        <!-- Data Management Checkbox -->
+                        <!-- Terms Checkbox -->
                         <div class="form-group">
                             <label for="dataManagementCheckBox" class="checkbox-container">
-                                <label for="dataManagementCheckBox">{{ 'register.acceptPrivacySimpleText' | translate }}
-                                    <a><span (click)="goToDataManagement()" class="forgot-password-text">{{
-                                            'register.acceptPrivacyLink' | translate }}</span></a>
+                                <label (click)="goToTermsDialog()" for="dataManagementCheckBox">{{
+                                    'register.acceptTerms' | translate }}
                                 </label>
-                                <input type="checkbox" ngModel name="dataManagementCheckBox" id="dataManagementCheckBox"
-                                    #admin="ngModel" required>
-                                <span class="checkmark"></span>
+                                <input (click)="goToTermsDialog()" type="checkbox" [(ngModel)]="termsAccepted"
+                                    name="dataManagementCheckBox" id="dataManagementCheckBox" #admin="ngModel" required>
+                                <span disabled class="checkmark"></span>
                             </label>
                         </div>
                         <!-- password error -->
