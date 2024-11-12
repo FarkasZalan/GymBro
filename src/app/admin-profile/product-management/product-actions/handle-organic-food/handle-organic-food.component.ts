@@ -17,6 +17,7 @@ import { ProductPrice } from '../../product-models/product-price.model';
 import { ProductViewText } from '../../product-view-texts';
 import { Location } from '@angular/common';
 import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
+import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-handle-organic-food',
@@ -92,16 +93,16 @@ export class HandleOrganicFoodComponent {
     ProductViewText.BLACK_BISCUIT_FLAVOR,
     ProductViewText.CAPPUCINO
   ];
-  selectedFlavor: string = ProductViewText.UNFLAVORED;
+  selectedFlavors: string[] = [];
 
   availableAllergens: string[] = [
-    ProductViewText.LACTOSE_ALLERGEN,
-    ProductViewText.GLUTEN_ALLERGEN,
-    ProductViewText.SOY_ALLERGEN,
-    ProductViewText.EGGS_ALLERGEN,
-    ProductViewText.ADDED_SUGARS_ALLERGEN,
-    ProductViewText.PEANUTS_ALLERGEN,
-    ProductViewText.FISH_ALLERGEN
+    ProductViewText.LACTOSE_FREE_ALLERGEN,
+    ProductViewText.GLUTEN_FREE_ALLERGEN,
+    ProductViewText.SOY_FREE_ALLERGEN,
+    ProductViewText.EGG_FREE_ALLERGEN,
+    ProductViewText.SUGAR_FREE_ALLERGEN,
+    ProductViewText.PEANUTS_FREE_ALLERGEN,
+    ProductViewText.FISH_FREE_ALLERGEN
   ];
   selectedAllergenes: string[] = [];
 
@@ -117,7 +118,6 @@ export class HandleOrganicFoodComponent {
     nutritionalValueFattyAcids: null,
     nutritionalValueCarbohydrates: null,
     nutritionalValueSugar: null,
-    nutritionalValueFiber: null,
     nutritionalValueProteins: null,
     nutritionalValueSalt: null,
   };
@@ -133,16 +133,41 @@ export class HandleOrganicFoodComponent {
   isUnifiedImage: boolean = false;
   unifiedImageUrl: string = null;
 
+  // text editor
+  editor: Editor;
+  toolbar: Toolbar;
+
+  // small description length
+  smallDescriptionLength: number = 0;
+
+  description: string = "";
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
+    this.editor = new Editor();
+
+    // Set up toolbar with command keys
+    this.toolbar = [
+      ['bold', "italic", "underline", "strike"],
+      ["blockquote", "horizontal_rule"],
+      ["ordered_list", "bullet_list"],
+      [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+      ["link"],
+      ["align_left", "align_center", "align_right", "align_justify", "indent", "outdent"],
+      ["undo", "redo"]
+    ];
+
+
     this.organicFoodObject = {
       id: "",
       productName: "",
       productCategory: "",
+      smallDescription: "",
+      ingredients: "",
       description: "",
       dosageUnit: "",
-      flavor: "",
+      flavors: [],
 
       useUnifiedImage: this.isUnifiedImage,
 
@@ -178,7 +203,7 @@ export class HandleOrganicFoodComponent {
           }
 
           // flavor and allergies list
-          this.selectedFlavor = this.organicFoodObject.flavor;
+          this.selectedFlavors = this.organicFoodObject.flavors;
           this.selectedAllergenes = this.organicFoodObject.allergens;
 
           // safety
@@ -187,6 +212,8 @@ export class HandleOrganicFoodComponent {
 
           // nutritional table
           this.nutritionalTable = this.organicFoodObject.nutritionalTable;
+
+          this.smallDescriptionLength = this.organicFoodObject.smallDescription.length;
         }
       });
     });
@@ -217,6 +244,9 @@ export class HandleOrganicFoodComponent {
   // Handle selection of allergens
   selectionOfTheList(type: string, item: string): void {
     switch (type) {
+      case ProductViewText.FLAVORS:
+        this.toggleSelection(this.selectedFlavors, item);
+        break;
       case ProductViewText.ALLERGENES:
         this.toggleSelection(this.selectedAllergenes, item);
         break;
@@ -233,6 +263,9 @@ export class HandleOrganicFoodComponent {
 
   // Remove selected item
   removeItemFromTheList(type: string, item: string): void {
+    if (type === ProductViewText.FLAVORS) {
+      this.removeItem(this.selectedFlavors, item);
+    }
     if (type === ProductViewText.ALLERGENES) {
       this.removeItem(this.selectedAllergenes, item);
     }
@@ -292,7 +325,9 @@ export class HandleOrganicFoodComponent {
         unit: this.selectedUnit,
         allPrices: this.productPrices,
         editText: false,
+        allFlavors: this.selectedFlavors,
         productCategory: ProductViewText.ORGANIC_FOOD,
+        productInnerCategory: this.selectedCategory,
         useUnifiedImage: this.unifiedImageUrl,
       }
     });
@@ -313,7 +348,20 @@ export class HandleOrganicFoodComponent {
           })
         }
 
-        this.productPrices.push(newPrice);
+        // Check for duplicates before adding
+        const existingIndex = this.productPrices.findIndex(price =>
+          price.productFlavor === newPrice.productFlavor &&
+          price.quantityInProduct === newPrice.quantityInProduct
+        );
+
+        if (existingIndex !== -1) {
+          // If a duplicate exists, update it instead of pushing a new price
+          this.productPrices[existingIndex] = newPrice;
+        } else {
+          // If no duplicates, add the new price
+          this.productPrices.push(newPrice);
+        }
+
         this.sortPrices();
       }
     });
@@ -325,9 +373,12 @@ export class HandleOrganicFoodComponent {
       data: {
         unit: this.selectedUnit,
         allPrices: this.productPrices,
+        allFlavors: this.selectedFlavors,
+        selectedFlavor: this.productPrices[id].productFlavor,
         selectedPrice: this.productPrices[id],
         editText: true,
         productCategory: ProductViewText.ORGANIC_FOOD,
+        productInnerCategory: this.selectedCategory,
         useUnifiedImage: this.unifiedImageUrl,
       }
     });
@@ -352,7 +403,24 @@ export class HandleOrganicFoodComponent {
           })
         }
 
-        this.productPrices[id] = editedPrice;
+        // Check if a price with the same color and size already exists
+        const existingIndex = this.productPrices.findIndex(price =>
+          price.productFlavor === editedPrice.productFlavor &&
+          price.quantityInProduct === editedPrice.quantityInProduct
+        );
+
+        if (existingIndex !== -1 && existingIndex !== id) {
+          // Update the existing entry and remove duplicates
+          this.productPrices[existingIndex] = editedPrice;
+          this.productPrices = this.productPrices.filter((price, index) =>
+            !(price.productFlavor === editedPrice.productFlavor &&
+              price.quantityInProduct === editedPrice.quantityInProduct && index !== existingIndex)
+          );
+        } else {
+          // If no duplicate, update the price at the specified id
+          this.productPrices[id] = editedPrice;
+        }
+
         this.sortPrices();
       }
     });
@@ -393,7 +461,6 @@ export class HandleOrganicFoodComponent {
         nutritionalValueFattyAcids: 0,
         nutritionalValueCarbohydrates: 0,
         nutritionalValueSugar: 0,
-        nutritionalValueFiber: 0,
         nutritionalValueProteins: 0,
         nutritionalValueSalt: 0
       }
@@ -410,9 +477,11 @@ export class HandleOrganicFoodComponent {
       id: "",
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createOrganicFoodForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createOrganicFoodForm.value.description,
+      smallDescription: this.createOrganicFoodForm.value.smallDescription,
+      ingredients: this.createOrganicFoodForm.value.ingredients,
+      description: this.description,
       dosageUnit: this.selectedUnit,
-      flavor: this.selectedFlavor,
+      flavors: this.selectedFlavors,
 
       safeForConsumptionDuringBreastfeeding: this.isSafeForConsumptionDuringBreastfeeding,
       safeForConsumptionDuringPregnancy: this.isSafeForConsumptionDuringPregnancy,
@@ -473,7 +542,6 @@ export class HandleOrganicFoodComponent {
         nutritionalValueFattyAcids: 0,
         nutritionalValueCarbohydrates: 0,
         nutritionalValueSugar: 0,
-        nutritionalValueFiber: 0,
         nutritionalValueProteins: 0,
         nutritionalValueSalt: 0
       }
@@ -491,9 +559,11 @@ export class HandleOrganicFoodComponent {
       id: this.organicFoodId,
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createOrganicFoodForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createOrganicFoodForm.value.description,
+      smallDescription: this.createOrganicFoodForm.value.smallDescription,
+      ingredients: this.createOrganicFoodForm.value.ingredients,
+      description: this.description,
       dosageUnit: this.selectedUnit,
-      flavor: this.selectedFlavor,
+      flavors: this.selectedFlavors,
 
       safeForConsumptionDuringBreastfeeding: this.isSafeForConsumptionDuringBreastfeeding,
       safeForConsumptionDuringPregnancy: this.isSafeForConsumptionDuringPregnancy,

@@ -7,11 +7,20 @@ import { Location } from '@angular/common';
 import { Accessories } from '../../product-models/accessories.model';
 import { ProductViewText } from '../../product-view-texts';
 import { OrganicFood } from '../../product-models/organic-food';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
-  styleUrl: '../../../../../styles/products.scss'
+  styleUrl: '../../../../../styles/products.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class ProductsListComponent implements OnInit {
   // store the products one of the array based on the productCategory value

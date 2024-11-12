@@ -169,7 +169,12 @@
                 "backToTheCategories": "Vissza a kategóriákhoz",
                 "addProductText": "Új termék",
                 "editProductText": "Termék módosítása",
+                "ingredients": "Összetevők",
+                "enterIngredients": "Összetevők megadása*",
+                "smallDescription": "Rövid leírás",
+                "enterProductSmallDescription": "Add meg a termék rövid leírását*",
                 "deleteProductText": "Biztosam törölni szeretnéd ezt a terméket?",
+                "relatedProducts": "További termékek",
                 "male": "Férfi",
                 "female": "Női",
                 "unisex": "Uniszex",
@@ -181,7 +186,8 @@
                 "dailyDosage": "Napi ajánlott bevitel",
                 "enterDailyDosage": "Adja meg a napi bevitelt*",
                 "selectUnit": "Válasszon mértékegységet*",
-                "description": "Leírás",
+                "activeIngredients": "Hatóanyakok",
+                "description": "Jellemzők",
                 "enterProductDescription": "Adja meg a termék leírását*",
                 "flavorsAndAllergens": "Ízesítések és allergének",
                 "productFlavors": "Ízesítések",
@@ -204,13 +210,22 @@
                 "proteinType": "Fehérje típus",
                 "selectProteinType": "Válassza ki a fehérje típusát*",
                 "nutritionalInformation": "Tápérték",
+                "nutritionTableDetailsText": "Tápérték adatok",
+                "nutritionalInformationTable": {
+                        "energy": "Energia",
+                        "fats": "Zsír",
+                        "fattyAcids": "- amelyből telített zsírsavak",
+                        "carbohydrates": "Szénhidrát",
+                        "sugar": "- amelyből cukrok",
+                        "protein": "Fehérje",
+                        "salt": "Só"
+                },
                 "energyKj": "Energia (kj)",
                 "energyKcal": "Energia (kcal)",
                 "fatsGram": "Zsír (gramm)",
                 "fattyAcidsGram": "Zsírsavak (gramm)",
                 "carbohydratesGram": "Szénhidrát (gramm)",
                 "sugarsGram": "Cukrok (gramm)",
-                "fiberGram": "Rost (gramm)",
                 "proteinsGram": "Fehérje (gramm)",
                 "saltGram": "Só (gramm)",
                 "otherNutritionalInformation": "Egyéb tápértékek",
@@ -231,6 +246,18 @@
                 "changeDefaultColorText": "Megváltoztatod erre a termék alapértelmezett színét?",
                 "unifiedImage": "Egységes kép használata",
                 "uploadProductImage": "Kép feltöltése",
+                "unitPrice": "Egységár:",
+                "capsule": "Tabletta",
+                "addToCart": "Kosárhoz adás",
+                "shippingInfo": "A szállítási díjak a Pénztárnál kerülnek felszámolásra",
+                "productInStock": "A termék raktáron van.",
+                "productNoStock": "Nincs raktáron.",
+                "maxCapacityToOrder": "Elérhető mennyiség ebből a típusból:",
+                "safePregnancyText": "Terhesség alatt is ajánlott",
+                "notSafePregnancyText": "Terhesség alatt nem ajánlott",
+                "notSafeBreastfeedingText": "Szoptatás alatt nem ajánlott",
+                "safeBreastfeedingText": " Szoptatás alatt is ajánlott",
+                "selectPoductFlavors": "Válassza ki az ízt",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
                         "vegan": "Növényi eredetű fehérje",
@@ -267,13 +294,13 @@
                         "blackBiscuit": "Csokis keksz"
                 },
                 "allergens": {
-                        "lactose": "Laktóz",
-                        "gluten": "Glutén",
-                        "soy": "Szója",
-                        "eggs": "Tojás",
-                        "addedSugars": "Hozzáadott cukrok",
-                        "peanuts": "Mogyoró",
-                        "fish": "Hal"
+                        "lactoseFree": "Laktóz mentes",
+                        "glutenFree": "Glutén mentes",
+                        "soyFree": "Szója mentes",
+                        "eggFree": "Tojás mentes",
+                        "sugarFree": "Cukor mentes",
+                        "peanutFree": "Mogyoró mentes",
+                        "fishFree": "Hal mentes"
                 },
                 "clothes": {
                         "coat": "Kabát",
@@ -319,6 +346,10 @@
                         "accessoriesType": "Kiegészítő típusa",
                         "selectAccessoriesType": "Válasszon típust*",
                         "selectSize": "Add meg a palack méretet*"
+                },
+                "loyaltyProgram": {
+                        "points": "Pont",
+                        "loyalityPointPerItem": "Sszerezhető pontok (termékenként):"
                 }
         },
         "blog": {

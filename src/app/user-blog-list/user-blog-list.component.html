@@ -1,6 +1,6 @@
 <!-- If no shipping addresses are present, display the empty card -->
 <div *ngIf="blogList.length === 0" class="empty-list-container">
-    <nb-card class="emptyCard">
+    <nb-card class="emptyCard" [@zoomIn]>
         <nb-card-body>
             <div>
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
@@ -20,7 +20,7 @@
 
 <!-- Blog list -->
 <div *ngIf="blogList.length !== 0" class="list-container">
-    <nb-card *ngFor="let blog of blogList" class="rounded-card blogCard" (click)="openBlog(blog.id)">
+    <nb-card *ngFor="let blog of blogList" class="rounded-card blogCard" (click)="openBlog(blog.id)" [@zoomIn]>
         <nb-card-body class="product-image">
             <div class="details-container text-center">
                 <div class="image-container text-center">

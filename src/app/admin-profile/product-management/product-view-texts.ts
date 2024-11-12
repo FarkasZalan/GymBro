@@ -85,6 +85,7 @@ export enum ProductViewText {
 
     // pieces, weight or pound
     PIECES = "products.pieces",
+    CAPSULE = "products.capsule",
     GRAM = "products.gram",
     POUNDS = "products.pound",
     PCS = "products.pcs",
@@ -132,13 +133,13 @@ export enum ProductViewText {
     CAPPUCINO = "Capuccino",
 
     // Allergens
-    LACTOSE_ALLERGEN = "products.allergens.lactose",
-    GLUTEN_ALLERGEN = "products.allergens.gluten",
-    SOY_ALLERGEN = "products.allergens.soy",
-    EGGS_ALLERGEN = "products.allergens.eggs",
-    ADDED_SUGARS_ALLERGEN = "products.allergens.addedSugars",
-    PEANUTS_ALLERGEN = "products.allergens.peanuts",
-    FISH_ALLERGEN = "products.allergens.fish",
+    LACTOSE_FREE_ALLERGEN = "products.allergens.lactoseFree",
+    GLUTEN_FREE_ALLERGEN = "products.allergens.glutenFree",
+    SOY_FREE_ALLERGEN = "products.allergens.soyFree",
+    EGG_FREE_ALLERGEN = "products.allergens.eggFree",
+    SUGAR_FREE_ALLERGEN = "products.allergens.sugarFree",
+    PEANUTS_FREE_ALLERGEN = "products.allergens.peanutFree",
+    FISH_FREE_ALLERGEN = "products.allergens.fishFree",
 
     // Languages
     HUNGARIAN = "blog.languages.hungarian",

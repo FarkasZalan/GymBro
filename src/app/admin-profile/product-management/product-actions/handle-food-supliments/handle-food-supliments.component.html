@@ -65,13 +65,51 @@
                         </div>
                     </div>
 
-                    <!-- Description -->
+                    <!-- Small description -->
                     <div class="col-md-6 form-group">
+                        <label for="smallDescription" class="label">{{ 'products.smallDescription' | translate
+                            }}</label>
+                        <textarea class="form-control" [(ngModel)]="foodSuplimentObject.smallDescription"
+                            name="smallDescription" required
+                            placeholder="{{ 'products.enterProductSmallDescription' | translate }}"
+                            #smallDescription="ngModel"
+                            (keyup)="smallDescriptionLength = foodSuplimentObject.smallDescription.length"></textarea>
+
+                        <!-- Character count display with conditional red color when max limit is reached -->
+                        <small
+                            [ngClass]="{'text-danger': smallDescriptionLength >= 150 || smallDescriptionLength === 0, 'text-success': smallDescriptionLength < 150 && smallDescriptionLength > 0}">
+                            {{ smallDescriptionLength || 0 }}/150
+                        </small>
+
+                        <!-- error block -->
+                        <span class="help-block" *ngIf="smallDescription.touched && !smallDescription.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="row">
+                    <div class="col-md-12 form-group">
                         <label for="description" class="label">{{ 'products.description' | translate }}</label>
-                        <textarea class="form-control" [(ngModel)]="foodSuplimentObject.description" name="description"
-                            required placeholder="{{ 'products.enterProductDescription' | translate }}"
-                            #description="ngModel"></textarea>
-                        <span class="help-block" *ngIf="description.touched && !description.valid">{{
+                        <div class="NgxEditor__Wrapper">
+                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                            <ngx-editor [editor]="editor" [(ngModel)]="description" name="description"
+                                [disabled]="false"
+                                placeholder="{{ 'products.enterProductDescription' | translate }}"></ngx-editor>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ingredients -->
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="ingredients" class="label">{{ 'products.ingredients' | translate }}</label>
+                        <textarea class="form-control" [(ngModel)]="foodSuplimentObject.ingredients" name="ingredients"
+                            required placeholder="{{ 'products.enterIngredients' | translate }}"
+                            #ingredients="ngModel"></textarea>
+
+                        <!-- error block -->
+                        <span class="help-block" *ngIf="ingredients.touched && !ingredients.valid">{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -389,17 +427,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <!-- Fiber -->
-                        <div class="col-md-4 form-group">
-                            <label for="nutritionalValueFiber" class="label">{{ 'products.fiberGram' | translate
-                                }}</label>
-                            <input type="number" class="form-control"
-                                [(ngModel)]="nutritionalTable.nutritionalValueFiber" name="nutritionalValueFiber"
-                                required placeholder="{{ 'products.fiberGram' | translate }}*"
-                                #nutritionalValueFiber="ngModel">
-                        </div>
                         <!-- Proteins -->
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label for="nutritionalValueProteins" class="label">{{ 'products.proteinsGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"
@@ -408,7 +437,7 @@
                                 #nutritionalValueProteins="ngModel">
                         </div>
                         <!-- Salt -->
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label for="nutritionalValueSalt" class="label">{{ 'products.saltGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"

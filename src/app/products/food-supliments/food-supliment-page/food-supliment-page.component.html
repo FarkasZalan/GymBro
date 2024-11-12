@@ -1,0 +1,443 @@
+<div class="container">
+    <nb-card class="container">
+        <nb-card-body style="overflow: hidden;">
+            <div class="row">
+                <!-- Product image -->
+                <div class="col-md-4 form-group">
+                    <div class="details-container">
+                        <div class="image-container">
+                            <img *ngIf="selectedImage !== ''" [@zoomIn] [src]="selectedImage" alt="Product Image"
+                                class="product-image" />
+                            <img *ngIf="selectedImage === ''" [@zoomIn]
+                                src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                class="product-image" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Details: Name, Allergen Information, Quantity Selection -->
+                <div class="col-md-4 form-group">
+                    <!-- Product Name -->
+                    <h2 class="product-name">{{ foodSupliment.productName | translate }}</h2>
+                    <!-- Selected quantity Name -->
+                    <h5 class="selected-quantity">{{ selectedQuantityInProduct }} {{ foodSupliment.dosageUnit |
+                        translate
+                        }}</h5>
+
+                    <!-- small description section -->
+                    <p>{{ foodSupliment.smallDescription }}</p>
+
+                    <!-- Allergen Information -->
+                    <div class="allergen-icons">
+                        <div *ngFor="let allergen of allergens" class="allergen-icon">
+                            <!-- Lactose free section -->
+                            <div *ngIf="allergen === productViewText.LACTOSE_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/lactose-free-icon.svg"
+                                    alt="LACTOSE Free Icon" width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Gluten free section-->
+                            <div *ngIf="allergen === productViewText.GLUTEN_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/gluten_free.svg" alt="Gluten Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Sugar free section -->
+                            <div *ngIf="allergen === productViewText.SUGAR_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/sugar-free.svg" alt="SUGAR Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Peanut free section -->
+                            <div *ngIf="allergen === productViewText.PEANUTS_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/peanut-free.svg" alt="PEANUT Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Fish free section -->
+                            <div *ngIf="allergen === productViewText.FISH_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/fish-free.svg" alt="Fish Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Egg free section -->
+                            <div *ngIf="allergen === productViewText.EGG_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/egg-free.svg" alt="Fish Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Soy free section -->
+                            <div *ngIf="allergen === productViewText.SOY_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/soy-free.svg" alt="SOY Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- safe section -->
+                    <div class="stock-info">
+                        <!-- pregnancy -->
+                        <span *ngIf="!foodSupliment.safeForConsumptionDuringPregnancy" class="red-text">
+                            <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
+                                height="12">
+                            {{ 'products.notSafePregnancyText' | translate }}
+                        </span>
+
+                        <span *ngIf="foodSupliment.safeForConsumptionDuringPregnancy" class="green-text">
+                            <img src="../../../../assets/images/inStock.svg" alt="SOY Free Icon" width="12" height="12">
+                            {{ 'products.safePregnancyText' | translate }}
+                        </span>
+                    </div>
+
+                    <!-- Breastfeeding -->
+                    <div class="stock-info">
+                        <span *ngIf="!foodSupliment.safeForConsumptionDuringBreastfeeding" class="red-text">
+                            <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
+                                height="12">
+                            {{ 'products.notSafeBreastfeedingText' | translate }}
+                        </span>
+
+                        <span *ngIf="foodSupliment.safeForConsumptionDuringBreastfeeding" class="green-text">
+                            <img src="../../../../assets/images/inStock.svg" alt="SOY Free Icon" width="12" height="12">
+                            {{ 'products.safeBreastfeedingText' | translate }}
+                        </span>
+                    </div><br>
+
+                    <!-- Quantity in product -->
+                    <div class="weight-select-display" *ngFor="let quantity of getUniqueQuantities()"
+                        (click)="selectQuantity(quantity)" name="quantity"
+                        [ngClass]="{'selected': selectedQuantityInProduct === quantity}">
+                        {{ quantity }} {{ foodSupliment.dosageUnit | translate }}
+                    </div>
+                </div>
+
+                <!-- cart and amount section -->
+                <div class="col-md-4 form-group">
+                    <h3 class="product-price">{{selectedPrice }} {{ 'products.huf' | translate
+                        }}</h3>
+
+                    <h4 class="unit-price" style="font-weight: 600;">{{ 'products.unitPrice' | translate }}
+                        {{ unitPrice }} {{ 'products.huf' | translate
+                        }}/{{ foodSupliment.dosageUnit | translate }}</h4>
+
+                    <!-- Loyalty Program Points -->
+                    <div class="loyalty-points">
+                        <h3 (click)="openLoyalityProgram()" class="product-price loyalty-program-text">{{
+                            'profileMenu.loyaltyProgram' | translate
+                            }}</h3>
+                        <p style="font-size: 16px;"><strong>{{ 'products.loyaltyProgram.loyalityPointPerItem' |
+                                translate }}
+                                <br><span class="loyality-points">{{ loyaltyPoints }} {{'products.loyaltyProgram.points'
+                                    | translate
+                                    }}</span></strong>
+                        </p>
+                        <br>
+                    </div>
+
+                    <div class="row">
+                        <!-- flavor section -->
+                        <div class="col-md-8 form-group">
+                            <div class="dropdown-list-container">
+                                <div class="form-group position-relative order-by-container">
+
+                                    <!-- Dropdown container with arrow icon -->
+                                    <div class="dropdown-container" (click)="toggleFlavorDropdown()">
+
+                                        <!-- Select flavor -->
+                                        <select class="form-control drop-down-list allow-selected-list-color"
+                                            name="flavors" required #flavors="ngModel"
+                                            (change)="selectFlavor(selectedFlavor)" [(ngModel)]="selectedFlavor">
+                                            <!-- List of categories -->
+                                            <option *ngFor="let flavor of availableFlavors" [value]="flavor">
+                                                {{ flavor | translate }}
+                                            </option>
+                                        </select>
+
+                                        <!-- Arrow icon based on dropdown open/closed state -->
+                                        <div class="arrow-icon">
+                                            <svg *ngIf="isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 14l5-5 5 5z" />
+                                            </svg>
+                                            <svg *ngIf="!isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 10l5 5 5-5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cart quantity input -->
+                        <div class="col-md-4 form-group">
+                            <div class="input-container">
+                                <input type="number" min="1" class="form-control" name="dailyDosage" required
+                                    [(ngModel)]="cartQuantity">
+                                <span class="unit-suffix">{{ productViewText.PCS | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span *ngIf="errorMessageStock" class="help-block-login-error">
+                        <i class="fas fa-exclamation-triangle icon"></i>
+                        {{ 'products.maxCapacityToOrder' | translate }} {{ productStock }} {{ productViewText.PCS |
+                        translate }}
+                    </span>
+
+                    <!-- Add to Cart Button -->
+                    <div class="add-to-cart text-center">
+                        <button class="btn btn-primary add-to-cart-btn"
+                            [disabled]="cartQuantity<=0 || !productIsInStock" (click)="addToCart()">{{
+                            'products.addToCart' |
+                            translate
+                            }}</button>
+                    </div><br>
+
+                    <!-- Stock text with small pipe and green color -->
+                    <div class="stock-info">
+                        <span class="stock-status">{{ 'products.stock' | translate }}:
+                            <span *ngIf="productIsInStock" class="green-text">
+                                <img src="../../../../assets/images/inStock.svg" alt="SOY Free Icon" width="12"
+                                    height="12">
+                                {{ 'products.productInStock' | translate }}
+                            </span>
+
+                            <span *ngIf="!productIsInStock" class="red-text">
+                                <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
+                                    height="12">
+                                {{ 'products.productNoStock' | translate }}
+                            </span>
+                        </span>
+                    </div><br>
+
+                    <!-- Shipping info -->
+                    <div class="stock-info">
+                        <span>{{ 'products.shippingInfo' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description section -->
+            <nb-card class="container-collapse-component">
+                <nb-card-body>
+                    <div class="header-collapse-component" (click)="toggleCollapsedDescription()">
+                        <h2 class="title"
+                            [ngClass]="{'center': isCollapsedDescription, 'left': !isCollapsedDescription}">{{
+                            'products.description' | translate }}
+                        </h2>
+                        <button class="toggle-button-collapse-component back-btn">
+                            <span class="categorie-arrow" *ngIf="isCollapsedDescription">▼</span>
+                            <span class="categorie-arrow" *ngIf="!isCollapsedDescription">▲</span>
+                        </button>
+                    </div>
+
+                    <div *ngIf="!isCollapsedDescription" [@collapseComponent] class="collapse-container">
+                        <!-- Description section -->
+                        <p [innerHTML]="foodSupliment.description"></p>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+
+            <!-- Ingredients section -->
+            <nb-card class="container-collapse-component">
+                <nb-card-body>
+                    <div class="header-collapse-component" (click)="toggleCollapsedIngredients()">
+                        <h2 class="title"
+                            [ngClass]="{'center': isCollapsedIngredients, 'left': !isCollapsedIngredients}">{{
+                            'products.ingredients' | translate }}
+                        </h2>
+                        <button class="toggle-button-collapse-component back-btn">
+                            <span class="categorie-arrow" *ngIf="isCollapsedIngredients">▼</span>
+                            <span class="categorie-arrow" *ngIf="!isCollapsedIngredients">▲</span>
+                        </button>
+                    </div>
+
+                    <div *ngIf="!isCollapsedIngredients" [@collapseComponent] class="collapse-container">
+                        <!-- ingredients section -->
+                        <p>{{ foodSupliment.ingredients }}</p>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+
+            <!-- Active ingredients section -->
+            <nb-card
+                *ngIf="foodSupliment.productCategory === productViewText.VITAMINS_AND_MINERALS || foodSupliment.productCategory === productViewText.JOIN_SUPPORT"
+                class="container-collapse-component">
+                <nb-card-body>
+                    <div class="header-collapse-component" (click)="toggleCollapsedActiveIngredients()">
+                        <h2 class="title"
+                            [ngClass]="{'center': isCollapsedActiveIngredients, 'left': !isCollapsedActiveIngredients}">
+                            {{ 'products.activeIngredients' | translate }}
+                        </h2>
+                        <button class="toggle-button-collapse-component back-btn">
+                            <span class="categorie-arrow" *ngIf="isCollapsedActiveIngredients">▼</span>
+                            <span class="categorie-arrow" *ngIf="!isCollapsedActiveIngredients">▲</span>
+                        </button>
+                    </div>
+
+                    <div *ngIf="!isCollapsedActiveIngredients" [@collapseComponent] class="collapse-container">
+                        <!-- Active ingredients section -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="table-text">
+                                    <td colspan="2">
+                                        {{ 'products.dailyDosage' | translate }}: {{ foodSupliment.dailyDosage }}
+                                        {{ foodSupliment.dosageUnit | translate }}<br>
+                                        {{ 'products.quantityInProduct' | translate }}: {{ selectedQuantityInProduct }}
+                                        {{ foodSupliment.dosageUnit | translate }}
+                                    </td>
+                                </tr>
+                                <tr class="table-text">
+                                    <th>{{ 'products.vitaminName' | translate }}</th>
+                                    <th>{{ 'products.vitaminQuantityPerCapsule' | translate }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let vitamin of vitaminList; let i = index">
+                                    <td>{{ vitamin.name }}</td>
+                                    <td>{{ vitamin.stock }} {{ vitamin.unit | translate }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+
+            <!-- Nutrition table section -->
+            <nb-card
+                *ngIf="foodSupliment.productCategory !== productViewText.VITAMINS_AND_MINERALS && foodSupliment.productCategory !== productViewText.JOIN_SUPPORT"
+                class="container-collapse-component">
+                <nb-card-body>
+                    <div class="header-collapse-component" (click)="toggleCollapsedNutritionTable()">
+                        <h2 class="title"
+                            [ngClass]="{'center': isCollapsedNutritionTable, 'left': !isCollapsedNutritionTable}">
+                            {{ 'products.nutritionalInformation' | translate }}
+                        </h2>
+                        <button class="toggle-button-collapse-component back-btn">
+                            <span class="categorie-arrow" *ngIf="isCollapsedNutritionTable">▼</span>
+                            <span class="categorie-arrow" *ngIf="!isCollapsedNutritionTable">▲</span>
+                        </button>
+                    </div>
+
+                    <div *ngIf="!isCollapsedNutritionTable" [@collapseComponent] class="collapse-container">
+                        <!-- Nutritional information section -->
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="table-text">
+                                    <td colspan="2">
+                                        {{ 'products.dailyDosage' | translate }}: {{ foodSupliment.dailyDosage }}
+                                        {{ foodSupliment.dosageUnit | translate }}<br>
+                                        {{ 'products.quantityInProduct' | translate }}: {{ selectedQuantityInProduct }}
+                                        {{ foodSupliment.dosageUnit | translate }}
+                                    </td>
+                                </tr>
+                                <tr class="table-text">
+                                    <th>{{ 'products.nutritionTableDetailsText' | translate }}</th>
+                                    <th>100 g</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Nutritional values -->
+                                <tr>
+                                    <td style="font-weight: 600; font-size: 16px;">{{
+                                        'products.nutritionalInformationTable.energy' |
+                                        translate }}</td>
+                                    <td>{{ foodSupliment.nutritionalTable.nutritionalValueEnergyKj }} kJ/ {{
+                                        foodSupliment.nutritionalTable.nutritionalValueEnergyCal }} kcal</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600; font-size: 16px;">{{
+                                        'products.nutritionalInformationTable.fats' |
+                                        translate }}</td>
+                                    <td>{{ foodSupliment.nutritionalTable.nutritionalValueFats }} g</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 300; font-size: 16px;">{{
+                                        'products.nutritionalInformationTable.fattyAcids' |
+                                        translate }}</td>
+                                    <td>{{ foodSupliment.nutritionalTable.nutritionalValueFattyAcids }} g</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600; font-size: 16px;">{{
+                                        'products.nutritionalInformationTable.carbohydrates' | translate }}</td>
+                                    <td>{{ foodSupliment.nutritionalTable.nutritionalValueCarbohydrates }} g</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 300; font-size: 16px;">{{
+                                        'products.nutritionalInformationTable.sugar' |
+                                        translate }}</td>
+                                    <td>{{ foodSupliment.nutritionalTable.nutritionalValueSugar }} g</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600; font-size: 16px;">{{
+                                        'products.nutritionalInformationTable.protein' |
+                                        translate }}</td>
+                                    <td>{{ foodSupliment.nutritionalTable.nutritionalValueProteins }} g</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 600; font-size: 16px;">{{
+                                        'products.nutritionalInformationTable.salt' |
+                                        translate }}</td>
+                                    <td>{{ foodSupliment.nutritionalTable.nutritionalValueSalt }} g</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+
+
+            <!-- Related products section -->
+            <br>
+            <div class="row">
+                <!-- Display product prices dynamically in a 2-column layout -->
+                <hr>
+                <h2>{{ 'products.relatedProducts' | translate }}</h2>
+                <!-- Food Supliments -->
+                <div *ngIf="relatedProducts" class="product-list-container">
+                    <nb-card class="rounded-card productCard" *ngFor="let relatedProduct of relatedProducts" [@zoomIn]>
+                        <nb-card-body class="related-product-image" (click)="goToProductPage(relatedProduct.id)">
+
+                            <div *ngIf="getDefaultPrice(relatedProduct) as defaultPrice"
+                                class="details-container text-center">
+                                <div class="related-image-container text-center">
+                                    <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                        alt="Product Image" class="card-image" />
+                                    <img *ngIf="defaultPrice.productImage === ''"
+                                        src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                        class="card-image" />
+                                </div>
+
+
+                                <h4>{{ relatedProduct.productName }}</h4>
+                                <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
+                                    'products.huf' | translate }}</h5>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+            </div>
+            <!-- back button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit"
+                    nbButton status="success" (click)="back()">
+                    <span class="arrow">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Filled left arrow -->
+                            <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                        </svg>
+                    </span>
+                    {{ 'blog.backToList' | translate }}</button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

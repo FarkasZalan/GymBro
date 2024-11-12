@@ -17,7 +17,7 @@
         <div class="search-container" [ngClass]="{ 'expanded': searchExpanded }">
             <input *ngIf="searchExpanded" [(ngModel)]="searcForProductText" placeholder="{{
                                 'filter.search' | translate }}" class="search-input" type="text"
-                (ngModelChange)="onSearchChange()" />
+                (ngModelChange)="onSearchChange()" (blur)="closeSearch()" autofocus />
             <i *ngIf="!searchExpanded" class="material-icons search-icon" (click)="openSearch()">
                 search
             </i>

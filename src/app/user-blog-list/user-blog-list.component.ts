@@ -8,11 +8,20 @@ import { FilterPageComponent } from '../filter-page/filter-page.component';
 import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
 import { Filter } from '../filter-page/filter.model';
 import { ProductService } from '../products/product.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-user-blog-list',
   templateUrl: './user-blog-list.component.html',
-  styleUrl: '../../styles/products.scss'
+  styleUrl: '../../styles/products.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class UserBlogListComponent {
   blogId: string;

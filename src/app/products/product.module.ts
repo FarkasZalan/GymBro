@@ -20,11 +20,14 @@ import { MatInputModule } from '@angular/material/input';
 import { NgxEditorModule } from 'ngx-editor';
 import { ProductRoutingModule } from './product-routing.module';
 import { ProductsListComponent } from '../admin-profile/product-management/products-categories/products-list/products-list.component';
-import { ProductSiteComponent } from './product-site/product-site.component';
-import { FoodSuplimentsListComponent } from './food-supliments-list/food-supliments-list.component';
-import { OrganicFoodListComponent } from './organic-food-list/organic-food-list.component';
-import { AccessoriesListComponent } from './accessories-list/accessories-list.component';
-import { ClothesListComponent } from './clothes-list/clothes-list.component';
+import { FoodSuplimentsListComponent } from './food-supliments/food-supliments-list/food-supliments-list.component';
+import { OrganicFoodListComponent } from './organic-food/organic-food-list/organic-food-list.component';
+import { AccessoriesListComponent } from './accessories/accessories-list/accessories-list.component';
+import { ClothesListComponent } from './clothes/clothes-list/clothes-list.component';
+import { FoodSuplimentPageComponent } from './food-supliments/food-supliment-page/food-supliment-page.component';
+import { OrganicFoodPageComponent } from './organic-food/organic-food-page/organic-food-page.component';
+import { AccessoriesPageComponent } from './accessories/accessories-page/accessories-page.component';
+import { ClothesPageComponent } from './clothes/clothes-page/clothes-page.component';
 
 @NgModule({
     imports: [
@@ -49,11 +52,14 @@ import { ClothesListComponent } from './clothes-list/clothes-list.component';
     ],
     declarations: [
         ProductsListComponent,
-        ProductSiteComponent,
         FoodSuplimentsListComponent,
         OrganicFoodListComponent,
         AccessoriesListComponent,
-        ClothesListComponent
+        ClothesListComponent,
+        FoodSuplimentPageComponent,
+        OrganicFoodPageComponent,
+        AccessoriesPageComponent,
+        ClothesPageComponent
     ],
 })
 export class ProductModule {

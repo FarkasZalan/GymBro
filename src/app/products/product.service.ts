@@ -42,6 +42,25 @@ export class ProductService {
         ).valueChanges();
     }
 
+    // Fetch related products based on category
+    getRelatedProducts(currentProductId: string, category: string, productMainCategory: string) {
+        return this.db.collection('products').doc(productMainCategory).collection('allProduct', ref =>
+            ref
+                .where('id', '!=', currentProductId)
+                .where('productCategory', '==', category)
+                .limit(6)
+        ).valueChanges();
+    }
+
+    // Fetch random products
+    getRandomProducts(currentProductId: string, limit: number, productMainCategory: string) {
+        return this.db.collection('products').doc(productMainCategory).collection('allProduct', ref =>
+            ref
+                .where('id', '!=', currentProductId)
+                .limit(limit)
+        ).valueChanges();
+    }
+
     // Sort food supliments
     sortFoodSuplimentsByPriceASC(foodSupliments: FoodSupliment[]) {
         // Sort default by defaul price desc

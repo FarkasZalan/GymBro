@@ -1,0 +1,134 @@
+.loyalty-hero {
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.hero-subtitle {
+    font-size: 1.2em;
+}
+
+.how-it-works,
+.rewards-section,
+.loyalty-tiers,
+.faq-section {
+    padding: 30px 20px;
+    margin-bottom: 20px;
+}
+
+.how-it-works h2,
+.rewards-section h2,
+.loyalty-tiers h2,
+.faq-section h2 {
+    color: #0b8e92;
+}
+
+.rewards-list {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.reward-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reward-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.points-needed {
+    color: #0b8e92;
+    font-weight: bold;
+}
+
+.loyalty-tiers {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tier-card {
+    background: #f7f7f7;
+    padding: 20px;
+    border-radius: 8px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero-card {
+    background-color: #0b8e92;
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+.hero-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.hero-subtitle {
+    font-size: 1.2em;
+}
+
+.info-card,
+.cta-card {
+    padding: 20px;
+    border-radius: 50px !important;
+}
+
+.rewards-list,
+.tier-cards {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.reward-card,
+.tier-card {
+    width: 220px;
+    text-align: center;
+}
+
+.reward-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.points-needed {
+    color: #0b8e92;
+    font-weight: bold;
+}
+
+.faq-item {
+    margin-top: 10px;
+}
+
+.cta-card {
+    text-align: center;
+}

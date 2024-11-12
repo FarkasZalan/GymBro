@@ -95,13 +95,13 @@ export class FilterPageComponent {
   selectedFlavors: string[] = [];
 
   availableAllergens: string[] = [
-    ProductViewText.LACTOSE_ALLERGEN,
-    ProductViewText.GLUTEN_ALLERGEN,
-    ProductViewText.SOY_ALLERGEN,
-    ProductViewText.EGGS_ALLERGEN,
-    ProductViewText.ADDED_SUGARS_ALLERGEN,
-    ProductViewText.PEANUTS_ALLERGEN,
-    ProductViewText.FISH_ALLERGEN
+    ProductViewText.LACTOSE_FREE_ALLERGEN,
+    ProductViewText.GLUTEN_FREE_ALLERGEN,
+    ProductViewText.SOY_FREE_ALLERGEN,
+    ProductViewText.EGG_FREE_ALLERGEN,
+    ProductViewText.SUGAR_FREE_ALLERGEN,
+    ProductViewText.PEANUTS_FREE_ALLERGEN,
+    ProductViewText.FISH_FREE_ALLERGEN
   ];
   selectedAllergenes: string[] = [];
 

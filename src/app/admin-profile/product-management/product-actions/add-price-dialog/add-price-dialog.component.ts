@@ -56,6 +56,10 @@ export class AddPriceDialogComponent implements OnInit {
   allPricesForProduct: ProductPrice[] = [];
   productViewText = ProductViewText;
 
+  // for food supliments and organic food
+  availableFlavors: string[] = [];
+  selectedFlavor: string = '';
+
   // use unified image
   unifiedImageUrl: string = '';
 
@@ -87,6 +91,15 @@ export class AddPriceDialogComponent implements OnInit {
       this.availableProductColors = Object.values(this.data.allColors);
       this.availableProductColors.sort((a, b) => a.color.localeCompare(b.color));
       this.accessoriesType = data.accessoriesType;
+    }
+
+    // if parent page was the food supliments ord organic food (drink and healthy snack have flavors) page
+    if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.DRINKS) || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.HEALTHY_SNACKS)) {
+      this.availableFlavors = Object.values(this.data.allFlavors);
+      if (this.availableFlavors.length === 0) {
+        this.availableFlavors.push(ProductViewText.UNFLAVORED);
+      }
+      this.availableFlavors.sort((a, b) => a.localeCompare(b));
     }
 
     if (this.editText) {
@@ -121,6 +134,15 @@ export class AddPriceDialogComponent implements OnInit {
 
     if (this.data.selectedPrice !== null && this.data.selectedPrice !== undefined) {
       this.newPrice = { ...this.data.selectedPrice };
+      if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.DRINKS) || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.HEALTHY_SNACKS)) {
+        this.availableFlavors = Object.values(this.data.allFlavors);
+        if (this.availableFlavors.length === 0) {
+          this.availableFlavors.push(ProductViewText.UNFLAVORED);
+        }
+        this.availableFlavors.sort((a, b) => a.localeCompare(b));
+        this.selectedFlavor = this.data.selectedFlavor;
+      }
+
       if (this.productCategory === ProductViewText.CLOTHES) {
         this.availableProductColors = Object.values(this.data.allColors);
         this.availableProductColors.sort((a, b) => a.color.localeCompare(b.color));
@@ -233,6 +255,7 @@ export class AddPriceDialogComponent implements OnInit {
       productPrice: this.priceForm.value.productPrice,
       productStock: this.priceForm.value.productStock,
       setAsDefaultPrice: this.isSetAsDefaultPrice,
+      productFlavor: this.selectedFlavor,
       productSize: this.selectedSize,
       productColor: this.selectedColor
     };

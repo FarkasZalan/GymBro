@@ -35,16 +35,53 @@
                     </div>
                 </div>
 
+
+                <!-- Ingredients and small description -->
+                <div class="row">
+                    <!-- Ingredients section -->
+                    <div class="col-md-6 form-group">
+                        <label for="ingredients" class="label">{{ 'products.ingredients' | translate }}</label>
+                        <textarea class="form-control" [(ngModel)]="organicFoodObject.ingredients" name="ingredients"
+                            required placeholder="{{ 'products.enterIngredients' | translate }}"
+                            #ingredients="ngModel"></textarea>
+
+                        <!-- error block -->
+                        <span class="help-block" *ngIf="ingredients.touched && !ingredients.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+
+                    <!-- Small description -->
+                    <div class="col-md-6 form-group">
+                        <label for="smallDescription" class="label">{{ 'products.smallDescription' | translate
+                            }}</label>
+                        <textarea class="form-control" [(ngModel)]="organicFoodObject.smallDescription"
+                            name="smallDescription" required
+                            placeholder="{{ 'products.enterProductSmallDescription' | translate }}"
+                            #smallDescription="ngModel"
+                            (keyup)="smallDescriptionLength = organicFoodObject.smallDescription.length"></textarea>
+
+                        <!-- Character count display with conditional red color when max limit is reached -->
+                        <small
+                            [ngClass]="{'text-danger': smallDescriptionLength >= 150 || smallDescriptionLength === 0, 'text-success': smallDescriptionLength < 150 && smallDescriptionLength > 0}">
+                            {{ smallDescriptionLength || 0 }}/150
+                        </small>
+
+                        <!-- error block -->
+                        <span class="help-block" *ngIf="smallDescription.touched && !smallDescription.valid">{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
                 <!-- Description Section -->
                 <div class="row">
-                    <!-- Description -->
                     <div class="col-md-12 form-group">
                         <label for="description" class="label">{{ 'products.description' | translate }}</label>
-                        <textarea class="form-control" [(ngModel)]="organicFoodObject.description" name="description"
-                            required placeholder="{{ 'products.enterProductDescription' | translate }}"
-                            #description="ngModel"></textarea>
-                        <span class="help-block" *ngIf="description.touched && !description.valid">{{
-                            'register.fieldRequired' | translate }}</span>
+                        <div class="NgxEditor__Wrapper">
+                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                            <ngx-editor [editor]="editor" [(ngModel)]="description" name="description"
+                                [disabled]="false"
+                                placeholder="{{ 'products.enterProductDescription' | translate }}"></ngx-editor>
+                        </div>
                     </div>
                 </div>
 
@@ -141,19 +178,30 @@
                 <h3>{{ 'products.flavorsAndAllergens' | translate }}</h3>
 
 
-                <div class="row">
-                    <!-- Flavor Section (Dropdown list) -->
+                <div *ngIf="selectedCategory === productViewText.DRINKS || selectedCategory === productViewText.HEALTHY_SNACKS"
+                    class="row">
+                    <!-- Flavors Section -->
                     <div class="col-md-12 form-group">
                         <label for="flavors" class="label">{{ 'products.productFlavors' | translate }}</label>
-                        <select class="form-control drop-down-list allow-selected-list-color" name="flavors" required
-                            #flavors="ngModel" [(ngModel)]="selectedFlavor">
-                            <!-- List of categories -->
-                            <option *ngFor="let flavor of availableFlavors" [value]="flavor">
-                                {{ flavor | translate }}
-                            </option>
-                        </select>
-                        <span class="help-block" *ngIf="flavors.touched && !flavors.valid">{{
-                            'register.fieldRequired' | translate }}</span>
+                        <div class="multi-select-container">
+                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
+                                [(ngModel)]="selectedFlavors" #flavorSelect="ngModel">
+                                <option *ngFor="let flavor of availableFlavors" [value]="flavor"
+                                    [ngClass]="{'active': selectedFlavors.includes(flavor) && selectedFlavors.length > 0}"
+                                    (click)="selectionOfTheList(productViewText.FLAVORS, flavor)">
+                                    {{ flavor | translate }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- display the selected flavors -->
+                        <div *ngIf="selectedFlavors.length > 0">
+                            <div class="selected-items-display" *ngFor="let selected of selectedFlavors"
+                                (click)="removeItemFromTheList(productViewText.FLAVORS, selected)">
+                                {{ selected | translate }}
+                                <span style="cursor: pointer; color: red;">&times;</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -248,17 +296,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <!-- Fiber -->
-                        <div class="col-md-4 form-group">
-                            <label for="nutritionalValueFiber" class="label">{{ 'products.fiberGram' | translate
-                                }}</label>
-                            <input type="number" class="form-control"
-                                [(ngModel)]="nutritionalTable.nutritionalValueFiber" name="nutritionalValueFiber"
-                                required placeholder="{{ 'products.fiberGram' | translate }}*"
-                                #nutritionalValueFiber="ngModel">
-                        </div>
                         <!-- Proteins -->
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label for="nutritionalValueProteins" class="label">{{ 'products.proteinsGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"
@@ -267,7 +306,7 @@
                                 #nutritionalValueProteins="ngModel">
                         </div>
                         <!-- Salt -->
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label for="nutritionalValueSalt" class="label">{{ 'products.saltGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"

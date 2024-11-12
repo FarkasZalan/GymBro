@@ -1,6 +1,6 @@
 <!-- If no products, display the empty card -->
 <div *ngIf="(emptyCollection === true)" class="product-empty-list-container">
-    <nb-card class="emptyCard">
+    <nb-card class="emptyCard" [@zoomIn]>
         <nb-card-body>
             <div>
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
@@ -21,8 +21,8 @@
 
     <!-- Organic food -->
     <div *ngIf="organicFoods" class="product-list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let organicFood of organicFoods">
-            <nb-card-body class="product-image" (click)="goToEditProduct(healthyProduct.id)">
+        <nb-card class="rounded-card productCard" *ngFor="let organicFood of organicFoods" [@zoomIn]>
+            <nb-card-body class="product-image" (click)="goToProductPage(organicFood.id)">
 
 
                 <div *ngIf="getDefaultPrice(organicFood) as defaultPrice" class="details-container text-center">

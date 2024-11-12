@@ -1,6 +1,6 @@
 <!-- If no products, display the empty card -->
 <div *ngIf="(emptyCollection === true)" class="product-empty-list-container">
-    <nb-card class="emptyCard">
+    <nb-card class="emptyCard" [@zoomIn]>
         <nb-card-body>
             <div>
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
@@ -19,13 +19,13 @@
 <div class="row">
     <!-- Display product prices dynamically in a 2-column layout -->
 
-    <!-- Clothes -->
-    <div *ngIf="clothes" class="product-list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes">
-            <nb-card-body class="product-image" (click)="goToEditProduct(cloth.id)">
+    <!-- Accessories -->
+    <div *ngIf="accessories" class="product-list-container">
+        <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories" [@zoomIn]>
+            <nb-card-body class="product-image" (click)="goToEditProduct(accessory.id)">
 
 
-                <div *ngIf="getDefaultPrice(cloth) as defaultPrice" class="details-container text-center">
+                <div *ngIf="getDefaultPrice(accessory) as defaultPrice" class="details-container text-center">
                     <div class="image-container text-center">
                         <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
                             alt="Product Image" class="card-image" />
@@ -35,7 +35,7 @@
                     </div>
 
 
-                    <h4>{{ cloth.productName }}</h4>
+                    <h4>{{ accessory.productName }}</h4>
                     <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
                         'products.huf' | translate }}</h5>
                 </div>

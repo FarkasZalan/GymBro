@@ -6,10 +6,12 @@ export interface OrganicFood {
     id?: string;
     productName: string;
     productCategory: string;
+    smallDescription: string;
+    ingredients: string;
     description: string;
     dosageUnit: string;
 
-    flavor: string;
+    flavors: string[];
 
     // Nutritional informations
 

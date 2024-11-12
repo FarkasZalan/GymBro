@@ -1,16 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { FoodSupliment } from '../../admin-profile/product-management/product-models/food-supliment.model';
-import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
+import { FoodSupliment } from '../../../admin-profile/product-management/product-models/food-supliment.model';
+import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProductService } from '../product.service';
-import { Filter } from '../../filter-page/filter.model';
-import { FilterPageComponent } from '../../filter-page/filter-page.component';
+import { ProductService } from '../../product.service';
+import { Filter } from '../../../filter-page/filter.model';
+import { FilterPageComponent } from '../../../filter-page/filter-page.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-food-supliments-list',
   templateUrl: './food-supliments-list.component.html',
-  styleUrl: '../../../styles/products.scss'
+  styleUrl: '../../../../styles/products.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class FoodSuplimentsListComponent implements OnInit {
   // store the products one of the array

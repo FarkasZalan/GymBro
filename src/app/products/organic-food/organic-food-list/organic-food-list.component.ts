@@ -1,16 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
-import { FilterPageComponent } from '../../filter-page/filter-page.component';
-import { Filter } from '../../filter-page/filter.model';
-import { ProductService } from '../product.service';
-import { OrganicFood } from '../../admin-profile/product-management/product-models/organic-food';
+import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
+import { FilterPageComponent } from '../../../filter-page/filter-page.component';
+import { Filter } from '../../../filter-page/filter.model';
+import { ProductService } from '../../product.service';
+import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-organic-food-list',
   templateUrl: './organic-food-list.component.html',
-  styleUrl: '../../../styles/products.scss'
+  styleUrl: '../../../../styles/products.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class OrganicFoodListComponent implements OnInit {
   // store the products one of the array
@@ -128,9 +137,9 @@ export class OrganicFoodListComponent implements OnInit {
         return false;
       }
 
-      // Flavor (single flavor comparison)
+      // Flavors (array contains any)
       if (this.filterObject.flavors && this.filterObject.flavors.length > 0) {
-        if (!this.filterObject.flavors.includes(item.flavor)) {
+        if (!this.filterObject.flavors.some(flavor => item.flavors.includes(flavor))) {
           return false;
         }
       }

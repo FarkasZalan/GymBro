@@ -18,6 +18,7 @@ import { SuccessfullDialogComponent } from '../../../../successfull-dialog/succe
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
 import { AdminService } from '../../../admin.service';
+import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-handle-food-supliments',
@@ -56,7 +57,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   selectedUnit: string = '';
   availableDosageUnits: string[] = [
     ProductViewText.GRAM,
-    ProductViewText.PIECES,
+    ProductViewText.CAPSULE,
     ProductViewText.POUNDS
   ]
   selectedCategory: string = '';
@@ -131,13 +132,13 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   selectedFlavors: string[] = [];
 
   availableAllergens: string[] = [
-    ProductViewText.LACTOSE_ALLERGEN,
-    ProductViewText.GLUTEN_ALLERGEN,
-    ProductViewText.SOY_ALLERGEN,
-    ProductViewText.EGGS_ALLERGEN,
-    ProductViewText.ADDED_SUGARS_ALLERGEN,
-    ProductViewText.PEANUTS_ALLERGEN,
-    ProductViewText.FISH_ALLERGEN
+    ProductViewText.LACTOSE_FREE_ALLERGEN,
+    ProductViewText.GLUTEN_FREE_ALLERGEN,
+    ProductViewText.SOY_FREE_ALLERGEN,
+    ProductViewText.EGG_FREE_ALLERGEN,
+    ProductViewText.SUGAR_FREE_ALLERGEN,
+    ProductViewText.PEANUTS_FREE_ALLERGEN,
+    ProductViewText.FISH_FREE_ALLERGEN
   ];
   selectedAllergenes: string[] = [];
 
@@ -163,7 +164,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     nutritionalValueFattyAcids: null,
     nutritionalValueCarbohydrates: null,
     nutritionalValueSugar: null,
-    nutritionalValueFiber: null,
     nutritionalValueProteins: null,
     nutritionalValueSalt: null,
   };
@@ -179,13 +179,37 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   isUnifiedImage: boolean = false;
   unifiedImageUrl: string = null;
 
+  // text editor
+  editor: Editor;
+  toolbar: Toolbar;
+
+  // small description length
+  smallDescriptionLength: number = 0;
+
+  description: string = "";
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
+    this.editor = new Editor();
+
+    // Set up toolbar with command keys
+    this.toolbar = [
+      ['bold', "italic", "underline", "strike"],
+      ["blockquote", "horizontal_rule"],
+      ["ordered_list", "bullet_list"],
+      [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+      ["link"],
+      ["align_left", "align_center", "align_right", "align_justify", "indent", "outdent"],
+      ["undo", "redo"]
+    ];
+
     this.foodSuplimentObject = {
       id: "",
       productName: "",
       productCategory: "",
+      smallDescription: "",
+      ingredients: "",
       description: "",
       dosageUnit: "",
       dailyDosage: null,
@@ -217,7 +241,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           this.isProductEdit = true;
           // pass the value to the object
           this.selectedCategory = this.foodSuplimentObject.productCategory;
-          if (this.selectedCategory === ProductViewText.PROTEINS) {
+          this.smallDescriptionLength = this.foodSuplimentObject.smallDescription.length;
+          this.description = foodSupliment.description;
+          if (this.selectedCategory === ProductViewText.PROTEINS || this.selectedCategory === ProductViewText.MASS_GAINERS) {
             this.isProtein = true;
           }
           this.selectedUnit = this.foodSuplimentObject.dosageUnit;
@@ -290,6 +316,37 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   isCategorySelected() {
     switch (this.selectedCategory) {
       case ProductViewText.PROTEINS:
+        this.isProtein = true;
+        this.resetFlavors(
+          [
+            ProductViewText.UNFLAVORED,
+            ProductViewText.VANILLA_FLAVOR,
+            ProductViewText.CHOCOLATE_FLAVOR,
+            ProductViewText.STRAWBERRY_FLAVOR,
+            ProductViewText.PINEAPPLE_MANGO_FLAVOR,
+            ProductViewText.COCONUT_FLAVOR,
+            ProductViewText.TIRAMISU_FLAVOR,
+            ProductViewText.COOKIES_AND_CREAM_FLAVOR,
+            ProductViewText.PEANUT_BUTTER_FLAVOR,
+            ProductViewText.WHITE_CHOCOLATE_FLAVOR,
+            ProductViewText.PISTACHIO_FLAVOR,
+            ProductViewText.CHOCOLATE_TOFFEE_FLAVOR,
+            ProductViewText.BANANA_FLAVOR,
+            ProductViewText.COFFEE_FLAVOR,
+            ProductViewText.SALT_CARAMEL_FLAVOR,
+            ProductViewText.MINT_CHOCOLATE_FLAVOR,
+            ProductViewText.MOCHA_FLAVOR,
+            ProductViewText.CINNAMON_ROLL_FLAVOR,
+            ProductViewText.BLUEBERRY_FLAVOR,
+            ProductViewText.PUMPKIN_SPICE_FLAVOR,
+            ProductViewText.CHOCOLATE_PEANUT_BUTTER_FLAVOR,
+            ProductViewText.APPLE_PIE_FLAVOR,
+            ProductViewText.LEMON_CHEESECAKE_FLAVOR,
+            ProductViewText.BLACK_BISCUIT_FLAVOR
+          ]);
+        this.isVitamin = this.isJoinSupport = false;
+        break;
+      case ProductViewText.MASS_GAINERS:
         this.isProtein = true;
         this.resetFlavors(
           [
@@ -469,6 +526,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         allPrices: this.productPrices,
         editText: false,
         useUnifiedImage: this.unifiedImageUrl,
+        allFlavors: this.selectedFlavors,
         productCategory: ProductViewText.FOOD_SUPLIMENTS
       }
     });
@@ -489,7 +547,20 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           })
         }
 
-        this.productPrices.push(newPrice);
+        // Check for duplicates before adding
+        const existingIndex = this.productPrices.findIndex(price =>
+          price.productFlavor === newPrice.productFlavor &&
+          price.quantityInProduct === newPrice.quantityInProduct
+        );
+
+        if (existingIndex !== -1) {
+          // If a duplicate exists, update it instead of pushing a new price
+          this.productPrices[existingIndex] = newPrice;
+        } else {
+          // If no duplicates, add the new price
+          this.productPrices.push(newPrice);
+        }
+
         this.sortPrices();
       }
     });
@@ -501,6 +572,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       data: {
         unit: this.selectedUnit,
         allPrices: this.productPrices,
+        allFlavors: this.selectedFlavors,
+        selectedFlavor: this.productPrices[id].productFlavor,
         selectedPrice: this.productPrices[id],
         editText: true,
         useUnifiedImage: this.unifiedImageUrl,
@@ -525,10 +598,27 @@ export class HandleFoodSuplimentsComponent implements OnInit {
             if (price.setAsDefaultPrice) {
               price.setAsDefaultPrice = false;
             }
-          })
+          });
         }
 
-        this.productPrices[id] = editedPrice;
+        // Check if a price with the same color and size already exists
+        const existingIndex = this.productPrices.findIndex(price =>
+          price.productFlavor === editedPrice.productFlavor &&
+          price.quantityInProduct === editedPrice.quantityInProduct
+        );
+
+        if (existingIndex !== -1 && existingIndex !== id) {
+          // Update the existing entry and remove duplicates
+          this.productPrices[existingIndex] = editedPrice;
+          this.productPrices = this.productPrices.filter((price, index) =>
+            !(price.productFlavor === editedPrice.productFlavor &&
+              price.quantityInProduct === editedPrice.quantityInProduct && index !== existingIndex)
+          );
+        } else {
+          // If no duplicate, update the price at the specified id
+          this.productPrices[id] = editedPrice;
+        }
+
         this.sortPrices();
       }
     });
@@ -655,7 +745,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         nutritionalValueFattyAcids: 0,
         nutritionalValueCarbohydrates: 0,
         nutritionalValueSugar: 0,
-        nutritionalValueFiber: 0,
         nutritionalValueProteins: 0,
         nutritionalValueSalt: 0
       }
@@ -672,7 +761,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       id: "",
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createFoodSuplimentForm.value.description,
+      smallDescription: this.createFoodSuplimentForm.value.smallDescription,
+      ingredients: this.createFoodSuplimentForm.value.ingredients,
+      description: this.description,
       dosageUnit: this.selectedUnit,
       dailyDosage: this.createFoodSuplimentForm.value.dailyDosage,
       flavors: this.selectedFlavors,
@@ -749,7 +840,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         nutritionalValueFattyAcids: 0,
         nutritionalValueCarbohydrates: 0,
         nutritionalValueSugar: 0,
-        nutritionalValueFiber: 0,
         nutritionalValueProteins: 0,
         nutritionalValueSalt: 0
       }
@@ -767,7 +857,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       id: this.foodSuplimentId,
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createFoodSuplimentForm.value.productName),
       productCategory: this.selectedCategory,
-      description: this.createFoodSuplimentForm.value.description,
+      smallDescription: this.createFoodSuplimentForm.value.smallDescription,
+      ingredients: this.createFoodSuplimentForm.value.ingredients,
+      description: this.description,
       dosageUnit: this.selectedUnit,
       dailyDosage: this.createFoodSuplimentForm.value.dailyDosage,
       flavors: this.selectedFlavors,

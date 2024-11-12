@@ -11,9 +11,6 @@ export interface NutritionalTable {
     nutritionalValueCarbohydrates: number;
     nutritionalValueSugar: number;
 
-    // Fiber
-    nutritionalValueFiber: number;
-
     // Proteins
     nutritionalValueProteins: number;
 

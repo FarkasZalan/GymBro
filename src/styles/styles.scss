@@ -161,9 +161,9 @@ textarea.ng-valid {
     border: none;
     border-radius: 50%;
     /* Use 50% for a perfect circle */
-    width: 60px;
-    height: 60px;
-    font-size: 24px !important;
+    width: 80px;
+    height: 80px;
+    font-size: 32px !important;
     /* Adjusted font size for better scaling */
     outline: none;
     background-color: white;
@@ -208,7 +208,7 @@ textarea.ng-valid {
 /* Style for the floating label */
 .floating-label {
     position: absolute;
-    bottom: 70px;
+    bottom: 90px;
     /* Distance from the button */
     left: 50%;
     /* Center horizontally */
@@ -220,7 +220,7 @@ textarea.ng-valid {
     /* Text color for the label */
     padding: 5px 10px;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 17px;
     white-space: nowrap;
     opacity: 0;
     /* Hidden by default */

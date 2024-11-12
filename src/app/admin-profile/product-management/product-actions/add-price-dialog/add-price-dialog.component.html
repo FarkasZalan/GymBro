@@ -24,6 +24,31 @@
                             <br>
                         </div>
 
+                        <!-- Product flavor (Dropdown) -->
+                        <div *ngIf="productCategory === productViewText.FOOD_SUPLIMENTS || (productCategory === productViewText.ORGANIC_FOOD && data.productInnerCategory === productViewText.DRINKS) || (productCategory === productViewText.ORGANIC_FOOD && data.productInnerCategory === productViewText.HEALTHY_SNACKS)"
+                            class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="productFlavors" class="label">{{ 'products.productFlavors' | translate
+                                    }}</label>
+                                <select class="form-control drop-down-list allow-selected-list-color"
+                                    name="productFlavors" required #productFlavors="ngModel"
+                                    [(ngModel)]="selectedFlavor">
+                                    <!-- Placeholder option -->
+                                    <option value="" selected disabled>{{ 'products.selectPoductFlavors' |
+                                        translate }}
+                                    </option>
+
+                                    <!-- List of available flavors -->
+                                    <option *ngFor="let flavor of availableFlavors" [value]="flavor">
+                                        {{ flavor | translate }}
+                                    </option>
+                                </select>
+                                <span class="help-block" *ngIf="productFlavors.touched && !productFlavors.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                            <br>
+                        </div>
+
                         <!-- Product color (Dropdown) -->
                         <div *ngIf="productCategory === productViewText.CLOTHES || (productCategory === productViewText.ACCESSORIES && accessoriesType === productViewText.SHAKERS)"
                             class="row">

@@ -1,6 +1,6 @@
 <!-- If no products, display the empty card -->
 <div *ngIf="(emptyCollection === true)" class="empty-list-container">
-    <nb-card class="emptyCard">
+    <nb-card class="emptyCard" [@zoomIn]>
         <nb-card-body>
             <div>
                 <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
@@ -21,7 +21,7 @@
 
     <!-- Food Supliments -->
     <div *ngIf="foodSupliments" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of foodSupliments">
+        <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of foodSupliments" [@zoomIn]>
             <nb-card-body class="product-image" (click)="goToEditProduct(foodSupliment.id)">
 
 
@@ -48,7 +48,7 @@
 
     <!-- Organic products -->
     <div *ngIf="organicProducts" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let organicProduct of organicProducts">
+        <nb-card class="rounded-card productCard" *ngFor="let organicProduct of organicProducts" [@zoomIn]>
             <nb-card-body class="product-image" (click)="goToEditProduct(organicProduct.id)">
 
 
@@ -75,7 +75,7 @@
 
     <!-- Clothes -->
     <div *ngIf="clothes" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes">
+        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes" [@zoomIn]>
             <nb-card-body class="product-image" (click)="goToEditProduct(cloth.id)">
 
 
@@ -104,7 +104,7 @@
 
     <!-- Accessories -->
     <div *ngIf="accessories" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories">
+        <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories" [@zoomIn]>
             <nb-card-body class="product-image" (click)="goToEditProduct(accessory.id)">
 
 

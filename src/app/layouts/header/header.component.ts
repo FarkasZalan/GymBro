@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
@@ -20,6 +20,7 @@ import { FoodSupliment } from '../../admin-profile/product-management/product-mo
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild('searchInput') searchInput!: ElementRef;
   userLoggedIn: boolean = false;
   userMenu = [];
   user: User;
@@ -125,6 +126,8 @@ export class HeaderComponent implements OnInit {
 
   openSearch() {
     this.searchExpanded = true;
+
+    this.searchInput.nativeElement.focus();
   }
 
   // Search Function

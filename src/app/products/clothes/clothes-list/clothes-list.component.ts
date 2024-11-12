@@ -1,16 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { Clothes } from '../../admin-profile/product-management/product-models/clothing.model';
+import { Clothes } from '../../../admin-profile/product-management/product-models/clothing.model';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
-import { FilterPageComponent } from '../../filter-page/filter-page.component';
-import { Filter } from '../../filter-page/filter.model';
-import { ProductService } from '../product.service';
+import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
+import { FilterPageComponent } from '../../../filter-page/filter-page.component';
+import { Filter } from '../../../filter-page/filter.model';
+import { ProductService } from '../../product.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-clothes-list',
   templateUrl: './clothes-list.component.html',
-  styleUrl: '../../../styles/products.scss'
+  styleUrl: '../../../../styles/products.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class ClothesListComponent implements OnInit {
   // store the products one of the array

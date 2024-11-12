@@ -7,6 +7,8 @@ export interface FoodSupliment {
     id?: string;
     productName: string;
     productCategory: string; // forexample protein, vitamin, creatin...
+    smallDescription: string;
+    ingredients: string;
     description: string;
 
     // Dosage form and flavors
@@ -32,6 +34,7 @@ export interface FoodSupliment {
     allergens: string[];
 
     // weight/piece  
+    // flavor
     // product image to this amount of weight/piece
     // the price for this product
     // stock

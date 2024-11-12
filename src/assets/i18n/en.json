@@ -181,6 +181,17 @@
       "enterDailyDosage": "Enter daily intake*",
       "selectUnit": "Select Unit",
       "description": "Description",
+      "activeIngredients": "Active ingredients",
+      "nutritionTableDetailsText": "Nutritional Values",
+      "nutritionalInformationTable": {
+         "energy": "Energy",
+         "fats": "Fats",
+         "fattyAcids": "- of which saturated fatty acids",
+         "carbohydrates": "Carbohydrates",
+         "sugar": "- of which sugars",
+         "protein": "Protein",
+         "salt": "Salt"
+      },
       "enterProductDescription": "Enter Product Description*",
       "flavorsAndAllergens": "Flavors and Allergens",
       "productFlavors": "Flavors",
@@ -190,6 +201,9 @@
       "vitaminQuantityPerCapsule": "Quantity per serving",
       "vitaminUnit": "Vitamin Unit",
       "gender": "Gender",
+      "relatedProducts": "Related products",
+      "ingredients": "Ingredients",
+      "enterIngredients": "Enter product ingredients*",
       "selectGender": "Select gender*",
       "allFieldsAreRequiredToAddNewVitamin": "All fields are required to add a new vitamin",
       "safetyInformation": "Safety Information",
@@ -209,7 +223,6 @@
       "fattyAcidsGram": "Fatty Acids (grams)",
       "carbohydratesGram": "Carbohydrates (grams)",
       "sugarsGram": "Sugars (grams)",
-      "fiberGram": "Fiber (grams)",
       "proteinsGram": "Protein (grams)",
       "saltGram": "Salt (grams)",
       "otherNutritionalInformation": "Other Nutritional Information",
@@ -230,6 +243,18 @@
       "changeDefaultColorText": "Are you changing the default color for this product?",
       "unifiedImage": "Use unified image",
       "uploadProductImage": "Upload image",
+      "unitPrice": "Unit price:",
+      "capsule": "Capsules",
+      "addToCart": "Add to cart",
+      "shippingInfo": "Shipping fees will be calculated at checkout",
+      "productInStock": "The product is in stock",
+      "productNoStock": "Out of stock.",
+      "maxCapacityToOrder": "Available quantity of this type:",
+      "safePregnancyText": "Recommended during pregnancy",
+      "notSafePregnancyText": "Not recommended during pregnancy",
+      "notSafeBreastfeedingText": "Not recommended during breastfeeding",
+      "safeBreastfeedingText": "Recommended during breastfeeding",
+      "selectPoductFlavors": "Select the flavor*",
       "proteins": {
          "casein": "Protein containing casein",
          "vegan": "Vegan protein",
@@ -265,13 +290,13 @@
          "blackBiscuit": "Black Biscuit"
       },
       "allergens": {
-         "lactose": "Lactose",
-         "gluten": "Gluten",
-         "soy": "Soy",
-         "eggs": "Eggs",
-         "addedSugars": "Added Sugars",
-         "peanuts": "Peanuts",
-         "fish": "Fish"
+         "lactoseFree": "Lactose free",
+         "glutenFree": "Gluten free",
+         "soyFree": "Soy free",
+         "eggFree": "Egg free",
+         "sugarFree": "Sugar free",
+         "peanutFree": "Peanuts free",
+         "fishFree": "Fish free"
       },
       "clothes": {
          "coat": "Coat",
@@ -317,6 +342,10 @@
          "accessoriesType": "Accessory Type",
          "selectAccessoriesType": "Select a type*",
          "selectSize": "Enter the bottle size*"
+      },
+      "loyaltyProgram": {
+         "points": "Points",
+         "loyalityPointPerItem": "Points that can be earned (per product):"
       }
    },
    "blog": {
