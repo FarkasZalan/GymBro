@@ -1,1 +1,78 @@
-<p>review-handle works!</p>
+<div class="create-review">
+    <nb-card class="review-container">
+        <nb-card-body>
+            <h3 class="text-center">{{ 'review.createReview' | translate }}</h3>
+            <form #reviewForm="ngForm">
+                <!-- Rating Stars Input -->
+                <div class="star-rating">
+                    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                        <span class="star" [ngClass]="{
+                          'filled-star': i < rating,
+                          'hover-star': hoverRating >= i
+                        }" (click)="setRating(i + 1)" (mouseenter)="setHoverRating(i)"
+                            (mouseleave)="resetHoverRating()">
+                            &#9733;
+                        </span>
+                    </ng-container>
+                </div>
+
+                <!-- Title Input -->
+                <div class="form-group review-texts">
+                    <label for="title">{{ 'review.title' | translate }}</label>
+                    <input type="text" id="title" name="title" class="form-control" [(ngModel)]="reviewTitle"
+                        #title="ngModel" required />
+                    <!-- title error block -->
+                    <span class="help-block" *ngIf="!title.valid && title.touched" [@zoomIn]>{{
+                        'register.fieldRequired' |
+                        translate }}</span>
+                </div>
+
+                <!-- Text Input -->
+                <div class="form-group review-texts">
+                    <label for="text">{{ 'review.text' | translate }}</label>
+                    <textarea id="text" name="text" class="form-control" [(ngModel)]="reviewText" required
+                        #text="ngModel"></textarea>
+                    <!-- text error block -->
+                    <span class="help-block" *ngIf="!text.valid && text.touched" [@zoomIn]>{{
+                        'register.fieldRequired' |
+                        translate }}</span>
+                </div>
+
+                <!-- Error block -->
+                <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'basicErrorMessage' | translate }}
+                </span>
+
+                <!-- add new review button -->
+                <div *ngIf="!edit" class="button-container review-button">
+                    <button class="btn btn-primary btn-review-dialog" type="button" nbButton status="success"
+                        [disabled]="!reviewForm.valid" (click)="createReview()">
+                        {{ 'products.add' | translate }}</button>
+                </div>
+
+                <!-- edit review button -->
+                <div *ngIf="edit" class="button-container review-button">
+                    <button class="btn btn-primary btn-review-dialog" type="button" nbButton status="success"
+                        [disabled]="!reviewForm.valid" (click)="editReview()">
+                        {{ 'profilePage.modify' | translate }}</button>
+                </div>
+
+                <!-- remove review button -->
+                <div *ngIf="edit" class="button-container review-button">
+                    <button class="btn btn-primary delete-btn btn-review-dialog" type="button" nbButton status="success"
+                        (click)="removeReview()">
+                        {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}</button>
+                </div>
+
+
+                <!-- back button -->
+                <div class="button-container review-button">
+                    <button class="btn btn-primary btn-review-dialog" type=" button" nbButton status="success"
+                        (click)="back()">
+                        {{ 'blog.backToList' | translate }}</button>
+                </div>
+            </form>
+        </nb-card-body>
+    </nb-card>
+</div>

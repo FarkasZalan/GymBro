@@ -24,8 +24,13 @@
                         translate
                         }}</h5>
 
-                    <!-- small description section -->
-                    <p>{{ foodSupliment.smallDescription }}</p>
+                    <!-- rating -->
+                    <div *ngIf="reviews.length > 0" class="average-rating-product-display" (click)="goToReviews()">
+                        <i [attr.data-star]="averageRating"></i>
+                        <span class="rating-number-product-display">{{ reviews.length }} {{ 'review.reviewText' |
+                            translate }}</span>
+                        <br>
+                    </div>
 
                     <!-- Allergen Information -->
                     <div class="allergen-icons">
@@ -80,6 +85,9 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <!-- small description section -->
+                    <p>{{ foodSupliment.smallDescription }}</p>
                     <br>
 
                     <!-- safe section -->
@@ -187,7 +195,7 @@
                         </div>
                     </div>
 
-                    <span *ngIf="errorMessageStock" class="help-block-login-error">
+                    <span *ngIf="errorMessageStock" class="help-block-login-error" [@zoomIn]>
                         <i class="fas fa-exclamation-triangle icon"></i>
                         {{ 'products.maxCapacityToOrder' | translate }} {{ productStock }} {{ productViewText.PCS |
                         translate }}
@@ -434,67 +442,159 @@
                 <h2>{{ 'products.customerReviews' | translate }}</h2>
 
                 <!-- no reviews section -->
-                <div *ngIf="reviews.length === 0">
-                    <p>{{ 'products.noReviewsYet' | translate }}</p>
-                </div>
-
-                <div class="ratings-container">
-                    <div class="average-rating">
-                        <i [attr.data-star]="averageRating"></i>
-                        <span class="rating-number">{{ averageRating }}</span>
-                    </div>
-                    <p class="review-numbers-display">{{ reviews.length }} Értékelés alapján</p>
-
-                    <div class="ratings-breakdown">
-                        <div class="rating-row" *ngFor="let star of [5, 4, 3, 2, 1]">
-                            <span class="star-bar">{{ star }}&#9733;</span>
-                            <div class="bar">
-                                <div class="filled-bar"
-                                    [ngStyle]="{'width': getRatingPercentage(star) + '%', 'background-color': '#0b8e92'}">
-                                </div>
+                <div *ngIf="reviews.length === 0" class="product-empty-list-container">
+                    <nb-card class="emptyCard" [@zoomIn]>
+                        <nb-card-body>
+                            <div>
+                                <img src="../../../../assets/images/no-products.jpg" alt="EmptyBox"
+                                    class="emptyCardImage">
+                                <p class="emptyCardText">{{ 'review.noReviewsYetForProduct' | translate }}</p>
                             </div>
-                            <span class="star-numbers-display">{{ getRatingCount(star) }}</span>
+                            <!-- add new review button -->
+                            <div class="button-container review-button">
+                                <button class="btn btn-primary " type="submit" nbButton status="success"
+                                    (click)="gotoCreateNewRReview()">
+                                    {{ 'review.addNewReview' | translate }}</button>
+                            </div>
+
+                            <!-- user logged out error -->
+                            <div *ngIf="userLoggedOutError" class="error-container" [@zoomIn]>
+                                <span class="help-block-login-error">
+                                    <i class="fas fa-exclamation-triangle icon"></i>
+                                    {{ 'review.needToLoginToWriteReview' | translate }}
+                                    <div class="error-login-text">
+                                        <span (click)="goToLogin()"> {{
+                                            'review.loginNow' | translate }}</span>
+                                    </div>
+                                </span>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <!-- have any reviews -->
+                <div *ngIf="reviews.length !== 0">
+                    <div class="ratings-container">
+                        <div class="average-rating">
+                            <i [attr.data-star]="averageRating"></i>
+                            <span class="rating-number">{{ averageRating }}</span>
+                        </div>
+                        <p class="review-numbers-display">{{ reviews.length }} {{ 'review.reviewText' | translate }}</p>
+
+                        <div class="ratings-breakdown" #reviewsSection>
+                            <div class="rating-row" *ngFor="let star of [5, 4, 3, 2, 1]">
+                                <span class="star-bar">{{ star }}&#9733;</span>
+                                <div class="bar">
+                                    <div class="filled-bar"
+                                        [ngStyle]="{'width': getRatingPercentage(star) + '%', 'background-color': '#0b8e92'}">
+                                    </div>
+                                </div>
+                                <span class="star-numbers-display">{{ getRatingCount(star) }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- add new review button -->
-                <div class="button-container review-button">
-                    <button class="btn btn-primary " type="submit" nbButton status="success"
-                        (click)="gotoCreateNewRReview()">
-                        {{ 'review.addNewReview' | translate }}</button>
-                </div>
+                    <!-- add new review button -->
+                    <div class="button-container review-button">
+                        <button class="btn btn-primary " type="submit" nbButton status="success"
+                            (click)="gotoCreateNewRReview()">
+                            {{ 'review.addNewReview' | translate }}</button>
+                    </div>
 
-                <div *ngIf="userLoggedOutError" class="error-container">
-                    <span class="help-block-login-error">
-                        <i class="fas fa-exclamation-triangle icon"></i>
-                        {{ 'review.needToLoginToWriteReview' | translate }}
-                        <div class="error-login-text">
-                            <span (click)="goToLogin()"> {{
-                                'review.loginNow' | translate }}</span>
-                        </div>
-                    </span>
+                    <!-- user logged out error -->
+                    <div *ngIf="userLoggedOutError" class="error-container" [@zoomIn]>
+                        <span class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i>
+                            {{ 'review.needToLoginToWriteReview' | translate }}
+                            <div class="error-login-text">
+                                <span (click)="goToLogin()"> {{
+                                    'review.loginNow' | translate }}</span>
+                            </div>
+                        </span>
+                    </div>
 
-                </div>
-
-                <!-- display reviews -->
-                <div *ngIf="reviews && reviews.length > 0">
-                    <div class="col-12">
-                        <nb-card class="review-card mb-3" *ngFor="let review of reviews">
-                            <nb-card-body>
-                                <!-- Star Rating Display -->
-                                <div class="star-rating">
-                                    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-                                        <span class="star"
-                                            [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
-                                    </ng-container>
+                    <!-- Display Reviews -->
+                    <div *ngIf="reviews && reviews.length > 0">
+                        <!-- user logged out error -->
+                        <div *ngIf="userLoggedOutLikeError" class="error-container" #userLoggedOutLikeErrorMessage
+                            [@zoomIn]>
+                            <span class="help-block-login-error">
+                                <i class="fas fa-exclamation-triangle icon"></i>
+                                {{ 'review.needToLoginToLikeReview' | translate }}
+                                <div class="error-login-text">
+                                    <span (click)="goToLogin()"> {{
+                                        'review.loginNow' | translate }}</span>
                                 </div>
-                                <!-- Review Title -->
-                                <h4 class="review-title">{{ review.title }}</h4>
-                                <!-- Review Text -->
-                                <p class="review-text">{{ review.text }}</p>
-                            </nb-card-body>
-                        </nb-card>
+                            </span>
+                        </div>
+
+                        <div class="col-12" *ngFor="let review of reviews">
+                            <!-- Review Card -->
+                            <nb-card class="review-card mb-3">
+                                <nb-card-body>
+                                    <!-- Flex container for username and date -->
+                                    <div class="review-header-top">
+                                        <!-- creator name -->
+                                        <span class="review-username">{{ review.userFirstName }} {{ review.userLastName
+                                            }}</span>
+
+                                        <!-- review date -->
+                                        <span class="review-date">{{ review.date.toDate() | date: 'yyyy/MM/dd' }}</span>
+                                    </div>
+
+                                    <!-- Flex container for star rating and title -->
+                                    <div class="review-header-bottom">
+                                        <!-- Review Title -->
+                                        <h4 class="review-title">{{ review.title }}</h4>
+
+                                        <!-- Star Rating Display -->
+                                        <div class="star-rating">
+                                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                                                <span class="star"
+                                                    [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                    <!-- Review Text -->
+                                    <p class="review-text">{{ review.text }}</p>
+
+                                    <!-- Like Button for Review -->
+                                    <div class="like-section">
+                                        <button class="like-button"
+                                            [ngClass]="{'liked': review.likes.includes(currentUserId)}">
+                                            <img src="../../../../assets/images/like.svg" alt="SOY Free Icon" width="22"
+                                                height="22" (click)="likeReview(review)"> <span class="like-number">{{
+                                                review.likes?.length || 0 }}</span>
+                                        </button>
+
+                                        <!-- Edit Button: Visible only if the user is the author of the review -->
+                                        <div *ngIf="review.userId === currentUserId" class="edit-review-container">
+                                            <button class="btn edit-button" (click)="editReview(review)">
+                                                {{ 'profileMenu.shippingAddressForm.modifyAddress' | translate }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+
+                            <!-- Response Card (if there is a response) -->
+                            <nb-card class="response-card mb-3" *ngIf="review.response">
+                                <nb-card-body>
+                                    <h5 class="response-title">Gym Bro</h5>
+                                    <p class="response-text">{{ review.response }}</p>
+
+                                    <!-- Like Button for Response -->
+                                    <div class="like-section">
+                                        <button class="like-button"
+                                            [ngClass]="{'liked': review.responseLikes.includes(currentUserId)}">
+                                            <img src="../../../../assets/images/like.svg" alt="SOY Free Icon" width="22"
+                                                height="22" (click)="likeResponse(review)"> <span class="like-number">{{
+                                                review.responseLikes?.length || 0 }}</span>
+                                        </button>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,7 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Router } from "@angular/router";
 import { User } from "../user/user.model";
+import { AdminEmail } from "../admin-profile/admin-email";
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +35,7 @@ export class AuthService {
         return new Promise<boolean>(async (resolve) => {
             try {
                 await this.auth.signInWithEmailAndPassword(emailInput, password).then((loggingResponse) => {
-                    if (emailInput === 'admin@gymbro.com') {
+                    if (emailInput === AdminEmail.email) {
                         resolve(true);
                     }
                     if (loggingResponse.user.emailVerified) {

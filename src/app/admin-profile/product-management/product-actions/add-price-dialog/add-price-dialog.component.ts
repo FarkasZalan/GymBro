@@ -32,6 +32,12 @@ import { ProductColor } from '../../product-models/product-color.model';
       transition('* => void', [
         animate('250ms ease-in') // Collapses smoothly
       ])
+    ]),
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
     ])
   ]
 })

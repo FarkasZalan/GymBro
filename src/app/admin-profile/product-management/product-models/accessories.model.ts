@@ -19,7 +19,4 @@ export interface Accessories {
     // price
     // stock
     prices: ProductPrice[];
-
-    // review ammount, title and text
-    productReviews: ProductReeviews[];
 }

@@ -195,9 +195,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
   description: string = "";
 
-  // to save the product reviews
-  savedProductReviews: ProductReeviews[] = [];
-
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -238,7 +235,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
       prices: [],
       useUnifiedImage: this.isUnifiedImage,
-      productReviews: []
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -293,9 +289,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
             this.isProtein = this.isJoinSupport = false;
             this.resetFlavors([ProductViewText.UNFLAVORED], true);
           }
-
-          // save the product reviews
-          this.savedProductReviews = foodSupliment.productReviews;
 
           // nutritional table
           if ((this.selectedCategory !== ProductViewText.JOIN_SUPPORT && (this.selectedCategory !== ProductViewText.VITAMINS_AND_MINERALS))) {
@@ -793,9 +786,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       genderList: this.selectedGenders,
 
       prices: [],
-      useUnifiedImage: this.isUnifiedImage,
-
-      productReviews: this.savedProductReviews
+      useUnifiedImage: this.isUnifiedImage
     }
 
     // Add the new food supliment product
@@ -891,9 +882,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       genderList: this.selectedGenders,
 
       prices: this.productPrices,
-      useUnifiedImage: this.isUnifiedImage,
-
-      productReviews: this.savedProductReviews
+      useUnifiedImage: this.isUnifiedImage
     }
 
     // Edit the food supliment product

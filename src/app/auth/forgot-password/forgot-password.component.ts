@@ -4,11 +4,20 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { AuthService } from '../auth.service';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.scss'
+  styleUrl: './forgot-password.component.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class ForgotPasswordComponent {
   @ViewChild('form') loginForm: NgForm;  // Reference to the form for validation

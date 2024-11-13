@@ -90,9 +90,7 @@ export class OrganicFoodPageComponent implements OnInit {
       allergens: [],
 
       prices: [],
-      useUnifiedImage: false,
-
-      productReviews: []
+      useUnifiedImage: false
     }
 
     this.route.params.subscribe(params => {

@@ -101,7 +101,10 @@
       "passwordEmailSent": "The link has been sent to the provided email address!",
       "reSendVerifyEmail": "The verification link has been sent\nto the provided email address!",
       "verrifyEmail": "Registration Successful!\n\nThe verification link has been sent\nto the provided email address!",
-      "creationSuccessfull": "Creation Successful!"
+      "creationSuccessfull": "Creation Successful!",
+      "reviewCreated": "ÉReview added!",
+      "reviewEdited": "Review edited!",
+      "reviewDeleted": "Review removed!"
    },
    "profilePage": {
       "profile": "Profile",
@@ -446,6 +449,13 @@
    "review": {
       "addNewReview": "Add new review",
       "loginNow": "Log in now",
-      "needToLoginToWriteReview": "You need to log in first to write a review!"
+      "needToLoginToWriteReview": "You need to log in first to write a review!",
+      "needToLoginToLikeReview": "You need to log in first to like a review!",
+      "noReviewsYetForProduct": "There are no reviews yet for the product",
+      "createReview": "New review",
+      "title": "Title",
+      "text": "Review description",
+      "deleteReviewText": "Are you sure you want to delete this review?",
+      "reviewText": "reviews"
    }
 }

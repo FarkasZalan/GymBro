@@ -88,8 +88,6 @@ export class HandleAccessoriesComponent {
   isUnifiedImage: boolean = false;
   unifiedImageUrl: string = null;
 
-  // to save the product reviews
-  savedProductReviews: ProductReeviews[] = [];
 
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
@@ -103,8 +101,7 @@ export class HandleAccessoriesComponent {
 
       equipmentType: "",
 
-      prices: [],
-      productReviews: []
+      prices: []
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -124,9 +121,6 @@ export class HandleAccessoriesComponent {
 
           // price, color, size
           this.productPrices = this.accessoryObject.prices;
-
-          // save the product reviews
-          this.savedProductReviews = this.accessoryObject.productReviews;
 
           this.isUnifiedImage = this.accessoryObject.useUnifiedImage;
           if (this.isUnifiedImage) {
@@ -471,8 +465,7 @@ export class HandleAccessoriesComponent {
 
       equipmentType: this.selectedAccessoryType,
 
-      prices: [],
-      productReviews: this.savedProductReviews
+      prices: []
     }
 
     // Add the new accessory
@@ -532,8 +525,7 @@ export class HandleAccessoriesComponent {
       useUnifiedImage: this.isUnifiedImage,
       equipmentType: this.selectedAccessoryType,
 
-      prices: this.productPrices,
-      productReviews: this.savedProductReviews
+      prices: this.productPrices
     }
 
     // Edit the accessory

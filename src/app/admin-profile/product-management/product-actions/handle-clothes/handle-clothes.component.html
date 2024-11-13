@@ -11,7 +11,7 @@
                         <input type="text" class="form-control" [(ngModel)]="clothingObject.productName"
                             name="productName" required placeholder="{{ 'products.enterProductName' | translate }}"
                             #productName="ngModel">
-                        <span class="help-block" *ngIf="productName.touched && !productName.valid">{{
+                        <span class="help-block" *ngIf="productName.touched && !productName.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
 
@@ -29,7 +29,7 @@
                                 {{ gender | translate }}
                             </option>
                         </select>
-                        <span class="help-block" *ngIf="productGender.touched && !productGender.valid">{{
+                        <span class="help-block" *ngIf="productGender.touched && !productGender.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                         <textarea class="form-control" [(ngModel)]="clothingObject.description" name="description"
                             required placeholder="{{ 'products.enterProductDescription' | translate }}"
                             #description="ngModel"></textarea>
-                        <span class="help-block" *ngIf="description.touched && !description.valid">{{
+                        <span class="help-block" *ngIf="description.touched && !description.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                                 {{ clothingType | translate }}
                             </option>
                         </select>
-                        <span class="help-block" *ngIf="clothingType.touched && !clothingType.valid">{{
+                        <span class="help-block" *ngIf="clothingType.touched && !clothingType.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
 
@@ -84,7 +84,8 @@
                                 {{ clothingMaterial | translate }}
                             </option>
                         </select>
-                        <span class="help-block" *ngIf="clothingMaterial.touched && !clothingMaterial.valid">{{
+                        <span class="help-block" *ngIf="clothingMaterial.touched && !clothingMaterial.valid"
+                            [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -176,19 +177,19 @@
                 </div>
 
                 <!-- Prices missing block -->
-                <span *ngIf="missingPricesErrorMessage" class="help-block-login-error">
+                <span *ngIf="missingPricesErrorMessage" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'products.missingPricesError' | translate }}
                 </span>
 
                 <!-- Product name exists block -->
-                <span *ngIf="productNameExistsError" class="help-block-login-error">
+                <span *ngIf="productNameExistsError" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'products.productNameExistsError' | translate }}
                 </span>
 
                 <!-- Error block -->
-                <span *ngIf="errorMessage" class="help-block-login-error">
+                <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'basicErrorMessage' | translate }}
                 </span>

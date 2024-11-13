@@ -208,7 +208,7 @@
                         </div>
                     </div>
 
-                    <span *ngIf="errorMessageStock" class="help-block-login-error">
+                    <span *ngIf="errorMessageStock" class="help-block-login-error" [@zoomIn]>
                         <i class="fas fa-exclamation-triangle icon"></i>
                         {{ 'products.maxCapacityToOrder' | translate }} {{ productStock }} {{ productViewText.PCS |
                         translate }}

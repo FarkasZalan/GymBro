@@ -42,7 +42,4 @@ export interface FoodSupliment {
     prices: ProductPrice[];
 
     useUnifiedImage: boolean;
-
-    // review ammount, title and text
-    productReviews: ProductReeviews[];
 }

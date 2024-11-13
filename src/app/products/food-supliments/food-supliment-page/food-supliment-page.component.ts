@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FoodSupliment } from '../../../admin-profile/product-management/product-models/food-supliment.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentHandlerService } from '../../../document.handler.service';
@@ -14,6 +14,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { User } from '../../../user/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-food-supliment-page',
@@ -47,6 +48,8 @@ import { ReviewHandleComponent } from '../../review-handle/review-handle.compone
   ]
 })
 export class FoodSuplimentPageComponent implements OnInit {
+  @ViewChild('userLoggedOutLikeErrorMessage') errorMessage: ElementRef;
+  @ViewChild('reviewsSection') reviewsSection: ElementRef;
   foodSupliment: FoodSupliment;
   selectedQuantityInProduct: number = 0;
   productViewText = ProductViewText;
@@ -79,17 +82,13 @@ export class FoodSuplimentPageComponent implements OnInit {
 
   // reviews
   averageRating: number = 0;
-  reviews: ProductReeviews[] = [
-    // Example data; replace with your actual reviews data
-    { rating: 5, title: "Great product!", text: "Loved it!", date: Timestamp.now() },
-    { rating: 4, title: "Good", text: "Works well.", date: Timestamp.now() },
-    { rating: 1, title: "Okay", text: "Average quality.", date: Timestamp.now() },
-    { rating: 4, title: "Good", text: "Works well.", date: Timestamp.now() },
-    { rating: 2, title: "Okay", text: "Average quality.", date: Timestamp.now() },
-  ];
+  reviews: ProductReeviews[] = [];
   userLoggedIn: boolean = false;
   userReview: User;
+  currentUserId: string = '';
   userLoggedOutError: boolean = false;
+  userLoggedOutLikeError: boolean = false;
+  productId: string = '';
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -98,6 +97,7 @@ export class FoodSuplimentPageComponent implements OnInit {
     private location: Location,
     private productService: ProductService,
     private auth: AngularFireAuth,
+    private db: AngularFirestore,
     private authService: AuthService,
     private dialog: MatDialog) { }
 
@@ -126,8 +126,6 @@ export class FoodSuplimentPageComponent implements OnInit {
 
       prices: [],
       useUnifiedImage: false,
-
-      productReviews: []
     }
 
     // check if user logged in for reviews
@@ -136,6 +134,7 @@ export class FoodSuplimentPageComponent implements OnInit {
         this.userLoggedIn = true;
         this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
           this.userReview = currentUser;
+          this.currentUserId = currentUser.id;
           if (this.userReview === undefined) {
             this.userLoggedIn = false; // User is logged out
           }
@@ -151,12 +150,15 @@ export class FoodSuplimentPageComponent implements OnInit {
         // make a copy from the object
         this.foodSupliment = { ...foodSupliment };
         this.allergens = foodSupliment.allergens;
+        this.productId = foodSupliment.id;
         this.vitaminList = foodSupliment.vitaminList;
 
         this.selectedQuantityInProduct = this.getDefaultPrice(foodSupliment).quantityInProduct;
         this.selectedPrice = this.getDefaultPrice(foodSupliment).productPrice;
         this.loyaltyPoints = Math.round(this.selectedPrice / 100);
         this.selectedImage = this.getDefaultPrice(foodSupliment).productImage;
+        this.getReviews();
+
         this.getAvailableFlavors();
 
         if (this.getDefaultPrice(foodSupliment).productStock === 0) {
@@ -166,8 +168,7 @@ export class FoodSuplimentPageComponent implements OnInit {
         }
         this.getUnitPrice();
 
-        this.calculateAverageRating();
-        await this.loadRelatedProducts();
+        this.loadRelatedProducts();
       });
     });
   }
@@ -359,7 +360,15 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.router.navigate(['product/loyaltyProgram']);
   }
 
+  getReviews() {
+    this.productService.getReviewsForProduct(this.productId, ProductViewText.FOOD_SUPLIMENTS).subscribe(reviews => {
+      this.reviews = reviews;
+      this.calculateAverageRating();
+    })
+  }
+
   calculateAverageRating(): void {
+    this.averageRating = 0;
     if (this.reviews.length > 0) {
       this.reviews.forEach(number => {
         this.averageRating += number.rating
@@ -379,18 +388,85 @@ export class FoodSuplimentPageComponent implements OnInit {
     return (this.getRatingCount(star) / this.reviews.length) * 100;
   }
 
+  async likeReview(review: ProductReeviews) {
+    if (this.userLoggedIn) {
+      // Check if user already liked the review
+      if (!review.likes.includes(this.currentUserId)) {
+        review.likes.push(this.currentUserId);
+      } else {
+        // Remove the like if user clicks again
+        review.likes = review.likes.filter(id => id !== this.currentUserId);
+      }
+      await this.db.collection('reviews').doc(ProductViewText.FOOD_SUPLIMENTS).collection('allReview').doc(review.id).update({ likes: review.likes });
+    } else {
+      this.userLoggedOutLikeError = true;
+      this.userLoggedOutError = false;
+    }
+  }
+
+  async likeResponse(review: ProductReeviews) {
+    if (this.userLoggedIn) {
+      // Check if user already liked the response
+      if (!review.responseLikes.includes(this.currentUserId)) {
+        review.responseLikes.push(this.currentUserId);
+      } else {
+        // Remove the like if user clicks again
+        review.responseLikes = review.responseLikes.filter(id => id !== this.currentUserId);
+      }
+      await this.db.collection('reviews').doc(ProductViewText.FOOD_SUPLIMENTS).collection('allReview').doc(review.id).update({ responseLikes: review.responseLikes });
+    } else {
+      this.userLoggedOutLikeError = true;
+      this.userLoggedOutError = false;
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.userLoggedOutLikeError && this.errorMessage) {
+      this.scrollToErrorMessage();
+    }
+  }
+
+  scrollToErrorMessage(): void {
+    // Scroll to the error message element
+    this.errorMessage.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  goToReviews() {
+    // Scroll to the reviews section element
+    this.reviewsSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   gotoCreateNewRReview() {
     if (!this.userLoggedIn) {
       this.userLoggedOutError = true;
+      this.userLoggedOutLikeError = false;
     } else {
       this.userLoggedOutError = false;
       this.dialog.open(ReviewHandleComponent, {
         data: {
           userId: this.userReview.id,
-          productid: this.foodSupliment.id
+          edit: false,
+          productId: this.foodSupliment.id,
+          userFirstName: this.userReview.firstName,
+          userLastName: this.userReview.lastName,
+          category: ProductViewText.FOOD_SUPLIMENTS
         }
       });
     }
+  }
+
+  editReview(review: ProductReeviews) {
+    this.dialog.open(ReviewHandleComponent, {
+      data: {
+        userId: this.userReview.id,
+        edit: true,
+        review: review,
+        productId: this.foodSupliment.id,
+        userFirstName: this.userReview.firstName,
+        userLastName: this.userReview.lastName,
+        category: ProductViewText.FOOD_SUPLIMENTS
+      }
+    });
   }
 
   goToLogin() {

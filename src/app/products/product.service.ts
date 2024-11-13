@@ -8,6 +8,7 @@ import { FoodSupliment } from "../admin-profile/product-management/product-model
 import { OrganicFood } from "../admin-profile/product-management/product-models/organic-food";
 import { Observable } from "rxjs";
 import { ProductViewText } from "../admin-profile/product-management/product-view-texts";
+import { ProductReeviews } from "../admin-profile/product-management/product-models/product-reviews.model";
 
 @Injectable({
     providedIn: 'root'
@@ -17,6 +18,13 @@ export class ProductService {
 
     getAllProductByCategory(categoryName: string) {
         return this.db.collection("products").doc(categoryName).collection('allProduct').valueChanges();
+    }
+
+    getReviewsForProduct(productId: string, productCategory: string) {
+        return this.db.collection('reviews').doc(productCategory).collection<ProductReeviews>('allReview', ref =>
+            ref
+                .where('productId', '==', productId)
+        ).valueChanges();
     }
 
     // Fetch related blogs based on tags and language

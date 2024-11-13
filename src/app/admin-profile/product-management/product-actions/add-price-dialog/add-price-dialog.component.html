@@ -19,7 +19,8 @@
                                 placeholder="{{ unitText }} ({{ selectedUnit | translate }})" required
                                 #quantityInProduct="ngModel" [(ngModel)]="newPrice.quantityInProduct" />
                             <!-- quantity in product error block -->
-                            <span class="help-block" *ngIf="!quantityInProduct.valid && quantityInProduct.touched">{{
+                            <span class="help-block" *ngIf="!quantityInProduct.valid && quantityInProduct.touched"
+                                [@zoomIn]>{{
                                 'register.fieldRequired' | translate }}</span>
                             <br>
                         </div>
@@ -43,7 +44,8 @@
                                         {{ flavor | translate }}
                                     </option>
                                 </select>
-                                <span class="help-block" *ngIf="productFlavors.touched && !productFlavors.valid">{{
+                                <span class="help-block" *ngIf="productFlavors.touched && !productFlavors.valid"
+                                    [@zoomIn]>{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                             <br>
@@ -69,7 +71,8 @@
                                         {{ colorElement.color | translate }}
                                     </option>
                                 </select>
-                                <span class="help-block" *ngIf="productColor.touched && !productColor.valid">{{
+                                <span class="help-block" *ngIf="productColor.touched && !productColor.valid"
+                                    [@zoomIn]>{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                             <br>
@@ -93,7 +96,7 @@
                                         {{ size }}
                                     </option>
                                 </select>
-                                <span class="help-block" *ngIf="productSize.touched && !productSize.valid">{{
+                                <span class="help-block" *ngIf="productSize.touched && !productSize.valid" [@zoomIn]>{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                             <br>
@@ -148,7 +151,7 @@
                                 }} ({{ 'products.huf' | translate }})" required #productPrice="ngModel"
                                 [(ngModel)]="newPrice.productPrice" />
                             <!-- price error block -->
-                            <span class="help-block" *ngIf="!productPrice.valid && productPrice.touched">{{
+                            <span class="help-block" *ngIf="!productPrice.valid && productPrice.touched" [@zoomIn]>{{
                                 'register.fieldRequired' | translate }}</span>
                         </div><br>
 
@@ -160,7 +163,7 @@
                                 }} ({{ productViewText.PIECES | translate }})" required #productStock="ngModel"
                                 [(ngModel)]="newPrice.productStock" />
                             <!-- stock error block -->
-                            <span class="help-block" *ngIf="!productStock.valid && productStock.touched">{{
+                            <span class="help-block" *ngIf="!productStock.valid && productStock.touched" [@zoomIn]>{{
                                 'register.fieldRequired' | translate }}</span>
                         </div><br>
 
@@ -177,7 +180,7 @@
                         </div><br>
 
                         <!-- Error block -->
-                        <span *ngIf="errorMessage" class="help-block-login-error">
+                        <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
                             <i class="fas fa-exclamation-triangle icon"></i>
                             {{ errorMessage }}
                         </span>

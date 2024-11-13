@@ -11,7 +11,7 @@
                         <input type="text" class="form-control" [(ngModel)]="foodSuplimentObject.productName"
                             name="productName" required placeholder="{{ 'products.enterProductName' | translate }}"
                             #productName="ngModel">
-                        <span class="help-block" *ngIf="productName.touched && !productName.valid">{{
+                        <span class="help-block" *ngIf="productName.touched && !productName.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
 
@@ -30,7 +30,7 @@
                                 {{ categorie | translate }}
                             </option>
                         </select>
-                        <span class="help-block" *ngIf="productCategory.touched && !productCategory.valid">{{
+                        <span class="help-block" *ngIf="productCategory.touched && !productCategory.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                                 <input type="number" min="0" class="form-control"
                                     [(ngModel)]="foodSuplimentObject.dailyDosage" name="dailyDosage" required
                                     placeholder="{{ 'products.enterDailyDosage' | translate }}" #dailyDosage="ngModel">
-                                <span class="help-block" *ngIf="dailyDosage.touched && !dailyDosage.valid">{{
+                                <span class="help-block" *ngIf="dailyDosage.touched && !dailyDosage.valid" [@zoomIn]>{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
 
@@ -59,7 +59,7 @@
                                         {{ unit | translate }}
                                     </option>
                                 </select>
-                                <span class="help-block" *ngIf="dosageUnit.touched && !dosageUnit.valid">{{
+                                <span class="help-block" *ngIf="dosageUnit.touched && !dosageUnit.valid" [@zoomIn]>{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
@@ -82,7 +82,8 @@
                         </small>
 
                         <!-- error block -->
-                        <span class="help-block" *ngIf="smallDescription.touched && !smallDescription.valid">{{
+                        <span class="help-block" *ngIf="smallDescription.touched && !smallDescription.valid"
+                            [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -109,7 +110,7 @@
                             #ingredients="ngModel"></textarea>
 
                         <!-- error block -->
-                        <span class="help-block" *ngIf="ingredients.touched && !ingredients.valid">{{
+                        <span class="help-block" *ngIf="ingredients.touched && !ingredients.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -217,7 +218,7 @@
                                 }}
                             </option>
                         </select>
-                        <span class="help-block" *ngIf="proteinType.touched && !proteinType.valid">{{
+                        <span class="help-block" *ngIf="proteinType.touched && !proteinType.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -308,7 +309,7 @@
                         </div>
                     </div>
                     <!-- missing vitamin fields error block -->
-                    <span *ngIf="vitaminMissingFieldsError" class="help-block-login-error">
+                    <span *ngIf="vitaminMissingFieldsError" class="help-block-login-error" [@zoomIn]>
                         <i class="fas fa-exclamation-triangle icon"></i>
                         {{ 'products.allFieldsAreRequiredToAddNewVitamin' | translate }}
                     </span>
@@ -499,19 +500,19 @@
                 </div>
 
                 <!-- Prices missing block -->
-                <span *ngIf="missingPricesErrorMessage" class="help-block-login-error">
+                <span *ngIf="missingPricesErrorMessage" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'products.missingPricesError' | translate }}
                 </span>
 
                 <!-- Product name exists block -->
-                <span *ngIf="productNameExistsError" class="help-block-login-error">
+                <span *ngIf="productNameExistsError" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'products.productNameExistsError' | translate }}
                 </span>
 
                 <!-- Error block -->
-                <span *ngIf="errorMessage" class="help-block-login-error">
+                <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'basicErrorMessage' | translate }}
                 </span>

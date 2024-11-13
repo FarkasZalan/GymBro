@@ -32,7 +32,4 @@ export interface OrganicFood {
     prices: ProductPrice[];
 
     useUnifiedImage: boolean;
-
-    // review ammount, title and text
-    productReviews: ProductReeviews[];
 }

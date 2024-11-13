@@ -1,0 +1,70 @@
+.create-review {
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.review-container {
+    border-radius: 50px;
+}
+
+.button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.review-texts {
+    font-size: 18px;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    font-size: 40px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.star {
+    color: #d3d3d3;
+    /* Default empty star color */
+    transition: color 0.2s ease-in-out;
+    /* Smooth transition for hover effect */
+}
+
+.star.filled-star {
+    color: #0b8e92;
+    /* Filled star color */
+}
+
+.star.hover-star {
+    color: #0b8e92;
+    /* Hover star color */
+}
+
+.rating-feedback {
+    color: red;
+    font-size: 12px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+button {
+    margin-top: 10px;
+}
+
+.btn-review-dialog {
+    width: 200px !important;
+}

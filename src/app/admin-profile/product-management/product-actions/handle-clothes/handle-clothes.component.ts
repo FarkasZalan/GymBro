@@ -99,9 +99,6 @@ export class HandleClothesComponent {
   isProductEdit: boolean = false;
   clothingId: string = '';
 
-  // to save the product reviews
-  savedProductReviews: ProductReeviews[] = [];
-
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -114,9 +111,7 @@ export class HandleClothesComponent {
       clothingType: "",
       material: "",
 
-      prices: [],
-
-      productReviews: []
+      prices: []
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -137,9 +132,6 @@ export class HandleClothesComponent {
 
           // price, color, size
           this.productPrices = this.clothingObject.prices;
-
-          // save the product reviews
-          this.savedProductReviews = this.clothingObject.productReviews;
 
           // update the clothing colors array
           this.updateClothingColorsFromPrices();
@@ -430,8 +422,6 @@ export class HandleClothesComponent {
       material: this.selectedMaterial,
 
       prices: [],
-
-      productReviews: this.savedProductReviews
     }
 
     // Add the new healthy product
@@ -493,8 +483,6 @@ export class HandleClothesComponent {
       material: this.selectedMaterial,
 
       prices: this.productPrices,
-
-      productReviews: this.savedProductReviews
     }
 
     // Edit the clothes

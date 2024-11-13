@@ -35,7 +35,8 @@
                                         {{ color | translate }}
                                     </option>
                                 </select>
-                                <span class="help-block" *ngIf="clothingColor.touched && !clothingColor.valid">{{
+                                <span class="help-block" *ngIf="clothingColor.touched && !clothingColor.valid"
+                                    [@zoomIn]>{{
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div><br>
@@ -67,7 +68,7 @@
                         </div><br>
 
                         <!-- Error block -->
-                        <span *ngIf="errorMessage" class="help-block-login-error">
+                        <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
                             <i class="fas fa-exclamation-triangle icon"></i>
                             {{ 'products.clothes.colors.colorAlreadyAdded' | translate }}
                         </span>

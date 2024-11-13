@@ -149,8 +149,6 @@ export class HandleOrganicFoodComponent {
 
   description: string = "";
 
-  // to save the product reviews
-  savedProductReviews: ProductReeviews[] = [];
 
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
@@ -189,8 +187,6 @@ export class HandleOrganicFoodComponent {
       allergens: [],
 
       prices: [],
-
-      productReviews: []
     }
     this.route.params.subscribe(params => {
       // get the organic food product by id
@@ -226,9 +222,6 @@ export class HandleOrganicFoodComponent {
           this.nutritionalTable = this.organicFoodObject.nutritionalTable;
 
           this.smallDescriptionLength = this.organicFoodObject.smallDescription.length;
-
-          // save the product reviews
-          this.savedProductReviews = this.organicFoodObject.productReviews;
         }
       });
     });
@@ -507,8 +500,6 @@ export class HandleOrganicFoodComponent {
 
       prices: [],
       useUnifiedImage: this.isUnifiedImage,
-
-      productReviews: this.savedProductReviews
     }
 
     // Add the new Organic food
@@ -591,8 +582,6 @@ export class HandleOrganicFoodComponent {
 
       prices: this.productPrices,
       useUnifiedImage: this.isUnifiedImage,
-
-      productReviews: this.savedProductReviews
     }
 
     // Edit the organic food

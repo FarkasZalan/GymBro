@@ -389,7 +389,7 @@ input[type="number"] {
 
 // image
 .product-image {
-    height: 450px !important;
+    height: 500px !important;
     width: 400px !important;
     object-fit: cover;
     /* Ensures the image covers the entire area without distortion */
@@ -609,6 +609,35 @@ input[type="number"] {
 }
 
 // reviews
+.product-empty-list-container {
+    margin-top: 10px;
+    max-width: 60%;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+}
+
+.emptyCardText {
+    margin: 20px;
+    font-size: 20px;
+}
+
+.emptyCard {
+    background-color: #fff6f6;
+    margin-bottom: auto;
+    width: 800px;
+    text-align: center;
+    border-radius: 20px !important;
+}
+
+.emptyCardImage {
+    display: block;
+    margin: auto;
+    width: 100px;
+}
+
 .ratings-container {
     text-align: center;
     max-width: 400px;
@@ -866,7 +895,7 @@ input[type="number"] {
 
 .review-numbers-display {
     font-size: 1.03em;
-    color: #555454;
+    color: #8a8888;
     margin-top: 10px;
 }
 
@@ -905,6 +934,32 @@ input[type="number"] {
     background-color: #f8f9fa;
 }
 
+/* Container for username and date */
+.review-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.review-username {
+    font-weight: bold;
+}
+
+.review-date {
+    font-style: italic;
+}
+
+/* Container for star rating and title */
+.review-header-bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Space between the star rating and title */
+}
+
 .star-rating {
     font-size: 24px;
     color: #afb0b1;
@@ -913,18 +968,113 @@ input[type="number"] {
 
 .filled-star {
     color: #0b8e92;
+    /* Filled star color */
 }
 
 .review-title {
     font-weight: bold;
-    margin-bottom: 0.3em;
-    margin-top: 0.3em;
+    margin: 0;
+    /* Remove margins for tight alignment */
 }
 
 .review-text {
     font-size: 16px !important;
     color: #555;
     margin-bottom: 1em;
+}
+
+.edit-review-container {
+    margin-left: 1em;
+}
+
+.edit-button {
+    font-size: 15px !important
+}
+
+.average-rating-product-display {
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.rating-number-product-display {
+    font-size: 18px !important;
+    color: #8a8888;
+}
+
+.response-card {
+    padding: 0.5em !important;
+    margin-left: 3em;
+    border-radius: 8px;
+    background-color: #eaf4f4;
+    margin-top: -0.3em;
+    margin-bottom: 2em !important;
+    /* Adjust spacing to bring response closer to review if needed */
+    border-left: 4px solid #0b8e92;
+}
+
+.response-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 0.2em;
+    color: #0b8e92;
+}
+
+.response-text {
+    font-size: 16px;
+    color: #555;
+}
+
+.like-section {
+    margin-top: 0.5em;
+    display: flex;
+    align-items: center;
+
+}
+
+.like-button {
+    background: none;
+    border: none;
+    color: #0b8e92;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    cursor: default !important;
+
+}
+
+.like-button img {
+    cursor: pointer;
+    margin-right: 8px;
+    /* Add space between the icon and the number */
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        color: #19b1b6;
+        transform: scale(1.2) !important;
+    }
+
+    &:active {
+        color: #19b1b6;
+        transform: scale(0.95) !important;
+    }
+}
+
+/* Hover effect for SVG icon */
+.like-button:hover img {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(11%) saturate(684%) hue-rotate(140deg) brightness(97%) contrast(92%);
+}
+
+/* Persistent like color when liked */
+.like-button.liked img {
+    filter: brightness(0) saturate(100%) invert(40%) sepia(44%) saturate(1714%) hue-rotate(135deg) brightness(95%) contrast(93%);
+}
+
+.like-button.liked {
+    color: #19b1b6;
+}
+
+.like-button:focus {
+    outline: none;
 }
 
 .error-container {

@@ -101,7 +101,10 @@
                 "passwordEmailSent": "A link elküldve a megadott email címre!",
                 "reSendVerifyEmail": "A hitelesítő link elküldve\na megadott email címre!",
                 "verrifyEmail": "Sikeres regisztráció!\n\nA hitelesítő link elküldve\na megadott email címre!",
-                "creationSuccessfull": "Sikeres létrehozás!"
+                "creationSuccessfull": "Sikeres létrehozás!",
+                "reviewCreated": "Értékelés hozzáadva!",
+                "reviewEdited": "Értékelés módosítva!",
+                "reviewDeleted": "Értékelés eltávolítva!"
         },
         "profilePage": {
                 "profile": "Profil",
@@ -450,6 +453,13 @@
         "review": {
                 "addNewReview": "vélemény hozzáadása",
                 "loginNow": "Bejelentkezek",
-                "needToLoginToWriteReview": "Előbb be kell jelentkezned, hogy értékelést írhass!"
+                "needToLoginToWriteReview": "Előbb be kell jelentkezned, hogy értékelést írhass!",
+                "needToLoginToLikeReview": "Előbb be kell jelentkezned, hogy értékelést kedvelhess!",
+                "noReviewsYetForProduct": "Még nincs egyetlen értékelés sem a termékhez",
+                "createReview": "Új vélemény",
+                "title": "Cím",
+                "text": "Vélemény részletezése",
+                "deleteReviewText": "Biztosan törölni szeretnéd az értékelésedet?",
+                "reviewText": "értékelés"
         }
 }

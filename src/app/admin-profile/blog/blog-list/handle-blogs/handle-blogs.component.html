@@ -10,7 +10,7 @@
                         <label for="blogTitle" class="label">{{ 'blog.blogTitleText' | translate }}</label>
                         <input type="text" class="form-control" [(ngModel)]="blogObject.title" name="blogTitle" required
                             placeholder="{{ 'blog.enterBlogTitle' | translate }}" #blogTitle="ngModel">
-                        <span class="help-block" *ngIf="blogTitle.touched && !blogTitle.valid">{{
+                        <span class="help-block" *ngIf="blogTitle.touched && !blogTitle.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
 
@@ -29,7 +29,7 @@
                                 {{ categorie | translate }}
                             </option>
                         </select>
-                        <span class="help-block" *ngIf="selectLanguage.touched && !selectLanguage.valid">{{
+                        <span class="help-block" *ngIf="selectLanguage.touched && !selectLanguage.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                             {{ descriptionLength || 0 }}/200
                         </small>
 
-                        <span class="help-block" *ngIf="description.touched && !description.valid">{{
+                        <span class="help-block" *ngIf="description.touched && !description.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                                 translate }}</button>
                         </div>
                         <!-- tag already is in use error block -->
-                        <span *ngIf="tagAlreadyExists" class="help-block-login-error">
+                        <span *ngIf="tagAlreadyExists" class="help-block-login-error" [@zoomIn]>
                             <i class="fas fa-exclamation-triangle icon"></i>
                             {{ 'blog.tagAlreadyExists' | translate }}
                         </span>
@@ -121,22 +121,22 @@
                 </div>
 
                 <!-- empty blog text error block -->
-                <span *ngIf="noTextError" class="help-block-login-error">
+                <span *ngIf="noTextError" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'blog.emptyTextBlog' | translate }}
                 </span>
                 <!-- title already is in use error block -->
-                <span *ngIf="titleAlreadyInUse" class="help-block-login-error">
+                <span *ngIf="titleAlreadyInUse" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'blog.titleAlreadyInUse' | translate }}
                 </span>
                 <!-- no tag added error block -->
-                <span *ngIf="missingTagError" class="help-block-login-error">
+                <span *ngIf="missingTagError" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'blog.missingTags' | translate }}
                 </span>
                 <!-- Error block -->
-                <span *ngIf="errorMessage" class="help-block-login-error">
+                <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
                     <i class="fas fa-exclamation-triangle icon"></i>
                     {{ 'basicErrorMessage' | translate }}
                 </span>

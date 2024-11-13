@@ -15,7 +15,7 @@
                                 placeholder="{{ 'loginPage.emailAddress' | translate }}" required email
                                 #emailInput="ngModel">
                             <!-- email error block -->
-                            <span class="help-block" *ngIf="emailInput.touched && !emailInput.valid">{{
+                            <span class="help-block" *ngIf="emailInput.touched && !emailInput.valid" [@zoomIn]>{{
                                 'loginPage.invalidEmail' | translate }}</span>
                         </div>
                         <!-- password block -->
@@ -25,22 +25,22 @@
                                 placeholder="{{ 'loginPage.password' | translate }}" minlength="6" required
                                 #password="ngModel">
                             <!-- password error block -->
-                            <span class="help-block" *ngIf="!password.valid && password.touched">{{
+                            <span class="help-block" *ngIf="!password.valid && password.touched" [@zoomIn]>{{
                                 'loginPage.invalidPassword' | translate }}
                             </span>
                         </div>
                         <!-- login error -->
-                        <span *ngIf="errorMessage" class="help-block-login-error">
+                        <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
                             <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
                             {{ 'loginPage.loginError' | translate }}
                         </span>
 
                         <!-- Email not verrifies error -->
-                        <span *ngIf="notVerrifiedError" class="help-block-login-error">
+                        <span *ngIf="notVerrifiedError" class="help-block-login-error" [@zoomIn]>
                             <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
                             {{ 'loginPage.notverrifiedError' | translate }}
                         </span>
-                        <div *ngIf="notVerrifiedError" class="form-group not-verrified-text">
+                        <div *ngIf="notVerrifiedError" class="form-group not-verrified-text" [@zoomIn]>
                             <span (click)="reSendVerificationLink()" class="forgot-password-text">{{
                                 'loginPage.reSendLink' | translate }}</span>
                         </div>

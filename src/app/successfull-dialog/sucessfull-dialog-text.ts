@@ -5,5 +5,8 @@ export enum SuccessFullDialogText {
     NEXT = "next",
     CREATED_TEXT = "created",
     MODIFIED_TEXT = "modified",
-    DELETED_TEXT = "deleted"
+    DELETED_TEXT = "deleted",
+    REVIEW_CREATED = "review_created",
+    REVIEW_EDITED = "review_edited",
+    REVIEW_DELETED = "review_deleted",
 }
