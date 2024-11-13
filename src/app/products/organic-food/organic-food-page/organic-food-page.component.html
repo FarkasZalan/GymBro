@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [@zoomIn]>
     <nb-card class="container">
         <nb-card-body style="overflow: hidden;">
             <div class="row">
@@ -401,6 +401,15 @@
                     </nb-card>
                 </div>
             </div>
+
+            <!-- Reviews section -->
+            <br>
+            <div class="row">
+                <hr>
+                <h2>{{ 'products.customerReviews' | translate }}</h2>
+
+            </div>
+
             <!-- back button -->
             <div class="button-container">
                 <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit"

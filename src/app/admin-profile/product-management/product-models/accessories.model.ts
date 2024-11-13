@@ -1,4 +1,5 @@
 import { ProductPrice } from "./product-price.model";
+import { ProductReeviews } from "./product-reviews.model";
 
 export interface Accessories {
     // identification and basic details
@@ -18,4 +19,7 @@ export interface Accessories {
     // price
     // stock
     prices: ProductPrice[];
+
+    // review ammount, title and text
+    productReviews: ProductReeviews[];
 }

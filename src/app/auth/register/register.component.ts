@@ -9,11 +9,20 @@ import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialo
 import { DocumentHandlerService } from '../../document.handler.service';
 import { Location } from '@angular/common';
 import { TermsComponent } from './terms/terms.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: '../../../styles/basic-form.scss'
+  styleUrl: '../../../styles/basic-form.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class RegisterComponent {
   @ViewChild('form') createUserForm: NgForm;  // Access the form for validation

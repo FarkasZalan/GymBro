@@ -1,5 +1,5 @@
 <!-- If no shipping addresses are present, display the empty card -->
-<div *ngIf="blogList.length === 0" class="empty-list-container">
+<div *ngIf="blogList.length === 0" class="empty-list-container" [@zoomIn]>
     <nb-card class="emptyCard">
         <nb-card-body>
             <div>
@@ -18,7 +18,7 @@
 
 <!-- Display each blogs as an nb-card -->
 <div class="list-container">
-    <nb-card *ngFor="let blog of blogList" class="rounded-card productCard" (click)="editBlogs(blog.id)">
+    <nb-card *ngFor="let blog of blogList" class="rounded-card productCard" (click)="editBlogs(blog.id)" [@zoomIn]>
         <nb-card-body class="product-image">
             <div class="details-container text-center">
                 <div class="image-container text-center">

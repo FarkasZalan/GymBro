@@ -258,6 +258,7 @@
                 "notSafeBreastfeedingText": "Szoptatás alatt nem ajánlott",
                 "safeBreastfeedingText": " Szoptatás alatt is ajánlott",
                 "selectPoductFlavors": "Válassza ki az ízt",
+                "customerReviews": "Vásárlói vélemények",
                 "proteins": {
                         "casein": "Kazein tartalmú fehérje",
                         "vegan": "Növényi eredetű fehérje",
@@ -445,5 +446,10 @@
                 "filterBySizeAndColor": "Szín és méret",
                 "clothTypeAndMaterialText": "Típus és anyag",
                 "search": "Keresés..."
+        },
+        "review": {
+                "addNewReview": "vélemény hozzáadása",
+                "loginNow": "Bejelentkezek",
+                "needToLoginToWriteReview": "Előbb be kell jelentkezned, hogy értékelést írhass!"
         }
 }

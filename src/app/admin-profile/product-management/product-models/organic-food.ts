@@ -1,5 +1,6 @@
 import { NutritionalTable } from "./nutritional-table.model";
 import { ProductPrice } from "./product-price.model";
+import { ProductReeviews } from "./product-reviews.model";
 
 export interface OrganicFood {
     // identification and basic details
@@ -31,4 +32,7 @@ export interface OrganicFood {
     prices: ProductPrice[];
 
     useUnifiedImage: boolean;
+
+    // review ammount, title and text
+    productReviews: ProductReeviews[];
 }

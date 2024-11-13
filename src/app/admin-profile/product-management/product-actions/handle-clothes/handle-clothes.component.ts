@@ -18,6 +18,7 @@ import { Clothes } from '../../product-models/clothing.model';
 import { AdminService } from '../../../admin.service';
 import { AddColorDialogComponent } from '../add-color-dialog/add-color-dialog.component';
 import { ProductColor } from '../../product-models/product-color.model';
+import { ProductReeviews } from '../../product-models/product-reviews.model';
 
 @Component({
   selector: 'app-handle-clothes',
@@ -40,6 +41,12 @@ import { ProductColor } from '../../product-models/product-color.model';
       transition('* => void', [
         animate('250ms ease-in') // Collapses smoothly
       ])
+    ]),
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
     ])
   ]
 })
@@ -92,6 +99,9 @@ export class HandleClothesComponent {
   isProductEdit: boolean = false;
   clothingId: string = '';
 
+  // to save the product reviews
+  savedProductReviews: ProductReeviews[] = [];
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -104,7 +114,9 @@ export class HandleClothesComponent {
       clothingType: "",
       material: "",
 
-      prices: []
+      prices: [],
+
+      productReviews: []
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -125,6 +137,9 @@ export class HandleClothesComponent {
 
           // price, color, size
           this.productPrices = this.clothingObject.prices;
+
+          // save the product reviews
+          this.savedProductReviews = this.clothingObject.productReviews;
 
           // update the clothing colors array
           this.updateClothingColorsFromPrices();
@@ -414,7 +429,9 @@ export class HandleClothesComponent {
       clothingType: this.selectedClothingType,
       material: this.selectedMaterial,
 
-      prices: []
+      prices: [],
+
+      productReviews: this.savedProductReviews
     }
 
     // Add the new healthy product
@@ -475,7 +492,9 @@ export class HandleClothesComponent {
       clothingType: this.selectedClothingType,
       material: this.selectedMaterial,
 
-      prices: this.productPrices
+      prices: this.productPrices,
+
+      productReviews: this.savedProductReviews
     }
 
     // Edit the clothes

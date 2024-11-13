@@ -2,11 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { RegisterComponent } from '../register.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-terms',
   templateUrl: './terms.component.html',
-  styleUrl: './terms.component.scss'
+  styleUrl: './terms.component.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class TermsComponent implements OnInit {
   termsAccepted: boolean = false;  // Track if terms are accepted

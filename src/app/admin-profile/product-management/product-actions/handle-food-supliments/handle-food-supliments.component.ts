@@ -19,6 +19,7 @@ import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull
 import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
 import { AdminService } from '../../../admin.service';
 import { Editor, Toolbar } from 'ngx-editor';
+import { ProductReeviews } from '../../product-models/product-reviews.model';
 
 @Component({
   selector: 'app-handle-food-supliments',
@@ -41,6 +42,12 @@ import { Editor, Toolbar } from 'ngx-editor';
       transition('* => void', [
         animate('250ms ease-in') // Collapses smoothly
       ])
+    ]),
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
     ])
   ]
 })
@@ -188,6 +195,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
   description: string = "";
 
+  // to save the product reviews
+  savedProductReviews: ProductReeviews[] = [];
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private changeDetector: ChangeDetectorRef, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -228,6 +238,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
       prices: [],
       useUnifiedImage: this.isUnifiedImage,
+      productReviews: []
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -283,6 +294,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
             this.resetFlavors([ProductViewText.UNFLAVORED], true);
           }
 
+          // save the product reviews
+          this.savedProductReviews = foodSupliment.productReviews;
 
           // nutritional table
           if ((this.selectedCategory !== ProductViewText.JOIN_SUPPORT && (this.selectedCategory !== ProductViewText.VITAMINS_AND_MINERALS))) {
@@ -781,6 +794,8 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
       prices: [],
       useUnifiedImage: this.isUnifiedImage,
+
+      productReviews: this.savedProductReviews
     }
 
     // Add the new food supliment product
@@ -876,7 +891,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
       genderList: this.selectedGenders,
 
       prices: this.productPrices,
-      useUnifiedImage: this.isUnifiedImage
+      useUnifiedImage: this.isUnifiedImage,
+
+      productReviews: this.savedProductReviews
     }
 
     // Edit the food supliment product

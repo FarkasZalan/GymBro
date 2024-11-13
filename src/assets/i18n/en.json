@@ -255,6 +255,7 @@
       "notSafeBreastfeedingText": "Not recommended during breastfeeding",
       "safeBreastfeedingText": "Recommended during breastfeeding",
       "selectPoductFlavors": "Select the flavor*",
+      "customerReviews": "Customer reviews",
       "proteins": {
          "casein": "Protein containing casein",
          "vegan": "Vegan protein",
@@ -441,5 +442,10 @@
       "filterBySizeAndColor": "Size and Color",
       "clothTypeAndMaterialText": "Type and material",
       "search": "Search..."
+   },
+   "review": {
+      "addNewReview": "Add new review",
+      "loginNow": "Log in now",
+      "needToLoginToWriteReview": "You need to log in first to write a review!"
    }
 }

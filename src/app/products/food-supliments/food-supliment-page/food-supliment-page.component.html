@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [@zoomIn]>
     <nb-card class="container">
         <nb-card-body style="overflow: hidden;">
             <div class="row">
@@ -426,8 +426,83 @@
                     </nb-card>
                 </div>
             </div>
+
+            <!-- Reviews section -->
+            <br>
+            <div class="row">
+                <hr>
+                <h2>{{ 'products.customerReviews' | translate }}</h2>
+
+                <!-- no reviews section -->
+                <div *ngIf="reviews.length === 0">
+                    <p>{{ 'products.noReviewsYet' | translate }}</p>
+                </div>
+
+                <div class="ratings-container">
+                    <div class="average-rating">
+                        <i [attr.data-star]="averageRating"></i>
+                        <span class="rating-number">{{ averageRating }}</span>
+                    </div>
+                    <p class="review-numbers-display">{{ reviews.length }} Értékelés alapján</p>
+
+                    <div class="ratings-breakdown">
+                        <div class="rating-row" *ngFor="let star of [5, 4, 3, 2, 1]">
+                            <span class="star-bar">{{ star }}&#9733;</span>
+                            <div class="bar">
+                                <div class="filled-bar"
+                                    [ngStyle]="{'width': getRatingPercentage(star) + '%', 'background-color': '#0b8e92'}">
+                                </div>
+                            </div>
+                            <span class="star-numbers-display">{{ getRatingCount(star) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- add new review button -->
+                <div class="button-container review-button">
+                    <button class="btn btn-primary " type="submit" nbButton status="success"
+                        (click)="gotoCreateNewRReview()">
+                        {{ 'review.addNewReview' | translate }}</button>
+                </div>
+
+                <div *ngIf="userLoggedOutError" class="error-container">
+                    <span class="help-block-login-error">
+                        <i class="fas fa-exclamation-triangle icon"></i>
+                        {{ 'review.needToLoginToWriteReview' | translate }}
+                        <div class="error-login-text">
+                            <span (click)="goToLogin()"> {{
+                                'review.loginNow' | translate }}</span>
+                        </div>
+                    </span>
+
+                </div>
+
+                <!-- display reviews -->
+                <div *ngIf="reviews && reviews.length > 0">
+                    <div class="col-12">
+                        <nb-card class="review-card mb-3" *ngFor="let review of reviews">
+                            <nb-card-body>
+                                <!-- Star Rating Display -->
+                                <div class="star-rating">
+                                    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                                        <span class="star"
+                                            [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
+                                    </ng-container>
+                                </div>
+                                <!-- Review Title -->
+                                <h4 class="review-title">{{ review.title }}</h4>
+                                <!-- Review Text -->
+                                <p class="review-text">{{ review.text }}</p>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                </div>
+            </div>
+
+
             <!-- back button -->
             <div class="button-container">
+                <hr>
                 <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit"
                     nbButton status="success" (click)="back()">
                     <span class="arrow">

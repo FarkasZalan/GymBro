@@ -7,6 +7,13 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { Location } from '@angular/common';
 import { Vitamin } from '../../../admin-profile/product-management/product-models/vitamin.model';
 import { ProductService } from '../../product.service';
+import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
+import { Timestamp } from 'firebase/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AuthService } from '../../../auth/auth.service';
+import { User } from '../../../user/user.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 
 @Component({
   selector: 'app-food-supliment-page',
@@ -70,7 +77,29 @@ export class FoodSuplimentPageComponent implements OnInit {
 
   errorMessageStock: boolean = false;
 
-  constructor(private router: Router, private route: ActivatedRoute, private documentHandler: DocumentHandlerService, private changeDetector: ChangeDetectorRef, private location: Location, private productService: ProductService) { }
+  // reviews
+  averageRating: number = 0;
+  reviews: ProductReeviews[] = [
+    // Example data; replace with your actual reviews data
+    { rating: 5, title: "Great product!", text: "Loved it!", date: Timestamp.now() },
+    { rating: 4, title: "Good", text: "Works well.", date: Timestamp.now() },
+    { rating: 1, title: "Okay", text: "Average quality.", date: Timestamp.now() },
+    { rating: 4, title: "Good", text: "Works well.", date: Timestamp.now() },
+    { rating: 2, title: "Okay", text: "Average quality.", date: Timestamp.now() },
+  ];
+  userLoggedIn: boolean = false;
+  userReview: User;
+  userLoggedOutError: boolean = false;
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private documentHandler: DocumentHandlerService,
+    private changeDetector: ChangeDetectorRef,
+    private location: Location,
+    private productService: ProductService,
+    private auth: AngularFireAuth,
+    private authService: AuthService,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.foodSupliment = {
@@ -97,7 +126,24 @@ export class FoodSuplimentPageComponent implements OnInit {
 
       prices: [],
       useUnifiedImage: false,
+
+      productReviews: []
     }
+
+    // check if user logged in for reviews
+    this.auth.authState.subscribe((userAuth) => {
+      if (userAuth) {
+        this.userLoggedIn = true;
+        this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
+          this.userReview = currentUser;
+          if (this.userReview === undefined) {
+            this.userLoggedIn = false; // User is logged out
+          }
+        });
+      } else {
+        this.userLoggedIn = false; // User is logged out
+      }
+    });
 
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -120,6 +166,7 @@ export class FoodSuplimentPageComponent implements OnInit {
         }
         this.getUnitPrice();
 
+        this.calculateAverageRating();
         await this.loadRelatedProducts();
       });
     });
@@ -310,6 +357,44 @@ export class FoodSuplimentPageComponent implements OnInit {
 
   openLoyalityProgram() {
     this.router.navigate(['product/loyaltyProgram']);
+  }
+
+  calculateAverageRating(): void {
+    if (this.reviews.length > 0) {
+      this.reviews.forEach(number => {
+        this.averageRating += number.rating
+      });
+      this.averageRating = this.averageRating / this.reviews.length;
+      this.averageRating = Math.round(this.averageRating * 100) / 100;
+    } else {
+      this.averageRating = 1;
+    }
+  }
+
+  getRatingCount(star: number): number {
+    return this.reviews.filter(review => review.rating === star).length;
+  }
+
+  getRatingPercentage(star: number): number {
+    return (this.getRatingCount(star) / this.reviews.length) * 100;
+  }
+
+  gotoCreateNewRReview() {
+    if (!this.userLoggedIn) {
+      this.userLoggedOutError = true;
+    } else {
+      this.userLoggedOutError = false;
+      this.dialog.open(ReviewHandleComponent, {
+        data: {
+          userId: this.userReview.id,
+          productid: this.foodSupliment.id
+        }
+      });
+    }
+  }
+
+  goToLogin() {
+    this.router.navigate(['/auth/login']);
   }
 
   back() {

@@ -18,6 +18,7 @@ import { ProductViewText } from '../../product-view-texts';
 import { Location } from '@angular/common';
 import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.component';
 import { Editor, Toolbar } from 'ngx-editor';
+import { ProductReeviews } from '../../product-models/product-reviews.model';
 
 @Component({
   selector: 'app-handle-organic-food',
@@ -40,6 +41,12 @@ import { Editor, Toolbar } from 'ngx-editor';
       transition('* => void', [
         animate('250ms ease-in') // Collapses smoothly
       ])
+    ]),
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
     ])
   ]
 })
@@ -142,6 +149,9 @@ export class HandleOrganicFoodComponent {
 
   description: string = "";
 
+  // to save the product reviews
+  savedProductReviews: ProductReeviews[] = [];
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -178,7 +188,9 @@ export class HandleOrganicFoodComponent {
 
       allergens: [],
 
-      prices: []
+      prices: [],
+
+      productReviews: []
     }
     this.route.params.subscribe(params => {
       // get the organic food product by id
@@ -214,6 +226,9 @@ export class HandleOrganicFoodComponent {
           this.nutritionalTable = this.organicFoodObject.nutritionalTable;
 
           this.smallDescriptionLength = this.organicFoodObject.smallDescription.length;
+
+          // save the product reviews
+          this.savedProductReviews = this.organicFoodObject.productReviews;
         }
       });
     });
@@ -491,7 +506,9 @@ export class HandleOrganicFoodComponent {
       allergens: this.selectedAllergenes,
 
       prices: [],
-      useUnifiedImage: this.isUnifiedImage
+      useUnifiedImage: this.isUnifiedImage,
+
+      productReviews: this.savedProductReviews
     }
 
     // Add the new Organic food
@@ -573,7 +590,9 @@ export class HandleOrganicFoodComponent {
       allergens: this.selectedAllergenes,
 
       prices: this.productPrices,
-      useUnifiedImage: this.isUnifiedImage
+      useUnifiedImage: this.isUnifiedImage,
+
+      productReviews: this.savedProductReviews
     }
 
     // Edit the organic food

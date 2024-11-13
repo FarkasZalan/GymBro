@@ -33,9 +33,9 @@ export class HeaderComponent implements OnInit {
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
-    private auth: AngularFireAuth,
     private db: AngularFirestore,
     private router: Router,
+    private auth: AngularFireAuth,
     private authService: AuthService,
     private dialog: MatDialog,
     private translate: TranslateService,

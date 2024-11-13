@@ -1,5 +1,6 @@
 import { NutritionalTable } from "./nutritional-table.model";
 import { ProductPrice } from "./product-price.model";
+import { ProductReeviews } from "./product-reviews.model";
 import { Vitamin } from "./vitamin.model";
 
 export interface FoodSupliment {
@@ -41,4 +42,7 @@ export interface FoodSupliment {
     prices: ProductPrice[];
 
     useUnifiedImage: boolean;
+
+    // review ammount, title and text
+    productReviews: ProductReeviews[];
 }

@@ -5,11 +5,20 @@ import { Blog } from '../../admin-profile/blog/blog.model';
 import { Location } from '@angular/common';
 import { Timestamp } from 'firebase/firestore';
 import { ProductService } from '../../products/product.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-blog-page-view',
   templateUrl: './blog-page-view.component.html',
-  styleUrl: './blog-page-view.component.scss'
+  styleUrl: './blog-page-view.component.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class BlogPageViewComponent implements OnInit {
 

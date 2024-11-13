@@ -28,6 +28,7 @@ import { FoodSuplimentPageComponent } from './food-supliments/food-supliment-pag
 import { OrganicFoodPageComponent } from './organic-food/organic-food-page/organic-food-page.component';
 import { AccessoriesPageComponent } from './accessories/accessories-page/accessories-page.component';
 import { ClothesPageComponent } from './clothes/clothes-page/clothes-page.component';
+import { ReviewHandleComponent } from './review-handle/review-handle.component';
 
 @NgModule({
     imports: [
@@ -59,7 +60,8 @@ import { ClothesPageComponent } from './clothes/clothes-page/clothes-page.compon
         FoodSuplimentPageComponent,
         OrganicFoodPageComponent,
         AccessoriesPageComponent,
-        ClothesPageComponent
+        ClothesPageComponent,
+        ReviewHandleComponent
     ],
 })
 export class ProductModule {

@@ -18,6 +18,7 @@ import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.co
 import { Location } from '@angular/common';
 import { ProductColor } from '../../product-models/product-color.model';
 import { Accessories } from '../../product-models/accessories.model';
+import { ProductReeviews } from '../../product-models/product-reviews.model';
 
 @Component({
   selector: 'app-handle-accessories',
@@ -40,6 +41,12 @@ import { Accessories } from '../../product-models/accessories.model';
       transition('* => void', [
         animate('250ms ease-in') // Collapses smoothly
       ])
+    ]),
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
     ])
   ]
 })
@@ -81,6 +88,9 @@ export class HandleAccessoriesComponent {
   isUnifiedImage: boolean = false;
   unifiedImageUrl: string = null;
 
+  // to save the product reviews
+  savedProductReviews: ProductReeviews[] = [];
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -93,7 +103,8 @@ export class HandleAccessoriesComponent {
 
       equipmentType: "",
 
-      prices: []
+      prices: [],
+      productReviews: []
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -113,6 +124,9 @@ export class HandleAccessoriesComponent {
 
           // price, color, size
           this.productPrices = this.accessoryObject.prices;
+
+          // save the product reviews
+          this.savedProductReviews = this.accessoryObject.productReviews;
 
           this.isUnifiedImage = this.accessoryObject.useUnifiedImage;
           if (this.isUnifiedImage) {
@@ -457,7 +471,8 @@ export class HandleAccessoriesComponent {
 
       equipmentType: this.selectedAccessoryType,
 
-      prices: []
+      prices: [],
+      productReviews: this.savedProductReviews
     }
 
     // Add the new accessory
@@ -517,7 +532,8 @@ export class HandleAccessoriesComponent {
       useUnifiedImage: this.isUnifiedImage,
       equipmentType: this.selectedAccessoryType,
 
-      prices: this.productPrices
+      prices: this.productPrices,
+      productReviews: this.savedProductReviews
     }
 
     // Edit the accessory

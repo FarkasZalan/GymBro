@@ -7,11 +7,20 @@ import { Location } from '@angular/common';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: '../../../styles/basic-form.scss'
+  styleUrl: '../../../styles/basic-form.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class LoginComponent {
   @ViewChild('form') loginForm: NgForm; // Reference to the login form for validation
