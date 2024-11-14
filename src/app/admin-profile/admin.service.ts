@@ -12,6 +12,7 @@ import {
     listAll,
     deleteObject
 } from "firebase/storage";
+import { map } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -36,6 +37,60 @@ export class AdminService {
                 }
             });
         });
+    }
+
+    getAllProductReviews(productCategory: string, productId: string) {
+        return this.db.collection("reviews")
+            .doc(productCategory)
+            .collection('allReview', ref =>
+                ref
+                    .where('productId', '==', productId) // get all the reviews for the selected product
+            ).valueChanges();
+    }
+
+    async getProductUncheckedProductReviewsNumber(productCategory: string) {
+        return this.db
+            .collection('reviews')
+            .doc(productCategory)
+            .collection('allReview', ref => ref.where('checkedByAdmin', '==', false))
+            .get()
+            .pipe(
+                map(snapshot => snapshot.size) // Get the count of unchecked documents
+            );
+    }
+
+    // Check how many unchecked reviews exist for a specific product in the given product category
+    productUncheckedReviewsCount(productId: string, productCategory: string) {
+        return this.db
+            .collection("reviews")
+            .doc(productCategory)
+            .collection('allReview', (ref) =>
+                ref
+                    .where('productId', '==', productId)
+                    .where('checkedByAdmin', '==', false)
+            )
+            .get()
+            .pipe(map((snapshot) => snapshot.size)); // Returns the count of unchecked reviews
+    }
+
+    async getAllReviewsCount() {
+        let totalCount = 0;
+
+        // List of categories
+        const categories = [ProductViewText.FOOD_SUPLIMENTS, ProductViewText.ORGANIC_FOOD, ProductViewText.CLOTHES, ProductViewText.ACCESSORIES];
+
+        // Loop through each category and fetch approved reviews
+        for (const category of categories) {
+            const reviewsCollectionRef = this.db.collection(`reviews/${category}/allReview`, ref =>
+                ref.where('checkedByAdmin', '==', false)
+            );
+
+            // Fetch the approved reviews in the sub-collection and count them
+            const approvedReviewsSnapshot = await reviewsCollectionRef.get().toPromise();
+            totalCount += approvedReviewsSnapshot.size;
+        }
+
+        return totalCount;
     }
 
     getAllBlog() {

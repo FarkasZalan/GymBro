@@ -1,5 +1,6 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AdminService } from './admin.service';
 
 @Component({
   selector: 'app-admin-profile',
@@ -25,12 +26,22 @@ import { Component } from '@angular/core';
     ])
   ]
 })
-export class AdminProfileComponent {
+export class AdminProfileComponent implements OnInit {
   isCollapsedStatisticsDetails = false;
   isCollapsedProfileDetails = true;
   isCollapsedItemsDetails = true;
   isCollapsedBlogDetails = true;
   isCollapsedOrders = true;
+  isCollapsedReviews = true;
+
+  // number of the unchecked reviews
+  uncheckedReviewsCount: number = 0;
+
+  constructor(private adminService: AdminService) { }
+
+  async ngOnInit(): Promise<void> {
+    this.uncheckedReviewsCount = await this.adminService.getAllReviewsCount();
+  }
 
   toggleCollapsedStatistics() {
     this.isCollapsedStatisticsDetails = !this.isCollapsedStatisticsDetails;
@@ -51,6 +62,7 @@ export class AdminProfileComponent {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedBlogDetails = true;
+      this.isCollapsedReviews = true;
     }
   }
 
@@ -62,6 +74,19 @@ export class AdminProfileComponent {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedProfileDetails = true;
       this.isCollapsedBlogDetails = true;
+      this.isCollapsedReviews = true;
+    }
+  }
+
+  toggleCollapsedReviews() {
+    this.isCollapsedReviews = !this.isCollapsedReviews;
+
+    if (!this.isCollapsedReviews) {
+      this.isCollapsedOrders = true;
+      this.isCollapsedStatisticsDetails = true;
+      this.isCollapsedProfileDetails = true;
+      this.isCollapsedBlogDetails = true;
+      this.isCollapsedItemsDetails = true;
     }
   }
 
@@ -73,6 +98,7 @@ export class AdminProfileComponent {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedProfileDetails = true;
+      this.isCollapsedReviews = true;
     }
   }
 
@@ -84,6 +110,7 @@ export class AdminProfileComponent {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedBlogDetails = true;
+      this.isCollapsedReviews = true;
     }
   }
 }

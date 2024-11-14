@@ -37,6 +37,7 @@ import { BlogComponent } from './blog/blog.component';
 import { UserBlogListComponent } from '../user-blog-list/user-blog-list.component';
 import { FilterPageComponent } from '../filter-page/filter-page.component';
 import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
+import { HandleReviewsComponent } from './product-management/product-actions/handle-reviews/handle-reviews.component';
 
 @NgModule({
     imports: [
@@ -82,7 +83,8 @@ import { HandleOrganicFoodComponent } from './product-management/product-actions
         HandleBlogsComponent,
         BlogComponent,
         UserBlogListComponent,
-        FilterPageComponent
+        FilterPageComponent,
+        HandleReviewsComponent
     ],
 })
 export class AdminProfileModule {

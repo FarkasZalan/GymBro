@@ -21,10 +21,16 @@
 
     <!-- Food Supliments -->
     <div *ngIf="foodSupliments" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of foodSupliments" [@zoomIn]>
-            <nb-card-body class="product-image" (click)="goToEditProduct(foodSupliment.id)">
+        <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of foodSupliments" [@zoomIn]
+            [class.has-unchecked-reviews]="productUncheckedReviewsMap[foodSupliment.id]">
 
+            <!-- Icon for Unchecked Reviews -->
+            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[foodSupliment.id]">
+                &#x26A0; <!-- warning icon -->
+            </div>
 
+            <!-- product details -->
+            <nb-card-body class="product-image">
                 <div *ngIf="getDefaultPrice(foodSupliment) as defaultPrice" class="details-container text-center">
                     <div class="image-container text-center">
                         <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
@@ -42,16 +48,37 @@
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
                 </div>
+
+                <!-- Overlay buttons container for edit product or show reviews -->
+                <div class="button-overlay">
+                    <button nbButton class="btn" (click)="goToEditProduct(foodSupliment.id)">{{
+                        'profilePage.modify' | translate }}</button>
+                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(foodSupliment.id)"
+                        [class.pulsing-button]="productUncheckedReviewsMap[foodSupliment.id]">
+                        {{ 'adminMenu.reviews' | translate }}
+
+                        <!-- Display the count of unchecked reviews -->
+                        <span *ngIf="productReviewCountMap[foodSupliment.id] !== 0" class="review-count">
+                            ({{ productReviewCountMap[foodSupliment.id] }} {{ 'review.new' | translate }})
+                        </span>
+                    </button>
+                </div>
             </nb-card-body>
         </nb-card>
     </div>
 
     <!-- Organic products -->
     <div *ngIf="organicProducts" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let organicProduct of organicProducts" [@zoomIn]>
+        <nb-card class="rounded-card productCard" *ngFor="let organicProduct of organicProducts" [@zoomIn]
+            [class.has-unchecked-reviews]="productUncheckedReviewsMap[organicProduct.id]">
+
+            <!-- Icon for Unchecked Reviews -->
+            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[organicProduct.id]">
+                &#x26A0; <!-- warning icon -->
+            </div>
+
+            <!-- product details -->
             <nb-card-body class="product-image" (click)="goToEditProduct(organicProduct.id)">
-
-
                 <div *ngIf="getDefaultPrice(organicProduct) as defaultPrice" class="details-container text-center">
                     <div class="image-container text-center">
                         <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
@@ -69,16 +96,31 @@
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
                 </div>
+
+                <!-- Overlay buttons container for edit product or show reviews -->
+                <div class="button-overlay">
+                    <button nbButton class="btn" (click)="goToEditProduct(organicProduct.id)">{{
+                        'profilePage.modify' | translate }}</button>
+                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(organicProduct.id)">{{
+                        'adminMenu.reviews' |
+                        translate }}</button>
+                </div>
             </nb-card-body>
         </nb-card>
     </div>
 
     <!-- Clothes -->
     <div *ngIf="clothes" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes" [@zoomIn]>
+        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes" [@zoomIn]
+            [class.has-unchecked-reviews]="productUncheckedReviewsMap[cloth.id]">
+
+            <!-- Icon for Unchecked Reviews -->
+            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[cloth.id]">
+                &#x26A0; <!-- warning icon -->
+            </div>
+
+            <!-- product details -->
             <nb-card-body class="product-image" (click)="goToEditProduct(cloth.id)">
-
-
                 <div *ngIf="getDefaultPrice(cloth) as defaultPrice" class="details-container text-center">
                     <div class="image-container text-center">
                         <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
@@ -98,16 +140,31 @@
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
                 </div>
+
+                <!-- Overlay buttons container for edit product or show reviews -->
+                <div class="button-overlay">
+                    <button nbButton class="btn" (click)="goToEditProduct(cloth.id)">{{
+                        'profilePage.modify' | translate }}</button>
+                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(cloth.id)">{{
+                        'adminMenu.reviews' |
+                        translate }}</button>
+                </div>
             </nb-card-body>
         </nb-card>
     </div>
 
     <!-- Accessories -->
     <div *ngIf="accessories" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories" [@zoomIn]>
+        <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories" [@zoomIn]
+            [class.has-unchecked-reviews]="productUncheckedReviewsMap[accessory.id]">
+
+            <!-- Icon for Unchecked Reviews -->
+            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[accessory.id]">
+                &#x26A0; <!-- warning icon -->
+            </div>
+
+            <!-- product details -->
             <nb-card-body class="product-image" (click)="goToEditProduct(accessory.id)">
-
-
                 <div *ngIf="getDefaultPrice(accessory) as defaultPrice" class="details-container text-center">
                     <div class="image-container text-center">
                         <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
@@ -127,6 +184,15 @@
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
+                </div>
+
+                <!-- Overlay buttons container for edit product or show reviews -->
+                <div class="button-overlay">
+                    <button nbButton class="btn" (click)="goToEditProduct(accessory.id)">{{
+                        'profilePage.modify' | translate }}</button>
+                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(accessory.id)">{{
+                        'adminMenu.reviews' |
+                        translate }}</button>
                 </div>
             </nb-card-body>
         </nb-card>

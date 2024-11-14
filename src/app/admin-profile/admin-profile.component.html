@@ -19,12 +19,18 @@
 </nb-card>
 
 <!-- product categories -->
-<nb-card class="container-collapse-component">
+<nb-card class="container-collapse-component" [class.has-unchecked-items]="uncheckedReviewsCount !== 0"
+    [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails">
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()">
             <h2 class="title" [ngClass]="{'center': isCollapsedItemsDetails, 'left': !isCollapsedItemsDetails}">{{
                 'adminMenu.items' | translate }}
             </h2>
+
+            <!-- Icon for Unchecked Reviews -->
+            <div class="review-alert-icon" *ngIf="uncheckedReviewsCount !== 0">
+                &#x26A0; <!-- warning icon -->
+            </div>
             <button class="toggle-button-collapse-component back-btn">
                 <span class="categorie-arrow" *ngIf="isCollapsedItemsDetails">▼</span>
                 <span class="categorie-arrow" *ngIf="!isCollapsedItemsDetails">▲</span>

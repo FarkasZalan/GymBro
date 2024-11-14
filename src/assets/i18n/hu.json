@@ -156,7 +156,8 @@
                 "statistic": "Statisztikák",
                 "items": "Termékek",
                 "blog": "Bejegyzések",
-                "users": "Felhasználók"
+                "users": "Felhasználók",
+                "reviews": "Értékelések"
         },
         "products": {
                 "add": "Hozzáadás",
@@ -460,6 +461,7 @@
                 "title": "Cím",
                 "text": "Vélemény részletezése",
                 "deleteReviewText": "Biztosan törölni szeretnéd az értékelésedet?",
-                "reviewText": "értékelés"
+                "reviewText": "értékelés",
+                "new": "új"
         }
 }

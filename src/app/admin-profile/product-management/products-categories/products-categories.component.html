@@ -2,7 +2,14 @@
 
 <div class="list-container">
     <!-- Food supliments card -->
-    <nb-card class="rounded-card-category categoryCard" (click)="goToFoodSupliments()">
+    <nb-card class="rounded-card-category categoryCard" (click)="goToFoodSupliments()"
+        [class.has-unchecked-reviews]="uncheckedFoodSuplimentsReviewsCount !== 0">
+        <!-- Icon for Unchecked Reviews -->
+        <div class="review-alert-icon" *ngIf="uncheckedFoodSuplimentsReviewsCount !== 0">
+            &#x26A0; <!-- warning icon -->
+        </div>
+
+        <!-- product category -->
         <nb-card-header class="card-header default-label">
             <strong class="default-label">{{ 'menu.foodSuplimentsMenu.foodSupliments' | translate }} <br> ({{
                 foodSuplimentsCount }} {{ 'products.pcs'
@@ -15,7 +22,14 @@
     </nb-card>
 
     <!-- Organic food card -->
-    <nb-card class="rounded-card-category categoryCard" (click)="goToHealthyProducts()">
+    <nb-card class="rounded-card-category categoryCard" (click)="goToHealthyProducts()"
+        [class.has-unchecked-reviews]="uncheckedOrganicFoodReviewsCount !== 0">
+        <!-- Icon for Unchecked Reviews -->
+        <div class="review-alert-icon" *ngIf="uncheckedOrganicFoodReviewsCount !== 0">
+            &#x26A0; <!-- warning icon -->
+        </div>
+
+        <!-- product category -->
         <nb-card-header class="card-header default-label">
             <strong class="default-label">{{ 'menu.organicFoodMenu.organicFood' | translate }} <br> ({{
                 organicProductsCount }} {{ 'products.pcs' |
@@ -27,7 +41,14 @@
     </nb-card>
 
     <!-- Clothing card -->
-    <nb-card class="rounded-card-category categoryCard" (click)="goToClothes()">
+    <nb-card class="rounded-card-category categoryCard" (click)="goToClothes()"
+        [class.has-unchecked-reviews]="uncheckedClothesReviewsCount !== 0">
+        <!-- Icon for Unchecked Reviews -->
+        <div class="review-alert-icon" *ngIf="uncheckedClothesReviewsCount !== 0">
+            &#x26A0; <!-- warning icon -->
+        </div>
+
+        <!-- product category -->
         <nb-card-header class="card-header default-label">
             <strong class="default-label">{{ 'menu.clothingMenu.clothing' | translate }} <br> ({{ ClothesCount }} {{
                 'products.pcs' | translate
@@ -39,7 +60,14 @@
     </nb-card>
 
     <!-- Accessories-->
-    <nb-card class="rounded-card-category categoryCard" (click)="goToAccessories()">
+    <nb-card class="rounded-card-category categoryCard" (click)="goToAccessories()"
+        [class.has-unchecked-reviews]="uncheckedAccessoriesReviewsCount !== 0">
+        <!-- Icon for Unchecked Reviews -->
+        <div class="review-alert-icon" *ngIf="uncheckedAccessoriesReviewsCount !== 0">
+            &#x26A0; <!-- warning icon -->
+        </div>
+
+        <!-- product category -->
         <nb-card-header class="card-header default-label">
             <strong class="default-label">{{ 'menu.accessoriesMenu.accessories' | translate }} <br> ({{ accessoriesCount
                 }}

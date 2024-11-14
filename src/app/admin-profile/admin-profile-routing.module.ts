@@ -10,6 +10,7 @@ import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { HandleBlogsComponent } from './blog/blog-list/handle-blogs/handle-blogs.component';
 import { BlogComponent } from './blog/blog.component';
 import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
+import { HandleReviewsComponent } from './product-management/product-actions/handle-reviews/handle-reviews.component';
 
 export const routes: Routes = [
     {
@@ -110,6 +111,16 @@ export const routes: Routes = [
                 component: HandleAccessoriesComponent
             },
 
+            // reviews
+            {
+                path: 'reviews',
+                redirectTo: '',
+                component: AdminProfileComponent
+            },
+            {
+                path: 'reviews/:productId',
+                component: HandleReviewsComponent
+            },
         ]
     },
 ];
