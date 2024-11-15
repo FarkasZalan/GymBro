@@ -32,7 +32,6 @@ export class AdminProfileComponent implements OnInit {
   isCollapsedItemsDetails = true;
   isCollapsedBlogDetails = true;
   isCollapsedOrders = true;
-  isCollapsedReviews = true;
 
   // number of the unchecked reviews
   uncheckedReviewsCount: number = 0;
@@ -62,7 +61,6 @@ export class AdminProfileComponent implements OnInit {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedBlogDetails = true;
-      this.isCollapsedReviews = true;
     }
   }
 
@@ -74,19 +72,6 @@ export class AdminProfileComponent implements OnInit {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedProfileDetails = true;
       this.isCollapsedBlogDetails = true;
-      this.isCollapsedReviews = true;
-    }
-  }
-
-  toggleCollapsedReviews() {
-    this.isCollapsedReviews = !this.isCollapsedReviews;
-
-    if (!this.isCollapsedReviews) {
-      this.isCollapsedOrders = true;
-      this.isCollapsedStatisticsDetails = true;
-      this.isCollapsedProfileDetails = true;
-      this.isCollapsedBlogDetails = true;
-      this.isCollapsedItemsDetails = true;
     }
   }
 
@@ -98,7 +83,6 @@ export class AdminProfileComponent implements OnInit {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedProfileDetails = true;
-      this.isCollapsedReviews = true;
     }
   }
 
@@ -110,7 +94,6 @@ export class AdminProfileComponent implements OnInit {
       this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedBlogDetails = true;
-      this.isCollapsedReviews = true;
     }
   }
 }

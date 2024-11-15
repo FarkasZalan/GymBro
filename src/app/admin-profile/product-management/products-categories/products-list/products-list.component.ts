@@ -9,7 +9,6 @@ import { ProductViewText } from '../../product-view-texts';
 import { OrganicFood } from '../../product-models/organic-food';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AdminService } from '../../../admin.service';
-import { ProductReeviews } from '../../product-models/product-reviews.model';
 
 @Component({
   selector: 'app-products-list',
@@ -161,6 +160,6 @@ export class ProductsListComponent implements OnInit {
 
   // navigate to the product review page
   goToShowReviews(productId: string) {
-    this.router.navigate(['admin-profile/reviews/' + '/' + productId])
+    this.router.navigate(['admin-profile/' + this.productCategory + '/reviews/' + '/' + productId])
   }
 }

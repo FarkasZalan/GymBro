@@ -9,4 +9,7 @@ export enum SuccessFullDialogText {
     REVIEW_CREATED = "review_created",
     REVIEW_EDITED = "review_edited",
     REVIEW_DELETED = "review_deleted",
+    RESPONSE_CREATED = "response_created",
+    RESPONSE_EDITED = "response_edited",
+    RESPONSE_DELETED = "response_deleted"
 }

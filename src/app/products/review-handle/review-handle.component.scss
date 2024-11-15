@@ -1,5 +1,5 @@
 .create-review {
-    width: 600px;
+    width: 700px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -67,4 +67,11 @@ button {
 
 .btn-review-dialog {
     width: 200px !important;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
 }

@@ -104,7 +104,10 @@
                 "creationSuccessfull": "Sikeres létrehozás!",
                 "reviewCreated": "Értékelés hozzáadva!",
                 "reviewEdited": "Értékelés módosítva!",
-                "reviewDeleted": "Értékelés eltávolítva!"
+                "reviewDeleted": "Értékelés eltávolítva!",
+                "responseCreated": "Válaszod létrehozva!",
+                "responseEdited": "Válaszod módosítva!",
+                "responseDeleted": "Válaszod törölve!"
         },
         "profilePage": {
                 "profile": "Profil",
@@ -432,7 +435,9 @@
                         "cheapest": "Rendezés legolcsóbb szerint",
                         "mostExpensive": "Rendezés legdrágább szerint",
                         "nameASC": "Rendezés név szerint (növekvő)",
-                        "nameDESC": "Rendezés név szerint (csökkenő)"
+                        "nameDESC": "Rendezés név szerint (csökkenő)",
+                        "bestRating": "Remdezés legjobb értékelés szerint",
+                        "worstRating": "Remdezés legrosszabb értékelés szerint"
                 },
                 "apply": "Alkalmaz",
                 "filterBlogByLanguage": "Szűrés nyelv szerint",
@@ -458,10 +463,21 @@
                 "needToLoginToLikeReview": "Előbb be kell jelentkezned, hogy értékelést kedvelhess!",
                 "noReviewsYetForProduct": "Még nincs egyetlen értékelés sem a termékhez",
                 "createReview": "Új vélemény",
+                "editReview": "Értékelés szerkesztése",
                 "title": "Cím",
                 "text": "Vélemény részletezése",
                 "deleteReviewText": "Biztosan törölni szeretnéd az értékelésedet?",
+                "deleteResponseText": "Biztosan törölni szeretnéd a válaszod?",
                 "reviewText": "értékelés",
-                "new": "új"
+                "new": "új",
+                "checked": "Ellenőrizve",
+                "checkedReview": "Ellenőrzött hozzászólás",
+                "response": "Válaszol",
+                "responseText": "Válasz megadás",
+                "newResponse": "Új válasz",
+                "editResponse": "Válasz szerkesztése",
+                "edited": "módosított",
+                "adminResponsedStart": "Válaszolt",
+                "adminResponsedEnd": "részére"
         }
 }

@@ -147,9 +147,13 @@ export enum ProductViewText {
 
     BLOG = "menu.blog",
 
+    ADMIN_REVIEW = "admin_review_page",
+
     // Order
     ORDER_BY_LATEST = 'filter.orderBy.latest',
     ORDER_BY_OLDEST = 'filter.orderBy.oldest',
+    ORDER_BY_BEST_RATING = 'filter.orderBy.bestRating',
+    ORDER_BY_WORST_RATING = 'filter.orderBy.worstRating',
     ORDER_BY_PRICE_CHEAPEST = 'filter.orderBy.cheapest',
     ORDER_BY_PRICE_MOST_EXPENSIVE = 'filter.orderBy.mostExpensive',
     ORDER_BY_NAME_ASC = 'filter.orderBy.nameASC',

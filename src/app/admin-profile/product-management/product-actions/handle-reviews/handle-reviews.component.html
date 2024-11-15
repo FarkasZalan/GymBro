@@ -1,1 +1,299 @@
-<p>handle-reviews works!</p>
+<div class="container" [@zoomIn]>
+    <nb-card class="container">
+        <nb-card-body style="overflow: hidden;">
+            <div class="row">
+                <!-- Product image -->
+                <div class="col-md-6 form-group">
+                    <div class="details-container">
+                        <div class="image-container">
+                            <img *ngIf="selectedImage !== ''" [@zoomIn] [src]="selectedImage" alt="Product Image"
+                                class="review-product-image" />
+                            <img *ngIf="selectedImage === ''" [@zoomIn]
+                                src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                class="product-image" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Details: Name, Allergen Information, Quantity Selection -->
+                <div class="col-md-6 form-group review-product-details">
+                    <!-- Product Name -->
+                    <h2 class="product-name">{{ productName | translate }}</h2>
+
+                    <!-- rating -->
+                    <div *ngIf="reviews.length > 0" class="average-rating-product-display" (click)="goToReviews()">
+                        <i [attr.data-star]="averageRating"></i>
+                        <span class="rating-number-product-display">{{ reviews.length }} {{ 'review.reviewText' |
+                            translate }}</span>
+                        <br>
+                    </div>
+
+                    <!-- Allergen Information -->
+                    <div class="allergen-icons">
+                        <div *ngFor="let allergen of allergens" class="allergen-icon">
+                            <!-- Lactose free section -->
+                            <div *ngIf="allergen === productViewText.LACTOSE_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/lactose-free-icon.svg"
+                                    alt="LACTOSE Free Icon" width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Gluten free section-->
+                            <div *ngIf="allergen === productViewText.GLUTEN_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/gluten_free.svg" alt="Gluten Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Sugar free section -->
+                            <div *ngIf="allergen === productViewText.SUGAR_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/sugar-free.svg" alt="SUGAR Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Peanut free section -->
+                            <div *ngIf="allergen === productViewText.PEANUTS_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/peanut-free.svg" alt="PEANUT Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Fish free section -->
+                            <div *ngIf="allergen === productViewText.FISH_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/fish-free.svg" alt="Fish Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Egg free section -->
+                            <div *ngIf="allergen === productViewText.EGG_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/egg-free.svg" alt="Fish Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+
+                            <!-- Soy free section -->
+                            <div *ngIf="allergen === productViewText.SOY_FREE_ALLERGEN">
+                                <img src="../../../../assets/images/allergenes/soy-free.svg" alt="SOY Free Icon"
+                                    width="40" height="40">
+                                <p>{{ allergen | translate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- small description section -->
+                    <p>{{ smallDescription }}</p>
+                    <br>
+
+                    <!-- safe section -->
+                    <div class="stock-info">
+                        <!-- pregnancy -->
+                        <span *ngIf="!safeForConsumptionDuringPregnancy" class="red-text">
+                            <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
+                                height="12">
+                            {{ 'products.notSafePregnancyText' | translate }}
+                        </span>
+
+                        <span *ngIf="safeForConsumptionDuringPregnancy" class="green-text">
+                            <img src="../../../../assets/images/inStock.svg" alt="SOY Free Icon" width="12" height="12">
+                            {{ 'products.safePregnancyText' | translate }}
+                        </span>
+                    </div>
+
+                    <!-- Breastfeeding -->
+                    <div class="stock-info">
+                        <span *ngIf="!safeForConsumptionDuringBreastfeeding" class="red-text">
+                            <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
+                                height="12">
+                            {{ 'products.notSafeBreastfeedingText' | translate }}
+                        </span>
+
+                        <span *ngIf="safeForConsumptionDuringBreastfeeding" class="green-text">
+                            <img src="../../../../assets/images/inStock.svg" alt="SOY Free Icon" width="12" height="12">
+                            {{ 'products.safeBreastfeedingText' | translate }}
+                        </span>
+                    </div><br>
+
+                    <!-- go to product page button -->
+                    <div class="button-container go-to-product-page">
+                        <button class="btn btn-primary go-to-product-page-btn" (click)="gotoProductPage()">Termék
+                            oldal</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews section -->
+            <br>
+            <div class="row">
+                <hr>
+                <h2>{{ 'products.customerReviews' | translate }}</h2>
+
+                <!-- no reviews section -->
+                <div *ngIf="reviews.length === 0" class="product-empty-list-container">
+                    <nb-card class="emptyCard" [@zoomIn]>
+                        <nb-card-body>
+                            <div>
+                                <img src="../../../../assets/images/no-products.jpg" alt="EmptyBox"
+                                    class="emptyCardImage">
+                                <p class="emptyCardText">{{ 'review.noReviewsYetForProduct' | translate }}</p>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <!-- have any reviews -->
+                <div *ngIf="reviews.length !== 0">
+                    <div class="ratings-container">
+                        <div class="average-rating">
+                            <i [attr.data-star]="averageRating"></i>
+                            <span class="rating-number">{{ averageRating }}</span>
+                        </div>
+                        <p class="review-numbers-display">{{ reviews.length }} {{ 'review.reviewText' | translate }}</p>
+
+                        <div class="ratings-breakdown" #reviewsSection>
+                            <div class="rating-row" *ngFor="let star of [5, 4, 3, 2, 1]">
+                                <span class="star-bar">{{ star }}&#9733;</span>
+                                <div class="bar">
+                                    <div class="filled-bar"
+                                        [ngStyle]="{'width': getRatingPercentage(star) + '%', 'background-color': '#0b8e92'}">
+                                    </div>
+                                </div>
+                                <span class="star-numbers-display">{{ getRatingCount(star) }}</span>
+                            </div>
+                        </div>
+                    </div><br>
+
+                    <!-- Display Reviews -->
+                    <div *ngIf="reviews && reviews.length > 0">
+                        <!-- Filter Section -->
+                        <div class="dropdown-container filter-review-section">
+                            <select class="form-control drop-down-list allow-selected-list-color" name="reviewFilter"
+                                #reviewFilter="ngModel" (change)="filterRating(selectedReviewFilter)"
+                                [(ngModel)]="selectedReviewFilter">
+                                <option *ngFor="let filters of availableReviewFilters" [value]="filters">
+                                    {{ filters | translate }}
+                                </option>
+                            </select>
+
+                            <!-- Arrow icon based on dropdown open/closed state -->
+                            <div class="arrow-icon">
+                                <svg *ngIf="isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="#0b8e92" width="40px" height="50px">
+                                    <path d="M7 14l5-5 5 5z" />
+                                </svg>
+                                <svg *ngIf="!isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                    <path d="M7 10l5 5 5-5z" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="col-12" *ngFor="let review of reviews">
+                            <!-- Review Card -->
+                            <!-- Apply 'no-overlay' class when response section is shown -->
+                            <nb-card class="review-card mb-3" [ngClass]="{ 
+                                'new-review-card': !review.checkedByAdmin || review.reviewEdited,
+                                'no-overlay': review.showResponseSection   
+                             }" (mouseenter)="markReviewAsChecked(review)">
+                                <nb-card-body>
+                                    <!-- Flex container for username and date -->
+                                    <div class="review-header-top">
+                                        <!-- creator name -->
+                                        <span class="review-username">{{ review.userFirstName }} {{ review.userLastName
+                                            }}</span>
+
+                                        <!-- review date -->
+                                        <span class="review-date">{{ review.date.toDate() | date: 'yyyy/MM/dd' }}</span>
+                                    </div>
+
+                                    <!-- Flex container for star rating and title -->
+                                    <div class="review-header-bottom">
+                                        <!-- Review Title -->
+                                        <h4 class="review-title">{{ review.title }}</h4>
+
+                                        <!-- Star Rating Display -->
+                                        <div class="star-rating">
+                                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                                                <span class="star"
+                                                    [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
+                                            </ng-container>
+                                        </div>
+
+                                        <!-- New Review or checked Badge -->
+                                        <div class="review-status">
+                                            <span *ngIf="!review.checkedByAdmin && !review.reviewEdited"
+                                                class="new-review-badge">
+                                                {{ 'review.new' | translate }}
+                                            </span>
+                                            <span *ngIf="review.reviewEdited" class="new-review-badge">
+                                                {{ 'review.edited' | translate }}
+                                            </span>
+                                            <span *ngIf="review.checkedByAdmin" class="checked-review-text">
+                                                {{ 'review.checked' | translate }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- Review Text -->
+                                    <p class="review-text">{{ review.text }}</p>
+
+                                    <!-- Overlay buttons container for edit product or show reviews -->
+                                    <div class="button-overlay">
+                                        <button nbButton class="btn btn-primary basic-btn basic-form-btn" nbButton
+                                            (click)="showCreateRespondToReviewSection(review)">
+                                            {{ 'review.response' | translate }}
+                                        </button>
+                                        <button nbButton class="btn btn-primary basic-btn delete-btn basic-form-btn"
+                                            nbButton (click)="removeReview(review)">
+                                            {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}
+                                        </button>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+
+                            <!-- Response Card (if there is a response) -->
+                            <nb-card class="response-card mb-3" *ngIf="review.response"
+                                (click)="showEditRespondToReviewSection(review)" (mouseenter)="hoverResponse = true"
+                                (mouseleave)="hoverResponse = false">
+                                <nb-card-body>
+                                    <!-- Edit Button -->
+                                    <div class="response-overlay" *ngIf="hoverResponse">
+                                        <button nbButton class="btn btn-primary basic-btn basic-form-btn" nbButton
+                                            (click)="showEditRespondToReviewSection(review)">
+                                            {{ 'profileMenu.shippingAddressForm.modifyAddress' | translate }}
+                                        </button>
+                                    </div>
+                                    <div class="review-header-top">
+                                        <!-- review creator name -->
+                                        <span class="review-username"> {{ 'review.adminResponsedStart' | translate }} {{
+                                            review.userFirstName }} {{ 'review.adminResponsedEnd' | translate }}</span>
+
+                                        <!-- response date -->
+                                        <span class="review-date">{{ review.responseDate.toDate() | date: 'yyyy/MM/dd'
+                                            }}</span>
+                                    </div>
+                                    <h5 class="response-title">Gym Bro</h5>
+                                    <p class="response-text">{{ review.response }}</p>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- back button -->
+            <div class="button-container">
+                <hr>
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit"
+                    nbButton status="success" (click)="back()">
+                    <span class="arrow">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Filled left arrow -->
+                            <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                        </svg>
+                    </span>
+                    {{ 'blog.backToList' | translate }}</button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

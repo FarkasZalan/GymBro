@@ -8,6 +8,7 @@ import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { DeleteConfirmationDialogComponent } from '../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../delete-confirmation-dialog/delete-text';
+import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
 
 @Component({
   selector: 'app-review-handle',
@@ -33,6 +34,8 @@ export class ReviewHandleComponent implements OnInit {
   errorMessage: boolean = false;
   productId: string = '';
   edit: boolean = false;
+  pageFrom: string = '';
+  productViewText = ProductViewText;
 
   reviewText: string = '';
   reviewTitle: string = '';
@@ -41,6 +44,8 @@ export class ReviewHandleComponent implements OnInit {
   reviewLikes: string[] = [];
   reviewResponseLikes: string[] = [];
   reviewResponse: string = '';
+  responseDate = Timestamp.now();
+  responseEdit: boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, private db: AngularFirestore) {
     this.userId = data.userId;
@@ -49,6 +54,11 @@ export class ReviewHandleComponent implements OnInit {
     this.userFirstName = data.userFirstName;
     this.userLastName = data.userLastName;
     this.edit = data.edit;
+    this.pageFrom = data.pageFrom;
+
+    if (this.pageFrom === this.productViewText.ADMIN_REVIEW) {
+      this.responseEdit = data.responseEdit;
+    }
 
     if (this.edit) {
       this.review = { ...data.review };
@@ -60,7 +70,12 @@ export class ReviewHandleComponent implements OnInit {
       this.reviewLikes = this.review.likes;
       this.reviewResponseLikes = this.review.responseLikes;
       this.reviewResponse = this.review.response;
+      if (this.reviewResponse !== '' && this.pageFrom === ProductViewText.ADMIN_REVIEW) {
+        this.responseEdit = true;
+      }
+      this.responseDate = this.review.responseDate;
     }
+
   }
 
   ngOnInit(): void {
@@ -74,10 +89,12 @@ export class ReviewHandleComponent implements OnInit {
       text: '',
       title: '',
       date: Timestamp.now(),
+      responseDate: Timestamp.now(),
       likes: [],
       response: '',
       responseLikes: [],
-      checkedByAdmin: false
+      checkedByAdmin: false,
+      reviewEdited: false
     }
   }
 
@@ -103,6 +120,57 @@ export class ReviewHandleComponent implements OnInit {
     }
   }
 
+  async handleResponse() {
+    if (this.review.response === '') {
+      this.responseDate = Timestamp.now();
+    }
+    console.log(this.reviewResponse)
+    await this.db
+      .collection('reviews')
+      .doc(this.category)
+      .collection('allReview')
+      .doc(this.reviewId)
+      .update({ response: this.reviewResponse, responseDate: this.responseDate })
+
+    // if everything was succes then open successfull dialog
+    const successfullText = this.responseEdit ? SuccessFullDialogText.RESPONSE_EDITED : SuccessFullDialogText.RESPONSE_CREATED
+    this.dialog.open(SuccessfullDialogComponent, {
+      data: {
+        text: successfullText,
+        needToGoPrevoiusPage: false
+      }
+    });
+  }
+
+  async removeResponse() {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: {
+        text: DeleteConfirmationText.RESPONSE_DELETE
+      }
+    });
+
+    // Wait for the dialog to close and get the user's confirmation
+    const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
+
+    if (confirmToDeleteAddress) {
+      // Update the Firestore document
+      this.db
+        .collection('reviews')
+        .doc(this.category)
+        .collection('allReview')
+        .doc(this.reviewId)
+        .update({ response: '' })
+
+      // if everything was succes then open successfull dialog
+      this.dialog.open(SuccessfullDialogComponent, {
+        data: {
+          text: SuccessFullDialogText.RESPONSE_DELETED,
+          needToGoPrevoiusPage: false
+        }
+      });
+    }
+  }
+
   async editReview() {
     this.review.rating = this.rating;
     this.review = {
@@ -117,8 +185,10 @@ export class ReviewHandleComponent implements OnInit {
       date: this.reviewDate,
       likes: this.reviewLikes,
       response: this.reviewResponse,
+      responseDate: this.responseDate,
       responseLikes: this.reviewResponseLikes,
-      checkedByAdmin: false
+      checkedByAdmin: false,
+      reviewEdited: true
     }
     try {
       await this.db.collection("reviews").doc(this.category).collection("allReview").doc(this.reviewId).update(this.review);
@@ -147,7 +217,6 @@ export class ReviewHandleComponent implements OnInit {
 
     if (confirmToDeleteAddress) {
       // Delete the review from firestore
-      console.log(this.review.id)
       const deleteAddressRef = this.db.collection("reviews").doc(this.category).collection("allReview").doc(this.reviewId);
       await deleteAddressRef.delete();
       this.dialog.open(SuccessfullDialogComponent, {
@@ -165,16 +234,22 @@ export class ReviewHandleComponent implements OnInit {
 
   // Set rating when user clicks a star
   setRating(value: number): void {
-    this.rating = value;
+    if (this.pageFrom !== ProductViewText.ADMIN_REVIEW) {
+      this.rating = value;
+    }
   }
 
   // Set hover rating when the user hovers over a star
   setHoverRating(value: number): void {
-    this.hoverRating = value;
+    if (this.pageFrom !== ProductViewText.ADMIN_REVIEW) {
+      this.hoverRating = value;
+    }
   }
 
   // Reset hover rating when the mouse leaves the stars
   resetHoverRating(): void {
-    this.hoverRating = 0;
+    if (this.pageFrom !== ProductViewText.ADMIN_REVIEW) {
+      this.hoverRating = 0;
+    }
   }
 }

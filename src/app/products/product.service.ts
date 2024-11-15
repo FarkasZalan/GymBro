@@ -27,6 +27,44 @@ export class ProductService {
         ).valueChanges();
     }
 
+    sortReviewsByOldest(reviews: ProductReeviews[]) {
+        return reviews.sort((a, b) => {
+            // Convert `a.date` and `b.date` to Date objects if they are Firebase Timestamps
+            const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
+            const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
+
+            // Sort reviews by date (oldest to newest)
+            return dateA.getTime() - dateB.getTime();
+        });
+    }
+
+    sortReviewsByNewest(reviews: ProductReeviews[]) {
+        return reviews.sort((a, b) => {
+            // Convert `a.date` and `b.date` to Date objects if they are Firebase Timestamps
+            const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
+            const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
+
+            // Sort reviews by date (newest to oldest)
+            return dateB.getTime() - dateA.getTime();
+        });
+    }
+
+    sortReviewsByRatingASC(reviews: ProductReeviews[]) {
+        // Sort default by defaul price desc
+        return reviews.sort((a, b) => {
+            // Sort in ascending order the ratings
+            return b.rating - a.rating;
+        });
+    }
+
+    sortReviewsByRatingDESC(reviews: ProductReeviews[]) {
+        // Sort default by defaul price desc
+        return reviews.sort((a, b) => {
+            // Sort in descending order the ratings
+            return a.rating - b.rating;
+        });
+    }
+
     // Fetch related blogs based on tags and language
     getRelatedBlogs(tags: string[], currentBlogId: string, language: string): Observable<Blog[]> {
         return this.db.collection<Blog>('blog', ref =>

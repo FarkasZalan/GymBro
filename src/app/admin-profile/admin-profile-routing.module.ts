@@ -118,7 +118,7 @@ export const routes: Routes = [
                 component: AdminProfileComponent
             },
             {
-                path: 'reviews/:productId',
+                path: ':productCategory/reviews/:productId',
                 component: HandleReviewsComponent
             },
         ]

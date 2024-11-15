@@ -515,6 +515,29 @@
 
                     <!-- Display Reviews -->
                     <div *ngIf="reviews && reviews.length > 0">
+                        <!-- Filter Section -->
+                        <div class="dropdown-container filter-review-section">
+                            <select class="form-control drop-down-list allow-selected-list-color" name="reviewFilter"
+                                #reviewFilter="ngModel" (change)="filterRating(selectedReviewFilter)"
+                                [(ngModel)]="selectedReviewFilter">
+                                <option *ngFor="let filters of availableReviewFilters" [value]="filters">
+                                    {{ filters | translate }}
+                                </option>
+                            </select>
+
+                            <!-- Arrow icon based on dropdown open/closed state -->
+                            <div class="arrow-icon">
+                                <svg *ngIf="isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="#0b8e92" width="40px" height="50px">
+                                    <path d="M7 14l5-5 5 5z" />
+                                </svg>
+                                <svg *ngIf="!isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                    <path d="M7 10l5 5 5-5z" />
+                                </svg>
+                            </div>
+                        </div>
+
                         <!-- user logged out error -->
                         <div *ngIf="userLoggedOutLikeError" class="error-container" #userLoggedOutLikeErrorMessage
                             [@zoomIn]>
@@ -530,7 +553,7 @@
 
                         <div class="col-12" *ngFor="let review of reviews">
                             <!-- Review Card -->
-                            <nb-card class="review-card mb-3">
+                            <nb-card class="review-card-user mb-3">
                                 <nb-card-body>
                                     <!-- Flex container for username and date -->
                                     <div class="review-header-top">
@@ -554,6 +577,11 @@
                                                     [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
                                             </ng-container>
                                         </div>
+
+                                        <!-- checked text if review already checked -->
+                                        <span *ngIf="review.checkedByAdmin" class="checked-review-text">
+                                            {{ 'review.checkedReview' | translate }}
+                                        </span>
                                     </div>
                                     <!-- Review Text -->
                                     <p class="review-text">{{ review.text }}</p>
@@ -578,8 +606,18 @@
                             </nb-card>
 
                             <!-- Response Card (if there is a response) -->
-                            <nb-card class="response-card mb-3" *ngIf="review.response">
+                            <nb-card class="response-card-user mb-3" *ngIf="review.response">
                                 <nb-card-body>
+
+                                    <div class="review-header-top">
+                                        <!-- review creator name -->
+                                        <span class="review-username"> {{ 'review.adminResponsedStart' | translate }} {{
+                                            review.userFirstName }} {{ 'review.adminResponsedEnd' | translate }}</span>
+
+                                        <!-- response date -->
+                                        <span class="review-date">{{ review.responseDate.toDate() | date: 'yyyy/MM/dd'
+                                            }}</span>
+                                    </div>
                                     <h5 class="response-title">Gym Bro</h5>
                                     <p class="response-text">{{ review.response }}</p>
 

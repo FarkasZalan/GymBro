@@ -8,7 +8,6 @@ import { Location } from '@angular/common';
 import { Vitamin } from '../../../admin-profile/product-management/product-models/vitamin.model';
 import { ProductService } from '../../product.service';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
-import { Timestamp } from 'firebase/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../../auth/auth.service';
 import { User } from '../../../user/user.model';
@@ -44,7 +43,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
         style({ transform: 'scale(0.8)', opacity: 0 }),
         animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
       ]),
-    ]),
+    ])
   ]
 })
 export class FoodSuplimentPageComponent implements OnInit {
@@ -89,6 +88,15 @@ export class FoodSuplimentPageComponent implements OnInit {
   userLoggedOutError: boolean = false;
   userLoggedOutLikeError: boolean = false;
   productId: string = '';
+
+  //filter
+  selectedReviewFilter: string = ProductViewText.ORDER_BY_LATEST;
+  availableReviewFilters: string[] = [
+    ProductViewText.ORDER_BY_OLDEST,
+    ProductViewText.ORDER_BY_LATEST,
+    ProductViewText.ORDER_BY_WORST_RATING,
+    ProductViewText.ORDER_BY_BEST_RATING
+  ];
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -360,9 +368,23 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.router.navigate(['product/loyaltyProgram']);
   }
 
+  filterRating() {
+    if (this.selectedReviewFilter === ProductViewText.ORDER_BY_BEST_RATING) {
+      this.reviews = this.productService.sortReviewsByRatingASC(this.reviews);
+    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_WORST_RATING) {
+      this.reviews = this.productService.sortReviewsByRatingDESC(this.reviews);
+    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_LATEST) {
+      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
+    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_OLDEST) {
+      this.reviews = this.productService.sortReviewsByOldest(this.reviews);
+    }
+  }
+
   getReviews() {
     this.productService.getReviewsForProduct(this.productId, ProductViewText.FOOD_SUPLIMENTS).subscribe(reviews => {
       this.reviews = reviews;
+      this.selectedReviewFilter = ProductViewText.ORDER_BY_LATEST;
+      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
       this.calculateAverageRating();
     })
   }
@@ -449,6 +471,7 @@ export class FoodSuplimentPageComponent implements OnInit {
           productId: this.foodSupliment.id,
           userFirstName: this.userReview.firstName,
           userLastName: this.userReview.lastName,
+          pageFrom: ProductViewText.FOOD_SUPLIMENTS,
           category: ProductViewText.FOOD_SUPLIMENTS
         }
       });
@@ -464,6 +487,7 @@ export class FoodSuplimentPageComponent implements OnInit {
         productId: this.foodSupliment.id,
         userFirstName: this.userReview.firstName,
         userLastName: this.userReview.lastName,
+        pageFrom: ProductViewText.FOOD_SUPLIMENTS,
         category: ProductViewText.FOOD_SUPLIMENTS
       }
     });

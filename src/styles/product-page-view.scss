@@ -400,6 +400,92 @@ input[type="number"] {
     border-radius: 20px;
 }
 
+// image
+.review-product-image {
+    height: 400px !important;
+    width: 400px !important;
+    object-fit: cover;
+    /* Ensures the image covers the entire area without distortion */
+    border-radius: 8px 8px 0 0;
+    /* Optional: rounded corners only at the top */
+    transition: filter 0.3s ease, transform 0.3s ease;
+    /* Smooth transition */
+    border-radius: 20px;
+}
+
+.go-to-product-page-btn {
+    width: -webkit-fill-available;
+}
+
+.new-review-badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 4px 8px;
+    background-color: rgba(255, 165, 0, 0.9);
+    /* Orange background */
+    color: #fff;
+    /* White text */
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+    animation: pulseEffect 1.5s infinite;
+    /* Optional pulse effect */
+}
+
+/* Checked review text */
+.checked-review-text {
+    color: #2ecc71;
+    /* Green color for checked */
+    font-weight: bold;
+}
+
+/* Pulsing effect for attention */
+@keyframes pulseEffect {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 165, 0, 0.6);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 15px rgba(255, 165, 0, 0.9);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(255, 165, 0, 0.6);
+    }
+}
+
+/* Highlight the card for new reviews */
+.new-review-card {
+    border: 2px solid rgba(255, 165, 0, 0.9);
+    /* Orange border */
+}
+
+/* Remove animation once checked */
+.review-card:not(.new-review-card) {
+    animation: none;
+}
+
+/* Animation for when a review is marked as checked */
+.checked-animation {
+    animation: fadeOutHighlight 1s ease-out;
+}
+
+/* Fade-out animation for checked reviews */
+@keyframes fadeOutHighlight {
+    0% {
+        background-color: rgba(255, 165, 0, 0.3);
+        transform: scale(1.05);
+    }
+
+    100% {
+        background-color: transparent;
+        transform: scale(1);
+    }
+}
+
 .image-container {
     width: 100%;
     /* Ensure the image container takes the full width of the card */
@@ -928,10 +1014,87 @@ input[type="number"] {
     margin-bottom: 3em;
 }
 
+/* Review Card user page Styles */
+.review-card-user {
+    position: relative;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    overflow: hidden;
+}
+
+/* Review Card Styles */
 .review-card {
-    padding: 0.5em !important;
-    border-radius: 8px;
-    background-color: #f8f9fa;
+    position: relative;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+        transform: scale(1.02);
+    }
+
+    &:active {
+        cursor: pointer;
+        transform: scale(0.96);
+    }
+}
+
+/* Overlay Buttons for review card */
+.button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    gap: 10px;
+    flex-direction: row;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show overlay on card hover */
+.review-card:hover .button-overlay {
+    display: flex;
+    opacity: 1;
+}
+
+/* Overlay container for buttons */
+.button-overlay {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(99, 97, 97, 0.24);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.button-overlay button {
+    width: 80%;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+
+.filter-review-section {
+    width: 50%;
+    margin-bottom: 30px;
 }
 
 /* Container for username and date */
@@ -1001,20 +1164,99 @@ input[type="number"] {
     color: #8a8888;
 }
 
-.response-card {
-    padding: 0.5em !important;
+/* Response card user page styling */
+.response-card-user {
+    padding: 0em !important;
     margin-left: 3em;
     border-radius: 8px;
     background-color: #eaf4f4;
     margin-top: -0.3em;
     margin-bottom: 2em !important;
-    /* Adjust spacing to bring response closer to review if needed */
+    position: relative;
+    /* Needed for overlay positioning */
     border-left: 4px solid #0b8e92;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+}
+
+/* Response card styling */
+.response-card {
+    padding: 0em !important;
+    margin-left: 3em;
+    border-radius: 8px;
+    background-color: #eaf4f4;
+    margin-top: -0.3em;
+    margin-bottom: 2em !important;
+    position: relative;
+    /* Needed for overlay positioning */
+    border-left: 4px solid #0b8e92;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.96) !important;
+    }
+}
+
+/* Overlay container */
+.response-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(194, 193, 193, 0.247);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+/* Show overlay on hover */
+.response-card:hover .response-overlay {
+    opacity: 1;
+}
+
+/* Overlay button styling */
+.overlay-btn {
+    color: white;
+    background-color: #0b8e92;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Different styles for delete button */
+.delete-btn {
+    background-color: #c0392b;
+}
+
+.overlay-btn:hover {
+    background-color: #097377;
+    /* Darker shade for hover effect */
+}
+
+.delete-btn:hover {
+    background-color: #922b21;
+    /* Darker shade for delete hover effect */
+}
+
+/* Smooth hover scaling effect for the card */
+.response-card:hover {
+    transform: scale(1.02);
 }
 
 .response-title {
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.3em;
     margin-bottom: 0.2em;
     color: #0b8e92;
 }
