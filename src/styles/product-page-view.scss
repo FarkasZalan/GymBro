@@ -434,7 +434,9 @@ input[type="number"] {
 
 /* Checked review text */
 .checked-review-text {
-    color: #2ecc71;
+    color: #fff;
+    padding: 4px 8px;
+    background-color: #0b8e92;
     /* Green color for checked */
     font-weight: bold;
 }
