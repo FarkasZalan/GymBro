@@ -7,6 +7,7 @@ export interface Accessories {
     productName: string;
     productCategory: string;
     description: string;
+    smallDescription: string;
 
     // shakers or weight lifting
     equipmentType: string;

@@ -29,23 +29,10 @@
                     </div>
                 </div>
 
-                <!-- Description Section -->
-                <div class="row">
-                    <!-- Description -->
-                    <div class="col-md-12 form-group">
-                        <label for="description" class="label">{{ 'products.description' | translate }}</label>
-                        <textarea class="form-control" [(ngModel)]="accessoryObject.description" name="description"
-                            required placeholder="{{ 'products.enterProductDescription' | translate }}"
-                            #description="ngModel"></textarea>
-                        <span class="help-block" *ngIf="description.touched && !description.valid" [@zoomIn]>{{
-                            'register.fieldRequired' | translate }}</span>
-                    </div>
-                </div>
-
                 <!-- Accessory type Section -->
                 <div class="row">
                     <!-- Clothing type Section (Dropdown list) -->
-                    <div class="col-md-12 form-group">
+                    <div class="col-md-6 form-group">
                         <label for="accessoriesType" class="label">{{ 'products.accessories.accessoriesType' | translate
                             }}</label>
                         <select class="form-control drop-down-list allow-selected-list-color" name="accessoriesType"
@@ -64,6 +51,41 @@
                         </select>
                         <span class="help-block" *ngIf="accessoriesType.touched && !accessoriesType.valid" [@zoomIn]>{{
                             'register.fieldRequired' | translate }}</span>
+                    </div>
+
+                    <!-- Small description -->
+                    <div class="col-md-6 form-group">
+                        <label for="smallDescription" class="label">{{ 'products.smallDescription' | translate
+                            }}</label>
+                        <textarea class="form-control" [(ngModel)]="accessoryObject.smallDescription"
+                            name="smallDescription" required
+                            placeholder="{{ 'products.enterProductSmallDescription' | translate }}"
+                            #smallDescription="ngModel" maxlength="150"
+                            (keyup)="smallDescriptionLength = accessoryObject.smallDescription.length"></textarea>
+
+                        <!-- Character count display with conditional red color when max limit is reached -->
+                        <small
+                            [ngClass]="{'text-danger': smallDescriptionLength >= 150 || smallDescriptionLength === 0, 'text-success': smallDescriptionLength < 150 && smallDescriptionLength > 0}">
+                            {{ smallDescriptionLength || 0 }}/150
+                        </small>
+
+                        <!-- error block -->
+                        <span class="help-block" *ngIf="smallDescription.touched && !smallDescription.valid"
+                            [@zoomIn]>{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="description" class="label">{{ 'products.description' | translate }}</label>
+                        <div class="NgxEditor__Wrapper">
+                            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                            <ngx-editor [editor]="editor" [(ngModel)]="description" name="description"
+                                [disabled]="false"
+                                placeholder="{{ 'products.enterProductDescription' | translate }}"></ngx-editor>
+                        </div>
                     </div>
                 </div>
 

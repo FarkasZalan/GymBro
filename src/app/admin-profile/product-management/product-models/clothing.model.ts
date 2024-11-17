@@ -6,6 +6,7 @@ export interface Clothes {
     id?: string;
     productName: string;
     productGender: string;
+    smallDescription: string;
     description: string;
 
     // type and material

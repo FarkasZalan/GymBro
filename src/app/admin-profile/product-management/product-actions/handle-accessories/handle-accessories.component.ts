@@ -19,6 +19,7 @@ import { Location } from '@angular/common';
 import { ProductColor } from '../../product-models/product-color.model';
 import { Accessories } from '../../product-models/accessories.model';
 import { ProductReeviews } from '../../product-models/product-reviews.model';
+import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-handle-accessories',
@@ -88,15 +89,38 @@ export class HandleAccessoriesComponent {
   isUnifiedImage: boolean = false;
   unifiedImageUrl: string = null;
 
+  // text editor
+  editor: Editor;
+  toolbar: Toolbar;
+
+  // small description length
+  smallDescriptionLength: number = 0;
+
+  description: string = "";
+
 
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
+    this.editor = new Editor();
+
+    // Set up toolbar with command keys
+    this.toolbar = [
+      ['bold', "italic", "underline", "strike"],
+      ["blockquote", "horizontal_rule"],
+      ["ordered_list", "bullet_list"],
+      [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+      ["link"],
+      ["align_left", "align_center", "align_right", "align_justify", "indent", "outdent"],
+      ["undo", "redo"]
+    ];
+
     this.accessoryObject = {
       id: "",
       productName: "",
       productCategory: this.selectedCategory,
       description: "",
+      smallDescription: "",
       useUnifiedImage: this.isUnifiedImage,
 
       equipmentType: "",
@@ -121,6 +145,9 @@ export class HandleAccessoriesComponent {
 
           // price, color, size
           this.productPrices = this.accessoryObject.prices;
+
+          this.smallDescriptionLength = this.accessoryObject.smallDescription.length;
+          this.description = this.accessoryObject.description;
 
           this.isUnifiedImage = this.accessoryObject.useUnifiedImage;
           if (this.isUnifiedImage) {
@@ -461,6 +488,7 @@ export class HandleAccessoriesComponent {
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName),
       productCategory: this.selectedCategory,
       description: this.createAccessoriesForm.value.description,
+      smallDescription: this.createAccessoriesForm.value.smallDescription,
       useUnifiedImage: this.isUnifiedImage,
 
       equipmentType: this.selectedAccessoryType,
@@ -521,6 +549,7 @@ export class HandleAccessoriesComponent {
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName),
       productCategory: this.selectedCategory,
       description: this.createAccessoriesForm.value.description,
+      smallDescription: this.createAccessoriesForm.value.smallDescription,
 
       useUnifiedImage: this.isUnifiedImage,
       equipmentType: this.selectedAccessoryType,

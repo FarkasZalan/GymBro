@@ -19,6 +19,7 @@ import { AdminService } from '../../../admin.service';
 import { AddColorDialogComponent } from '../add-color-dialog/add-color-dialog.component';
 import { ProductColor } from '../../product-models/product-color.model';
 import { ProductReeviews } from '../../product-models/product-reviews.model';
+import { Editor, Toolbar } from 'ngx-editor';
 
 @Component({
   selector: 'app-handle-clothes',
@@ -99,14 +100,38 @@ export class HandleClothesComponent {
   isProductEdit: boolean = false;
   clothingId: string = '';
 
+  // text editor
+  editor: Editor;
+  toolbar: Toolbar;
+
+  // small description length
+  smallDescriptionLength: number = 0;
+
+  description: string = "";
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
 
   ngOnInit(): void {
+    this.editor = new Editor();
+
+    // Set up toolbar with command keys
+    this.toolbar = [
+      ['bold', "italic", "underline", "strike"],
+      ["blockquote", "horizontal_rule"],
+      ["ordered_list", "bullet_list"],
+      [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+      ["link"],
+      ["align_left", "align_center", "align_right", "align_justify", "indent", "outdent"],
+      ["undo", "redo"]
+    ];
+
+
     this.clothingObject = {
       id: "",
       productName: "",
       productGender: "",
       description: "",
+      smallDescription: "",
 
       clothingType: "",
       material: "",
@@ -132,6 +157,9 @@ export class HandleClothesComponent {
 
           // price, color, size
           this.productPrices = this.clothingObject.prices;
+
+          this.smallDescriptionLength = this.clothingObject.smallDescription.length;
+          this.description = this.clothingObject.description;
 
           // update the clothing colors array
           this.updateClothingColorsFromPrices();
@@ -417,6 +445,7 @@ export class HandleClothesComponent {
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
       productGender: this.selectedGender,
       description: this.createClothesForm.value.description,
+      smallDescription: this.createClothesForm.value.smallDescription,
 
       clothingType: this.selectedClothingType,
       material: this.selectedMaterial,
@@ -477,6 +506,7 @@ export class HandleClothesComponent {
       productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
       productGender: this.selectedGender,
       description: this.createClothesForm.value.description,
+      smallDescription: this.createClothesForm.value.smallDescription,
 
       clothingType: this.selectedClothingType,
       material: this.selectedMaterial,

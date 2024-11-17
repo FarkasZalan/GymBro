@@ -70,7 +70,15 @@ export class AddPriceDialogComponent implements OnInit {
   unifiedImageUrl: string = '';
 
   // For clothing and accessories prices
-  availableProductSizes: string[] = [];
+  availableProductSizes: string[] = [
+    ProductViewText.XS,
+    ProductViewText.S,
+    ProductViewText.M,
+    ProductViewText.L,
+    ProductViewText.XL,
+    ProductViewText.XXL,
+    ProductViewText.XXXL,
+  ];
   selectedSize: string = '';
 
   availableProductColors: ProductColor[] = [];

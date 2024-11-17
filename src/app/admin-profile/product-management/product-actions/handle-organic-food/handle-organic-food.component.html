@@ -57,7 +57,7 @@
                         <textarea class="form-control" [(ngModel)]="organicFoodObject.smallDescription"
                             name="smallDescription" required
                             placeholder="{{ 'products.enterProductSmallDescription' | translate }}"
-                            #smallDescription="ngModel"
+                            #smallDescription="ngModel" maxlength="150"
                             (keyup)="smallDescriptionLength = organicFoodObject.smallDescription.length"></textarea>
 
                         <!-- Character count display with conditional red color when max limit is reached -->
