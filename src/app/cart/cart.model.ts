@@ -10,5 +10,4 @@ export interface CartItem {
     flavor?: string;
     maxStockError?: boolean;
     maxStock?: number;
-    minStockError?: boolean;
 }

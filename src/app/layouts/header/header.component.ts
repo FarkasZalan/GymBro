@@ -15,7 +15,9 @@ import { ProductViewText } from '../../admin-profile/product-management/product-
 import { FoodSupliment } from '../../admin-profile/product-management/product-models/food-supliment.model';
 import { CartService } from '../../cart/cart.service';
 import { CartNotificationService } from '../../cart/cart-notification.service';
-import { trigger, style, animate, transition } from '@angular/animations';
+import { trigger, style, animate, transition, keyframes } from '@angular/animations';
+import { ProductReeviews } from '../../admin-profile/product-management/product-models/product-reviews.model';
+import { ProductService } from '../../products/product.service';
 
 @Component({
   selector: 'app-header',
@@ -53,6 +55,8 @@ export class HeaderComponent implements OnInit {
   searchExpanded: boolean = false;
   searcForProductText: string = '';
   searchResults: Product[] = []; // Store search results
+  // Add property to store reviews
+  productReviews: Map<string, ProductReeviews[]> = new Map();
 
   // Observable to track the total number of items in the cart
   cartCount$ = this.cartService.cartItems$.pipe(
@@ -71,6 +75,7 @@ export class HeaderComponent implements OnInit {
     private translate: TranslateService,
     private appComponent: AppComponent,
     private cartService: CartService,
+    private productService: ProductService,
     private cartNotificationService: CartNotificationService
   ) { }
 
@@ -173,27 +178,33 @@ export class HeaderComponent implements OnInit {
       // Iterate through each category and fetch all products once
       categories.forEach(category => {
         this.db.collection('products').doc(category).collection('allProduct').valueChanges().subscribe((results: Product[]) => {
-
-          // Use front-end filtering for substring match on name
           const filteredResults = results.filter(product =>
             product.productName.toLowerCase().includes(searchText)
           );
 
-          // Add filtered results to searchResults array with category tracking
+          // Add filtered results and fetch reviews for each product
+          filteredResults.forEach(product => {
+            this.productService.getReviewsForProduct(product.id, category)
+              .subscribe(reviews => {
+                this.productReviews.set(product.id, reviews);
+              });
+          });
+
           this.searchResults.push(...filteredResults.map(product => ({
             ...product,
-            category // Track product category if needed
+            category
           })));
         });
       });
     } else {
       this.searchResults = []; // Clear results if search is empty
+      this.productReviews.clear();
     }
   }
 
   closeSearch() {
     this.searchExpanded = false;
-    this.searcForProductText
+    this.searcForProductText = '';
     this.searchResults = []; // Clear results on close
   }
 
@@ -202,7 +213,23 @@ export class HeaderComponent implements OnInit {
     return foodSupliment.prices.find(price => price.setAsDefaultPrice);
   }
 
+  // Method to get the reviews for the product
+  getProductReviews(productId: string): ProductReeviews[] {
+    return this.productReviews.get(productId) || [];
+  }
+
+  // Method to get the average rating for the product
+  getAverageRating(productId: string): number {
+    const reviews = this.getProductReviews(productId);
+    if (reviews.length === 0) return 0;
+
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    const average = sum / reviews.length;
+    return Math.round(average * 100) / 100;
+  }
+
   onProductSelected(selectedProduct: Product) {
+    this.closeSearch();
     this.router.navigate(['product/' + selectedProduct.category + '/' + selectedProduct.id])
   }
 

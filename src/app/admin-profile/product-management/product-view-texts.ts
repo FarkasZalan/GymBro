@@ -91,6 +91,8 @@ export enum ProductViewText {
     PCS = "products.pcs",
     LBS = "products.lbs",
     ML = "ml",
+    LITER = "L",
+    KG = "Kg",
 
     // Gender
     GENDER = "Gender",

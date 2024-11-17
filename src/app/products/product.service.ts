@@ -7,7 +7,6 @@ import { Clothes } from "../admin-profile/product-management/product-models/clot
 import { FoodSupliment } from "../admin-profile/product-management/product-models/food-supliment.model";
 import { OrganicFood } from "../admin-profile/product-management/product-models/organic-food";
 import { Observable } from "rxjs";
-import { ProductViewText } from "../admin-profile/product-management/product-view-texts";
 import { ProductReeviews } from "../admin-profile/product-management/product-models/product-reviews.model";
 
 @Injectable({

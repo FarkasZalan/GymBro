@@ -7,6 +7,7 @@ import { ProductService } from '../../product.service';
 import { Filter } from '../../../filter-page/filter.model';
 import { FilterPageComponent } from '../../../filter-page/filter-page.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
 
 @Component({
   selector: 'app-food-supliments-list',
@@ -26,6 +27,9 @@ export class FoodSuplimentsListComponent implements OnInit {
   foodSupliments: FoodSupliment[] = [];
   originalFoodSuplimentList: FoodSupliment[] = [];
   productViewText = ProductViewText;
+
+  // Add property to store reviews
+  productReviews: Map<string, ProductReeviews[]> = new Map();
 
   // if there are no products in the collection
   emptyCollection: boolean = false;
@@ -58,6 +62,14 @@ export class FoodSuplimentsListComponent implements OnInit {
       this.foodSupliments = this.productService.sortFoodSuplimentsByPriceASC(this.foodSupliments);
       this.originalFoodSuplimentList = this.productService.sortFoodSuplimentsByPriceASC(this.originalFoodSuplimentList);
 
+      // Get the reviews for the products
+      this.foodSupliments.forEach((product) => {
+        this.productService.getReviewsForProduct(product.id, ProductViewText.FOOD_SUPLIMENTS)
+          .subscribe(reviews => {
+            this.productReviews.set(product.id, reviews);
+          });
+      });
+
       // if the collection doesn't have any products
       if (this.foodSupliments.length === 0) {
         this.emptyCollection = true;
@@ -73,6 +85,21 @@ export class FoodSuplimentsListComponent implements OnInit {
   // navigateto the product page
   goToProductPage(productId: string) {
     this.router.navigate(['product/' + ProductViewText.FOOD_SUPLIMENTS + '/' + productId])
+  }
+
+  // Method to get the reviews for the product
+  getProductReviews(productId: string): ProductReeviews[] {
+    return this.productReviews.get(productId) || [];
+  }
+
+  // Method to get the average rating for the product
+  getAverageRating(productId: string): number {
+    const reviews = this.getProductReviews(productId);
+    if (reviews.length === 0) return 0;
+
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    const average = sum / reviews.length;
+    return Math.round(average * 100) / 100;
   }
 
   openFilterMenu() {
@@ -103,6 +130,10 @@ export class FoodSuplimentsListComponent implements OnInit {
             this.foodSupliments = this.productService.sortFoodSuplimentsByNameASC(this.foodSupliments);
           } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
             this.foodSupliments = this.productService.sortFoodSuplimentsByNameDESC(this.foodSupliments);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
+            this.foodSupliments.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
+            this.foodSupliments.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
           }
         }
       }

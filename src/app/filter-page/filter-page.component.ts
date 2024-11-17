@@ -219,6 +219,8 @@ export class FilterPageComponent {
 
       // order by
       this.availableOrders = [
+        ProductViewText.ORDER_BY_BEST_RATING,
+        ProductViewText.ORDER_BY_WORST_RATING,
         ProductViewText.ORDER_BY_PRICE_CHEAPEST,
         ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE,
         ProductViewText.ORDER_BY_NAME_ASC,
@@ -235,6 +237,8 @@ export class FilterPageComponent {
 
       // order by
       this.availableOrders = [
+        ProductViewText.ORDER_BY_BEST_RATING,
+        ProductViewText.ORDER_BY_WORST_RATING,
         ProductViewText.ORDER_BY_PRICE_CHEAPEST,
         ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE,
         ProductViewText.ORDER_BY_NAME_ASC,
@@ -249,6 +253,8 @@ export class FilterPageComponent {
 
       // order by
       this.availableOrders = [
+        ProductViewText.ORDER_BY_BEST_RATING,
+        ProductViewText.ORDER_BY_WORST_RATING,
         ProductViewText.ORDER_BY_PRICE_CHEAPEST,
         ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE,
         ProductViewText.ORDER_BY_NAME_ASC,
@@ -290,6 +296,8 @@ export class FilterPageComponent {
 
       // order by
       this.availableOrders = [
+        ProductViewText.ORDER_BY_BEST_RATING,
+        ProductViewText.ORDER_BY_WORST_RATING,
         ProductViewText.ORDER_BY_PRICE_CHEAPEST,
         ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE,
         ProductViewText.ORDER_BY_NAME_ASC,
@@ -316,9 +324,6 @@ export class FilterPageComponent {
 
     // Allergens
     this.availableAllergens.sort((a, b) => a.localeCompare(b));
-
-    // Order by
-    this.availableOrders.sort((a, b) => a.localeCompare(b));
 
     // Language
     this.availableLanguage.sort((a, b) => a.localeCompare(b));

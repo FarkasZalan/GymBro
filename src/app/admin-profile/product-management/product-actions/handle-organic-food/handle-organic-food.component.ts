@@ -222,6 +222,7 @@ export class HandleOrganicFoodComponent {
           this.nutritionalTable = this.organicFoodObject.nutritionalTable;
 
           this.smallDescriptionLength = this.organicFoodObject.smallDescription.length;
+          this.description = this.organicFoodObject.description;
         }
       });
     });

@@ -135,7 +135,7 @@
 
                     <h4 class="unit-price" style="font-weight: 600;">{{ 'products.unitPrice' | translate }}
                         {{ unitPrice | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate
-                        }}/{{ foodSupliment.dosageUnit | translate }}</h4>
+                        }}/{{ unitPriceUnit | translate }}</h4>
 
                     <!-- Loyalty Program Points -->
                     <div class="loyalty-points">
@@ -190,7 +190,7 @@
                         <div class="col-md-4 form-group">
                             <div class="input-container">
                                 <input type="number" min="1" class="form-control" name="dailyDosage" required
-                                    [(ngModel)]="cartQuantity">
+                                    [(ngModel)]="cartQuantity" (input)="checkStock()">
                                 <span class="unit-suffix">{{ productViewText.PCS | translate }}</span>
                             </div>
                         </div>
@@ -205,7 +205,8 @@
                     <!-- Add to Cart Button (only for users) -->
                     <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn" class="add-to-cart text-center">
                         <button class="btn btn-primary add-to-cart-btn"
-                            [disabled]="cartQuantity<=0 || !productIsInStock" (click)="addToCart()">{{
+                            [disabled]="cartQuantity<=0 || !productIsInStock || errorMessageStock"
+                            (click)="addToCart()">{{
                             'products.addToCart' |
                             translate
                             }}</button>

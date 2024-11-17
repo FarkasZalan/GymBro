@@ -44,7 +44,7 @@
 
                     <div class="item-details">
                         <h3>{{item.productName}}</h3>
-                        <!-- Optional product attributes -->
+                        <!-- product attributes -->
                         <p *ngIf="item.size">{{ 'cart.size' | translate }}: {{item.size | translate}}</p>
                         <p *ngIf="item.color">{{ 'cart.color' | translate }}: {{item.color | translate}}</p>
                         <p *ngIf="item.flavor">{{ 'cart.flavor' | translate }}: {{item.flavor | translate}}</p>
@@ -52,21 +52,17 @@
 
                     <!-- Quantity input with unit display -->
                     <div class="quantity-controls" (click)="$event.stopPropagation()">
-                        <label>{{ 'cart.quantity' | translate }}:</label>
-                        <div class="input-with-unit">
-                            <input type="number" [value]="item.quantity" [(ngModel)]="item.quantity"
-                                (input)="updateQuantity(i, $event)" class="form-control">
-                            <span class="unit">{{ 'products.pcs' | translate }}</span>
-                        </div>
+                        <button class="quantity-btn minus-btn delete-btn" (click)="decrementQuantity(item, i)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" [value]="item.quantity" readonly class="quantity-input">
+                        <button class="quantity-btn plus-btn delete-btn" (click)="incrementQuantity(item, i)">
+                            <i class="fas fa-plus"></i>
+                        </button>
 
                         <!-- Error message for max stock -->
                         <span *ngIf="item.maxStockError" class="stock-error-label">
                             max: {{ item.maxStock }} {{ 'products.pcs' | translate }}
-                        </span>
-
-                        <!-- Error message for min stock -->
-                        <span *ngIf="item.minStockError" class="stock-error-label">
-                            min: 1 {{ 'products.pcs' | translate }}
                         </span>
                     </div>
 

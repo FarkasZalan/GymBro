@@ -37,7 +37,7 @@ import { CurrencyPipe, Location } from '@angular/common';
         ])
     ]
 })
-export class CartComponent implements OnInit {
+export class CartComponent {
     cartItems$: Observable<CartItem[]>;
     // Calculate total price from all items in cart
     cartTotal$: Observable<number>;
@@ -52,10 +52,7 @@ export class CartComponent implements OnInit {
         private currencyPipe: CurrencyPipe
     ) {
         this.cartItems$ = this.cartService.cartItems$;
-        this.cartTotal$ = this.cartItems$.pipe(
-            map(items => items.reduce((total, item) =>
-                total + (item.price * item.quantity), 0))
-        );
+        this.cartTotal$ = this.getTotalPrice();
 
         // Check and sync error states
         this.cartItems$.subscribe(items => {
@@ -64,54 +61,15 @@ export class CartComponent implements OnInit {
 
             // Update individual item error states
             items.forEach(item => {
-                item.minStockError = item.quantity <= 0;
                 item.maxStockError = item.quantity > item.maxStock;
             });
         });
     }
 
-    ngOnInit(): void { }
-
-    // Update quantity and validate it's greater than 0
-    async updateQuantity(index: number, event: any) {
-        const quantity = parseInt(event.target.value, 10);
-        const items = await this.cartItems$.pipe(take(1)).toPromise();
-        const item = items[index];
-        if (quantity > 0) {
-            item.minStockError = false;
-            this.errorMinStock = false;
-
-            // Check stock availability
-            const stockAvailable = item.maxStock;
-
-            if (stockAvailable < quantity) {
-                // Update item with error state
-                item.maxStockError = true;
-            } else {
-                // Update quantity if stock is available
-                this.cartService.updateQuantity(index, quantity);
-                item.maxStockError = false;
-                item.minStockError = false;
-            }
-        } else {
-            item.minStockError = true;
-            item.maxStockError = false;
-        }
-
-
-        // Check if there are any items with error messages
-        this.cartItems$.subscribe(items => {
-            if (items.some(item => item.minStockError)) {
-                this.errorMinStock = true;
-            } else {
-                this.errorMinStock = false;
-            }
-            if (items.some(item => item.maxStockError)) {
-                this.errorMaxStock = true;
-            } else {
-                this.errorMaxStock = false;
-            }
-        });
+    getTotalPrice() {
+        return this.cartItems$.pipe(
+            map(items => items.reduce((total, item) => total + (item.price * item.quantity), 0))
+        );
     }
 
     // Remove item from cart
@@ -141,5 +99,38 @@ export class CartComponent implements OnInit {
     // Navigate to product page
     navigateToProduct(item: CartItem) {
         this.router.navigate(['/product', item.category, item.productId]);
+    }
+
+    // Increment quantity of item in the cart
+    incrementQuantity(item: CartItem, index: number) {
+        item.quantity++;
+        console.log(item.quantity, item.maxStock);
+        if (item.quantity >= item.maxStock) {
+            item.maxStockError = true;
+        } else {
+            item.maxStockError = false;
+        }
+
+        this.cartTotal$ = this.getTotalPrice();
+        this.cartService.updateQuantity(index, item.quantity);
+    }
+
+    // Decrement quantity of item in the cart
+    decrementQuantity(item: CartItem, index: number) {
+        if (item.quantity > 1) {
+            item.quantity--;
+            if (item.quantity < 1) {
+                item.quantity = 1;
+            }
+        }
+
+        if (item.quantity > item.maxStock) {
+            item.maxStockError = true;
+        } else {
+            item.maxStockError = false;
+        }
+
+        this.cartTotal$ = this.getTotalPrice();
+        this.cartService.updateQuantity(index, item.quantity);
     }
 } 

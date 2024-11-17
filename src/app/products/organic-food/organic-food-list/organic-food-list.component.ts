@@ -7,6 +7,7 @@ import { Filter } from '../../../filter-page/filter.model';
 import { ProductService } from '../../product.service';
 import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
 
 @Component({
   selector: 'app-organic-food-list',
@@ -26,6 +27,9 @@ export class OrganicFoodListComponent implements OnInit {
   organicFoods: OrganicFood[] = [];
   originalOrganicFood: OrganicFood[] = [];
   productViewText = ProductViewText;
+
+  // Add property to store reviews
+  productReviews: Map<string, ProductReeviews[]> = new Map();
 
   // if there are no products in the collection
   emptyCollection: boolean = false;
@@ -58,6 +62,14 @@ export class OrganicFoodListComponent implements OnInit {
       this.organicFoods = this.productService.sortOrganicProductsPriceByASC(this.organicFoods);
       this.originalOrganicFood = this.productService.sortOrganicProductsPriceByASC(this.originalOrganicFood);
 
+      // Get the reviews for the products
+      this.organicFoods.forEach((product) => {
+        this.productService.getReviewsForProduct(product.id, ProductViewText.ORGANIC_FOOD)
+          .subscribe(reviews => {
+            this.productReviews.set(product.id, reviews);
+          });
+      });
+
       // if the collection doesn't have any products
       if (this.organicFoods.length === 0) {
         this.emptyCollection = true;
@@ -68,6 +80,21 @@ export class OrganicFoodListComponent implements OnInit {
   // Method to get the default price for a the products
   getDefaultPrice(foodSupliment: OrganicFood) {
     return foodSupliment.prices.find(price => price.setAsDefaultPrice);
+  }
+
+  // Method to get the reviews for the product
+  getProductReviews(productId: string): ProductReeviews[] {
+    return this.productReviews.get(productId) || [];
+  }
+
+  // Method to get the average rating for the product
+  getAverageRating(productId: string): number {
+    const reviews = this.getProductReviews(productId);
+    if (reviews.length === 0) return 0;
+
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    const average = sum / reviews.length;
+    return Math.round(average * 100) / 100;
   }
 
   // navigateto the product page
@@ -103,6 +130,10 @@ export class OrganicFoodListComponent implements OnInit {
             this.organicFoods = this.productService.sortOrganicProductsByNameASC(this.organicFoods);
           } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
             this.organicFoods = this.productService.sortOrganicProductsByNameDESC(this.organicFoods);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
+            this.organicFoods.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
+            this.organicFoods.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
           }
         }
       }

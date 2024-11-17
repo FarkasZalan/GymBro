@@ -1,12 +1,20 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CurrencyPipe, Location } from '@angular/common';
 import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food';
 import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DocumentHandlerService } from '../../../document.handler.service';
 import { ProductService } from '../../product.service';
-import { ProductPrice } from '../../../admin-profile/product-management/product-models/product-price.model';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
+import { Vitamin } from '../../../admin-profile/product-management/product-models/vitamin.model';
+import { AuthService } from '../../../auth/auth.service';
+import { CartService } from '../../../cart/cart.service';
+import { User } from '../../../user/user.model';
+import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 
 @Component({
   selector: 'app-organic-food-page',
@@ -36,10 +44,12 @@ import { ProductPrice } from '../../../admin-profile/product-management/product-
         style({ transform: 'scale(0.8)', opacity: 0 }),
         animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
       ]),
-    ]),
+    ])
   ]
 })
 export class OrganicFoodPageComponent implements OnInit {
+  @ViewChild('userLoggedOutLikeErrorMessage') errorMessage: ElementRef;
+  @ViewChild('reviewsSection') reviewsSection: ElementRef;
   organicFood: OrganicFood;
   selectedQuantityInProduct: number = 0;
   productViewText = ProductViewText;
@@ -47,10 +57,11 @@ export class OrganicFoodPageComponent implements OnInit {
   selectedPrice: number = 0;
   selectedImage: string = '';
 
-  // Flavor and Allergens
+  // Flavors, viatmins and Allergens
   availableFlavors: string[] = [];
   selectedFlavor: string = '';
   allergens: string[] = [];
+  vitaminList: Vitamin[] = [];
 
   isCollapsedDescription: boolean = true;
   isCollapsedIngredients: boolean = true;
@@ -60,7 +71,9 @@ export class OrganicFoodPageComponent implements OnInit {
 
   relatedProducts: OrganicFood[] = [];
 
+  // cart, unit price and loyality program
   unitPrice: number = 0;
+  unitPriceUnit: string = '';
   cartQuantity: number = 1;
   loyaltyPoints: number = 0;
 
@@ -69,7 +82,38 @@ export class OrganicFoodPageComponent implements OnInit {
 
   errorMessageStock: boolean = false;
 
-  constructor(private router: Router, private route: ActivatedRoute, private documentHandler: DocumentHandlerService, private changeDetector: ChangeDetectorRef, private location: Location, private productService: ProductService) { }
+  // reviews
+  averageRating: number = 0;
+  reviews: ProductReeviews[] = [];
+  userLoggedIn: boolean = false;
+  userReview: User;
+  currentUserId: string = '';
+  userLoggedOutError: boolean = false;
+  userLoggedOutLikeError: boolean = false;
+  productId: string = '';
+  isProductInCart: boolean = false;
+
+  //filter reviews
+  selectedReviewFilter: string = ProductViewText.ORDER_BY_LATEST;
+  availableReviewFilters: string[] = [
+    ProductViewText.ORDER_BY_OLDEST,
+    ProductViewText.ORDER_BY_LATEST,
+    ProductViewText.ORDER_BY_WORST_RATING,
+    ProductViewText.ORDER_BY_BEST_RATING
+  ];
+
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private documentHandler: DocumentHandlerService,
+    private changeDetector: ChangeDetectorRef,
+    private location: Location,
+    private productService: ProductService,
+    private auth: AngularFireAuth,
+    private db: AngularFirestore,
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private cartService: CartService,
+    private currencyPipe: CurrencyPipe) { }
 
   ngOnInit(): void {
     this.organicFood = {
@@ -90,8 +134,24 @@ export class OrganicFoodPageComponent implements OnInit {
       allergens: [],
 
       prices: [],
-      useUnifiedImage: false
+      useUnifiedImage: false,
     }
+
+    // check if user logged in for reviews
+    this.auth.authState.subscribe((userAuth) => {
+      if (userAuth) {
+        this.userLoggedIn = true;
+        this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
+          this.userReview = currentUser;
+          this.currentUserId = currentUser.id;
+          if (this.userReview === undefined) {
+            this.userLoggedIn = false; // User is logged out
+          }
+        });
+      } else {
+        this.userLoggedIn = false; // User is logged out
+      }
+    });
 
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -99,17 +159,15 @@ export class OrganicFoodPageComponent implements OnInit {
         // make a copy from the object
         this.organicFood = { ...organicFood };
         this.allergens = organicFood.allergens;
-        this.availableFlavors = organicFood.flavors;
-        this.selectedFlavor = this.availableFlavors[0];
+        this.productId = organicFood.id;
 
         this.selectedQuantityInProduct = this.getDefaultPrice(organicFood).quantityInProduct;
         this.selectedPrice = this.getDefaultPrice(organicFood).productPrice;
         this.loyaltyPoints = Math.round(this.selectedPrice / 100);
         this.selectedImage = this.getDefaultPrice(organicFood).productImage;
+        this.getReviews();
 
-        if (organicFood.productCategory === ProductViewText.DRINKS || organicFood.productCategory === ProductViewText.HEALTHY_SNACKS) {
-          this.getAvailableFlavors();
-        }
+        this.getAvailableFlavors();
 
         if (this.getDefaultPrice(organicFood).productStock === 0) {
           this.productIsInStock = false;
@@ -118,7 +176,7 @@ export class OrganicFoodPageComponent implements OnInit {
         }
         this.getUnitPrice();
 
-        await this.loadRelatedProducts();
+        this.loadRelatedProducts();
       });
     });
   }
@@ -126,13 +184,6 @@ export class OrganicFoodPageComponent implements OnInit {
   // Function to get unique quantities for display
   getUniqueQuantities() {
     return Array.from(new Set(this.organicFood.prices.map(price => price.quantityInProduct)));
-  }
-
-  getAvailableFlavors() {
-    const filteredPrices = this.organicFood.prices.filter(price => price.quantityInProduct === this.selectedQuantityInProduct);
-    this.availableFlavors = Array.from(new Set(filteredPrices.map(price => price.productFlavor)));
-    this.selectedFlavor = this.availableFlavors[0];
-    this.updateSelectedPriceAndStock();
   }
 
   // Method to get the default price for a the products
@@ -143,6 +194,16 @@ export class OrganicFoodPageComponent implements OnInit {
   // navigateto the product page
   goToProductPage(productId: string) {
     this.router.navigate(['product/' + ProductViewText.ORGANIC_FOOD + '/' + productId])
+  }
+
+  // get the available flavors
+  getAvailableFlavors() {
+    const filteredPrices = this.organicFood.prices.filter(price => price.quantityInProduct === this.selectedQuantityInProduct);
+
+    // get the unique flavors
+    this.availableFlavors = Array.from(new Set(filteredPrices.map(price => price.productFlavor)));
+    this.selectedFlavor = this.availableFlavors[0];
+    this.updateSelectedPriceAndStock();
   }
 
   selectQuantity(selectedQuantity: number) {
@@ -171,18 +232,10 @@ export class OrganicFoodPageComponent implements OnInit {
   }
 
   updateSelectedPriceAndStock() {
-    let selectedPriceObject: ProductPrice;
-
-    if (this.organicFood.productCategory === ProductViewText.DRINKS || this.organicFood.productCategory === ProductViewText.HEALTHY_SNACKS) {
-      selectedPriceObject = this.organicFood.prices.find(price =>
-        price.quantityInProduct === this.selectedQuantityInProduct &&
-        price.productFlavor === this.selectedFlavor
-      );
-    } else {
-      selectedPriceObject = this.organicFood.prices.find(price =>
-        price.quantityInProduct === this.selectedQuantityInProduct
-      );
-    }
+    const selectedPriceObject = this.organicFood.prices.find(price =>
+      price.quantityInProduct === this.selectedQuantityInProduct &&
+      price.productFlavor === this.selectedFlavor
+    );
 
     if (selectedPriceObject) {
       this.selectedPrice = selectedPriceObject.productPrice;
@@ -190,6 +243,7 @@ export class OrganicFoodPageComponent implements OnInit {
       this.loyaltyPoints = Math.round(this.selectedPrice / 100);
       this.productIsInStock = selectedPriceObject.productStock > 0;
       this.selectedImage = selectedPriceObject.productImage;
+      this.getUnitPrice();
     }
   }
 
@@ -202,21 +256,32 @@ export class OrganicFoodPageComponent implements OnInit {
     if (this.organicFood.dosageUnit === this.productViewText.GRAM) {
       // Convert grams to kilograms (1000 grams = 1 kg)
       quantityInKg = this.selectedQuantityInProduct / 1000;
+      this.unitPriceUnit = this.productViewText.KG;
     } else if (this.organicFood.dosageUnit === this.productViewText.POUNDS) {
-      // Convert pounds to kilograms (1 lb ≈ 0.4536 kg)
-      quantityInKg = this.selectedQuantityInProduct * 0.4536;
-    } else if (this.organicFood.dosageUnit === this.productViewText.PIECES || this.organicFood.dosageUnit === this.productViewText.CAPSULE) {
+      // get the price of one pound
       quantityInKg = this.selectedPrice / this.selectedQuantityInProduct;
+      this.unitPriceUnit = this.productViewText.POUNDS;
+    } else if (this.organicFood.dosageUnit === this.productViewText.PIECES) {
+      quantityInKg = this.selectedPrice / this.selectedQuantityInProduct;
+      this.unitPriceUnit = this.productViewText.PIECES;
     } else {
       // 1000 ml = 1 liter
       quantityInKg = this.selectedQuantityInProduct / 1000;
+      this.unitPriceUnit = this.productViewText.LITER;
     }
 
-    this.unitPrice = this.selectedPrice / quantityInKg;
+    if (this.organicFood.dosageUnit !== this.productViewText.POUNDS) {
+      this.unitPrice = this.selectedPrice / quantityInKg;
+    } else {
+      this.unitPrice = quantityInKg;
+    }
+
     this.unitPrice = Math.round(this.unitPrice);
     if (this.unitPrice < 1) {
       this.unitPrice = 1;
     }
+
+    this.checkStock();
   }
 
   toggleCollapsedDescription() {
@@ -252,7 +317,7 @@ export class OrganicFoodPageComponent implements OnInit {
   toggleCollapsedNutritionTable() {
     this.isCollapsedNutritionTable = !this.isCollapsedNutritionTable;
 
-    if (!this.isCollapsedActiveIngredients) {
+    if (!this.isCollapsedNutritionTable) {
       this.isCollapsedDescription = true;
       this.isCollapsedIngredients = true;
       this.isCollapsedActiveIngredients = true;
@@ -263,11 +328,11 @@ export class OrganicFoodPageComponent implements OnInit {
     this.isFlavorDropdownOpen = !this.isFlavorDropdownOpen;
   }
 
-  // get related blog list
+  // get related products list
   loadRelatedProducts(): void {
-    // Fetch related blogs based on tags and language
+    // Fetch related products based on tags and language
     this.productService.getRelatedProducts(this.organicFood.id, this.organicFood.productCategory, ProductViewText.ORGANIC_FOOD).subscribe((relatedProducts: OrganicFood[]) => {
-      // Create a Set to track unique blog id
+      // Create a Set to track unique product id
       const existingIds = new Set<string>();
 
       // Add IDs of the related products to the Set
@@ -276,46 +341,180 @@ export class OrganicFoodPageComponent implements OnInit {
       // Handle related products based on their count
       if (relatedProducts.length > 0) {
         this.relatedProducts = relatedProducts; // Set the found related products
-
-        // if there are not found 6 related products
-        if (relatedProducts.length < 6) {
-          existingIds.add(this.organicFood.id);
-
-          const remainingCount = 6 - relatedProducts.length;
-
-          this.productService.getRandomProducts(this.organicFood.id, remainingCount, ProductViewText.ORGANIC_FOOD).subscribe((randomProducts: OrganicFood[]) => {
-            const uniqueRandomProducts = randomProducts.filter(product => !existingIds.has(product.id));
-
-            // Add unique random products to the relatedProducts array and to existingIds
-            uniqueRandomProducts.forEach(product => {
-              relatedProducts.push(product);
-              existingIds.add(product.id);
-            });
-          });
-        }
       }
       else if (relatedProducts.length === 0) {
-        // No related products found, fetch six random blogs
-        this.productService.getRandomProducts(this.organicFood.id, 6, ProductViewText.ORGANIC_FOOD).subscribe((randomBlogs: OrganicFood[]) => {
+        // No related products found, fetch three random blogs
+        this.productService.getRandomProducts(this.organicFood.id, 3, ProductViewText.ORGANIC_FOOD).subscribe((randomBlogs: OrganicFood[]) => {
           this.relatedProducts = randomBlogs; // Set the random products as related
         });
       }
     });
   }
 
+  checkStock() {
+    if (this.productIsInStock && this.productStock < this.cartQuantity) {
+      this.errorMessageStock = true;
+      return;
+    } else {
+      this.errorMessageStock = false;
+    }
+  }
+
   addToCart() {
-    if (this.cartQuantity > 1) {
-      if (this.getPriceBasedOnQuantity(this.organicFood, this.selectedQuantityInProduct).productStock < this.cartQuantity) {
-        this.errorMessageStock = true;
-        this.productStock = this.getPriceBasedOnQuantity(this.organicFood, this.selectedQuantityInProduct).productStock;
-      } else {
-        this.errorMessageStock = false;
-      }
+    if (this.cartQuantity > 0) {
+      const selectedPrice = this.organicFood.prices.find(price =>
+        price.quantityInProduct === this.selectedQuantityInProduct &&
+        price.productFlavor === this.selectedFlavor
+      );
+
+      this.cartService.addToCart({
+        productId: this.organicFood.id,
+        productName: this.organicFood.productName,
+        quantity: this.cartQuantity,
+        price: this.selectedPrice,
+        imageUrl: this.selectedImage || '',
+        category: ProductViewText.ORGANIC_FOOD,
+        flavor: this.selectedFlavor,
+        size: this.selectedQuantityInProduct.toString(),
+        maxStockError: false,
+        maxStock: selectedPrice.productStock
+      });
+
+      this.errorMessageStock = false;
     }
   }
 
   openLoyalityProgram() {
     this.router.navigate(['product/loyaltyProgram']);
+  }
+
+  filterRating() {
+    if (this.selectedReviewFilter === ProductViewText.ORDER_BY_BEST_RATING) {
+      this.reviews = this.productService.sortReviewsByRatingASC(this.reviews);
+    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_WORST_RATING) {
+      this.reviews = this.productService.sortReviewsByRatingDESC(this.reviews);
+    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_LATEST) {
+      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
+    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_OLDEST) {
+      this.reviews = this.productService.sortReviewsByOldest(this.reviews);
+    }
+  }
+
+  getReviews() {
+    this.productService.getReviewsForProduct(this.productId, ProductViewText.ORGANIC_FOOD).subscribe(reviews => {
+      this.reviews = reviews;
+      this.selectedReviewFilter = ProductViewText.ORDER_BY_LATEST;
+      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
+      this.calculateAverageRating();
+    })
+  }
+
+  calculateAverageRating(): void {
+    this.averageRating = 0;
+    if (this.reviews.length > 0) {
+      this.reviews.forEach(number => {
+        this.averageRating += number.rating
+      });
+      this.averageRating = this.averageRating / this.reviews.length;
+      this.averageRating = Math.round(this.averageRating * 100) / 100;
+    } else {
+      this.averageRating = 1;
+    }
+  }
+
+  getRatingCount(star: number): number {
+    return this.reviews.filter(review => review.rating === star).length;
+  }
+
+  getRatingPercentage(star: number): number {
+    return (this.getRatingCount(star) / this.reviews.length) * 100;
+  }
+
+  async likeReview(review: ProductReeviews) {
+    if (this.userLoggedIn) {
+      // Check if user already liked the review
+      if (!review.likes.includes(this.currentUserId)) {
+        review.likes.push(this.currentUserId);
+      } else {
+        // Remove the like if user clicks again
+        review.likes = review.likes.filter(id => id !== this.currentUserId);
+      }
+      await this.db.collection('reviews').doc(ProductViewText.ORGANIC_FOOD).collection('allReview').doc(review.id).update({ likes: review.likes });
+    } else {
+      this.userLoggedOutLikeError = true;
+      this.userLoggedOutError = false;
+    }
+  }
+
+  async likeResponse(review: ProductReeviews) {
+    if (this.userLoggedIn) {
+      // Check if user already liked the response
+      if (!review.responseLikes.includes(this.currentUserId)) {
+        review.responseLikes.push(this.currentUserId);
+      } else {
+        // Remove the like if user clicks again
+        review.responseLikes = review.responseLikes.filter(id => id !== this.currentUserId);
+      }
+      await this.db.collection('reviews').doc(ProductViewText.ORGANIC_FOOD).collection('allReview').doc(review.id).update({ responseLikes: review.responseLikes });
+    } else {
+      this.userLoggedOutLikeError = true;
+      this.userLoggedOutError = false;
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.userLoggedOutLikeError && this.errorMessage) {
+      this.scrollToErrorMessage();
+    }
+  }
+
+  scrollToErrorMessage(): void {
+    // Scroll to the error message element
+    this.errorMessage.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  goToReviews() {
+    // Scroll to the reviews section element
+    this.reviewsSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  gotoCreateNewRReview() {
+    if (!this.userLoggedIn) {
+      this.userLoggedOutError = true;
+      this.userLoggedOutLikeError = false;
+    } else {
+      this.userLoggedOutError = false;
+      this.dialog.open(ReviewHandleComponent, {
+        data: {
+          userId: this.userReview.id,
+          edit: false,
+          productId: this.organicFood.id,
+          userFirstName: this.userReview.firstName,
+          userLastName: this.userReview.lastName,
+          pageFrom: ProductViewText.ORGANIC_FOOD,
+          category: ProductViewText.ORGANIC_FOOD
+        }
+      });
+    }
+  }
+
+  editReview(review: ProductReeviews) {
+    this.dialog.open(ReviewHandleComponent, {
+      data: {
+        userId: this.userReview.id,
+        edit: true,
+        review: review,
+        productId: this.organicFood.id,
+        userFirstName: this.userReview.firstName,
+        userLastName: this.userReview.lastName,
+        pageFrom: ProductViewText.ORGANIC_FOOD,
+        category: ProductViewText.ORGANIC_FOOD
+      }
+    });
+  }
+
+  goToLogin() {
+    this.router.navigate(['/auth/login']);
   }
 
   back() {

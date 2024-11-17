@@ -17,7 +17,7 @@
         <div class="search-container" [ngClass]="{ 'expanded': searchExpanded }">
             <input *ngIf="searchExpanded" [(ngModel)]="searcForProductText" placeholder="{{
                                 'filter.search' | translate }}" class="search-input" type="text"
-                (ngModelChange)="onSearchChange()" (blur)="closeSearch()" autofocus />
+                (ngModelChange)="onSearchChange()" autofocus />
             <i *ngIf="!searchExpanded" class="material-icons search-icon" (click)="openSearch()">
                 search
             </i>
@@ -40,8 +40,13 @@
 
                         <div class="product-info">
                             <span class="product-name">{{ product.productName }}</span>
-                            <span class="product-price">{{ defaultPrice.productPrice }} {{
-                                'products.huf' | translate }}</span>
+
+                            <div *ngIf="getProductReviews(product.id).length > 0"
+                                class="average-rating-product-display">
+                                <i [attr.data-star]="getAverageRating(product.id)"></i>
+                            </div>
+                            <div class="product-price">{{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -65,9 +70,9 @@
         <div *ngIf="userLoggedIn && !user.isAdmin || !userLoggedIn" class="header-container-user cart-button-container">
             <button class="cart-button" (click)="navigateToCart()">
                 <i class="material-icons cart-icon">shopping_cart</i>
-                <span class="cart-badge" *ngIf="(cartCount$ | async) > 0">
+                <div class="cart-badge" *ngIf="(cartCount$ | async) > 0">
                     {{ cartCount$ | async }}
-                </span>
+                </div>
             </button>
 
             <!-- Enhanced cart notification -->

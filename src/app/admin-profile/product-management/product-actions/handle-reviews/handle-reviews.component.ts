@@ -100,6 +100,8 @@ export class HandleReviewsComponent implements OnInit {
           this.allergens = this.organicFoodObject.allergens;
           this.selectedImage = this.getDefaultPrice(this.organicFoodObject).productImage;
           this.smallDescription = this.organicFoodObject.smallDescription;
+          this.safeForConsumptionDuringPregnancy = this.organicFoodObject.safeForConsumptionDuringPregnancy;
+          this.safeForConsumptionDuringBreastfeeding = this.organicFoodObject.safeForConsumptionDuringBreastfeeding;
           this.getReviews();
         });
       } else if (this.productCategory === ProductViewText.CLOTHES) {

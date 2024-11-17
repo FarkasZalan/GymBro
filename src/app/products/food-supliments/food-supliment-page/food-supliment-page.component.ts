@@ -72,6 +72,7 @@ export class FoodSuplimentPageComponent implements OnInit {
   relatedProducts: FoodSupliment[] = [];
 
   unitPrice: number = 0;
+  unitPriceUnit: string = '';
   cartQuantity: number = 1;
   loyaltyPoints: number = 0;
 
@@ -91,7 +92,7 @@ export class FoodSuplimentPageComponent implements OnInit {
   productId: string = '';
   isProductInCart: boolean = false;
 
-  //filter
+  //filter reviews
   selectedReviewFilter: string = ProductViewText.ORDER_BY_LATEST;
   availableReviewFilters: string[] = [
     ProductViewText.ORDER_BY_OLDEST,
@@ -200,8 +201,11 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.router.navigate(['product/' + ProductViewText.FOOD_SUPLIMENTS + '/' + productId])
   }
 
+  // get the available flavors
   getAvailableFlavors() {
     const filteredPrices = this.foodSupliment.prices.filter(price => price.quantityInProduct === this.selectedQuantityInProduct);
+
+    // get the unique flavors
     this.availableFlavors = Array.from(new Set(filteredPrices.map(price => price.productFlavor)));
     this.selectedFlavor = this.availableFlavors[0];
     this.updateSelectedPriceAndStock();
@@ -257,21 +261,36 @@ export class FoodSuplimentPageComponent implements OnInit {
     if (this.foodSupliment.dosageUnit === this.productViewText.GRAM) {
       // Convert grams to kilograms (1000 grams = 1 kg)
       quantityInKg = this.selectedQuantityInProduct / 1000;
+      this.unitPriceUnit = this.productViewText.KG;
     } else if (this.foodSupliment.dosageUnit === this.productViewText.POUNDS) {
-      // Convert pounds to kilograms (1 lb ≈ 0.4536 kg)
-      quantityInKg = this.selectedQuantityInProduct * 0.4536;
+      // get the price of one pound
+      quantityInKg = this.selectedPrice / this.selectedQuantityInProduct;
+      this.unitPriceUnit = this.productViewText.POUNDS;
     } else if (this.foodSupliment.dosageUnit === this.productViewText.PIECES || this.foodSupliment.dosageUnit === this.productViewText.CAPSULE) {
       quantityInKg = this.selectedPrice / this.selectedQuantityInProduct;
+      if (this.foodSupliment.dosageUnit === this.productViewText.PIECES) {
+        this.unitPriceUnit = this.productViewText.PCS;
+      } else {
+        this.unitPriceUnit = this.productViewText.CAPSULE;
+      }
     } else {
       // 1000 ml = 1 liter
       quantityInKg = this.selectedQuantityInProduct / 1000;
+      this.unitPriceUnit = this.productViewText.LITER;
     }
 
-    this.unitPrice = this.selectedPrice / quantityInKg;
+    if (this.foodSupliment.dosageUnit !== this.productViewText.POUNDS) {
+      this.unitPrice = this.selectedPrice / quantityInKg;
+    } else {
+      this.unitPrice = quantityInKg;
+    }
+
     this.unitPrice = Math.round(this.unitPrice);
     if (this.unitPrice < 1) {
       this.unitPrice = 1;
     }
+
+    this.checkStock();
   }
 
   toggleCollapsedDescription() {
@@ -318,11 +337,11 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.isFlavorDropdownOpen = !this.isFlavorDropdownOpen;
   }
 
-  // get related blog list
+  // get related products list
   loadRelatedProducts(): void {
-    // Fetch related blogs based on tags and language
+    // Fetch related products based on tags and language
     this.productService.getRelatedProducts(this.foodSupliment.id, this.foodSupliment.productCategory, ProductViewText.FOOD_SUPLIMENTS).subscribe((relatedProducts: FoodSupliment[]) => {
-      // Create a Set to track unique blog id
+      // Create a Set to track unique products id
       const existingIds = new Set<string>();
 
       // Add IDs of the related products to the Set
@@ -331,45 +350,31 @@ export class FoodSuplimentPageComponent implements OnInit {
       // Handle related products based on their count
       if (relatedProducts.length > 0) {
         this.relatedProducts = relatedProducts; // Set the found related products
-
-        // if there are not found 6 related products
-        if (relatedProducts.length < 6) {
-          existingIds.add(this.foodSupliment.id);
-
-          const remainingCount = 6 - relatedProducts.length;
-
-          this.productService.getRandomProducts(this.foodSupliment.id, remainingCount, ProductViewText.FOOD_SUPLIMENTS).subscribe((randomProducts: FoodSupliment[]) => {
-            const uniqueRandomProducts = randomProducts.filter(product => !existingIds.has(product.id));
-
-            // Add unique random products to the relatedProducts array and to existingIds
-            uniqueRandomProducts.forEach(product => {
-              relatedProducts.push(product);
-              existingIds.add(product.id);
-            });
-          });
-        }
       }
       else if (relatedProducts.length === 0) {
-        // No related products found, fetch six random blogs
-        this.productService.getRandomProducts(this.foodSupliment.id, 6, ProductViewText.FOOD_SUPLIMENTS).subscribe((randomBlogs: FoodSupliment[]) => {
+        // No related products found, fetch three random blogs
+        this.productService.getRandomProducts(this.foodSupliment.id, 3, ProductViewText.FOOD_SUPLIMENTS).subscribe((randomBlogs: FoodSupliment[]) => {
           this.relatedProducts = randomBlogs; // Set the random products as related
         });
       }
     });
   }
 
+  checkStock() {
+    if (this.productIsInStock && this.productStock < this.cartQuantity) {
+      this.errorMessageStock = true;
+      return;
+    } else {
+      this.errorMessageStock = false;
+    }
+  }
+
   addToCart() {
     if (this.cartQuantity > 0) {
-      const selectedPrice = this.getPriceBasedOnQuantity(
-        this.foodSupliment,
-        this.selectedQuantityInProduct
+      const selectedPrice = this.foodSupliment.prices.find(price =>
+        price.quantityInProduct === this.selectedQuantityInProduct &&
+        price.productFlavor === this.selectedFlavor
       );
-
-      if (selectedPrice.productStock < this.cartQuantity) {
-        this.errorMessageStock = true;
-        this.productStock = selectedPrice.productStock;
-        return;
-      }
 
       this.cartService.addToCart({
         productId: this.foodSupliment.id,
@@ -381,7 +386,6 @@ export class FoodSuplimentPageComponent implements OnInit {
         flavor: this.selectedFlavor,
         size: this.selectedQuantityInProduct.toString(),
         maxStockError: false,
-        minStockError: false,
         maxStock: selectedPrice.productStock
       });
 

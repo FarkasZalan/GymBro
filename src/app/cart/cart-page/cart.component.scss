@@ -82,12 +82,44 @@
     // Quantity controls
     .quantity-controls {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
-        width: 150px;
+        width: auto;
         justify-content: center;
         align-items: center;
         position: relative;
+
+        .quantity-btn {
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &:disabled {
+                background: #ccc;
+                cursor: not-allowed;
+            }
+        }
+
+        .quantity-input {
+            cursor: default !important;
+            width: 60px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px;
+
+            /* Hide input number arrows */
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        }
 
         label {
             color: var(--text-color-secondary);
@@ -100,6 +132,7 @@
             display: flex;
             align-items: center;
             width: 100px;
+            cursor: default !important;
 
             input {
                 width: 100%;
@@ -111,14 +144,6 @@
                 padding-right: 35px;
                 background-color: #ffffff;
                 transition: border-color 0.2s;
-
-                &:focus {
-                    border-color: #3366ff;
-                }
-
-                &:hover {
-                    border-color: #c5cee0;
-                }
             }
 
             .unit {
@@ -131,6 +156,7 @@
         }
 
         .stock-error-label {
+            cursor: default !important;
             position: absolute;
             top: 100%;
             left: 50%;
@@ -187,6 +213,35 @@
         &:hover {
             color: var(--danger-hover);
         }
+    }
+}
+
+.minus-btn {
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        transform: scale(1.15);
+        color: #ffffff !important;
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.plus-btn {
+    color: #0b8e92 !important;
+    border-color: #0b8e92 !important;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        background-color: #0b8e92 !important;
+        color: #ffffff !important;
+        transform: scale(1.15);
+    }
+
+    &:active {
+        transform: scale(0.95);
     }
 }
 

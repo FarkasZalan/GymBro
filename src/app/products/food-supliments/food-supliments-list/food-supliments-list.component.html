@@ -35,7 +35,16 @@
 
 
                     <h4>{{ foodSupliment.productName }}</h4>
-                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
+
+                    <!-- Display the average rating of the product -->
+                    <div *ngIf="getProductReviews(foodSupliment.id).length > 0" class="average-rating-product-display">
+                        <i [attr.data-star]="getAverageRating(foodSupliment.id)"></i>
+                        <span class="rating-number-product-display">
+                            {{ getProductReviews(foodSupliment.id).length }} {{ 'review.reviewText' | translate }}
+                        </span>
+                    </div>
+
+                    <h5 class="price-display"> {{ defaultPrice.productPrice | currency:'':'':'1.0-0' }} {{
                         'products.huf' | translate }}</h5>
                 </div>
             </nb-card-body>

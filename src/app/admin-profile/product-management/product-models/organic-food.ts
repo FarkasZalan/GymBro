@@ -26,6 +26,7 @@ export interface OrganicFood {
     allergens: string[];
 
     // weight/piece  
+    // flavor
     // product image to this amount of weight/piece
     // the price for this product
     // stock

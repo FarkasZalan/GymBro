@@ -7,6 +7,7 @@ import { FilterPageComponent } from '../../../filter-page/filter-page.component'
 import { Filter } from '../../../filter-page/filter.model';
 import { ProductService } from '../../product.service';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
 
 @Component({
   selector: 'app-clothes-list',
@@ -29,6 +30,9 @@ export class ClothesListComponent implements OnInit {
 
   // if there are no products in the collection
   emptyCollection: boolean = false;
+
+  // Add property to store reviews
+  productReviews: Map<string, ProductReeviews[]> = new Map();
 
   filterObject: Filter = {
     category: '',
@@ -58,6 +62,14 @@ export class ClothesListComponent implements OnInit {
       this.clothes = this.productService.sortClothesPriceByASC(this.clothes);
       this.originaClothes = this.productService.sortClothesPriceByASC(this.originaClothes);
 
+      // Get the reviews for the products
+      this.clothes.forEach((product) => {
+        this.productService.getReviewsForProduct(product.id, ProductViewText.CLOTHES)
+          .subscribe(reviews => {
+            this.productReviews.set(product.id, reviews);
+          });
+      });
+
       // if the collection doesn't have any products
       if (this.clothes.length === 0) {
         this.emptyCollection = true;
@@ -68,6 +80,21 @@ export class ClothesListComponent implements OnInit {
   // Method to get the default price for a the products
   getDefaultPrice(foodSupliment: Clothes) {
     return foodSupliment.prices.find(price => price.setAsDefaultPrice);
+  }
+
+  // Method to get the reviews for the product
+  getProductReviews(productId: string): ProductReeviews[] {
+    return this.productReviews.get(productId) || [];
+  }
+
+  // Method to get the average rating for the product
+  getAverageRating(productId: string): number {
+    const reviews = this.getProductReviews(productId);
+    if (reviews.length === 0) return 0;
+
+    const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
+    const average = sum / reviews.length;
+    return Math.round(average * 100) / 100;
   }
 
   // navigateto the product page
@@ -103,6 +130,10 @@ export class ClothesListComponent implements OnInit {
             this.clothes = this.productService.sortClothesByNameASC(this.clothes);
           } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
             this.clothes = this.productService.sortClothesByNameDESC(this.clothes);
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
+            this.clothes.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
+          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
+            this.clothes.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
           }
         }
       }
