@@ -493,6 +493,8 @@
       "continueShopping": "Continue Shopping",
       "subtotal": "Subtotal",
       "items": "items",
-      "item": "item"
+      "item": "item",
+      "addedToCart": "Added to Cart",
+      "goToCart": "Go to Cart"
    }
 }

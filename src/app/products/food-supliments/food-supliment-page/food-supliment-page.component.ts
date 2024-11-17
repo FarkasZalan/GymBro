@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentHandlerService } from '../../../document.handler.service';
 import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Location } from '@angular/common';
+import { CurrencyPipe, Location } from '@angular/common';
 import { Vitamin } from '../../../admin-profile/product-management/product-models/vitamin.model';
 import { ProductService } from '../../product.service';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
@@ -110,7 +110,8 @@ export class FoodSuplimentPageComponent implements OnInit {
     private db: AngularFirestore,
     private authService: AuthService,
     private dialog: MatDialog,
-    private cartService: CartService) { }
+    private cartService: CartService,
+    private currencyPipe: CurrencyPipe) { }
 
   ngOnInit(): void {
     this.foodSupliment = {
@@ -374,11 +375,14 @@ export class FoodSuplimentPageComponent implements OnInit {
         productId: this.foodSupliment.id,
         productName: this.foodSupliment.productName,
         quantity: this.cartQuantity,
-        price: selectedPrice.productPrice,
-        imageUrl: selectedPrice.productImage || '',
+        price: this.selectedPrice,
+        imageUrl: this.selectedImage || '',
         category: ProductViewText.FOOD_SUPLIMENTS,
         flavor: this.selectedFlavor,
-        size: this.selectedQuantityInProduct.toString()
+        size: this.selectedQuantityInProduct.toString(),
+        maxStockError: false,
+        minStockError: false,
+        maxStock: selectedPrice.productStock
       });
 
       this.errorMessageStock = false;

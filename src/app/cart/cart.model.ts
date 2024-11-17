@@ -8,4 +8,7 @@ export interface CartItem {
     size?: string;
     color?: string;
     flavor?: string;
+    maxStockError?: boolean;
+    maxStock?: number;
+    minStockError?: boolean;
 }

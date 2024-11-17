@@ -497,6 +497,8 @@
                 "continueShopping": "Vásárlás folytatása",
                 "subtotal": "Részösszeg",
                 "items": "termék",
-                "item": "termék"
+                "item": "termék",
+                "addedToCart": "Hozzáadva a kosárhoz",
+                "goToCart": "Irány a kosár"
         }
 }

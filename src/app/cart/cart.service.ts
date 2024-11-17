@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CartItem } from './cart.model';
+import { CartNotificationService } from './cart-notification.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class CartService {
     // Observable to expose cart items to components
     cartItems$ = this.cartItemsSubject.asObservable();
 
-    constructor() {
+    constructor(private cartNotificationService: CartNotificationService) {
         // Load saved cart items from localStorage on service initialization
         this.loadCartItems();
     }
@@ -57,6 +58,14 @@ export class CartService {
 
         this.cartItemsSubject.next(currentItems);
         this.saveCartItems();
+
+        // Show enhanced notification
+        this.cartNotificationService.showNotification({
+            productName: item.productName,
+            imageUrl: item.imageUrl,
+            quantity: item.quantity,
+            price: item.price
+        });
     }
 
     // Update quantity of specific item in cart

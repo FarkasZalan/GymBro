@@ -69,6 +69,38 @@
                     {{ cartCount$ | async }}
                 </span>
             </button>
+
+            <!-- Enhanced cart notification -->
+            <div class="cart-notification" *ngIf="cartNotification$ | async as notification" [@slideInOut]>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <i class="fas fa-check-circle"></i>
+                        <span class="notification-text">{{ 'cart.addedToCart' | translate }}</span>
+                    </div>
+                    <div class="product-details">
+                        <img *ngIf="notification.imageUrl" [src]="notification.imageUrl"
+                            [alt]="notification.productName" class="product-image">
+                        <img *ngIf="!notification.imageUrl" src="../../../assets/images/gym-bro-logo.png"
+                            alt="Product Image" class="product-image">
+                        <div class="product-info">
+                            <h4 class="notification-text">{{ notification.productName }}</h4>
+                            <div class="quantity-price">
+                                <span class="calculation notification-text">
+                                    {{ notification.quantity }} {{ 'products.pcs' | translate }}
+                                </span>
+                                <span class="total-price">
+                                    {{ notification.quantity * notification.price }} {{ 'products.huf' | translate }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="btn continue-btn" (click)="navigateToCart()">
+                            {{ 'cart.goToCart' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Button to switch language -->

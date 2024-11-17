@@ -35,10 +35,11 @@
             <div *ngIf="(cartItems$ | async)?.length > 0">
                 <!-- Cart item list with quantity controls and price calculations -->
                 <div *ngFor="let item of cartItems$ | async; let i = index" class="cart-item"
-                    (click)="navigateToProduct(item)">
+                    (click)="navigateToProduct(item)" [@removeItem]="'in'">
                     <!-- Product image and details -->
                     <div class="item-image">
-                        <img [src]="item.imageUrl" [alt]="item.productName">
+                        <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.productName">
+                        <img *ngIf="!item.imageUrl" src="../../../assets/images/gym-bro-logo.png" alt="Product Image">
                     </div>
 
                     <div class="item-details">
@@ -50,23 +51,35 @@
                     </div>
 
                     <!-- Quantity input with unit display -->
-                    <div class="quantity-controls">
+                    <div class="quantity-controls" (click)="$event.stopPropagation()">
                         <label>{{ 'cart.quantity' | translate }}:</label>
                         <div class="input-with-unit">
-                            <input type="number" [value]="item.quantity" (change)="updateQuantity(i, $event)" min="1"
-                                class="form-control">
+                            <input type="number" [value]="item.quantity" [(ngModel)]="item.quantity"
+                                (input)="updateQuantity(i, $event)" class="form-control">
                             <span class="unit">{{ 'products.pcs' | translate }}</span>
                         </div>
+
+                        <!-- Error message for max stock -->
+                        <span *ngIf="item.maxStockError" class="stock-error-label">
+                            max: {{ item.maxStock }} {{ 'products.pcs' | translate }}
+                        </span>
+
+                        <!-- Error message for min stock -->
+                        <span *ngIf="item.minStockError" class="stock-error-label">
+                            min: 1 {{ 'products.pcs' | translate }}
+                        </span>
                     </div>
 
                     <!-- Price calculations for item -->
                     <div class="item-price">
                         <div class="subtotal">
                             {{ 'cart.subtotal' | translate }}:<br>
-                            {{item.price * item.quantity}} {{ 'products.huf' | translate }}
+                            {{item.price * item.quantity | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}
                         </div>
                         <div class="unit-price">
-                            {{item.price}} Ft/{{ item.quantity === 1 ? ('cart.item' | translate) : ('cart.items' |
+                            {{item.price | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}/{{ item.quantity
+                            === 1 ? ('cart.item' |
+                            translate) : ('cart.items' |
                             translate) }}
                         </div>
                     </div>
@@ -80,17 +93,20 @@
 
                 <!-- Cart footer with separate back button -->
                 <div *ngIf="(cartItems$ | async)?.length > 0">
+                    <br>
                     <!-- Cart total and actions -->
                     <div class="cart-footer">
                         <div class="cart-total">
-                            {{ 'cart.total' | translate }}: {{cartTotal$ | async}} {{ 'products.huf' | translate }}
+                            {{ 'cart.total' | translate }}: {{ (cartTotal$ | async) | currency:'':'':'1.0-0' }} {{
+                            'products.huf' | translate }}
                         </div>
 
                         <div class="cart-actions">
                             <button class="btn delete-btn" nbButton status="danger" (click)="clearCart()">
                                 {{ 'cart.clear' | translate }}
                             </button>
-                            <button class="btn" nbButton status="success" (click)="checkout()">
+                            <button [disabled]="errorMaxStock || errorMinStock" class="btn" nbButton status="success"
+                                (click)="checkout()">
                                 {{ 'cart.checkout' | translate }}
                             </button>
                         </div>

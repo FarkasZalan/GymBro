@@ -14,11 +14,33 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
 import { FoodSupliment } from '../../admin-profile/product-management/product-models/food-supliment.model';
 import { CartService } from '../../cart/cart.service';
+import { CartNotificationService } from '../../cart/cart-notification.service';
+import { trigger, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrl: './header.component.scss',
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({
+          transform: 'translateY(20px)',
+          opacity: 0
+        }),
+        animate('300ms ease-out', style({
+          transform: 'translateY(0)',
+          opacity: 1
+        }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in', style({
+          transform: 'translateY(20px)',
+          opacity: 0
+        }))
+      ])
+    ])
+  ]
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef;
@@ -37,6 +59,8 @@ export class HeaderComponent implements OnInit {
     map(items => items.reduce((count, item) => count + item.quantity, 0))
   );
 
+  cartNotification$ = this.cartNotificationService.notification$;
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private db: AngularFirestore,
@@ -46,7 +70,8 @@ export class HeaderComponent implements OnInit {
     private dialog: MatDialog,
     private translate: TranslateService,
     private appComponent: AppComponent,
-    private cartService: CartService
+    private cartService: CartService,
+    private cartNotificationService: CartNotificationService
   ) { }
 
   ngOnInit(): void {
@@ -198,6 +223,11 @@ export class HeaderComponent implements OnInit {
 
   // Navigate to cart page
   navigateToCart() {
+    this.hideNotification();
     this.router.navigate(['/cart']);
+  }
+
+  hideNotification() {
+    this.cartNotificationService.hideNotification();
   }
 }

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { CartService } from '../cart.service';
 import { CartItem } from '../cart.model';
-import { trigger, transition, style, animate } from '@angular/animations';
-import { Location } from '@angular/common';
+import { trigger, transition, style, animate, state } from '@angular/animations';
+import { CurrencyPipe, Location } from '@angular/common';
 
 @Component({
     selector: 'app-cart',
@@ -17,6 +17,23 @@ import { Location } from '@angular/common';
                 style({ transform: 'scale(0.8)', opacity: 0 }),
                 animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
             ]),
+        ]),
+        trigger('removeItem', [
+            state('in', style({
+                opacity: 1,
+                height: '*',
+                transform: 'translateX(0)'
+            })),
+            transition(':leave', [
+                animate('300ms ease-out', style({
+                    opacity: 0,
+                    height: 0,
+                    transform: 'translateX(-100%)',
+                    marginBottom: 0,
+                    paddingTop: 0,
+                    paddingBottom: 0
+                }))
+            ])
         ])
     ]
 })
@@ -25,30 +42,79 @@ export class CartComponent implements OnInit {
     // Calculate total price from all items in cart
     cartTotal$: Observable<number>;
 
+    errorMaxStock: boolean = false;
+    errorMinStock: boolean = false;
+
     constructor(
         private cartService: CartService,
         private router: Router,
-        private location: Location
+        private location: Location,
+        private currencyPipe: CurrencyPipe
     ) {
         this.cartItems$ = this.cartService.cartItems$;
-        // Reduce cart items to calculate total price
         this.cartTotal$ = this.cartItems$.pipe(
             map(items => items.reduce((total, item) =>
                 total + (item.price * item.quantity), 0))
         );
+
+        // Check and sync error states
+        this.cartItems$.subscribe(items => {
+            this.errorMinStock = items.some(item => item.quantity <= 0);
+            this.errorMaxStock = items.some(item => item.quantity > item.maxStock);
+
+            // Update individual item error states
+            items.forEach(item => {
+                item.minStockError = item.quantity <= 0;
+                item.maxStockError = item.quantity > item.maxStock;
+            });
+        });
     }
 
     ngOnInit(): void { }
 
     // Update quantity and validate it's greater than 0
-    updateQuantity(index: number, event: any) {
+    async updateQuantity(index: number, event: any) {
         const quantity = parseInt(event.target.value, 10);
+        const items = await this.cartItems$.pipe(take(1)).toPromise();
+        const item = items[index];
         if (quantity > 0) {
-            this.cartService.updateQuantity(index, quantity);
+            item.minStockError = false;
+            this.errorMinStock = false;
+
+            // Check stock availability
+            const stockAvailable = item.maxStock;
+
+            if (stockAvailable < quantity) {
+                // Update item with error state
+                item.maxStockError = true;
+            } else {
+                // Update quantity if stock is available
+                this.cartService.updateQuantity(index, quantity);
+                item.maxStockError = false;
+                item.minStockError = false;
+            }
+        } else {
+            item.minStockError = true;
+            item.maxStockError = false;
         }
+
+
+        // Check if there are any items with error messages
+        this.cartItems$.subscribe(items => {
+            if (items.some(item => item.minStockError)) {
+                this.errorMinStock = true;
+            } else {
+                this.errorMinStock = false;
+            }
+            if (items.some(item => item.maxStockError)) {
+                this.errorMaxStock = true;
+            } else {
+                this.errorMaxStock = false;
+            }
+        });
     }
 
-    // Remove specific item from cart by index
+    // Remove item from cart
     removeItem(index: number) {
         this.cartService.removeFromCart(index);
     }
@@ -70,5 +136,10 @@ export class CartComponent implements OnInit {
 
     back() {
         this.location.back();
+    }
+
+    // Navigate to product page
+    navigateToProduct(item: CartItem) {
+        this.router.navigate(['/product', item.category, item.productId]);
     }
 } 

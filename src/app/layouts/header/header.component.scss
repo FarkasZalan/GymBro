@@ -290,8 +290,30 @@
 }
 
 .product-info {
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+
+    h4 {
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        color: var(--text-color-primary);
+    }
+
+    .quantity-price {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--text-color-secondary);
+
+        .calculation {
+            color: var(--text-color-secondary);
+        }
+
+        .total-price {
+            font-weight: 600;
+            color: #0b8e92;
+        }
+    }
 }
 
 .product-name {
@@ -341,10 +363,131 @@
     font-weight: 900;
 }
 
+.notification-text {
+    color: #0b8e92 !important;
+}
+
 .cart-button-container {
     position: relative;
     display: flex;
     align-items: center;
+
+    .cart-notification {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 10px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        z-index: 1000;
+        overflow: hidden;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 15px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid white;
+        }
+
+        .notification-content {
+            .notification-header {
+                padding: 12px;
+                background-color: #f8f9fa;
+                border-bottom: 1px solid #eee;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                i {
+                    color: #0b8e92;
+                    font-size: 18px;
+                }
+
+                span {
+                    font-weight: 500;
+                    color: var(--text-color-primary);
+                }
+            }
+
+            .product-details {
+                padding: 12px;
+                display: flex;
+                gap: 12px;
+                border-bottom: 1px solid #eee;
+
+                .product-image {
+                    width: 60px;
+                    height: 60px;
+                    object-fit: cover;
+                    border-radius: 20px;
+                }
+
+                .product-info {
+                    flex: 1;
+
+                    h4 {
+                        margin: 0 0 8px 0;
+                        font-size: 14px;
+                        color: var(--text-color-primary);
+                    }
+
+                    .quantity-price {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 13px;
+                        color: var(--text-color-secondary);
+
+                        .price {
+                            font-weight: 600;
+                            color: #0b8e92;
+                        }
+                    }
+                }
+            }
+
+            .notification-actions {
+                padding: 12px;
+                display: flex;
+                gap: 8px;
+
+                button {
+                    flex: 1;
+                    padding: 8px;
+                    font-size: 13px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+
+                    &.continue-btn {
+                        background: none;
+                        border: 1px solid #0b8e92;
+                        color: #0b8e92;
+
+                        &:hover {
+                            background: rgba(11, 142, 146, 0.1);
+                        }
+                    }
+
+                    &.checkout-btn {
+                        background: #0b8e92;
+                        border: none;
+                        color: white;
+
+                        &:hover {
+                            background: darken(#0b8e92, 5%);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .cart-button {
@@ -399,4 +542,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+// Optional: Add a pulse animation to the cart icon when item is added
+@keyframes cartPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.cart-icon.pulse {
+    animation: cartPulse 0.3s ease-in-out;
 }

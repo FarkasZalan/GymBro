@@ -129,11 +129,12 @@
 
                 <!-- cart and amount section -->
                 <div class="col-md-4 form-group">
-                    <h3 class="product-price">{{selectedPrice }} {{ 'products.huf' | translate
+                    <h3 class="product-price">{{ selectedPrice | currency:'':'':'1.0-0' }} {{ 'products.huf'
+                        | translate
                         }}</h3>
 
                     <h4 class="unit-price" style="font-weight: 600;">{{ 'products.unitPrice' | translate }}
-                        {{ unitPrice }} {{ 'products.huf' | translate
+                        {{ unitPrice | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate
                         }}/{{ foodSupliment.dosageUnit | translate }}</h4>
 
                     <!-- Loyalty Program Points -->

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -45,6 +45,9 @@ import { CartRoutingModule } from './cart-routing.module';
     declarations: [
         CartComponent
     ],
+    providers: [
+        CurrencyPipe
+    ]
 })
 export class CartModule {
 }
