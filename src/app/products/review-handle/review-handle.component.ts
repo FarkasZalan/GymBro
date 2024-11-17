@@ -124,7 +124,7 @@ export class ReviewHandleComponent implements OnInit {
     if (this.review.response === '') {
       this.responseDate = Timestamp.now();
     }
-    console.log(this.reviewResponse)
+
     await this.db
       .collection('reviews')
       .doc(this.category)

@@ -479,5 +479,24 @@
                 "edited": "módosított",
                 "adminResponsedStart": "Válaszolt",
                 "adminResponsedEnd": "részére"
+        },
+        "cart": {
+                "title": "Kosár",
+                "empty": "Üres a kosár",
+                "total": "Végösszeg",
+                "clear": "Kosár ürítése",
+                "checkout": "Fizetés",
+                "remove": "Eltávolítás",
+                "quantity": "Mennyiség",
+                "added": "Termék hozzáadva a kosárhoz",
+                "updated": "Kosár frissítve",
+                "removed": "Termék eltávolítva a kosárból",
+                "size": "Méret",
+                "color": "Szín",
+                "flavor": "Íz",
+                "continueShopping": "Vásárlás folytatása",
+                "subtotal": "Részösszeg",
+                "items": "termék",
+                "item": "termék"
         }
 }

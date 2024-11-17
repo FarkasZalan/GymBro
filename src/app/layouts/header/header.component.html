@@ -56,16 +56,19 @@
             </nb-user>
         </div>
 
-        <div *ngIf="userLoggedIn && !user.isAdmin" class="header-container-user .cart-button-container">
-            <button class="cart-button">
-                <i class="material-icons cart-icon">shopping_cart</i>
-                <span class="cart-badge">3</span>
-            </button>
-        </div>
-
         <!-- Login icon displayed if user is not logged in -->
         <div *ngIf="!userLoggedIn" class="header-container-user">
             <i (click)="navigateToLogin()" class="material-icons login-icon">login</i>
+        </div>
+
+        <!-- Cart button displayed if user is not admin -->
+        <div *ngIf="userLoggedIn && !user.isAdmin || !userLoggedIn" class="header-container-user cart-button-container">
+            <button class="cart-button" (click)="navigateToCart()">
+                <i class="material-icons cart-icon">shopping_cart</i>
+                <span class="cart-badge" *ngIf="(cartCount$ | async) > 0">
+                    {{ cartCount$ | async }}
+                </span>
+            </button>
         </div>
 
         <!-- Button to switch language -->

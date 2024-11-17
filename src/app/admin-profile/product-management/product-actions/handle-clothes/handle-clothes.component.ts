@@ -442,7 +442,6 @@ export class HandleClothesComponent {
         }
       });
     } catch (error) {
-      console.log(error)
       this.errorMessage = true;
     }
   }

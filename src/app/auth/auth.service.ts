@@ -4,12 +4,18 @@ import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Router } from "@angular/router";
 import { User } from "../user/user.model";
 import { AdminEmail } from "../admin-profile/admin-email";
+import { CartService } from '../cart/cart.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    constructor(private auth: AngularFireAuth, private db: AngularFirestore, private router: Router) { }
+    constructor(
+        private auth: AngularFireAuth,
+        private db: AngularFirestore,
+        private router: Router,
+        private cartService: CartService
+    ) { }
 
     // Check if a user is authenticated by observing the auth state
     isAuthenticated() {
@@ -92,10 +98,6 @@ export class AuthService {
         return this.db.collection('users').doc(userId).valueChanges();
     }
 
-    logOut() {
-        this.auth.signOut();
-    }
-
     // Send a password reset email to the user
     async forgotPassword(email: string) {
         try {
@@ -104,5 +106,15 @@ export class AuthService {
         } catch {
             return false;
         }
+    }
+
+    // Logout method
+    async logOut() {
+        try {
+            // Clear the cart when logging out
+            this.cartService.clearCartOnLogout();
+
+            this.auth.signOut();
+        } catch (error) { }
     }
 }

@@ -1,0 +1,116 @@
+<div class="container" [@zoomIn]>
+    <nb-card class="cart-container">
+        <nb-card-header>
+            <h2>{{ 'cart.title' | translate }}</h2>
+        </nb-card-header>
+
+        <nb-card-body>
+            <!-- Empty cart message -->
+            <div *ngIf="(cartItems$ | async)?.length === 0" class="product-empty-list-container">
+                <nb-card class="emptyCard" [@zoomIn]>
+                    <nb-card-body>
+                        <div>
+                            <img src="../../../assets/images/no-products.jpg" alt="EmptyCart" class="emptyCardImage">
+                            <p class="emptyCardText">{{ 'cart.empty' | translate }}</p>
+                        </div>
+
+                        <!-- back button -->
+                        <div class="button-container">
+                            <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                                status="success" (click)="back()">
+                                <span class="arrow">
+                                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Filled left arrow -->
+                                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                                    </svg>
+                                </span>
+                                {{ 'loginPage.back' | translate }}
+                            </button>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+
+            <!-- Cart items list (only shown when cart has items) -->
+            <div *ngIf="(cartItems$ | async)?.length > 0">
+                <!-- Cart item list with quantity controls and price calculations -->
+                <div *ngFor="let item of cartItems$ | async; let i = index" class="cart-item"
+                    (click)="navigateToProduct(item)">
+                    <!-- Product image and details -->
+                    <div class="item-image">
+                        <img [src]="item.imageUrl" [alt]="item.productName">
+                    </div>
+
+                    <div class="item-details">
+                        <h3>{{item.productName}}</h3>
+                        <!-- Optional product attributes -->
+                        <p *ngIf="item.size">{{ 'cart.size' | translate }}: {{item.size | translate}}</p>
+                        <p *ngIf="item.color">{{ 'cart.color' | translate }}: {{item.color | translate}}</p>
+                        <p *ngIf="item.flavor">{{ 'cart.flavor' | translate }}: {{item.flavor | translate}}</p>
+                    </div>
+
+                    <!-- Quantity input with unit display -->
+                    <div class="quantity-controls">
+                        <label>{{ 'cart.quantity' | translate }}:</label>
+                        <div class="input-with-unit">
+                            <input type="number" [value]="item.quantity" (change)="updateQuantity(i, $event)" min="1"
+                                class="form-control">
+                            <span class="unit">{{ 'products.pcs' | translate }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Price calculations for item -->
+                    <div class="item-price">
+                        <div class="subtotal">
+                            {{ 'cart.subtotal' | translate }}:<br>
+                            {{item.price * item.quantity}} {{ 'products.huf' | translate }}
+                        </div>
+                        <div class="unit-price">
+                            {{item.price}} Ft/{{ item.quantity === 1 ? ('cart.item' | translate) : ('cart.items' |
+                            translate) }}
+                        </div>
+                    </div>
+
+                    <!-- Remove button with event propagation stopped to prevent navigation -->
+                    <button class="remove-btn" (click)="$event.stopPropagation(); removeItem(i)"
+                        nbTooltip="{{ 'cart.remove' | translate }}">
+                        <nb-icon class="remove-icon" icon="trash-2-outline"></nb-icon>
+                    </button>
+                </div>
+
+                <!-- Cart footer with separate back button -->
+                <div *ngIf="(cartItems$ | async)?.length > 0">
+                    <!-- Cart total and actions -->
+                    <div class="cart-footer">
+                        <div class="cart-total">
+                            {{ 'cart.total' | translate }}: {{cartTotal$ | async}} {{ 'products.huf' | translate }}
+                        </div>
+
+                        <div class="cart-actions">
+                            <button class="btn delete-btn" nbButton status="danger" (click)="clearCart()">
+                                {{ 'cart.clear' | translate }}
+                            </button>
+                            <button class="btn" nbButton status="success" (click)="checkout()">
+                                {{ 'cart.checkout' | translate }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Centered back button -->
+                    <div class="button-container">
+                        <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                            status="success" (click)="back()">
+                            <span class="arrow">
+                                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Filled left arrow -->
+                                    <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                                </svg>
+                            </span>
+                            {{ 'loginPage.back' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

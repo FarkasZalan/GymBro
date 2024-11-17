@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../user/user.model';
-import { filter, tap } from 'rxjs';
+import { filter, tap, map } from 'rxjs';
 import { LogOutComponent } from '../../auth/log-out/log-out.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,6 +13,7 @@ import { Product } from '../../admin-profile/product-management/product-models/p
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
 import { FoodSupliment } from '../../admin-profile/product-management/product-models/food-supliment.model';
+import { CartService } from '../../cart/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +32,11 @@ export class HeaderComponent implements OnInit {
   searcForProductText: string = '';
   searchResults: Product[] = []; // Store search results
 
+  // Observable to track the total number of items in the cart
+  cartCount$ = this.cartService.cartItems$.pipe(
+    map(items => items.reduce((count, item) => count + item.quantity, 0))
+  );
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private db: AngularFirestore,
@@ -39,7 +45,8 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private translate: TranslateService,
-    private appComponent: AppComponent
+    private appComponent: AppComponent,
+    private cartService: CartService
   ) { }
 
   ngOnInit(): void {
@@ -133,7 +140,6 @@ export class HeaderComponent implements OnInit {
   // Search Function
   onSearchChange() {
     const searchText = this.searcForProductText.toLowerCase();
-    console.log("Search text:", searchText);  // Check search text
 
     if (searchText) {
       const categories = [ProductViewText.FOOD_SUPLIMENTS, ProductViewText.ORGANIC_FOOD, ProductViewText.CLOTHES, ProductViewText.ACCESSORIES];
@@ -188,5 +194,10 @@ export class HeaderComponent implements OnInit {
   // Open logout confirmation dialog
   logOut() {
     this.dialog.open(LogOutComponent);
+  }
+
+  // Navigate to cart page
+  navigateToCart() {
+    this.router.navigate(['/cart']);
   }
 }

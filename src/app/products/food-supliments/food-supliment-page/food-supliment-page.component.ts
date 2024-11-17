@@ -14,6 +14,7 @@ import { User } from '../../../user/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { CartService } from '../../../cart/cart.service';
 
 @Component({
   selector: 'app-food-supliment-page',
@@ -88,6 +89,7 @@ export class FoodSuplimentPageComponent implements OnInit {
   userLoggedOutError: boolean = false;
   userLoggedOutLikeError: boolean = false;
   productId: string = '';
+  isProductInCart: boolean = false;
 
   //filter
   selectedReviewFilter: string = ProductViewText.ORDER_BY_LATEST;
@@ -107,7 +109,8 @@ export class FoodSuplimentPageComponent implements OnInit {
     private auth: AngularFireAuth,
     private db: AngularFirestore,
     private authService: AuthService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private cartService: CartService) { }
 
   ngOnInit(): void {
     this.foodSupliment = {
@@ -240,6 +243,7 @@ export class FoodSuplimentPageComponent implements OnInit {
       this.loyaltyPoints = Math.round(this.selectedPrice / 100);
       this.productIsInStock = selectedPriceObject.productStock > 0;
       this.selectedImage = selectedPriceObject.productImage;
+      this.getUnitPrice();
     }
   }
 
@@ -302,7 +306,7 @@ export class FoodSuplimentPageComponent implements OnInit {
   toggleCollapsedNutritionTable() {
     this.isCollapsedNutritionTable = !this.isCollapsedNutritionTable;
 
-    if (!this.isCollapsedActiveIngredients) {
+    if (!this.isCollapsedNutritionTable) {
       this.isCollapsedDescription = true;
       this.isCollapsedIngredients = true;
       this.isCollapsedActiveIngredients = true;
@@ -354,13 +358,30 @@ export class FoodSuplimentPageComponent implements OnInit {
   }
 
   addToCart() {
-    if (this.cartQuantity > 1) {
-      if (this.getPriceBasedOnQuantity(this.foodSupliment, this.selectedQuantityInProduct).productStock < this.cartQuantity) {
+    if (this.cartQuantity > 0) {
+      const selectedPrice = this.getPriceBasedOnQuantity(
+        this.foodSupliment,
+        this.selectedQuantityInProduct
+      );
+
+      if (selectedPrice.productStock < this.cartQuantity) {
         this.errorMessageStock = true;
-        this.productStock = this.getPriceBasedOnQuantity(this.foodSupliment, this.selectedQuantityInProduct).productStock;
-      } else {
-        this.errorMessageStock = false;
+        this.productStock = selectedPrice.productStock;
+        return;
       }
+
+      this.cartService.addToCart({
+        productId: this.foodSupliment.id,
+        productName: this.foodSupliment.productName,
+        quantity: this.cartQuantity,
+        price: selectedPrice.productPrice,
+        imageUrl: selectedPrice.productImage || '',
+        category: ProductViewText.FOOD_SUPLIMENTS,
+        flavor: this.selectedFlavor,
+        size: this.selectedQuantityInProduct.toString()
+      });
+
+      this.errorMessageStock = false;
     }
   }
 

@@ -201,17 +201,18 @@
                         translate }}
                     </span>
 
-                    <!-- Add to Cart Button -->
-                    <div class="add-to-cart text-center">
+                    <!-- Add to Cart Button (only for users) -->
+                    <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn" class="add-to-cart text-center">
                         <button class="btn btn-primary add-to-cart-btn"
                             [disabled]="cartQuantity<=0 || !productIsInStock" (click)="addToCart()">{{
                             'products.addToCart' |
                             translate
                             }}</button>
-                    </div><br>
+                    </div>
 
                     <!-- Stock text with small pipe and green color -->
                     <div class="stock-info">
+                        <br>
                         <span class="stock-status">{{ 'products.stock' | translate }}:
                             <span *ngIf="productIsInStock" class="green-text">
                                 <img src="../../../../assets/images/inStock.svg" alt="SOY Free Icon" width="12"
@@ -450,8 +451,9 @@
                                     class="emptyCardImage">
                                 <p class="emptyCardText">{{ 'review.noReviewsYetForProduct' | translate }}</p>
                             </div>
-                            <!-- add new review button -->
-                            <div class="button-container review-button">
+                            <!-- add new review button (only for users) -->
+                            <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn"
+                                class="button-container review-button">
                                 <button class="btn btn-primary " type="submit" nbButton status="success"
                                     (click)="gotoCreateNewRReview()">
                                     {{ 'review.addNewReview' | translate }}</button>
@@ -494,12 +496,13 @@
                         </div>
                     </div>
 
-                    <!-- add new review button -->
-                    <div class="button-container review-button">
+                    <!-- add new review button (only for users) -->
+                    <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn"
+                        class="button-container review-button">
                         <button class="btn btn-primary " type="submit" nbButton status="success"
                             (click)="gotoCreateNewRReview()">
                             {{ 'review.addNewReview' | translate }}</button>
-                    </div>
+                    </div><br>
 
                     <!-- user logged out error -->
                     <div *ngIf="userLoggedOutError" class="error-container" [@zoomIn]>

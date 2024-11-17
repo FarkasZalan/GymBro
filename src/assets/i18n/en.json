@@ -475,5 +475,24 @@
       "edited": "edited",
       "adminResponsedStart": "Replied to",
       "adminResponsedEnd": ""
+   },
+   "cart": {
+      "title": "Shopping Cart",
+      "empty": "Your cart is empty",
+      "total": "Total",
+      "clear": "Clear Cart",
+      "checkout": "Checkout",
+      "remove": "Remove",
+      "quantity": "Quantity",
+      "added": "Product added to cart",
+      "updated": "Cart updated",
+      "removed": "Product removed from cart",
+      "size": "Size",
+      "color": "Color",
+      "flavor": "Flavor",
+      "continueShopping": "Continue Shopping",
+      "subtotal": "Subtotal",
+      "items": "items",
+      "item": "item"
    }
 }

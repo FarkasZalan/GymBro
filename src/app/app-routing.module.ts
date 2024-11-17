@@ -32,6 +32,11 @@ export const routes: Routes = [
       .then(m => m.BlogModule),
   },
   {
+    path: 'cart',
+    loadChildren: () => import('./cart/cart.module')
+      .then(m => m.CartModule),
+  },
+  {
     path: 'admin-profile',
     loadChildren: () => import('./admin-profile/admin-profile.module')
       .then(m => m.AdminProfileModule),

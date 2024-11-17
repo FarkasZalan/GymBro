@@ -39,7 +39,6 @@ export class ForgotPasswordComponent {
     // send the password recovry email to the given email
     this.authService.forgotPassword(this.emailToForgotPassword)
       .then(success => {
-        console.log(success)
         if (success) {
           this.errorMessage = false;
           this.dialog.closeAll();
