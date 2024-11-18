@@ -94,6 +94,10 @@ export class FoodSuplimentPageComponent implements OnInit {
   productId: string = '';
   isProductInCart: boolean = false;
 
+  // show all reviews
+  showAllReviews: boolean = false;
+  readonly initialReviewCount: number = 3;
+
   //filter reviews
   availableReviewFilters: string[] = [
     ProductViewText.ORDER_BY_OLDEST,
@@ -101,7 +105,7 @@ export class FoodSuplimentPageComponent implements OnInit {
     ProductViewText.ORDER_BY_WORST_RATING,
     ProductViewText.ORDER_BY_BEST_RATING
   ];
-  currentSortOrder: string = ProductViewText.ORDER_BY_BEST_RATING;
+  currentSortOrder: string = ProductViewText.ORDER_BY_LATEST;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -404,7 +408,7 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.router.navigate(['product/loyaltyProgram']);
   }
 
-  filterRating(filter: string = ProductViewText.ORDER_BY_BEST_RATING) {
+  filterRating(filter: string = ProductViewText.ORDER_BY_LATEST) {
     // store the current sort order
     this.currentSortOrder = filter;
 
@@ -568,6 +572,16 @@ export class FoodSuplimentPageComponent implements OnInit {
         category: ProductViewText.FOOD_SUPLIMENTS
       }
     });
+  }
+
+  get visibleReviews(): ProductReeviews[] {
+    return this.showAllReviews
+      ? this.displayedReviews
+      : this.displayedReviews.slice(0, this.initialReviewCount);
+  }
+
+  toggleReviewsDisplay() {
+    this.showAllReviews = !this.showAllReviews;
   }
 
   goToLogin() {

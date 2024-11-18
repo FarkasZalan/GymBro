@@ -488,7 +488,10 @@
                 "editResponse": "Válasz szerkesztése",
                 "edited": "módosított",
                 "adminResponsedStart": "Válaszolt",
-                "adminResponsedEnd": "részére"
+                "adminResponsedEnd": "részére",
+                "showMore": "További vélemények",
+                "showLess": "Kevesebb vélemény",
+                "loading": "Betöltés..."
         },
         "cart": {
                 "title": "Kosár",

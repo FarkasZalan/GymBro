@@ -559,87 +559,108 @@
                             </span>
                         </div>
 
-                        <div class="col-12" *ngFor="let review of displayedReviews">
-                            <!-- Review Card -->
-                            <nb-card class="review-card-user mb-3">
-                                <nb-card-body>
-                                    <!-- Flex container for username and date -->
-                                    <div class="review-header-top">
-                                        <!-- creator name -->
-                                        <span class="review-username">{{ review.userFirstName }} {{ review.userLastName
-                                            }}</span>
+                        <!-- display reviews -->
+                        <div class="reviews-list">
+                            <div class="col-12 review-item" *ngFor="let review of visibleReviews">
+                                <!-- Review Card -->
+                                <nb-card class="review-card-user mb-3">
+                                    <nb-card-body>
+                                        <!-- Flex container for username and date -->
+                                        <div class="review-header-top">
+                                            <!-- creator name -->
+                                            <span class="review-username">{{ review.userFirstName }} {{
+                                                review.userLastName
+                                                }}</span>
 
-                                        <!-- review date -->
-                                        <span class="review-date">{{ review.date.toDate() | date: 'yyyy/MM/dd' }}</span>
-                                    </div>
-
-                                    <!-- Flex container for star rating and title -->
-                                    <div class="review-header-bottom">
-                                        <!-- Review Title -->
-                                        <h4 class="review-title">{{ review.title }}</h4>
-
-                                        <!-- Star Rating Display -->
-                                        <div class="star-rating">
-                                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-                                                <span class="star"
-                                                    [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
-                                            </ng-container>
+                                            <!-- review date -->
+                                            <span class="review-date">{{ review.date.toDate() | date: 'yyyy/MM/dd'
+                                                }}</span>
                                         </div>
 
-                                        <!-- checked text if review already checked -->
-                                        <span *ngIf="review.checkedByAdmin" class="checked-review-text">
-                                            {{ 'review.checkedReview' | translate }}
-                                        </span>
-                                    </div>
-                                    <!-- Review Text -->
-                                    <p class="review-text">{{ review.text }}</p>
+                                        <!-- Flex container for star rating and title -->
+                                        <div class="review-header-bottom">
+                                            <!-- Review Title -->
+                                            <h4 class="review-title">{{ review.title }}</h4>
 
-                                    <!-- Like Button for Review -->
-                                    <div class="like-section">
-                                        <button class="like-button"
-                                            [ngClass]="{'liked': review.likes.includes(currentUserId)}">
-                                            <img src="../../../../assets/images/like.svg" alt="SOY Free Icon" width="22"
-                                                height="22" (click)="likeReview(review)"> <span class="like-number">{{
-                                                review.likes?.length || 0 }}</span>
-                                        </button>
+                                            <!-- Star Rating Display -->
+                                            <div class="star-rating">
+                                                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                                                    <span class="star"
+                                                        [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
+                                                </ng-container>
+                                            </div>
 
-                                        <!-- Edit Button: Visible only if the user is the author of the review -->
-                                        <div *ngIf="review.userId === currentUserId" class="edit-review-container">
-                                            <button class="btn edit-button" (click)="editReview(review)">
-                                                {{ 'profileMenu.shippingAddressForm.modifyAddress' | translate }}
+                                            <!-- checked text if review already checked -->
+                                            <span *ngIf="review.checkedByAdmin" class="checked-review-text">
+                                                {{ 'review.checkedReview' | translate }}
+                                            </span>
+                                        </div>
+                                        <!-- Review Text -->
+                                        <p class="review-text">{{ review.text }}</p>
+
+                                        <!-- Like Button for Review -->
+                                        <div class="like-section">
+                                            <button class="like-button"
+                                                [ngClass]="{'liked': review.likes.includes(currentUserId)}">
+                                                <img src="../../../../assets/images/like.svg" alt="SOY Free Icon"
+                                                    width="22" height="22" (click)="likeReview(review)"> <span
+                                                    class="like-number">{{
+                                                    review.likes?.length || 0 }}</span>
+                                            </button>
+
+                                            <!-- Edit Button: Visible only if the user is the author of the review -->
+                                            <div *ngIf="review.userId === currentUserId" class="edit-review-container">
+                                                <button class="btn edit-button" (click)="editReview(review)">
+                                                    {{ 'profileMenu.shippingAddressForm.modifyAddress' | translate
+                                                    }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </nb-card-body>
+                                </nb-card>
+
+                                <!-- Response Card (if there is a response) -->
+                                <nb-card class="response-card-user mb-3" *ngIf="review.response">
+                                    <nb-card-body>
+
+                                        <div class="review-header-top">
+                                            <!-- review creator name -->
+                                            <span class="review-username"> {{ 'review.adminResponsedStart' |
+                                                translate
+                                                }} {{
+                                                review.userFirstName }} {{ 'review.adminResponsedEnd' | translate
+                                                }}</span>
+
+                                            <!-- response date -->
+                                            <span class="review-date">{{ review.responseDate.toDate() | date:
+                                                'yyyy/MM/dd'
+                                                }}</span>
+                                        </div>
+                                        <h5 class="response-title">Gym Bro</h5>
+                                        <p class="response-text">{{ review.response }}</p>
+
+                                        <!-- Like Button for Response -->
+                                        <div class="like-section">
+                                            <button class="like-button"
+                                                [ngClass]="{'liked': review.responseLikes.includes(currentUserId)}">
+                                                <img src="../../../../assets/images/like.svg" alt="SOY Free Icon"
+                                                    width="22" height="22" (click)="likeResponse(review)"> <span
+                                                    class="like-number">{{
+                                                    review.responseLikes?.length || 0 }}</span>
                                             </button>
                                         </div>
-                                    </div>
-                                </nb-card-body>
-                            </nb-card>
+                                    </nb-card-body>
+                                </nb-card>
+                            </div>
 
-                            <!-- Response Card (if there is a response) -->
-                            <nb-card class="response-card-user mb-3" *ngIf="review.response">
-                                <nb-card-body>
-
-                                    <div class="review-header-top">
-                                        <!-- review creator name -->
-                                        <span class="review-username"> {{ 'review.adminResponsedStart' | translate }} {{
-                                            review.userFirstName }} {{ 'review.adminResponsedEnd' | translate }}</span>
-
-                                        <!-- response date -->
-                                        <span class="review-date">{{ review.responseDate.toDate() | date: 'yyyy/MM/dd'
-                                            }}</span>
-                                    </div>
-                                    <h5 class="response-title">Gym Bro</h5>
-                                    <p class="response-text">{{ review.response }}</p>
-
-                                    <!-- Like Button for Response -->
-                                    <div class="like-section">
-                                        <button class="like-button"
-                                            [ngClass]="{'liked': review.responseLikes.includes(currentUserId)}">
-                                            <img src="../../../../assets/images/like.svg" alt="SOY Free Icon" width="22"
-                                                height="22" (click)="likeResponse(review)"> <span class="like-number">{{
-                                                review.responseLikes?.length || 0 }}</span>
-                                        </button>
-                                    </div>
-                                </nb-card-body>
-                            </nb-card>
+                            <!-- show more reviews button -->
+                            <div *ngIf="displayedReviews.length > initialReviewCount" class="show-more-container">
+                                <button class="btn btn-primary show-more-button" (click)="toggleReviewsDisplay()">
+                                    {{ (showAllReviews ? 'review.showLess' : 'review.showMore') | translate }}
+                                    {{ showAllReviews ? '' :' (' + (displayedReviews.length - initialReviewCount) +
+                                    ')'}}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

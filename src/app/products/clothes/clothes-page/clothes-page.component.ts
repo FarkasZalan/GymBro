@@ -43,7 +43,7 @@ import { ReviewHandleComponent } from '../../review-handle/review-handle.compone
         style({ transform: 'scale(0.8)', opacity: 0 }),
         animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
       ]),
-    ]),
+    ])
   ]
 })
 export class ClothesPageComponent implements OnInit {
@@ -117,6 +117,10 @@ export class ClothesPageComponent implements OnInit {
   productId: string = '';
   isProductInCart: boolean = false;
 
+  // show all reviews
+  showAllReviews: boolean = false;
+  readonly initialReviewCount: number = 3;
+
   //filter reviews
   availableReviewFilters: string[] = [
     ProductViewText.ORDER_BY_OLDEST,
@@ -124,7 +128,7 @@ export class ClothesPageComponent implements OnInit {
     ProductViewText.ORDER_BY_WORST_RATING,
     ProductViewText.ORDER_BY_BEST_RATING
   ];
-  currentSortOrder: string = ProductViewText.ORDER_BY_BEST_RATING;
+  currentSortOrder: string = ProductViewText.ORDER_BY_LATEST;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -354,7 +358,7 @@ export class ClothesPageComponent implements OnInit {
     this.router.navigate(['product/loyaltyProgram']);
   }
 
-  filterRating(filter: string = ProductViewText.ORDER_BY_BEST_RATING) {
+  filterRating(filter: string = ProductViewText.ORDER_BY_LATEST) {
     // store the current sort order
     this.currentSortOrder = filter;
 
@@ -517,6 +521,16 @@ export class ClothesPageComponent implements OnInit {
         category: ProductViewText.CLOTHES
       }
     });
+  }
+
+  get visibleReviews(): ProductReeviews[] {
+    return this.showAllReviews
+      ? this.displayedReviews
+      : this.displayedReviews.slice(0, this.initialReviewCount);
+  }
+
+  toggleReviewsDisplay() {
+    this.showAllReviews = !this.showAllReviews;
   }
 
   goToLogin() {

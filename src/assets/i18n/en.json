@@ -484,7 +484,10 @@
       "editResponse": "Edit response",
       "edited": "edited",
       "adminResponsedStart": "Replied to",
-      "adminResponsedEnd": ""
+      "adminResponsedEnd": "",
+      "showMore": "Show More Reviews",
+      "showLess": "Show Less",
+      "loading": "Loading..."
    },
    "cart": {
       "title": "Shopping Cart",
