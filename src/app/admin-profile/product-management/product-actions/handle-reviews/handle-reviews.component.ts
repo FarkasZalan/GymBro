@@ -158,13 +158,21 @@ export class HandleReviewsComponent implements OnInit {
 
   filterRating() {
     if (this.selectedReviewFilter === ProductViewText.ORDER_BY_BEST_RATING) {
-      this.reviews = this.productService.sortReviewsByRatingASC(this.reviews);
+      this.productService.sortReviewsByRatingASC(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
+        this.reviews = reviews;
+      });
     } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_WORST_RATING) {
-      this.reviews = this.productService.sortReviewsByRatingDESC(this.reviews);
+      this.productService.sortReviewsByRatingDESC(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
+        this.reviews = reviews;
+      });
     } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_LATEST) {
-      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
+      this.productService.sortReviewsByNewest(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
+        this.reviews = reviews;
+      });
     } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_OLDEST) {
-      this.reviews = this.productService.sortReviewsByOldest(this.reviews);
+      this.productService.sortReviewsByOldest(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
+        this.reviews = reviews;
+      });
     }
   }
 
@@ -172,8 +180,8 @@ export class HandleReviewsComponent implements OnInit {
     this.productService.getReviewsForProduct(this.productId, this.productCategory).subscribe(reviews => {
       this.reviews = reviews;
       this.selectedReviewFilter = ProductViewText.ORDER_BY_LATEST;
-      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
       this.calculateAverageRating();
+      this.filterRating();
     })
   }
 

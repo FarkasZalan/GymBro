@@ -26,42 +26,32 @@ export class ProductService {
         ).valueChanges();
     }
 
-    sortReviewsByOldest(reviews: ProductReeviews[]) {
-        return reviews.sort((a, b) => {
-            // Convert `a.date` and `b.date` to Date objects if they are Firebase Timestamps
-            const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
-            const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
-
-            // Sort reviews by date (oldest to newest)
-            return dateA.getTime() - dateB.getTime();
-        });
+    sortReviewsByOldest(productCategory: string) {
+        return this.db.collection('reviews').doc(productCategory).collection('allReview', ref =>
+            ref
+                .orderBy('date', 'asc')
+        ).valueChanges();
     }
 
-    sortReviewsByNewest(reviews: ProductReeviews[]) {
-        return reviews.sort((a, b) => {
-            // Convert `a.date` and `b.date` to Date objects if they are Firebase Timestamps
-            const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
-            const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
-
-            // Sort reviews by date (newest to oldest)
-            return dateB.getTime() - dateA.getTime();
-        });
+    sortReviewsByNewest(productCategory: string) {
+        return this.db.collection('reviews').doc(productCategory).collection('allReview', ref =>
+            ref
+                .orderBy('date', 'desc')
+        ).valueChanges();
     }
 
-    sortReviewsByRatingASC(reviews: ProductReeviews[]) {
-        // Sort default by defaul price desc
-        return reviews.sort((a, b) => {
-            // Sort in ascending order the ratings
-            return b.rating - a.rating;
-        });
+    sortReviewsByRatingASC(productCategory: string) {
+        return this.db.collection('reviews').doc(productCategory).collection('allReview', ref =>
+            ref
+                .orderBy('rating', 'desc')
+        ).valueChanges();
     }
 
-    sortReviewsByRatingDESC(reviews: ProductReeviews[]) {
-        // Sort default by defaul price desc
-        return reviews.sort((a, b) => {
-            // Sort in descending order the ratings
-            return a.rating - b.rating;
-        });
+    sortReviewsByRatingDESC(productCategory: string) {
+        return this.db.collection('reviews').doc(productCategory).collection('allReview', ref =>
+            ref
+                .orderBy('rating', 'asc')
+        ).valueChanges();
     }
 
     // Fetch related blogs based on tags and language

@@ -82,8 +82,11 @@ export class OrganicFoodPageComponent implements OnInit {
   errorMessageStock: boolean = false;
 
   // reviews
+  // Need two arrays for the reviews, one for the display the reviews and one for handling the reviews likes
+  displayedReviews: ProductReeviews[] = []; // Display data - gets sorted
+  originalReviews: ProductReeviews[] = []; // Original data - never sorted
   averageRating: number = 0;
-  reviews: ProductReeviews[] = [];
+
   userLoggedIn: boolean = false;
   userReview: User;
   currentUserId: string = '';
@@ -93,13 +96,13 @@ export class OrganicFoodPageComponent implements OnInit {
   isProductInCart: boolean = false;
 
   //filter reviews
-  selectedReviewFilter: string = ProductViewText.ORDER_BY_LATEST;
   availableReviewFilters: string[] = [
     ProductViewText.ORDER_BY_OLDEST,
     ProductViewText.ORDER_BY_LATEST,
     ProductViewText.ORDER_BY_WORST_RATING,
     ProductViewText.ORDER_BY_BEST_RATING
   ];
+  currentSortOrder: string = ProductViewText.ORDER_BY_BEST_RATING;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -380,33 +383,53 @@ export class OrganicFoodPageComponent implements OnInit {
     this.router.navigate(['product/loyaltyProgram']);
   }
 
-  filterRating() {
-    if (this.selectedReviewFilter === ProductViewText.ORDER_BY_BEST_RATING) {
-      this.reviews = this.productService.sortReviewsByRatingASC(this.reviews);
-    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_WORST_RATING) {
-      this.reviews = this.productService.sortReviewsByRatingDESC(this.reviews);
-    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_LATEST) {
-      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
-    } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_OLDEST) {
-      this.reviews = this.productService.sortReviewsByOldest(this.reviews);
+  filterRating(filter: string = ProductViewText.ORDER_BY_BEST_RATING) {
+    // store the current sort order
+    this.currentSortOrder = filter;
+
+    // make a copy of the original reviews
+    let sortedReviews = [...this.originalReviews];
+
+    // sort the reviews based on the current sort order
+    switch (filter) {
+      case ProductViewText.ORDER_BY_BEST_RATING:
+        sortedReviews.sort((a, b) => b.rating - a.rating);
+        break;
+      case ProductViewText.ORDER_BY_WORST_RATING:
+        sortedReviews.sort((a, b) => a.rating - b.rating);
+        break;
+      case ProductViewText.ORDER_BY_LATEST:
+        sortedReviews.sort((a, b) => b.date.toMillis() - a.date.toMillis());
+        break;
+      case ProductViewText.ORDER_BY_OLDEST:
+        sortedReviews.sort((a, b) => a.date.toMillis() - b.date.toMillis());
+        break;
     }
+
+    // set the sorted reviews to the display array
+    this.displayedReviews = sortedReviews;
   }
 
   getReviews() {
     this.productService.getReviewsForProduct(this.productId, ProductViewText.ORGANIC_FOOD).subscribe(reviews => {
-      this.reviews = reviews;
+      // set the original reviews
+      this.originalReviews = reviews;
+      // set the display reviews
+      this.displayedReviews = [...reviews];
+      // calculate the average rating
       this.calculateAverageRating();
-      this.filterRating();
+      // sort the reviews based on the current sort order
+      this.filterRating(this.currentSortOrder); // Apply initial sort
     })
   }
 
   calculateAverageRating(): void {
     this.averageRating = 0;
-    if (this.reviews.length > 0) {
-      this.reviews.forEach(number => {
+    if (this.displayedReviews.length > 0) {
+      this.displayedReviews.forEach(number => {
         this.averageRating += number.rating
       });
-      this.averageRating = this.averageRating / this.reviews.length;
+      this.averageRating = this.averageRating / this.displayedReviews.length;
       this.averageRating = Math.round(this.averageRating * 100) / 100;
     } else {
       this.averageRating = 1;
@@ -414,23 +437,44 @@ export class OrganicFoodPageComponent implements OnInit {
   }
 
   getRatingCount(star: number): number {
-    return this.reviews.filter(review => review.rating === star).length;
+    return this.displayedReviews.filter(review => review.rating === star).length;
   }
 
   getRatingPercentage(star: number): number {
-    return (this.getRatingCount(star) / this.reviews.length) * 100;
+    return (this.getRatingCount(star) / this.displayedReviews.length) * 100;
   }
 
   async likeReview(review: ProductReeviews) {
+    // check if user is logged in
     if (this.userLoggedIn) {
-      // Check if user already liked the review
-      if (!review.likes.includes(this.currentUserId)) {
-        review.likes.push(this.currentUserId);
+      // make a copy of the review we are going to update
+      const updatedReview = { ...review };
+
+      // check if the user already liked the review
+      if (!updatedReview.likes.includes(this.currentUserId)) {
+        updatedReview.likes.push(this.currentUserId);
       } else {
-        // Remove the like if user clicks again
-        review.likes = review.likes.filter(id => id !== this.currentUserId);
+        // remove the like if the user already liked the review
+        updatedReview.likes = updatedReview.likes.filter(id => id !== this.currentUserId);
       }
-      await this.db.collection('reviews').doc(ProductViewText.ORGANIC_FOOD).collection('allReview').doc(review.id).update({ likes: review.likes });
+
+      // update the review in the database
+      await this.db.collection('reviews')
+        .doc(ProductViewText.ORGANIC_FOOD)
+        .collection('allReview')
+        .doc(review.id)
+        .update({ likes: updatedReview.likes });
+
+      // update the display array
+      const index = this.displayedReviews.findIndex(r => r.id === review.id);
+      // update the original array
+      const allIndex = this.originalReviews.findIndex(r => r.id === review.id);
+
+      if (index !== -1) this.displayedReviews[index] = updatedReview;
+      if (allIndex !== -1) this.originalReviews[allIndex] = updatedReview;
+
+      // sort the reviews based on the current sort order
+      this.filterRating(this.currentSortOrder);
     } else {
       this.userLoggedOutLikeError = true;
       this.userLoggedOutError = false;
@@ -439,11 +483,11 @@ export class OrganicFoodPageComponent implements OnInit {
 
   async likeResponse(review: ProductReeviews) {
     if (this.userLoggedIn) {
-      // Check if user already liked the response
+      // check if the user already liked the response
       if (!review.responseLikes.includes(this.currentUserId)) {
         review.responseLikes.push(this.currentUserId);
       } else {
-        // Remove the like if user clicks again
+        // remove the like if the user already liked the response
         review.responseLikes = review.responseLikes.filter(id => id !== this.currentUserId);
       }
       await this.db.collection('reviews').doc(ProductViewText.ORGANIC_FOOD).collection('allReview').doc(review.id).update({ responseLikes: review.responseLikes });

@@ -446,8 +446,8 @@
                         "mostExpensive": "Rendezés legdrágább szerint",
                         "nameASC": "Rendezés név szerint (növekvő)",
                         "nameDESC": "Rendezés név szerint (csökkenő)",
-                        "bestRating": "Remdezés legjobb értékelés szerint",
-                        "worstRating": "Remdezés legrosszabb értékelés szerint"
+                        "bestRating": "Rendezés legjobb értékelés szerint",
+                        "worstRating": "Rendezés legrosszabb értékelés szerint"
                 },
                 "apply": "Alkalmaz",
                 "filterBlogByLanguage": "Szűrés nyelv szerint",

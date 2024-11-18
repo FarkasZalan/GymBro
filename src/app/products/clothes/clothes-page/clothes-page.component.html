@@ -23,9 +23,11 @@
                     <h5 class="selected-quantity">{{ selectedSizeInProduct }}</h5>
 
                     <!-- rating -->
-                    <div *ngIf="reviews.length > 0" class="average-rating-product-display" (click)="goToReviews()">
+                    <div *ngIf="displayedReviews.length > 0" class="average-rating-product-display"
+                        (click)="goToReviews()">
                         <i [attr.data-star]="averageRating"></i>
-                        <span class="rating-number-product-display">{{ reviews.length }} {{ 'review.reviewText' |
+                        <span class="rating-number-product-display">{{ displayedReviews.length }} {{ 'review.reviewText'
+                            |
                             translate }}</span>
                         <br>
                     </div>
@@ -263,7 +265,7 @@
                     <h2>{{ 'products.customerReviews' | translate }}</h2>
 
                     <!-- no reviews section -->
-                    <div *ngIf="reviews.length === 0" class="product-empty-list-container">
+                    <div *ngIf="displayedReviews.length === 0" class="product-empty-list-container">
                         <nb-card class="emptyCard" [@zoomIn]>
                             <nb-card-body>
                                 <div>
@@ -295,13 +297,14 @@
                     </div>
 
                     <!-- have any reviews -->
-                    <div *ngIf="reviews.length !== 0">
+                    <div *ngIf="displayedReviews.length !== 0">
                         <div class="ratings-container">
                             <div class="average-rating">
                                 <i [attr.data-star]="averageRating"></i>
                                 <span class="rating-number">{{ averageRating }}</span>
                             </div>
-                            <p class="review-numbers-display">{{ reviews.length }} {{ 'review.reviewText' | translate }}
+                            <p class="review-numbers-display">{{ displayedReviews.length }} {{ 'review.reviewText' |
+                                translate }}
                             </p>
 
                             <div class="ratings-breakdown" #reviewsSection>
@@ -338,12 +341,12 @@
                         </div>
 
                         <!-- Display Reviews -->
-                        <div *ngIf="reviews && reviews.length > 0">
+                        <div *ngIf="displayedReviews && displayedReviews.length > 0">
                             <!-- Filter Section -->
                             <div class="dropdown-container filter-review-section">
                                 <select class="form-control drop-down-list allow-selected-list-color"
                                     name="reviewFilter" #reviewFilter="ngModel"
-                                    (change)="filterRating(selectedReviewFilter)" [(ngModel)]="selectedReviewFilter">
+                                    (change)="filterRating(currentSortOrder)" [(ngModel)]="currentSortOrder">
                                     <option *ngFor="let filters of availableReviewFilters" [value]="filters">
                                         {{ filters | translate }}
                                     </option>
@@ -375,7 +378,7 @@
                                 </span>
                             </div>
 
-                            <div class="col-12" *ngFor="let review of reviews">
+                            <div class="col-12" *ngFor="let review of displayedReviews">
                                 <!-- Review Card -->
                                 <nb-card class="review-card-user mb-3">
                                     <nb-card-body>
