@@ -86,8 +86,31 @@
                     <p>{{ smallDescription }}</p>
                     <br>
 
+                    <!-- Gender and Material info -->
+                    <div class="product-specs" *ngIf="productCategory === productViewText.CLOTHES">
+                        <div class="spec-item">
+                            <div class="spec-icon">
+                                <i class="fas fa-venus-mars"></i>
+                            </div>
+                            <div class="spec-content">
+                                <span class="spec-label">{{ 'products.gender' | translate }}</span>
+                                <span class="spec-value">{{ clothObject.productGender | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <div class="spec-content">
+                                <span class="spec-label">{{ 'products.material' | translate }}</span>
+                                <span class="spec-value">{{ clothObject.material | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- safe section -->
-                    <div class="stock-info">
+                    <div class="stock-info"
+                        *ngIf="productCategory === productViewText.FOOD_SUPLIMENTS || productCategory === productViewText.ORGANIC_FOOD">
                         <!-- pregnancy -->
                         <span *ngIf="!safeForConsumptionDuringPregnancy" class="red-text">
                             <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
@@ -102,7 +125,8 @@
                     </div>
 
                     <!-- Breastfeeding -->
-                    <div class="stock-info">
+                    <div class="stock-info"
+                        *ngIf="productCategory === productViewText.FOOD_SUPLIMENTS || productCategory === productViewText.ORGANIC_FOOD">
                         <span *ngIf="!safeForConsumptionDuringBreastfeeding" class="red-text">
                             <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
                                 height="12">

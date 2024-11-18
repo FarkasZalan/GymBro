@@ -65,7 +65,6 @@ export class OrganicFoodPageComponent implements OnInit {
 
   isCollapsedDescription: boolean = true;
   isCollapsedIngredients: boolean = true;
-  isCollapsedActiveIngredients: boolean = true;
   isCollapsedNutritionTable: boolean = true;
   isFlavorDropdownOpen: boolean = false;
 
@@ -163,11 +162,13 @@ export class OrganicFoodPageComponent implements OnInit {
 
         this.selectedQuantityInProduct = this.getDefaultPrice(organicFood).quantityInProduct;
         this.selectedPrice = this.getDefaultPrice(organicFood).productPrice;
+        this.selectedFlavor = this.getDefaultPrice(organicFood).productFlavor;
         this.loyaltyPoints = Math.round(this.selectedPrice / 100);
         this.selectedImage = this.getDefaultPrice(organicFood).productImage;
         this.getReviews();
 
-        this.getAvailableFlavors();
+        // get the available flavors for default price
+        this.getAvailableFlavors(true);
 
         if (this.getDefaultPrice(organicFood).productStock === 0) {
           this.productIsInStock = false;
@@ -196,13 +197,16 @@ export class OrganicFoodPageComponent implements OnInit {
     this.router.navigate(['product/' + ProductViewText.ORGANIC_FOOD + '/' + productId])
   }
 
-  // get the available flavors
-  getAvailableFlavors() {
+  // get the available flavors for the selected quantity
+  // if defaultPriceSelect is false, the first flavor will be selected (this is necessary for the default price)
+  getAvailableFlavors(defaultPriceSelect: boolean) {
     const filteredPrices = this.organicFood.prices.filter(price => price.quantityInProduct === this.selectedQuantityInProduct);
 
     // get the unique flavors
     this.availableFlavors = Array.from(new Set(filteredPrices.map(price => price.productFlavor)));
-    this.selectedFlavor = this.availableFlavors[0];
+    if (!defaultPriceSelect) {
+      this.selectedFlavor = this.availableFlavors[0];
+    }
     this.updateSelectedPriceAndStock();
   }
 
@@ -212,7 +216,7 @@ export class OrganicFoodPageComponent implements OnInit {
     this.loyaltyPoints = Math.round(this.selectedPrice / 100);
     this.selectedImage = this.getPriceBasedOnQuantity(this.organicFood, selectedQuantity).productImage;
 
-    this.getAvailableFlavors();
+    this.getAvailableFlavors(false);
 
     if (this.getPriceBasedOnQuantity(this.organicFood, selectedQuantity).productStock === 0) {
       this.productIsInStock = false;
@@ -289,7 +293,6 @@ export class OrganicFoodPageComponent implements OnInit {
 
     if (!this.isCollapsedDescription) {
       this.isCollapsedIngredients = true;
-      this.isCollapsedActiveIngredients = true;
       this.isCollapsedNutritionTable = true;
     }
   }
@@ -299,17 +302,6 @@ export class OrganicFoodPageComponent implements OnInit {
 
     if (!this.isCollapsedIngredients) {
       this.isCollapsedDescription = true;
-      this.isCollapsedActiveIngredients = true;
-      this.isCollapsedNutritionTable = true;
-    }
-  }
-
-  toggleCollapsedActiveIngredients() {
-    this.isCollapsedActiveIngredients = !this.isCollapsedActiveIngredients;
-
-    if (!this.isCollapsedActiveIngredients) {
-      this.isCollapsedDescription = true;
-      this.isCollapsedIngredients = true;
       this.isCollapsedNutritionTable = true;
     }
   }
@@ -320,7 +312,6 @@ export class OrganicFoodPageComponent implements OnInit {
     if (!this.isCollapsedNutritionTable) {
       this.isCollapsedDescription = true;
       this.isCollapsedIngredients = true;
-      this.isCollapsedActiveIngredients = true;
     }
   }
 
@@ -376,6 +367,7 @@ export class OrganicFoodPageComponent implements OnInit {
         category: ProductViewText.ORGANIC_FOOD,
         flavor: this.selectedFlavor,
         size: this.selectedQuantityInProduct.toString(),
+        productUnit: this.organicFood.dosageUnit,
         maxStockError: false,
         maxStock: selectedPrice.productStock
       });

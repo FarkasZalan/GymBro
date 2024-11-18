@@ -110,6 +110,7 @@ export class HandleReviewsComponent implements OnInit {
           // make a copy from the object
           this.clothObject = { ...cloth };
           this.productName = this.clothObject.productName;
+          this.smallDescription = this.clothObject.smallDescription;
           this.productId = this.clothObject.id;
           this.selectedImage = this.getDefaultPrice(this.clothObject).productImage;
           //this.smallDescription = this.clothObject.smallDescription;
@@ -121,6 +122,7 @@ export class HandleReviewsComponent implements OnInit {
           // make a copy from the object
           this.accessoriObject = { ...accessories };
           this.productName = this.accessoriObject.productName;
+          this.smallDescription = this.accessoriObject.smallDescription;
           this.productId = this.accessoriObject.id;
           this.selectedImage = this.getDefaultPrice(this.accessoriObject).productImage;
           //this.smallDescription = this.accessoriObject.smallDescription;

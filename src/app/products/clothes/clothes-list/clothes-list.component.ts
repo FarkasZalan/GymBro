@@ -60,7 +60,7 @@ export class ClothesListComponent implements OnInit {
 
       // Sort default by name
       this.clothes = this.productService.sortClothesPriceByASC(this.clothes);
-      this.originaClothes = this.productService.sortClothesPriceByASC(this.originaClothes);
+      this.originaClothes = this.productService.sortClothesPriceByDESC(this.originaClothes);
 
       // Get the reviews for the products
       this.clothes.forEach((product) => {

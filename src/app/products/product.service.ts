@@ -87,6 +87,16 @@ export class ProductService {
         ).valueChanges();
     }
 
+    // Fetch related products based on gender
+    getRelatedProductsByGender(currentProductId: string, gender: string, productMainCategory: string) {
+        return this.db.collection('products').doc(productMainCategory).collection('allProduct', ref =>
+            ref
+                .where('id', '!=', currentProductId)
+                .where('productGender', '==', gender)
+                .limit(6)
+        ).valueChanges();
+    }
+
     // Fetch related products based on category
     getRelatedProducts(currentProductId: string, category: string, productMainCategory: string) {
         return this.db.collection('products').doc(productMainCategory).collection('allProduct', ref =>

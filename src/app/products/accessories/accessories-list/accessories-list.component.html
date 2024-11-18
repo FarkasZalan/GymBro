@@ -22,7 +22,7 @@
     <!-- Accessories -->
     <div *ngIf="accessories" class="product-list-container">
         <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories" [@zoomIn]>
-            <nb-card-body class="product-image" (click)="goToEditProduct(accessory.id)">
+            <nb-card-body class="product-image" (click)="goToProductPage(accessory.id)">
 
 
                 <div *ngIf="getDefaultPrice(accessory) as defaultPrice" class="details-container text-center">

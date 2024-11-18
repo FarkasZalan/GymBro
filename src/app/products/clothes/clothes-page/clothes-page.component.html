@@ -1,1 +1,491 @@
-<p>clothes-page works!</p>
+<div class="container" [@zoomIn]>
+    <nb-card class="container">
+        <nb-card-body style="overflow: hidden;">
+            <div class="row">
+                <!-- Product image -->
+                <div class="col-md-4 form-group">
+                    <div class="details-container">
+                        <div class="image-container">
+                            <img *ngIf="selectedImage !== ''" [@zoomIn] [src]="selectedImage" alt="Product Image"
+                                class="product-image" />
+                            <img *ngIf="selectedImage === ''" [@zoomIn]
+                                src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                class="product-image" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Details: Name, Quantity Selection -->
+                <div class="col-md-4 form-group">
+                    <!-- Product Name -->
+                    <h2 class="product-name">{{ clothes.productName | translate }}</h2>
+                    <!-- Selected size -->
+                    <h5 class="selected-quantity">{{ selectedSizeInProduct }}</h5>
+
+                    <!-- rating -->
+                    <div *ngIf="reviews.length > 0" class="average-rating-product-display" (click)="goToReviews()">
+                        <i [attr.data-star]="averageRating"></i>
+                        <span class="rating-number-product-display">{{ reviews.length }} {{ 'review.reviewText' |
+                            translate }}</span>
+                        <br>
+                    </div>
+
+                    <!-- small description section -->
+                    <p>{{ clothes.smallDescription }}</p>
+                    <br>
+
+                    <!-- Gender and Material info -->
+                    <div class="product-specs">
+                        <div class="spec-item">
+                            <div class="spec-icon">
+                                <i class="fas fa-venus-mars"></i>
+                            </div>
+                            <div class="spec-content">
+                                <span class="spec-label">{{ 'products.gender' | translate }}</span>
+                                <span class="spec-value">{{ clothes.productGender | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <div class="spec-content">
+                                <span class="spec-label">{{ 'products.material' | translate }}</span>
+                                <span class="spec-value">{{ clothes.material | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- sizes section -->
+                    <div class="weight-select-display" *ngFor="let size of getUniqueSizes()" (click)="selectSize(size)"
+                        name="size" [ngClass]="{'selected': selectedSizeInProduct === size}">
+                        {{ size }}
+                    </div>
+                </div>
+
+                <!-- cart and amount section -->
+                <div class="col-md-4 form-group">
+                    <h3 class="product-price">{{ selectedPrice | currency:'':'':'1.0-0' }} {{ 'products.huf'
+                        | translate
+                        }}</h3>
+
+                    <!-- Loyalty Program Points -->
+                    <div class="loyalty-points">
+                        <h3 (click)="openLoyalityProgram()" class="product-price loyalty-program-text">{{
+                            'profileMenu.loyaltyProgram' | translate
+                            }}</h3>
+                        <p style="font-size: 16px;"><strong>{{ 'products.loyaltyProgram.loyalityPointPerItem' |
+                                translate }}
+                                <br><span class="loyality-points">{{ loyaltyPoints }} {{'products.loyaltyProgram.points'
+                                    | translate
+                                    }}</span></strong>
+                        </p>
+                        <br>
+                    </div>
+
+                    <div class="row">
+                        <!-- color section -->
+                        <div class="col-md-8 form-group">
+                            <div class="dropdown-list-container">
+                                <div class="form-group position-relative order-by-container">
+
+                                    <!-- Dropdown container with arrow icon -->
+                                    <div class="dropdown-container" (click)="toggleColorDropdown()">
+
+                                        <!-- Select color -->
+                                        <select class="form-control drop-down-list allow-selected-list-color"
+                                            name="colors" required #colors="ngModel"
+                                            (change)="selectColor(selectedColor)" [(ngModel)]="selectedColor">
+                                            <!-- List of categories -->
+                                            <option *ngFor="let color of availableColors" [value]="color">
+                                                {{ color | translate }}
+                                            </option>
+                                        </select>
+
+                                        <!-- Arrow icon based on dropdown open/closed state -->
+                                        <div class="arrow-icon">
+                                            <svg *ngIf="isColorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 14l5-5 5 5z" />
+                                            </svg>
+                                            <svg *ngIf="!isColorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                                <path d="M7 10l5 5 5-5z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Cart quantity input -->
+                        <div class="col-md-12 form-group">
+                            <div class="input-container">
+                                <input type="number" min="1" class="form-control" name="dailyDosage" required
+                                    [(ngModel)]="cartQuantity" (input)="checkStock()">
+                                <span class="unit-suffix">{{ productViewText.PCS | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span *ngIf="errorMessageStock" class="help-block-login-error" [@zoomIn]>
+                        <i class="fas fa-exclamation-triangle icon"></i>
+                        {{ 'products.maxCapacityToOrder' | translate }} {{ productStock }} {{ productViewText.PCS |
+                        translate }}
+                    </span>
+
+                    <!-- Add to Cart Button -->
+                    <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn" class="add-to-cart text-center">
+                        <button class="btn btn-primary add-to-cart-btn"
+                            [disabled]="cartQuantity<=0 || errorMessageStock || !productIsInStock"
+                            (click)="addToCart()">{{
+                            'products.addToCart' |
+                            translate
+                            }}</button>
+                    </div>
+
+                    <!-- Stock text with small pipe and green color -->
+                    <div class="stock-info">
+                        <br>
+                        <span class="stock-status">{{ 'products.stock' | translate }}:
+                            <span *ngIf="productIsInStock" class="green-text">
+                                <img src="../../../../assets/images/inStock.svg" alt="SOY Free Icon" width="12"
+                                    height="12">
+                                {{ 'products.productInStock' | translate }}
+                            </span>
+
+                            <span *ngIf="!productIsInStock" class="red-text">
+                                <img src="../../../../assets/images/outOfStock.svg" alt="SOY Free Icon" width="12"
+                                    height="12">
+                                {{ 'products.productNoStock' | translate }}
+                            </span>
+                        </span>
+                    </div><br>
+
+                    <!-- Shipping info -->
+                    <div class="stock-info">
+                        <span>{{ 'products.shippingInfo' | translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Description section -->
+                <nb-card class="container-collapse-component">
+                    <nb-card-body>
+                        <div class="header-collapse-component" (click)="toggleCollapsedDescription()">
+                            <h2 class="title"
+                                [ngClass]="{'center': isCollapsedDescription, 'left': !isCollapsedDescription}">
+                                {{ 'products.description' | translate }}
+                            </h2>
+                            <button class="toggle-button-collapse-component back-btn">
+                                <span class="categorie-arrow" *ngIf="isCollapsedDescription">▼</span>
+                                <span class="categorie-arrow" *ngIf="!isCollapsedDescription">▲</span>
+                            </button>
+                        </div>
+
+                        <div *ngIf="!isCollapsedDescription" [@collapseComponent] class="collapse-container">
+                            <p [innerHTML]="clothes.description"></p>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+
+                <!-- Return Policy section -->
+                <nb-card class="container-collapse-component return-policy-section">
+                    <nb-card-body>
+                        <div class="header-collapse-component" (click)="toggleCollapsedReturn()">
+                            <h2 class="title" [ngClass]="{'center': isCollapsedReturn, 'left': !isCollapsedReturn}">
+                                {{ 'products.returnPolicy' | translate }}
+                            </h2>
+                            <button class="toggle-button-collapse-component back-btn">
+                                <span class="categorie-arrow" *ngIf="isCollapsedReturn">▼</span>
+                                <span class="categorie-arrow" *ngIf="!isCollapsedReturn">▲</span>
+                            </button>
+                        </div>
+
+                        <div *ngIf="!isCollapsedReturn" [@collapseComponent] class="collapse-container return-content">
+                            <div class="return-info-grid">
+                                <div class="return-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <h4>{{ 'products.return.days' | translate }}</h4>
+                                    <p>{{ 'products.return.daysDescription' | translate }}</p>
+                                </div>
+                                <div class="return-item">
+                                    <i class="fas fa-box-open"></i>
+                                    <h4>{{ 'products.return.condition' | translate }}</h4>
+                                    <p>{{ 'products.return.conditionDescription' | translate }}</p>
+                                </div>
+                                <div class="return-item">
+                                    <i class="fas fa-truck"></i>
+                                    <h4>{{ 'products.return.shipping' | translate }}</h4>
+                                    <p>{{ 'products.return.shippingDescription' | translate }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+
+                <!-- Related products section -->
+                <br>
+                <div class="row">
+                    <!-- Display product prices dynamically in a 3-column layout -->
+                    <hr>
+                    <h2>{{ 'products.relatedProducts' | translate }}</h2>
+                    <!-- Organic Foods -->
+                    <div *ngIf="relatedProducts" class="product-list-container">
+                        <nb-card class="rounded-card productCard" *ngFor="let relatedProduct of relatedProducts"
+                            [@zoomIn]>
+                            <nb-card-body class="related-product-image" (click)="goToProductPage(relatedProduct.id)">
+
+                                <div *ngIf="getDefaultPrice(relatedProduct) as defaultPrice"
+                                    class="details-container text-center">
+                                    <div class="related-image-container text-center">
+                                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                            alt="Product Image" class="card-image" />
+                                        <img *ngIf="defaultPrice.productImage === ''"
+                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                            class="card-image" />
+                                    </div>
+
+
+                                    <h4>{{ relatedProduct.productName }}</h4>
+                                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
+                                        'products.huf' | translate }}</h5>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                </div>
+
+                <!-- Reviews section -->
+                <br>
+                <div class="row">
+                    <hr>
+                    <h2>{{ 'products.customerReviews' | translate }}</h2>
+
+                    <!-- no reviews section -->
+                    <div *ngIf="reviews.length === 0" class="product-empty-list-container">
+                        <nb-card class="emptyCard" [@zoomIn]>
+                            <nb-card-body>
+                                <div>
+                                    <img src="../../../../assets/images/no-products.jpg" alt="EmptyBox"
+                                        class="emptyCardImage">
+                                    <p class="emptyCardText">{{ 'review.noReviewsYetForProduct' | translate }}</p>
+                                </div>
+                                <!-- add new review button (only for users) -->
+                                <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn"
+                                    class="button-container review-button">
+                                    <button class="btn btn-primary " type="submit" nbButton status="success"
+                                        (click)="gotoCreateNewRReview()">
+                                        {{ 'review.addNewReview' | translate }}</button>
+                                </div>
+
+                                <!-- user logged out error -->
+                                <div *ngIf="userLoggedOutError" class="error-container" [@zoomIn]>
+                                    <span class="help-block-login-error">
+                                        <i class="fas fa-exclamation-triangle icon"></i>
+                                        {{ 'review.needToLoginToWriteReview' | translate }}
+                                        <div class="error-login-text">
+                                            <span (click)="goToLogin()"> {{
+                                                'review.loginNow' | translate }}</span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+
+                    <!-- have any reviews -->
+                    <div *ngIf="reviews.length !== 0">
+                        <div class="ratings-container">
+                            <div class="average-rating">
+                                <i [attr.data-star]="averageRating"></i>
+                                <span class="rating-number">{{ averageRating }}</span>
+                            </div>
+                            <p class="review-numbers-display">{{ reviews.length }} {{ 'review.reviewText' | translate }}
+                            </p>
+
+                            <div class="ratings-breakdown" #reviewsSection>
+                                <div class="rating-row" *ngFor="let star of [5, 4, 3, 2, 1]">
+                                    <span class="star-bar">{{ star }}&#9733;</span>
+                                    <div class="bar">
+                                        <div class="filled-bar"
+                                            [ngStyle]="{'width': getRatingPercentage(star) + '%', 'background-color': '#0b8e92'}">
+                                        </div>
+                                    </div>
+                                    <span class="star-numbers-display">{{ getRatingCount(star) }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- add new review button (only for users) -->
+                        <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn"
+                            class="button-container review-button">
+                            <button class="btn btn-primary " type="submit" nbButton status="success"
+                                (click)="gotoCreateNewRReview()">
+                                {{ 'review.addNewReview' | translate }}</button>
+                        </div><br>
+
+                        <!-- user logged out error -->
+                        <div *ngIf="userLoggedOutError" class="error-container" [@zoomIn]>
+                            <span class="help-block-login-error">
+                                <i class="fas fa-exclamation-triangle icon"></i>
+                                {{ 'review.needToLoginToWriteReview' | translate }}
+                                <div class="error-login-text">
+                                    <span (click)="goToLogin()"> {{
+                                        'review.loginNow' | translate }}</span>
+                                </div>
+                            </span>
+                        </div>
+
+                        <!-- Display Reviews -->
+                        <div *ngIf="reviews && reviews.length > 0">
+                            <!-- Filter Section -->
+                            <div class="dropdown-container filter-review-section">
+                                <select class="form-control drop-down-list allow-selected-list-color"
+                                    name="reviewFilter" #reviewFilter="ngModel"
+                                    (change)="filterRating(selectedReviewFilter)" [(ngModel)]="selectedReviewFilter">
+                                    <option *ngFor="let filters of availableReviewFilters" [value]="filters">
+                                        {{ filters | translate }}
+                                    </option>
+                                </select>
+
+                                <!-- Arrow icon based on dropdown open/closed state -->
+                                <div class="arrow-icon">
+                                    <svg *ngIf="isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                        <path d="M7 14l5-5 5 5z" />
+                                    </svg>
+                                    <svg *ngIf="!isFlavorDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                        <path d="M7 10l5 5 5-5z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- user logged out error -->
+                            <div *ngIf="userLoggedOutLikeError" class="error-container" #userLoggedOutLikeErrorMessage
+                                [@zoomIn]>
+                                <span class="help-block-login-error">
+                                    <i class="fas fa-exclamation-triangle icon"></i>
+                                    {{ 'review.needToLoginToLikeReview' | translate }}
+                                    <div class="error-login-text">
+                                        <span (click)="goToLogin()"> {{
+                                            'review.loginNow' | translate }}</span>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div class="col-12" *ngFor="let review of reviews">
+                                <!-- Review Card -->
+                                <nb-card class="review-card-user mb-3">
+                                    <nb-card-body>
+                                        <!-- Flex container for username and date -->
+                                        <div class="review-header-top">
+                                            <!-- creator name -->
+                                            <span class="review-username">{{ review.userFirstName }} {{
+                                                review.userLastName
+                                                }}</span>
+
+                                            <!-- review date -->
+                                            <span class="review-date">{{ review.date.toDate() | date: 'yyyy/MM/dd'
+                                                }}</span>
+                                        </div>
+
+                                        <!-- Flex container for star rating and title -->
+                                        <div class="review-header-bottom">
+                                            <!-- Review Title -->
+                                            <h4 class="review-title">{{ review.title }}</h4>
+
+                                            <!-- Star Rating Display -->
+                                            <div class="star-rating">
+                                                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+                                                    <span class="star"
+                                                        [ngClass]="{ 'filled-star': i < review.rating }">&#9733;</span>
+                                                </ng-container>
+                                            </div>
+
+                                            <!-- checked text if review already checked -->
+                                            <span *ngIf="review.checkedByAdmin" class="checked-review-text">
+                                                {{ 'review.checkedReview' | translate }}
+                                            </span>
+                                        </div>
+                                        <!-- Review Text -->
+                                        <p class="review-text">{{ review.text }}</p>
+
+                                        <!-- Like Button for Review -->
+                                        <div class="like-section">
+                                            <button class="like-button"
+                                                [ngClass]="{'liked': review.likes.includes(currentUserId)}">
+                                                <img src="../../../../assets/images/like.svg" alt="SOY Free Icon"
+                                                    width="22" height="22" (click)="likeReview(review)"> <span
+                                                    class="like-number">{{
+                                                    review.likes?.length || 0 }}</span>
+                                            </button>
+
+                                            <!-- Edit Button: Visible only if the user is the author of the review -->
+                                            <div *ngIf="review.userId === currentUserId" class="edit-review-container">
+                                                <button class="btn edit-button" (click)="editReview(review)">
+                                                    {{ 'profileMenu.shippingAddressForm.modifyAddress' | translate }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </nb-card-body>
+                                </nb-card>
+
+                                <!-- Response Card (if there is a response) -->
+                                <nb-card class="response-card-user mb-3" *ngIf="review.response">
+                                    <nb-card-body>
+
+                                        <div class="review-header-top">
+                                            <!-- review creator name -->
+                                            <span class="review-username"> {{ 'review.adminResponsedStart' | translate
+                                                }} {{
+                                                review.userFirstName }} {{ 'review.adminResponsedEnd' | translate
+                                                }}</span>
+
+                                            <!-- response date -->
+                                            <span class="review-date">{{ review.responseDate.toDate() | date:
+                                                'yyyy/MM/dd'
+                                                }}</span>
+                                        </div>
+                                        <h5 class="response-title">Gym Bro</h5>
+                                        <p class="response-text">{{ review.response }}</p>
+
+                                        <!-- Like Button for Response -->
+                                        <div class="like-section">
+                                            <button class="like-button"
+                                                [ngClass]="{'liked': review.responseLikes.includes(currentUserId)}">
+                                                <img src="../../../../assets/images/like.svg" alt="SOY Free Icon"
+                                                    width="22" height="22" (click)="likeResponse(review)"> <span
+                                                    class="like-number">{{
+                                                    review.responseLikes?.length || 0 }}</span>
+                                            </button>
+                                        </div>
+                                    </nb-card-body>
+                                </nb-card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- back button -->
+                <div class="button-container">
+                    <hr>
+                    <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit"
+                        nbButton status="success" (click)="back()">
+                        <span class="arrow">
+                            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Filled left arrow -->
+                                <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                            </svg>
+                        </span>
+                        {{ 'blog.backToList' | translate }}
+                    </button>
+                </div>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

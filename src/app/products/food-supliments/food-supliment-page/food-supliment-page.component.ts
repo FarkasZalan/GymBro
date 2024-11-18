@@ -168,11 +168,12 @@ export class FoodSuplimentPageComponent implements OnInit {
 
         this.selectedQuantityInProduct = this.getDefaultPrice(foodSupliment).quantityInProduct;
         this.selectedPrice = this.getDefaultPrice(foodSupliment).productPrice;
+        this.selectedFlavor = this.getDefaultPrice(foodSupliment).productFlavor;
         this.loyaltyPoints = Math.round(this.selectedPrice / 100);
         this.selectedImage = this.getDefaultPrice(foodSupliment).productImage;
         this.getReviews();
 
-        this.getAvailableFlavors();
+        this.getAvailableFlavors(true);
 
         if (this.getDefaultPrice(foodSupliment).productStock === 0) {
           this.productIsInStock = false;
@@ -201,13 +202,16 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.router.navigate(['product/' + ProductViewText.FOOD_SUPLIMENTS + '/' + productId])
   }
 
-  // get the available flavors
-  getAvailableFlavors() {
+  // get the available flavors for the selected quantity
+  // if defaultPriceSelect is false, the first flavor will be selected (this is necessary for the default price)
+  getAvailableFlavors(defaultPriceSelect: boolean) {
     const filteredPrices = this.foodSupliment.prices.filter(price => price.quantityInProduct === this.selectedQuantityInProduct);
 
     // get the unique flavors
     this.availableFlavors = Array.from(new Set(filteredPrices.map(price => price.productFlavor)));
-    this.selectedFlavor = this.availableFlavors[0];
+    if (!defaultPriceSelect) {
+      this.selectedFlavor = this.availableFlavors[0];
+    }
     this.updateSelectedPriceAndStock();
   }
 
@@ -217,7 +221,7 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.loyaltyPoints = Math.round(this.selectedPrice / 100);
     this.selectedImage = this.getPriceBasedOnQuantity(this.foodSupliment, selectedQuantity).productImage;
 
-    this.getAvailableFlavors();
+    this.getAvailableFlavors(false);
 
     if (this.getPriceBasedOnQuantity(this.foodSupliment, selectedQuantity).productStock === 0) {
       this.productIsInStock = false;
@@ -385,6 +389,7 @@ export class FoodSuplimentPageComponent implements OnInit {
         category: ProductViewText.FOOD_SUPLIMENTS,
         flavor: this.selectedFlavor,
         size: this.selectedQuantityInProduct.toString(),
+        productUnit: this.foodSupliment.dosageUnit,
         maxStockError: false,
         maxStock: selectedPrice.productStock
       });

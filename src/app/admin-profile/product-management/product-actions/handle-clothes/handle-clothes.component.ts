@@ -136,7 +136,7 @@ export class HandleClothesComponent {
       clothingType: "",
       material: "",
 
-      prices: []
+      prices: [],
     }
     this.route.params.subscribe(params => {
       // get the food supliment product by id

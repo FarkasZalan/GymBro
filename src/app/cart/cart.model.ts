@@ -6,6 +6,7 @@ export interface CartItem {
     imageUrl: string;
     category: string;
     size?: string;
+    productUnit?: string;
     color?: string;
     flavor?: string;
     maxStockError?: boolean;

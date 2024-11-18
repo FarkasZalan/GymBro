@@ -45,7 +45,8 @@
                     <div class="item-details">
                         <h3>{{item.productName}}</h3>
                         <!-- product attributes -->
-                        <p *ngIf="item.size">{{ 'cart.size' | translate }}: {{item.size | translate}}</p>
+                        <p *ngIf="item.size">{{ 'cart.size' | translate }}: {{item.size | translate}} {{item.productUnit
+                            | translate}}</p>
                         <p *ngIf="item.color">{{ 'cart.color' | translate }}: {{item.color | translate}}</p>
                         <p *ngIf="item.flavor">{{ 'cart.flavor' | translate }}: {{item.flavor | translate}}</p>
                     </div>

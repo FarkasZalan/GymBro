@@ -190,6 +190,15 @@
       "description": "Description",
       "activeIngredients": "Active ingredients",
       "nutritionTableDetailsText": "Nutritional Values",
+      "returnPolicy": "Return Policy",
+      "return": {
+         "days": "14-Day Returns",
+         "daysDescription": "Return items within 14 days of delivery for a full refund",
+         "condition": "Original Condition",
+         "conditionDescription": "Items must be unworn, unwashed, and with original tags attached",
+         "shipping": "Free Returns",
+         "shippingDescription": "We cover return shipping costs for all standard returns"
+      },
       "nutritionalInformationTable": {
          "energy": "Energy",
          "fats": "Fats",
@@ -208,6 +217,7 @@
       "vitaminQuantityPerCapsule": "Quantity per serving",
       "vitaminUnit": "Vitamin Unit",
       "gender": "Gender",
+      "material": "Material",
       "relatedProducts": "Related products",
       "ingredients": "Ingredients",
       "enterIngredients": "Enter product ingredients*",

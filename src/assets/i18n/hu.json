@@ -182,6 +182,16 @@
                 "enterProductSmallDescription": "Add meg a termék rövid leírását*",
                 "deleteProductText": "Biztosam törölni szeretnéd ezt a terméket?",
                 "relatedProducts": "További termékek",
+                "material": "Anyag",
+                "returnPolicy": "Visszaküldés",
+                "return": {
+                        "days": "14 napos visszaküldés",
+                        "daysDescription": "A kézhezvételtől számított 14 napon belül teljes visszatérítéssel visszaküldheti a terméket",
+                        "condition": "Eredeti állapot",
+                        "conditionDescription": "A terméknek használatlannak, mosatlannak kell lennie, és az eredeti címkékkel ellátva",
+                        "shipping": "Ingyenes visszaküldés",
+                        "shippingDescription": "Minden standard visszaküldés esetén mi álljuk a szállítási költségeket"
+                },
                 "male": "Férfi",
                 "female": "Női",
                 "unisex": "Uniszex",
