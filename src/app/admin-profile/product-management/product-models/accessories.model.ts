@@ -1,5 +1,4 @@
 import { ProductPrice } from "./product-price.model";
-import { ProductReeviews } from "./product-reviews.model";
 
 export interface Accessories {
     // identification and basic details

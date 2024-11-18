@@ -395,9 +395,8 @@ export class OrganicFoodPageComponent implements OnInit {
   getReviews() {
     this.productService.getReviewsForProduct(this.productId, ProductViewText.ORGANIC_FOOD).subscribe(reviews => {
       this.reviews = reviews;
-      this.selectedReviewFilter = ProductViewText.ORDER_BY_LATEST;
-      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
       this.calculateAverageRating();
+      this.filterRating();
     })
   }
 

@@ -146,6 +146,21 @@ export class AddPriceDialogComponent implements OnInit {
       setAsDefaultPrice: false
     }
 
+    if (this.accessoriesType === this.productViewText.SHAKERS) {
+      this.availableProductSizes = [
+        ProductViewText.BOTTLE_100_ML,
+        ProductViewText.BOTTLE_150_ML,
+        ProductViewText.BOTTLE_300_ML,
+        ProductViewText.BOTTLE_450_ML,
+        ProductViewText.BOTTLE_500_ML,
+        ProductViewText.BOTTLE_600_ML,
+        ProductViewText.BOTTLE_700_ML,
+        ProductViewText.BOTTLE_800_ML,
+        ProductViewText.BOTTLE_1000_ML,
+        ProductViewText.BOTTLE_1500_ML,
+      ];
+    }
+
     if (this.data.selectedPrice !== null && this.data.selectedPrice !== undefined) {
       this.newPrice = { ...this.data.selectedPrice };
       if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.DRINKS) || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.HEALTHY_SNACKS)) {

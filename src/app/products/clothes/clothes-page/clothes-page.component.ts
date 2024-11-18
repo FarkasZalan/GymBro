@@ -367,9 +367,8 @@ export class ClothesPageComponent implements OnInit {
   getReviews() {
     this.productService.getReviewsForProduct(this.productId, ProductViewText.CLOTHES).subscribe(reviews => {
       this.reviews = reviews;
-      this.selectedReviewFilter = ProductViewText.ORDER_BY_LATEST;
-      this.reviews = this.productService.sortReviewsByNewest(this.reviews);
       this.calculateAverageRating();
+      this.filterRating();
     })
   }
 
