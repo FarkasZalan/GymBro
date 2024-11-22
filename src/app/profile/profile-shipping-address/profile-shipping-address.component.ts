@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ShippingAddress } from '../../user/shipping-address.model';
+import { ShippingAddress } from './shipping-address.model';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateShippingAddressComponent } from './create-shipping-address/create-shipping-address.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../user/user.model';
+import { User } from '../user.model';
 import { TranslateService } from '@ngx-translate/core';
 import { EditShippingAddressComponent } from './edit-shipping-address/edit-shipping-address.component';
 import { AddressTypeText } from '../profile-address-type-text';

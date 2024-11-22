@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { Router } from "@angular/router";
-import { User } from "../user/user.model";
+import { User } from "../profile/user.model";
 import { AdminEmail } from "../admin-profile/admin-email";
 import { CartService } from '../cart/cart.service';
 

@@ -12,7 +12,7 @@ import { ProductReeviews } from '../../../admin-profile/product-management/produ
 import { AuthService } from '../../../auth/auth.service';
 import { CartService } from '../../../cart/cart.service';
 import { DocumentHandlerService } from '../../../document.handler.service';
-import { User } from '../../../user/user.model';
+import { User } from '../../../profile/user.model';
 import { ProductService } from '../../product.service';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 

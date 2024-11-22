@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { AuthService } from '../../auth/auth.service';
-import { User } from '../../user/user.model';
+import { User } from '../../profile/user.model';
 import { filter, tap, map } from 'rxjs';
 import { LogOutComponent } from '../../auth/log-out/log-out.component';
 import { MatDialog } from '@angular/material/dialog';

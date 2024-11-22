@@ -1,14 +1,14 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SuccessfullDialogComponent } from '../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../successfull-dialog/sucessfull-dialog-text';
 import { DocumentHandlerService } from '../../../document.handler.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../../auth/auth.service';
-import { User } from '../../../user/user.model';
+import { User } from '../../user.model';
 import { Router } from '@angular/router';
 import { ChangeDefaultAddressConfirmDialogComponent } from '../change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
@@ -63,7 +63,8 @@ export class CreateShippingAddressComponent implements OnInit {
     private auth: AngularFireAuth,
     private authService: AuthService,
     private router: Router,
-    private translate: TranslateService) { }
+    private translate: TranslateService,
+    private dialogRef: MatDialogRef<CreateShippingAddressComponent>) { }
 
   ngOnInit(): void {
     //load the current user
@@ -195,7 +196,28 @@ export class CreateShippingAddressComponent implements OnInit {
         await documentumRef.update({ id: documentumRef.id });
         this.errorMessage = false;
         this.missingAddressNameError = false;
-        this.back();
+
+        // Close dialog with success and the new address
+        this.dialogRef.close({
+          success: true,
+          address: {
+            id: documentumRef.id,
+            addressName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.addressName),
+            addressType: this.selectedAddressType,
+            country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.country),
+            postalCode: this.createShippingAddressForm.value.postalCode,
+            city: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.city),
+            street: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.streetName),
+            streetType: this.createShippingAddressForm.value.streetType,
+            houseNumber: this.createShippingAddressForm.value.houseNumber,
+            floor: this.createShippingAddressForm.value.floor,
+            door: this.createShippingAddressForm.value.door,
+            isSetAsDefaultAddress: this.isSetAsDefaultAddress,
+            taxNumber: this.taxNumber,
+            companyName: this.companyName
+          }
+        });
+
         // if everything was succes then open successfull dialog
         this.dialog.open(SuccessfullDialogComponent, {
           data: {
@@ -209,7 +231,8 @@ export class CreateShippingAddressComponent implements OnInit {
     }
   }
 
+  // Update the back method to match the edit component
   back() {
-    this.dialog.closeAll();
+    this.dialogRef.close({ success: false });
   }
 }

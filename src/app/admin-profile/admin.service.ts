@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { User } from "../user/user.model";
+import { User } from "../profile/user.model";
 import { AuthService } from "../auth/auth.service";
 import { ProductPrice } from "./product-management/product-models/product-price.model";
 import { AngularFireStorage } from "@angular/fire/compat/storage";

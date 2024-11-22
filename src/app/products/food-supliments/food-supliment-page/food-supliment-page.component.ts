@@ -10,7 +10,7 @@ import { ProductService } from '../../product.service';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../../auth/auth.service';
-import { User } from '../../../user/user.model';
+import { User } from '../../../profile/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';

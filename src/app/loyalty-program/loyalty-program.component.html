@@ -1,70 +1,58 @@
-<nb-card class="info-card">
-    <!-- welcome section -->
-    <nb-card-body>
-        <div class="loyalty-hero">
-            <h1 class="hero-title">Welcome to the Gym Bro Loyalty Program!</h1>
-            <p class="hero-subtitle">Earn rewards every time you shop. Train hard, shop smart, and reap the rewards!</p>
+<div class="loyalty-dashboard">
+    <div class="loyalty-header">
+        <h2>
+            <nb-icon icon="award-outline"></nb-icon>
+            {{ 'loyaltyProgram.title' | translate }}
+        </h2>
+        <p class="loyalty-subtitle">{{ 'loyaltyProgram.subtitle' | translate }}</p>
+        <p class="loyalty-intro">{{ 'loyaltyProgram.intro' | translate }}</p>
+    </div>
+
+    <div class="points-overview">
+        <div class="current-points">
+            <div class="points-circle">
+                <span class="points-number">{{currentPoints}}</span>
+                <span class="points-label">{{ 'loyaltyProgram.pointsOverview.totalPoints' | translate }}</span>
+            </div>
         </div>
-    </nb-card-body>
-
-
-    <!-- how it works -->
-    <nb-card-body>
-        <div class="how-it-works">
-            <h2>How It Works</h2>
-            <p>For every 100 Ft you spend, you'll earn 1 point!</p>
-            <p>Collect points and redeem them for exclusive discounts, free products, and more!</p>
-        </div>
-    </nb-card-body>
-
-    <nb-card-body>
-        <!-- rewards section -->
-        <div class="rewards-section">
-            <h2>Redeem Your Points</h2>
-            <div class="rewards-list">
-                <div class="reward-card" *ngFor="let reward of rewards">
-                    <img [src]="reward.image" alt="{{ reward.title }}" class="reward-image">
-                    <h3>{{ reward.title }}</h3>
-                    <p>{{ reward.description }}</p>
-                    <p class="points-needed">{{ reward.points }} Points</p>
+        <div class="points-stats">
+            <div class="stat-item">
+                <nb-icon icon="trending-up-outline"></nb-icon>
+                <div class="stat-content">
+                    <span class="stat-label">{{ 'loyaltyProgram.pointsOverview.earnedThisMonth' | translate }}</span>
+                    <span class="stat-value">+{{pointsEarnedThisMonth}}</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <nb-icon icon="gift-outline"></nb-icon>
+                <div class="stat-content">
+                    <span class="stat-label">{{ 'loyaltyProgram.pointsOverview.rewardsRedeemed' | translate }}</span>
+                    <span class="stat-value">{{rewardsRedeemed}}</span>
                 </div>
             </div>
         </div>
-    </nb-card-body>
-
-    <nb-card-body>
-        <!-- tiers section -->
-        <div class="loyalty-tiers">
-            <h2>Loyalty Tiers</h2>
-            <div class="tier-card" *ngFor="let tier of tiers">
-                <h3>{{ tier.name }}</h3>
-                <p>{{ tier.description }}</p>
-                <p class="points-needed">Earn {{ tier.requiredPoints }} points to reach {{ tier.name }}</p>
-            </div>
-        </div>
-    </nb-card-body>
-
-    <nb-card-body>
-        <!-- FAQ -->
-        <div class="faq-section">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item" *ngFor="let faq of faqs">
-                <h3>{{ faq.question }}</h3>
-                <p>{{ faq.answer }}</p>
-            </div>
-        </div>
-    </nb-card-body>
-
-    <!-- back button -->
-    <div class="button-container">
-        <button class="btn btn-primary basic-btn back-btn basic-form-btn blog-back-button" type="submit" nbButton
-            status="success" (click)="back()">
-            <span class="arrow">
-                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Filled left arrow -->
-                    <path d="M26 6L14 16l12 10" fill="#0b8e92" />
-                </svg>
-            </span>
-            {{ 'blog.backToList' | translate }}</button>
     </div>
-</nb-card>
+
+    <div class="rewards-section">
+        <h3>{{ 'loyaltyProgram.rewardsSection.title' | translate }}</h3>
+        <div class="rewards-grid">
+            <div *ngFor="let reward of availableRewards" class="reward-card"
+                [class.locked]="currentPoints < reward.pointsRequired">
+                <div class="reward-icon">
+                    <nb-icon [icon]="reward.icon"></nb-icon>
+                </div>
+                <div class="reward-details">
+                    <h4>{{reward.nameKey | translate}}</h4>
+                    <p>{{reward.descriptionKey | translate}}</p>
+                    <div class="points-required">
+                        <span>{{reward.pointsRequired}} {{ 'loyaltyProgram.pointsOverview.points' | translate }}</span>
+                        <button nbButton status="primary" [disabled]="currentPoints < reward.pointsRequired"
+                            (click)="redeemReward(reward)">
+                            {{ 'loyaltyProgram.rewardsSection.redeem' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@ import { Component, Inject, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NgForm } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../auth/auth.service';
@@ -12,7 +12,7 @@ import { SuccessfullDialogComponent } from '../../../successfull-dialog/successf
 import { SuccessFullDialogText } from '../../../successfull-dialog/sucessfull-dialog-text';
 import { AddressTypeText } from '../../profile-address-type-text';
 import { ChangeDefaultAddressConfirmDialogComponent } from '../change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
-import { ShippingAddress } from '../../../user/shipping-address.model';
+import { ShippingAddress } from '../shipping-address.model';
 import { DeleteConfirmationText } from '../../../delete-confirmation-dialog/delete-text';
 import { DeleteConfirmationDialogComponent } from '../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 
@@ -61,7 +61,7 @@ export class EditShippingAddressComponent {
   // the tag, name for the address type
   addressTypeTexts = AddressTypeText;
 
-  constructor(private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data, private documentumHandler: DocumentHandlerService, private db: AngularFirestore, private auth: AngularFireAuth, private authService: AuthService, private router: Router, private translate: TranslateService) {
+  constructor(private dialog: MatDialog, private dialogRef: MatDialogRef<EditShippingAddressComponent>, @Inject(MAT_DIALOG_DATA) public data, private documentumHandler: DocumentHandlerService, private db: AngularFirestore, private auth: AngularFireAuth, private authService: AuthService, private router: Router, private translate: TranslateService) {
     this.userId = data.userId;
     this.modifyShippingAddressId = data.addresId;
 
@@ -220,8 +220,30 @@ export class EditShippingAddressComponent {
         });
         this.errorMessage = false;
         this.missingAddressNameError = false;
-        this.back();
-        // if everything was succes then open successfull dialog
+
+        // Close dialog with success and the updated address
+        // This is used to update the address in the checkout page
+        this.dialogRef.close({
+          success: true,
+          address: {
+            id: this.modifyShippingAddressId,
+            addressName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.addressName),
+            addressType: this.selectedAddressType,
+            country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.modifyShippingAddressForm.value.country),
+            postalCode: this.modifyShippingAddressForm.value.postalCode,
+            city: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.modifyShippingAddressForm.value.city),
+            street: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.modifyShippingAddressForm.value.streetName),
+            streetType: this.modifyShippingAddressForm.value.streetType,
+            houseNumber: this.modifyShippingAddressForm.value.houseNumber,
+            floor: this.modifyShippingAddressForm.value.floor,
+            door: this.modifyShippingAddressForm.value.door,
+            isSetAsDefaultAddress: this.isSetAsDefaultAddress,
+            taxNumber: this.taxNumber,
+            companyName: this.companyName
+          }
+        });
+
+        // Show success dialog
         this.dialog.open(SuccessfullDialogComponent, {
           data: {
             text: SuccessFullDialogText.MODIFIED_TEXT,
@@ -259,7 +281,8 @@ export class EditShippingAddressComponent {
     }
   }
 
+  // Close the dialog with success false to update the address in the checkout page
   back() {
-    this.dialog.closeAll();
+    this.dialogRef.close({ success: false });
   }
 }

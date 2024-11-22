@@ -1,34 +1,55 @@
-import { Component } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { NbDialogService, NbToastrService } from '@nebular/theme';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loyalty-program',
   templateUrl: './loyalty-program.component.html',
-  styleUrl: './loyalty-program.component.scss'
+  styleUrls: ['./loyalty-program.component.scss']
 })
 export class LoyaltyProgramComponent {
+  currentPoints: number = 750;
+  pointsEarnedThisMonth: number = 150;
+  rewardsRedeemed: number = 2;
 
-  constructor(private location: Location) { }
-
-  rewards = [
-    { title: '5% Discount', description: 'Get 5% off your next purchase', points: 100, image: '/assets/images/discount.jpg' },
-    { title: 'Free Protein Bar', description: 'Redeem for a free protein bar', points: 200, image: '/assets/images/protein-bar.jpg' },
-    { title: '10% Discount', description: 'Get 10% off your next purchase', points: 500, image: '/assets/images/discount10.jpg' }
+  availableRewards = [
+    {
+      id: 'discount10',
+      nameKey: 'loyaltyProgram.rewards.discount10.title',
+      descriptionKey: 'loyaltyProgram.rewards.discount10.description',
+      pointsRequired: 500,
+      icon: 'percent-outline'
+    },
+    {
+      id: 'freeShipping',
+      nameKey: 'loyaltyProgram.rewards.freeShipping.title',
+      descriptionKey: 'loyaltyProgram.rewards.freeShipping.description',
+      pointsRequired: 750,
+      icon: 'car-outline'
+    },
+    {
+      id: 'vipStatus',
+      nameKey: 'loyaltyProgram.rewards.vipStatus.title',
+      descriptionKey: 'loyaltyProgram.rewards.vipStatus.description',
+      pointsRequired: 1000,
+      icon: 'star-outline'
+    },
+    {
+      id: 'giftCard',
+      nameKey: 'loyaltyProgram.rewards.giftCard.title',
+      descriptionKey: 'loyaltyProgram.rewards.giftCard.description',
+      pointsRequired: 1500,
+      icon: 'gift-outline'
+    }
   ];
 
-  tiers = [
-    { name: 'Bronze', description: 'Join and start earning points', requiredPoints: 0 },
-    { name: 'Silver', description: 'Unlock more rewards at 500 points', requiredPoints: 500 },
-    { name: 'Gold', description: 'Exclusive rewards at 1000 points', requiredPoints: 1000 }
-  ];
+  constructor(
+    private dialogService: NbDialogService,
+    private toastrService: NbToastrService,
+    private translateService: TranslateService
+  ) { }
 
-  faqs = [
-    { question: 'How do I earn points?', answer: 'You earn 1 point for every 100 Ft spent in our store.' },
-    { question: 'Do points expire?', answer: 'Points expire after 12 months of inactivity.' },
-    { question: 'How do I redeem my points?', answer: 'Select an available reward and redeem it during checkout.' }
-  ];
+  async redeemReward(reward: any) {
 
-  back() {
-    this.location.back();
   }
 }

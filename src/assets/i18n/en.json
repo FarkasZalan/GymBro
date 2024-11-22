@@ -509,5 +509,116 @@
       "item": "item",
       "addedToCart": "Added to Cart",
       "goToCart": "Go to Cart"
+   },
+   "checkout": {
+      "title": "Checkout",
+      "guestAddressName": "Guest Address",
+      "shippingAddress": {
+         "title": "Shipping Address",
+         "noAddress": "No shipping address selected",
+         "selectAddress": "Select Address",
+         "changeAddress": "Change Address",
+         "addAddress": "Add New Address"
+      },
+      "orderSummary": {
+         "title": "Order Summary",
+         "subtotal": "Subtotal",
+         "shipping": "Shipping",
+         "total": "Total Amount",
+         "items": "items",
+         "summary": "Order Summary",
+         "paymentFee": "Payment Fee"
+      },
+      "payment": {
+         "title": "Payment Method",
+         "card": "Credit/Debit Card",
+         "cardDescription": "Pay securely with Stripe",
+         "cash": "Cash on Delivery",
+         "cashDescription": "Pay when you receive your order (+1000 HUF)",
+         "additionalFee": "+{{fee}} HUF fee"
+      },
+      "actions": {
+         "placeOrder": "Place Order",
+         "backToCart": "Back to Cart",
+         "loginPrompt": "Please login to continue checkout",
+         "back": "Back"
+      },
+      "shipping": {
+         "title": "Shipping Method",
+         "estimatedDays": "{{days}} business days",
+         "free": "Free",
+         "storePickup": {
+            "title": "Store Pickup",
+            "description": "Pick up your order at our store location"
+         },
+         "dhl": {
+            "title": "DHL Express",
+            "description": "Fast worldwide shipping with package tracking"
+         }
+      },
+      "loyalty": {
+         "title": "Loyalty Points",
+         "points": "points",
+         "earnPoints": "You'll earn points with this purchase!",
+         "nextReward": "{{points}} points until your next reward!"
+      },
+      "login": {
+         "title": "Welcome to Checkout",
+         "alreadyMember": "Already have an account?",
+         "loginHere": "Log in here",
+         "or": "or",
+         "createAccount": "create an account",
+         "forBetterExperience": "for a better shopping experience.",
+         "benefit1": "Track your order status",
+         "benefit2": "Access your order history",
+         "benefit3": "Earn loyalty points"
+      }
+   },
+   "loyaltyProgram": {
+      "title": "Gym Bro Rewards",
+      "subtitle": "Success starts with loyalty",
+      "intro": "Earn points with every purchase and unlock exclusive rewards!",
+      "pointsOverview": {
+         "totalPoints": "Total Points",
+         "earnedThisMonth": "Earned This Month",
+         "rewardsRedeemed": "Rewards Redeemed",
+         "points": "points",
+         "point": "point"
+      },
+      "rewardsSection": {
+         "title": "Available Rewards",
+         "redeem": "Redeem",
+         "locked": "Locked",
+         "pointsNeeded": "points needed",
+         "confirmRedeem": {
+            "title": "Redeem Reward",
+            "message": "Are you sure you want to redeem this reward?",
+            "confirm": "Yes, Redeem",
+            "cancel": "Cancel"
+         }
+      },
+      "rewards": {
+         "discount10": {
+            "title": "10% Discount",
+            "description": "Get 10% off your next purchase"
+         },
+         "freeShipping": {
+            "title": "Free Shipping",
+            "description": "Get free shipping on your next order"
+         },
+         "vipStatus": {
+            "title": "VIP Status",
+            "description": "Unlock exclusive VIP benefits for 30 days"
+         },
+         "giftCard": {
+            "title": "5000 Ft Gift Card",
+            "description": "Get a 5000 Ft gift card to spend in store"
+         }
+      },
+      "notifications": {
+         "redeemSuccess": "Reward successfully redeemed!",
+         "redeemError": "Failed to redeem reward. Please try again.",
+         "insufficientPoints": "Not enough points to redeem this reward."
+      }
    }
 }

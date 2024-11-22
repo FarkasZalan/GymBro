@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { User } from '../../user/user.model';
+import { User } from '../../profile/user.model';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { DocumentHandlerService } from '../../document.handler.service';

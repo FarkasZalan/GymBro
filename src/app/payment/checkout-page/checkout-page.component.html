@@ -1,0 +1,540 @@
+<div class="container" [@zoomIn]>
+    <!-- Login Section -->
+    <div class="login-prompt-container" *ngIf="!userLoggedIn" @fadeSlide>
+        <div class="login-prompt">
+            <div class="login-content">
+                <div class="login-info">
+                    <nb-icon icon="person-outline" class="login-icon"></nb-icon>
+                    <p class="login-text">
+                        {{ 'checkout.login.alreadyMember' | translate }}
+                        <a (click)="navigateToLogin()" class="login-link">{{ 'checkout.login.loginHere' | translate
+                            }}</a>
+                        {{ 'checkout.login.or' | translate }}
+                        <a (click)="navigateToRegister()" class="login-link">{{ 'checkout.login.createAccount' |
+                            translate }}</a>
+                        {{ 'checkout.login.forBetterExperience' | translate }}
+                    </p>
+                    <ul class="benefits-list">
+                        <li>
+                            <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                            {{ 'checkout.login.benefit1' | translate }}
+                        </li>
+                        <li>
+                            <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                            {{ 'checkout.login.benefit2' | translate }}
+                        </li>
+                        <li>
+                            <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                            {{ 'checkout.login.benefit3' | translate }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nb-card class="checkout-container">
+        <nb-card-header>
+            <div class="header-content">
+                <h2>
+                    {{ 'checkout.title' | translate }}
+                </h2>
+            </div>
+        </nb-card-header>
+
+        <nb-card-body>
+            <!-- Order Summary Section -->
+            <div class="checkout-section order-summary">
+                <h3>
+                    {{ 'checkout.orderSummary.title' | translate }}
+                </h3>
+                <div class="cart-items-section">
+                    <div *ngFor="let item of cartItems" class="cart-item" [@fadeIn] (click)="goToProduct(item)">
+                        <div class="item-image">
+                            <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.productName">
+                            <img *ngIf="!item.imageUrl" src="../../../assets/images/gym-bro-logo.png"
+                                alt="Product Image">
+                        </div>
+
+                        <div class="item-details">
+                            <h4>{{item.productName}}</h4>
+                            <div class="item-attributes">
+                                <span *ngIf="item.size" class="attribute">
+                                    <nb-icon icon="cube-outline"></nb-icon>
+                                    {{item.size | translate}} {{item.productUnit | translate}}
+                                </span>
+                                <span *ngIf="item.color" class="attribute">
+                                    <nb-icon icon="color-palette-outline"></nb-icon>
+                                    {{item.color | translate}}
+                                </span>
+                                <span *ngIf="item.flavor" class="attribute">
+                                    <nb-icon icon="star-outline"></nb-icon>
+                                    {{item.flavor | translate}}
+                                </span>
+                                <span class="attribute">
+                                    <nb-icon icon="shopping-cart-outline"></nb-icon>
+                                    x{{item.quantity}}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="item-price">
+                            <div class="price-tag">
+                                {{item.price * item.quantity | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}
+                            </div>
+                            <div class="unit-price">
+                                {{item.price | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}/{{ 'cart.item'
+                                | translate }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price Summary Section -->
+            <div class="checkout-section price-summary">
+                <h3>
+                    {{ 'checkout.orderSummary.summary' | translate }}
+                </h3>
+                <div class="summary-row">
+                    <span>
+                        <nb-icon class="summary-icon" icon="shopping-cart-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.subtotal' | translate }}
+                    </span>
+                    <span>{{subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="summary-row" *ngIf="selectedShippingMethod" @fadeInUp>
+                    <span>
+                        <nb-icon class="summary-icon" icon="car-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.shipping' | translate }}
+                    </span>
+                    <span>
+                        <ng-container *ngIf="selectedShippingMethod === 'store'">
+                            {{ 'checkout.shipping.free' | translate }}
+                        </ng-container>
+                        <ng-container *ngIf="selectedShippingMethod !== 'store'">
+                            {{shipping | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}
+                        </ng-container>
+                    </span>
+                </div>
+                <div class="summary-row" *ngIf="paymentFee > 0" @fadeInUp>
+                    <span>
+                        <nb-icon class="summary-icon" icon="credit-card-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.paymentFee' | translate }}
+                    </span>
+                    <span>{{paymentFee | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>
+                        <nb-icon class="summary-icon" icon="checkmark-circle-2-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.total' | translate }}
+                    </span>
+                    <span>{{calculateTotal() | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+            </div>
+
+            <!-- Loyalty Preview Section -->
+            <div class="checkout-section loyalty-preview" *ngIf="calculateLoyaltyPoints() > 0 && userLoggedIn" @fadeIn>
+                <h3>
+                    <nb-icon icon="star-outline" class="loyalty-icon"></nb-icon>
+                    {{ 'checkout.loyalty.title' | translate }}
+                </h3>
+                <div class="loyalty-content">
+                    <div class="points-preview">
+                        <div class="points-circle">
+                            <span class="points-number">+{{calculateLoyaltyPoints()}}</span>
+                            <span class="points-label">{{ 'checkout.loyalty.points' | translate }}</span>
+                        </div>
+                    </div>
+                    <div class="points-info">
+                        <p>{{ 'checkout.loyalty.earnPoints' | translate }}</p>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress" [style.width]="getLoyaltyProgress() + '%'"></div>
+                            </div>
+                            <div class="progress-labels">
+                                <span>{{currentLoyaltyPoints}}</span>
+                                <span>{{nextRewardThreshold}}</span>
+                            </div>
+                        </div>
+                        <p class="next-reward" *ngIf="getPointsToNextReward() > 0">
+                            <nb-icon icon="gift-outline"></nb-icon>
+                            {{ 'checkout.loyalty.nextReward' | translate: { points: getPointsToNextReward() } }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Address Section -->
+            <div class="shipping-address" *ngIf="shippingAddress && !displayGuestForm" @fadeInUp>
+                <h3>
+                    {{ 'checkout.shippingAddress.title' | translate }}
+                </h3>
+                <div class="address-container">
+                    <nb-card class="rounded-card addressCard">
+                        <nb-card-header class="card-header">
+                            <strong>{{ shippingAddress.addressName | translate }}</strong>
+                        </nb-card-header>
+                        <nb-card-body class="address-details">
+                            <p>{{ shippingAddress.street }} {{ shippingAddress.streetType }}, {{
+                                shippingAddress.houseNumber }}</p>
+                            <p>{{ shippingAddress.floor ? (shippingAddress.floor + '/') : '' }}{{ shippingAddress.door
+                                }}</p>
+                            <p>{{ shippingAddress.city }}, {{ shippingAddress.postalCode }}</p>
+                            <p>{{ shippingAddress.country }}</p>
+
+                            <!-- Company details if they exist -->
+                            <p *ngIf="shippingAddress.companyName">
+                                <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong>
+                                {{ shippingAddress.companyName }}
+                            </p>
+                            <p *ngIf="shippingAddress.taxNumber">
+                                <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
+                                {{ shippingAddress.taxNumber }}
+                            </p>
+                        </nb-card-body>
+                        <nb-card-footer>
+                            <!-- for logged in users -->
+                            <button *ngIf="userLoggedIn" class="change-address-btn"
+                                (click)="editAddress(shippingAddress.id)">
+                                <nb-icon icon="edit-2-outline"></nb-icon>
+                                {{ 'checkout.shippingAddress.changeAddress' | translate }}
+                            </button>
+
+                            <!-- for guest users -->
+                            <button *ngIf="!userLoggedIn" class="change-address-btn" (click)="editGuestForm()">
+                                <nb-icon icon="edit-2-outline"></nb-icon>
+                                {{ 'checkout.shippingAddress.changeAddress' | translate }}
+                            </button>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
+            </div>
+
+            <!-- No Address Prompt for Logged In Users -->
+            <div *ngIf="userLoggedIn && !shippingAddress" class="no-address" @fadeIn>
+                <div class="no-address-content">
+                    <nb-icon icon="map-outline"></nb-icon>
+                    <p>{{ 'checkout.shippingAddress.noAddress' | translate }}</p>
+                    <button class="select-address-btn" nbButton status="primary" (click)="openAddressSelection()">
+                        <nb-icon icon="pin-outline"></nb-icon>
+                        {{ 'checkout.shippingAddress.selectAddress' | translate }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Guest Shipping Address Form -->
+            <div class="shipping-address-form" *ngIf="displayGuestForm" @fadeSlide>
+                <h3>
+                    {{ 'checkout.guestAddressName' | translate }}
+                </h3>
+                <form (ngSubmit)="addNewGuestAddress()" #form="ngForm">
+                    <!-- Name block -->
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- First Name block -->
+                            <div class="form-group">
+                                <label for="firstName" class="label">{{ 'register.firstName' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="guestFirstName" name="firstName"
+                                    minlength="1" required placeholder="{{ 'register.firstName' | translate }}*"
+                                    #firstName="ngModel">
+                                <span class="help-block" *ngIf="firstName.touched && !firstName.valid" [@zoomIn]>{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!-- Last Name block -->
+                            <div class="form-group">
+                                <label for="lastName" class="label">{{ 'register.lastName' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="guestLastName" name="lastName"
+                                    minlength="1" required placeholder="{{ 'register.lastName' | translate }}*"
+                                    #lastName="ngModel">
+                                <span class="help-block" *ngIf="lastName.touched && !lastName.valid" [@zoomIn]>{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- Email block -->
+                            <div class="form-group">
+                                <label for="email" class="label">{{ 'loginPage.email' | translate }}</label>
+                                <input type="email" class="form-control" [(ngModel)]="guestEmail" name="email" required
+                                    placeholder="{{ 'loginPage.emailAddress' | translate }}*" #email="ngModel">
+                                <span class="help-block" *ngIf="email.touched && !email.valid" [@zoomIn]>{{
+                                    'loginPage.invalidEmail' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!-- Phone block -->
+                            <div class="form-group">
+                                <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
+                                <input type="tel" class="form-control" [(ngModel)]="guestPhone" name="phone" required
+                                    placeholder="{{ 'register.phone' | translate }}*" #phone="ngModel">
+                                <span class="help-block" *ngIf="phone.touched && !phone.valid" [@zoomIn]>{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address block -->
+                    <div class="row">
+                        <div class="col-8">
+                            <!-- Country block -->
+                            <div class="form-group">
+                                <label for="country" class="label">{{ 'profileMenu.shippingAddressForm.country' |
+                                    translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.country"
+                                    name="country" minlength="1" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.country' | translate }}*"
+                                    #country="ngModel">
+                                <span class="help-block" *ngIf="country.touched && !country.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <!-- Postal code block -->
+                            <div class="form-group">
+                                <label for="postalCode" class="label">{{
+                                    'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.postalCode"
+                                    name="postalCode" minlength="1" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"
+                                    #postalCode="ngModel">
+                                <span class="help-block" *ngIf="postalCode.touched && !postalCode.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <!-- City block -->
+                            <div class="form-group">
+                                <label for="city" class="label">{{
+                                    'profileMenu.shippingAddressForm.city' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.city" name="city"
+                                    required placeholder="{{ 'profileMenu.shippingAddressForm.city' | translate }}*"
+                                    #city="ngModel">
+                                <span class="help-block" *ngIf="city.touched && !city.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <!-- Street block -->
+                            <div class="form-group">
+                                <label for="streetName" class="label">{{
+                                    'profileMenu.shippingAddressForm.streetName' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.streetName"
+                                    name="streetName" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.streetName' | translate }}*"
+                                    #streetName="ngModel">
+                                <span class="help-block" *ngIf="streetName.touched && !streetName.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <!-- Street type block -->
+                            <div class="form-group">
+                                <label for="streetType" class="label">{{
+                                    'profileMenu.shippingAddressForm.streetType' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.streetType"
+                                    name="streetType" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.streetType' | translate }}*"
+                                    #streetType="ngModel">
+                                <span class="help-block" *ngIf="streetType.touched && !streetType.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <!-- House number block -->
+                            <div class="form-group">
+                                <label for="houseNumber" class="label">{{
+                                    'profileMenu.shippingAddressForm.houseNumber' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.houseNumber"
+                                    name="houseNumber" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.houseNumber' | translate }}*"
+                                    #houseNumber="ngModel">
+                                <span class="help-block" *ngIf="houseNumber.touched && !houseNumber.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <!-- Floor block -->
+                            <div class="form-group">
+                                <label for="floor" class="label">{{ 'profileMenu.shippingAddressForm.floor' |
+                                    translate }}</label>
+                                <input type="number" class="form-control" [(ngModel)]="shippingAddress.floor"
+                                    name="floor" placeholder="{{ 'profileMenu.shippingAddressForm.floor' |
+                                    translate }}" #floor="ngModel">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <!-- Door block -->
+                            <div class="form-group">
+                                <label for="door" class="label">{{ 'profileMenu.shippingAddressForm.door' |
+                                    translate }}</label>
+                                <input type="number" class="form-control" min="1" [(ngModel)]="shippingAddress.door"
+                                    name="door" placeholder="{{ 'profileMenu.shippingAddressForm.door' | translate }}"
+                                    #door="ngModel">
+                                <span class="help-block" *ngIf="door.touched && !door.valid">{{
+                                    'profileMenu.shippingAddressForm.fieldIncorrect' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- company address Checkbox -->
+                    <div class="form-group">
+                        <label for="companyAddress" class="checkbox-container">
+                            <label for="companyAddress">{{ 'profileMenu.shippingAddressForm.setAsCompanyAddress'
+                                | translate }}
+                            </label>
+                            <input type="checkbox" [(ngModel)]="isCompanyAddressChecked" name="companyAddress"
+                                id="companyAddress" #admin="ngModel">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div *ngIf="isCompanyAddressChecked" [@collapseFields] class="row">
+                        <div class="col-6">
+                            <!-- Company name block -->
+                            <div class="form-group">
+                                <label for="companyName" class="label">{{
+                                    'profileMenu.shippingAddressForm.companyName' |
+                                    translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.companyName"
+                                    name="companyName" minlength="1" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.companyName' | translate }}*"
+                                    #companyName="ngModel">
+                                <span class="help-block" *ngIf="companyName.touched && !companyName.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <!-- Tax number block -->
+                            <div class="form-group">
+                                <label for="taxNumber" class="label">{{
+                                    'profileMenu.shippingAddressForm.taxNumber' | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.taxNumber"
+                                    name="taxNumber" minlength="1" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}*"
+                                    #taxNumber="ngModel">
+                                <span class="help-block" *ngIf="taxNumber.touched && !taxNumber.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                    </div><br>
+
+                    <!-- new address submit button -->
+                    <div class="button-container">
+                        <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton status="success"
+                            [disabled]="!form.valid">{{
+                            isEditGuestForm ? ('profileMenu.shippingAddressForm.modifyAddress' | translate) :
+                            ('profileMenu.shippingAddressForm.addAddress' | translate)
+                            }}</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Shipping Methods Section -->
+            <div class="checkout-section shipping-methods">
+                <h3>
+                    {{ 'checkout.shipping.title' | translate }}
+                </h3>
+                <div class="shipping-options">
+                    <div *ngFor="let method of shippingMethods" class="shipping-option"
+                        [class.selected]="selectedShippingMethod === method.id"
+                        (click)="selectShippingMethod(method.id)">
+                        <div class="shipping-icon">
+                            <nb-icon [icon]="method.icon"></nb-icon>
+                        </div>
+                        <div class="shipping-details">
+                            <div class="shipping-name">{{ method.name | translate }}</div>
+                            <div class="shipping-description">{{ method.description | translate }}</div>
+                            <div class="shipping-info">
+                                <span class="delivery-time">
+                                    <nb-icon icon="clock-outline"></nb-icon>
+                                    {{ 'checkout.shipping.estimatedDays' | translate:{ days: method.estimatedDays } }}
+                                </span>
+                                <span class="shipping-price">
+                                    <nb-icon icon="pricetags-outline"></nb-icon>
+                                    {{ method.price === 0 ? ('checkout.shipping.free' | translate) :
+                                    (method.price | currency:'':'':'1.0-0') + ' ' + ('products.huf' | translate) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div class="checkout-section payment-methods">
+                <h3>
+                    {{ 'checkout.payment.title' | translate }}
+                </h3>
+                <div class="payment-options">
+                    <div *ngFor="let method of paymentMethods" class="payment-option"
+                        [class.selected]="selectedPaymentMethod === method.id"
+                        (click)="selectedPaymentMethod = method.id">
+                        <div class="payment-icon">
+                            <nb-icon [icon]="method.icon"></nb-icon>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-name">{{ method.name | translate}}</div>
+                            <div class="payment-description">{{ method.description | translate}}</div>
+                            <div class="payment-fee" *ngIf="method.additionalFee > 0">
+                                <nb-icon icon="alert-circle-outline"></nb-icon>
+                                {{ 'checkout.payment.additionalFee' | translate:{ fee: method.additionalFee } }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- back button -->
+            <div class="button-container">
+                <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                    status="success" (click)="back()">
+                    <span class="arrow">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Filled left arrow -->
+                            <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                        </svg>
+                    </span>
+                    {{ 'loginPage.back' | translate }}
+                </button>
+            </div>
+        </nb-card-body>
+    </nb-card>
+
+    <!-- sticky bottom summary section -->
+    <div class="sticky-summary" *ngIf="selectedShippingMethod || selectedPaymentMethod" [@slideUp]>
+        <div class="sticky-content">
+            <div class="price-breakdown">
+                <div class="breakdown-item" *ngIf="subtotal">
+                    <span>{{ 'checkout.orderSummary.subtotal' | translate }}</span>
+                    <span>{{subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="breakdown-item" *ngIf="shipping">
+                    <span>{{ 'checkout.orderSummary.shipping' | translate }}</span>
+                    <span>{{shipping | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="breakdown-item" *ngIf="paymentFee">
+                    <span>{{ 'checkout.orderSummary.paymentFee' | translate }}</span>
+                    <span>{{paymentFee | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="breakdown-item total">
+                    <span>{{ 'checkout.orderSummary.total' | translate }}</span>
+                    <span>{{calculateTotal() | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="proceed-btn" nbButton status="success" class="proceed-btn btn"
+                    [disabled]="!selectedPaymentMethod || !shippingAddress || !selectedShippingMethod"
+                    (click)="proceedToPayment()">
+                    <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                    {{ 'checkout.actions.placeOrder' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

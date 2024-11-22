@@ -13,7 +13,7 @@ import { ProductReeviews } from '../../../admin-profile/product-management/produ
 import { Vitamin } from '../../../admin-profile/product-management/product-models/vitamin.model';
 import { AuthService } from '../../../auth/auth.service';
 import { CartService } from '../../../cart/cart.service';
-import { User } from '../../../user/user.model';
+import { User } from '../../../profile/user.model';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 
 @Component({

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ChangeProfileComponent } from './change-profile/change-profile.component';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../auth/auth.service';
-import { User } from '../../user/user.model';
+import { User } from '../user.model';
 import { Router } from '@angular/router';
 
 @Component({

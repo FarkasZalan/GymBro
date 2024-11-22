@@ -1,0 +1,72 @@
+<div class="dialog-container">
+    <div class="dialog-header">
+        <h5>{{ 'profileMenu.shippingAddresses' | translate }}</h5>
+        <button class="close-button" (click)="close()">×</button>
+    </div>
+
+    <!-- If no shipping addresses are present -->
+    <div *ngIf="shippingAddresses.length === 0" class="empty-list-container">
+        <nb-card class="rounded-card emptyCard">
+            <nb-card-body>
+                <div>
+                    <img src="../../../assets/images/no-address.png" alt="SadHouse" class="emptyCardImage">
+                    <p>{{ 'profileMenu.noAddresses' | translate }}</p>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+
+    <!-- Display addresses in a row -->
+    <div class="addresses-container">
+        <nb-card *ngFor="let address of shippingAddresses" class="rounded-card addressCard"
+            (click)="selectAddress(address)">
+            <nb-card-header class="card-header">
+                <span *ngIf="address.isSetAsDefaultAddress" class="default-badge">
+                    {{ 'profileMenu.shippingAddressForm.defaultShippingAddress' | translate }}
+                </span>
+                <strong class="default-label">{{ address.addressName }}</strong>
+            </nb-card-header>
+            <nb-card-body class="address-details">
+                <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
+                <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }}</p>
+                <p>{{ address.city }}, {{ address.postalCode }}</p>
+                <p>{{ address.country }}</p>
+                <p *ngIf="address.companyName">
+                    <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong>
+                    {{ address.companyName }}
+                </p>
+                <p *ngIf="address.taxNumber">
+                    <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
+                    {{ address.taxNumber }}
+                </p>
+            </nb-card-body>
+            <nb-card-footer>
+                <button class="edit-btn" (click)="editAddress(address.id); $event.stopPropagation()">
+                    <nb-icon icon="edit-2-outline"></nb-icon>
+                    {{ 'profilePage.modify' | translate }}
+                </button>
+            </nb-card-footer>
+        </nb-card>
+    </div>
+
+    <!-- Add New Address Button -->
+    <div class="action-buttons">
+        <button class="btn btn-primary basic-btn" nbButton status="success" (click)="goToAddNewAddress()">
+            {{ 'profileMenu.addNewShippingAddress' | translate }}
+        </button>
+
+
+        <div class="button-container">
+            <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton status="success"
+                (click)="close()">
+                <span class="arrow">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span>
+                {{ 'loginPage.back' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

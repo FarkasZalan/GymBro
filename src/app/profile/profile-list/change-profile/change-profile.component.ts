@@ -3,9 +3,9 @@ import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SuccessfullDialogComponent } from '../../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../../successfull-dialog/sucessfull-dialog-text';
-import { User } from '../../../user/user.model';
+import { User } from '../../user.model';
 import { DocumentHandlerService } from '../../../document.handler.service';
-import { UserService } from '../../../user/user.service';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-change-profile',

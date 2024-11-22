@@ -132,3 +132,298 @@
 .cta-card {
     text-align: center;
 }
+
+.loyalty-dashboard {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .loyalty-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+
+        h2 {
+            font-size: 2.5rem;
+            color: #0b8e92;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+
+            nb-icon {
+                font-size: 2.5rem;
+                color: #ffd700;
+                animation: rotate 20s linear infinite;
+            }
+        }
+
+        .loyalty-intro {
+            font-size: 1.2rem;
+            color: var(--text-hint-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    }
+
+    .points-overview {
+        background: linear-gradient(135deg, #0b8e92 0%, #06565a 100%);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        color: white;
+        display: flex;
+        gap: 3rem;
+        align-items: center;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .current-points {
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+
+            .points-circle {
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.1);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                animation: pulse 2s infinite;
+
+                .points-number {
+                    font-size: 3.5rem;
+                    font-weight: bold;
+                    color: #ffd700;
+                    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                }
+
+                .points-label {
+                    font-size: 1.1rem;
+                    opacity: 0.8;
+                }
+            }
+        }
+
+        .points-stats {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
+
+            .stat-item {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 1rem;
+                transition: transform 0.3s ease;
+
+                &:hover {
+                    transform: translateX(10px);
+                }
+
+                nb-icon {
+                    font-size: 2rem;
+                    color: #ffd700;
+                }
+
+                .stat-content {
+                    display: flex;
+                    flex-direction: column;
+
+                    .stat-label {
+                        font-size: 0.9rem;
+                        opacity: 0.8;
+                    }
+
+                    .stat-value {
+                        font-size: 1.5rem;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+
+    .rewards-section {
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+
+            nb-icon {
+                color: #0b8e92;
+            }
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+
+            .reward-card {
+                background: var(--card-background-color);
+                border-radius: 1rem;
+                padding: 2rem;
+                transition: all 0.3s ease;
+                border: 2px solid var(--border-basic-color-3);
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                gap: 1.5rem;
+                width: auto;
+
+                &:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                }
+
+                &.locked {
+                    opacity: 0.7;
+
+                    &::after {
+                        content: '🔒';
+                        position: absolute;
+                        top: 1.5rem;
+                        right: 1.5rem;
+                        font-size: 1.8rem;
+                    }
+                }
+
+                .reward-icon {
+                    width: 80px;
+                    height: 80px;
+                    background: rgba(11, 142, 146, 0.1);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+
+                    nb-icon {
+                        font-size: 2.5rem;
+                        color: #0b8e92;
+                    }
+                }
+
+                .reward-details {
+                    flex: 1;
+
+                    h4 {
+                        font-size: 1.4rem;
+                        margin-bottom: 0.75rem;
+                        color: var(--text-primary-color);
+                    }
+
+                    p {
+                        color: var(--text-hint-color);
+                        margin-bottom: 1.5rem;
+                        font-size: 1rem;
+                        line-height: 1.5;
+                    }
+
+                    .points-required {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding-top: 1rem;
+                        border-top: 1px solid var(--border-basic-color-3);
+                        margin-top: auto;
+
+                        span {
+                            font-weight: bold;
+                            color: #0b8e92;
+                            font-size: 1.1rem;
+                        }
+
+                        button {
+                            border-radius: 2rem;
+                            padding: 0.6rem 2rem;
+                            min-width: 120px;
+
+                            &:not(:disabled) {
+                                background: #0b8e92;
+                                border-color: #0b8e92;
+
+                                &:hover {
+                                    background: darken(#0b8e92, 5%);
+                                    transform: translateY(-2px);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+@media (max-width: 1200px) {
+    .rewards-section {
+        .rewards-grid {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .rewards-section {
+        .rewards-grid {
+            grid-template-columns: 1fr;
+
+            .reward-card {
+                padding: 1.5rem;
+            }
+        }
+    }
+}

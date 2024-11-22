@@ -37,6 +37,11 @@ export const routes: Routes = [
       .then(m => m.CartModule),
   },
   {
+    path: 'checkout',
+    loadChildren: () => import('./payment/payment.module')
+      .then(m => m.PaymentModule)
+  },
+  {
     path: 'admin-profile',
     loadChildren: () => import('./admin-profile/admin-profile.module')
       .then(m => m.AdminProfileModule),

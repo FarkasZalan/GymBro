@@ -513,5 +513,115 @@
                 "item": "termék",
                 "addedToCart": "Hozzáadva a kosárhoz",
                 "goToCart": "Irány a kosár"
+        },
+        "checkout": {
+                "title": "Összegzés",
+                "guestAddressName": "Vendég cím",
+                "shippingAddress": {
+                        "title": "Szállítási cím",
+                        "noAddress": "Nincs kiválasztott szállítási cím",
+                        "selectAddress": "Cím kiválasztása",
+                        "changeAddress": "Cím módosítása",
+                        "addAddress": "Új cím hozzáadása"
+                },
+                "orderSummary": {
+                        "title": "Rendelés összesítése",
+                        "subtotal": "Részösszeg",
+                        "shipping": "Szállítási díj",
+                        "total": "Végösszeg",
+                        "items": "termék",
+                        "summary": "Rendelés összesítése",
+                        "paymentFee": "Fizetési díj"
+                },
+                "payment": {
+                        "title": "Fizetési mód",
+                        "card": "Bankkártya",
+                        "cardDescription": "Biztonságos fizetés Stripe-pal",
+                        "cash": "Utánvét",
+                        "cashDescription": "Fizetés átvételkor (+1000 Ft)",
+                        "additionalFee": "+{{fee}} Ft díj"
+                },
+                "actions": {
+                        "placeOrder": "Fizetés leadása",
+                        "backToCart": "Vissza a kosárhoz",
+                        "loginPrompt": "A folytatáshoz jelentkezz be"
+                },
+                "shipping": {
+                        "title": "Szállítási mód",
+                        "estimatedDays": "{{days}} munkanap",
+                        "free": "Ingyenes",
+                        "storePickup": {
+                                "title": "Bolti átvétel",
+                                "description": "Vedd át rendelésed üzletünkben"
+                        },
+                        "dhl": {
+                                "title": "DHL Express",
+                                "description": "Gyors, világszerte elérhető szállítás csomagkövetéssel"
+                        }
+                },
+                "loyalty": {
+                        "title": "Hűségpontok",
+                        "points": "pont",
+                        "earnPoints": "Pontot gyűjtesz ezzel a vásárlással!",
+                        "nextReward": "Még {{points}} pont a következő jutalomig!"
+                },
+                "login": {
+                        "title": "Üdvözöljük a Pénztárnál",
+                        "alreadyMember": "Már van fiókja?",
+                        "loginHere": "Jelentkezzen be itt",
+                        "or": "vagy",
+                        "createAccount": "hozzon létre egy fiókot",
+                        "forBetterExperience": "a jobb vásárlási élményért.",
+                        "benefit1": "Kövesse rendelése állapotát",
+                        "benefit2": "Tekintse meg rendelési előzményeit",
+                        "benefit3": "Gyűjtsön hűségpontokat"
+                }
+        },
+        "loyaltyProgram": {
+                "title": "Gym Bro Hűségprogram",
+                "subtitle": "A siker a hűséggel kezdődik",
+                "intro": "Gyűjts pontokat minden vásárlással és oldd fel az exkluzív jutalmakat!",
+                "pointsOverview": {
+                        "totalPoints": "Összes Pont",
+                        "earnedThisMonth": "Ebben a Hónapban Szerzett",
+                        "rewardsRedeemed": "Beváltott Jutalmak",
+                        "points": "pont",
+                        "point": "pont"
+                },
+                "rewardsSection": {
+                        "title": "Elérhető Jutalmak",
+                        "redeem": "Beváltás",
+                        "locked": "Zárolva",
+                        "pointsNeeded": "pont szükséges",
+                        "confirmRedeem": {
+                                "title": "Jutalom Beváltása",
+                                "message": "Biztosan be szeretnéd váltani ezt a jutalmat?",
+                                "confirm": "Igen, Beváltom",
+                                "cancel": "Mégsem"
+                        }
+                },
+                "rewards": {
+                        "discount10": {
+                                "title": "10% Kedvezmény",
+                                "description": "Kapj 10% kedvezményt a következő vásárlásodból"
+                        },
+                        "freeShipping": {
+                                "title": "Ingyenes Szállítás",
+                                "description": "Ingyenes szállítás a következő rendelésedhez"
+                        },
+                        "vipStatus": {
+                                "title": "VIP Státusz",
+                                "description": "Oldd fel az exkluzív VIP előnyöket 30 napra"
+                        },
+                        "giftCard": {
+                                "title": "5000 Ft Ajándékkártya",
+                                "description": "Kapj egy 5000 Ft értékű ajándékkártyát"
+                        }
+                },
+                "notifications": {
+                        "redeemSuccess": "Jutalom sikeresen beváltva!",
+                        "redeemError": "Hiba történt a beváltás során. Kérjük, próbáld újra.",
+                        "insufficientPoints": "Nincs elég pont a jutalom beváltásához."
+                }
         }
 }

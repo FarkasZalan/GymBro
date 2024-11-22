@@ -159,5 +159,19 @@ export enum ProductViewText {
     ORDER_BY_PRICE_CHEAPEST = 'filter.orderBy.cheapest',
     ORDER_BY_PRICE_MOST_EXPENSIVE = 'filter.orderBy.mostExpensive',
     ORDER_BY_NAME_ASC = 'filter.orderBy.nameASC',
-    ORDER_BY_NAME_DESC = 'filter.orderBy.nameDESC'
+    ORDER_BY_NAME_DESC = 'filter.orderBy.nameDESC',
+
+    // Checkout
+    CHECKOUT_PAY_WITH_STRIPE_DESCRIPTION = 'checkout.payment.cardDescription',
+    CHECKOUT_PAY_WITH_CASH_DESCRIPTION = 'checkout.payment.cashDescription',
+    CHECKOUT_PAY_WITH_STRIPE = 'checkout.payment.card',
+    CHECKOUT_PAY_WITH_CASH = 'checkout.payment.cash',
+
+    CHECKOUT_GUEST_ADDRESS_NAME = 'checkout.guestAddressName',
+
+    // Shipping
+    CHECKOUT_SHIPPING_STORE_PICKUP_TITLE = 'checkout.shipping.storePickup.title',
+    CHECKOUT_SHIPPING_STORE_PICKUP_DESCRIPTION = 'checkout.shipping.storePickup.description',
+    CHECKOUT_SHIPPING_DHL_TITLE = 'checkout.shipping.dhl.title',
+    CHECKOUT_SHIPPING_DHL_DESCRIPTION = 'checkout.shipping.dhl.description',
 }
