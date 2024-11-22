@@ -131,8 +131,9 @@ export class CheckoutPageComponent implements OnInit {
 
   selectedShippingMethod: string = '';
 
-  currentLoyaltyPoints: number = 0; // Get this from user service
-  nextRewardThreshold: number = 1000; // Example threshold
+  // loyalty program
+  currentLoyaltyPoints: number = 0;
+  nextRewardThreshold: number = 0;
 
   showAddressForm = false;
   isSubmitting = false;
@@ -185,6 +186,18 @@ export class CheckoutPageComponent implements OnInit {
         this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
           this.currentUser = currentUser;
           this.currentUserId = currentUser.id;
+          this.currentLoyaltyPoints = currentUser.loyaltyPoints || 0;
+          if (this.currentLoyaltyPoints <= 300) {
+            this.nextRewardThreshold = 300;
+          } else if (this.currentLoyaltyPoints <= 600) {
+            this.nextRewardThreshold = 600;
+          } else if (this.currentLoyaltyPoints <= 700) {
+            this.nextRewardThreshold = 700;
+          } else if (this.currentLoyaltyPoints <= 850) {
+            this.nextRewardThreshold = 850;
+          } else if (this.currentLoyaltyPoints > 850) {
+            this.nextRewardThreshold = 1500;
+          }
           this.getDefaultAddress(currentUser).then((address) => {
             this.shippingAddress = address;
           });
@@ -214,6 +227,10 @@ export class CheckoutPageComponent implements OnInit {
       id: defaultAddressDoc.id,
       ...defaultAddressDoc.data()
     } as ShippingAddress;
+  }
+
+  openLoyalityProgram() {
+    this.router.navigate(['product/loyaltyProgram']);
   }
 
   calculateTotals() {

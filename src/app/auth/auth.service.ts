@@ -72,6 +72,12 @@ export class AuthService {
                     lastName: lastName,
                     phone: phone,
                     isAdmin: false,
+                    loyaltyPoints: 0,
+                    is10PercentDiscountActive: false,
+                    is20PercentDiscountActive: false,
+                    is30PercentDiscountActive: false,
+                    isFreeShippingActive: false,
+                    is5000HufDiscountActive: false,
                     deleted: false,
                 }
                 await this.db.collection('users').doc(userAuth.user.uid).set(newUser);

@@ -583,7 +583,9 @@
          "earnedThisMonth": "Earned This Month",
          "rewardsRedeemed": "Rewards Redeemed",
          "points": "points",
-         "point": "point"
+         "point": "point",
+         "loggedOutTitle": "You're not logged in",
+         "loggedOutMessage": "Log in or create an account to start earning points and redeem rewards!"
       },
       "rewardsSection": {
          "title": "Available Rewards",
@@ -602,6 +604,14 @@
             "title": "10% Discount",
             "description": "Get 10% off your next purchase"
          },
+         "discount20": {
+            "title": "20% Discount",
+            "description": "Get 20% off your next purchase"
+         },
+         "discount30": {
+            "title": "30% Discount",
+            "description": "Get 30% off your next purchase"
+         },
          "freeShipping": {
             "title": "Free Shipping",
             "description": "Get free shipping on your next order"
@@ -619,6 +629,15 @@
          "redeemSuccess": "Reward successfully redeemed!",
          "redeemError": "Failed to redeem reward. Please try again.",
          "insufficientPoints": "Not enough points to redeem this reward."
+      },
+      "basicIntro": {
+         "title": "Join the GymBro Loyalty Program",
+         "subtitle": "Earn points with every purchase and get valuable coupons!",
+         "earnPoints": "Earn Points",
+         "earnPointsDesc": "Get 1 point for every 100 HUF spent. Points can be redeemed for exclusive rewards and discounts.",
+         "joinPrompt": "Ready to start earning rewards? Join our loyalty program today!",
+         "register": "Create Account",
+         "login": "Already a Member? Sign In"
       }
    }
 }

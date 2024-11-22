@@ -566,15 +566,15 @@
                         "nextReward": "Még {{points}} pont a következő jutalomig!"
                 },
                 "login": {
-                        "title": "Üdvözöljük a Pénztárnál",
-                        "alreadyMember": "Már van fiókja?",
-                        "loginHere": "Jelentkezzen be itt",
+                        "title": "Üdvözölünk a Pénztárnál",
+                        "alreadyMember": "Már van fiókod?",
+                        "loginHere": "Jelentkezz be itt",
                         "or": "vagy",
                         "createAccount": "hozzon létre egy fiókot",
                         "forBetterExperience": "a jobb vásárlási élményért.",
-                        "benefit1": "Kövesse rendelése állapotát",
-                        "benefit2": "Tekintse meg rendelési előzményeit",
-                        "benefit3": "Gyűjtsön hűségpontokat"
+                        "benefit1": "Követheted rendelésed állapotát",
+                        "benefit2": "Rendelési előzmények megtekintése",
+                        "benefit3": "Hűségpontok gyűjtése"
                 }
         },
         "loyaltyProgram": {
@@ -586,7 +586,9 @@
                         "earnedThisMonth": "Ebben a Hónapban Szerzett",
                         "rewardsRedeemed": "Beváltott Jutalmak",
                         "points": "pont",
-                        "point": "pont"
+                        "point": "pont",
+                        "loggedOutTitle": "Nincs bejelentkezett felhasználó",
+                        "loggedOutMessage": "Jelentkezz be vagy hozz létre egy fiókot a pontok gyűjtéséhez és jutalmak beváltásához!"
                 },
                 "rewardsSection": {
                         "title": "Elérhető Jutalmak",
@@ -603,25 +605,38 @@
                 "rewards": {
                         "discount10": {
                                 "title": "10% Kedvezmény",
-                                "description": "Kapj 10% kedvezményt a következő vásárlásodból"
+                                "description": "10% kedvezmény a következő vásárlásodhoz"
+                        },
+                        "discount20": {
+                                "title": "20% Kedvezmény",
+                                "description": "20% kedvezmény a következő vásárlásodhoz"
+                        },
+                        "discount30": {
+                                "title": "30% Kedvezmény",
+                                "description": "30% kedvezmény a következő vásárlásodhoz"
                         },
                         "freeShipping": {
                                 "title": "Ingyenes Szállítás",
                                 "description": "Ingyenes szállítás a következő rendelésedhez"
                         },
-                        "vipStatus": {
-                                "title": "VIP Státusz",
-                                "description": "Oldd fel az exkluzív VIP előnyöket 30 napra"
-                        },
                         "giftCard": {
-                                "title": "5000 Ft Ajándékkártya",
-                                "description": "Kapj egy 5000 Ft értékű ajándékkártyát"
+                                "title": "5000 Ft-os kupon",
+                                "description": "5000 Ft lejön a következő vásárlásodból"
                         }
                 },
                 "notifications": {
                         "redeemSuccess": "Jutalom sikeresen beváltva!",
                         "redeemError": "Hiba történt a beváltás során. Kérjük, próbáld újra.",
                         "insufficientPoints": "Nincs elég pont a jutalom beváltásához."
+                },
+                "basicIntro": {
+                        "title": "Csatlakozz a GymBro Hűségprogramhoz",
+                        "subtitle": "Gyűjts pontokat minden vásárlással, és szerezz értékes kuponokat!",
+                        "earnPoints": "Pontgyűjtés",
+                        "earnPointsDesc": "Minden elköltött 100 Ft után 1 pontot kapsz. A pontokat exkluzív jutalmakra és kedvezményekre válthatod be.",
+                        "joinPrompt": "Készen állsz a jutalmak gyűjtésére? Csatlakozz hűségprogramunkhoz még ma!",
+                        "register": "Fiók létrehozása",
+                        "login": "Már tag vagy? Jelentkezz be"
                 }
         }
 }

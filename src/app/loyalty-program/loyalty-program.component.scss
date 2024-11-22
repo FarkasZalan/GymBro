@@ -133,6 +133,84 @@
     text-align: center;
 }
 
+.login-prompt-container {
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+}
+
+.login-prompt {
+    background: var(--card-background-color);
+    border-radius: 1rem;
+    padding: 2.5rem;
+    border: 2px solid var(--border-basic-color-3);
+    text-align: center;
+
+    .login-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+
+        .login-info {
+            max-width: 600px;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            display: ruby !important;
+
+            .login-icon {
+                font-size: 3.5rem;
+                color: #0b8e92;
+                margin-bottom: 1rem;
+            }
+
+            h3 {
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+                color: var(--text-primary-color);
+            }
+
+            .benefits-list {
+                max-width: 400px;
+                margin: 0 auto;
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    margin-bottom: 0.75rem;
+                    color: var(--text-basic-color);
+
+                    nb-icon {
+                        color: #0b8e92;
+                        flex-shrink: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.login-text {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: var(--text-hint-color);
+
+    .login-link {
+        color: #0b8e92;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: darken(#0b8e92, 10%);
+            text-decoration: underline;
+        }
+    }
+}
+
 .loyalty-dashboard {
     padding: 2rem;
     max-width: 1200px;
@@ -172,12 +250,40 @@
         border-radius: 1.5rem;
         padding: 2rem;
         color: white;
-        display: flex;
-        gap: 3rem;
-        align-items: center;
         margin-bottom: 3rem;
         position: relative;
         overflow: hidden;
+
+        &:not(:has(.logged-out-points)) {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .logged-out-points {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+
+            nb-icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+
+            h3 {
+                margin-bottom: 0.5rem;
+            }
+
+            p {
+                margin-bottom: 1.5rem;
+            }
+
+            button {
+                position: relative;
+                z-index: 2;
+            }
+        }
 
         &::before {
             content: '';
@@ -215,8 +321,9 @@
                 }
 
                 .points-label {
-                    font-size: 1.1rem;
+                    font-size: 1.5rem !important;
                     opacity: 0.8;
+                    margin-top: 15px !important;
                 }
             }
         }
@@ -381,6 +488,18 @@
     }
 }
 
+.btn-primary {
+    &:hover {
+        background: darken(white, 10%) !important;
+        color: #0b8e92 !important;
+    }
+
+    &:active {
+        background: darken(white, 20%) !important;
+        color: #0b8e92 !important;
+    }
+}
+
 @keyframes rotate {
     0% {
         transform: rotate(0deg);
@@ -423,6 +542,227 @@
 
             .reward-card {
                 padding: 1.5rem;
+            }
+        }
+    }
+}
+
+.loyalty-intro-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+
+    .loyalty-intro-content {
+        background: var(--card-background-color);
+        border-radius: 1.5rem;
+        padding: 3rem 2rem;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+        .intro-header {
+            margin-bottom: 3rem;
+
+            .intro-icon {
+                font-size: 4rem;
+                color: #0b8e92;
+                margin-bottom: 1rem;
+                animation: sparkle 2s infinite;
+            }
+
+            h2 {
+                font-size: 2.5rem;
+                color: var(--text-primary-color);
+                margin-bottom: 1rem;
+            }
+
+            .intro-subtitle {
+                font-size: 1.2rem;
+                color: var(--text-hint-color);
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .benefit-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+
+            &:hover {
+                transform: translateY(-4px);
+            }
+
+            background: #0b8e92;
+
+            .benefit-icon nb-icon {
+                color: #0b8e92 !important;
+            }
+
+            .benefit-content {
+
+                h3 {
+                    color: #0b8e92 !important;
+                }
+
+                p {
+                    color: white;
+                }
+            }
+
+            &:hover {
+                background: darken(#0b8e92, 5%);
+            }
+        }
+
+        .benefit-icon {
+            margin-bottom: 1rem;
+            color: #0b8e92;
+
+            nb-icon {
+                font-size: 2rem;
+                color: #0b8e92;
+            }
+        }
+
+        .benefit-content {
+            h3 {
+                margin-bottom: 0.5rem;
+                font-size: 1.25rem;
+                color: #0b8e92 !important
+            }
+
+            p {
+                color: var(--text-secondary-color);
+                line-height: 1.5;
+            }
+        }
+
+        .join-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-basic-color-3);
+
+            .join-text {
+                font-size: 1.2rem;
+                color: var(--text-primary-color);
+                margin-bottom: 1.5rem;
+            }
+
+            .join-buttons {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+
+                button {
+                    padding: 0.75rem 2rem;
+                    font-size: 1.1rem;
+                    border-radius: 2rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+
+                    nb-icon {
+                        font-size: 1.2rem;
+                    }
+
+                    &[status="primary"] {
+                        background: #0b8e92;
+
+                        &:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(11, 142, 146, 0.2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.benefit-icon nb-icon {
+    color: #0b8e92 !important;
+}
+
+.benefit-content {
+
+    h3 {
+        color: #0b8e92 !important;
+    }
+}
+
+.rewards-title {
+    color: #0b8e92 !important;
+}
+
+.logged-out-points {
+    text-align: center;
+    padding: 2rem;
+}
+
+.logged-out-points nb-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.logged-out-points h3 {
+    margin-bottom: 0.5rem;
+}
+
+.logged-out-points p {
+    margin-bottom: 1.5rem;
+}
+
+.button-container {
+    text-align: center;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+@media (max-width: 768px) {
+    .loyalty-intro-container {
+        padding: 1rem;
+
+        .loyalty-intro-content {
+            padding: 2rem 1rem;
+
+            .intro-header {
+                h2 {
+                    font-size: 2rem;
+                }
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .join-buttons {
+                flex-direction: column;
+
+                button {
+                    width: 100%;
+                }
             }
         }
     }

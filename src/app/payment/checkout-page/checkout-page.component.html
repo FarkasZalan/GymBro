@@ -134,8 +134,9 @@
             </div>
 
             <!-- Loyalty Preview Section -->
-            <div class="checkout-section loyalty-preview" *ngIf="calculateLoyaltyPoints() > 0 && userLoggedIn" @fadeIn>
-                <h3>
+            <div class="checkout-section loyalty-preview" *ngIf="calculateLoyaltyPoints() > 0 && userLoggedIn" @fadeIn
+                (click)="openLoyalityProgram()">
+                <h3 class="loyalty-title">
                     <nb-icon icon="star-outline" class="loyalty-icon"></nb-icon>
                     {{ 'checkout.loyalty.title' | translate }}
                 </h3>

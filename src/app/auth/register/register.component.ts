@@ -56,6 +56,12 @@ export class RegisterComponent {
         email: this.createUserForm.value.email,
         phone: this.createUserForm.value.phone,
         isAdmin: false,
+        loyaltyPoints: 0,
+        is10PercentDiscountActive: false,
+        is20PercentDiscountActive: false,
+        is30PercentDiscountActive: false,
+        isFreeShippingActive: false,
+        is5000HufDiscountActive: false,
         deleted: false
       }
       this.password = this.createUserForm.value.password;

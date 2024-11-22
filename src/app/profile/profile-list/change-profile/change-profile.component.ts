@@ -20,6 +20,14 @@ export class ChangeProfileComponent {
   password: string;
   passwordAgain: string;
 
+  // save the user loyalty points data
+  loyaltyPoints: number;
+  is10PercentDiscountActive: boolean;
+  is20PercentDiscountActive: boolean;
+  is30PercentDiscountActive: boolean;
+  isFreeShippingActive: boolean;
+  is5000HufDiscountActive: boolean;
+
   // for error handleing
   errorMessage: boolean = false;
 
@@ -34,6 +42,12 @@ export class ChangeProfileComponent {
     // Fetch user details by ID when the component initializes
     this.documentumHandler.getDocumentByID("users", this.modifyUserId).subscribe((user: User) => {
       this.modifyUser = user;
+      this.loyaltyPoints = this.modifyUser.loyaltyPoints;
+      this.is10PercentDiscountActive = this.modifyUser.is10PercentDiscountActive;
+      this.is20PercentDiscountActive = this.modifyUser.is20PercentDiscountActive;
+      this.is30PercentDiscountActive = this.modifyUser.is30PercentDiscountActive;
+      this.is5000HufDiscountActive = this.modifyUser.is5000HufDiscountActive;
+      this.isFreeShippingActive = this.modifyUser.isFreeShippingActive;
       this.userIsAdmin = this.modifyUser.isAdmin;
     });
   }
@@ -60,6 +74,12 @@ export class ChangeProfileComponent {
       email: this.modifyUser.email,
       phone: this.modifyUserForm.value.phone,
       isAdmin: this.userIsAdmin,
+      loyaltyPoints: this.loyaltyPoints,
+      is10PercentDiscountActive: this.is10PercentDiscountActive,
+      is20PercentDiscountActive: this.is20PercentDiscountActive,
+      is30PercentDiscountActive: this.is30PercentDiscountActive,
+      is5000HufDiscountActive: this.is5000HufDiscountActive,
+      isFreeShippingActive: this.isFreeShippingActive,
       deleted: false
     }
 

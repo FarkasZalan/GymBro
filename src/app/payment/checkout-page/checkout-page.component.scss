@@ -118,6 +118,11 @@
             color: #0b8e92 !important;
         }
 
+        &:active {
+            transform: scale(0.97) !important;
+            background-color: darken(#ffffff, 10%) !important;
+        }
+
         &:last-child {
             border-bottom: none;
         }
@@ -961,6 +966,16 @@
     color: white;
     overflow: hidden;
     position: relative;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.02);
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
 
     &::before {
         content: '';
