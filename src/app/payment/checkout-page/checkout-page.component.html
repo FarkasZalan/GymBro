@@ -91,48 +91,6 @@
                 </div>
             </div>
 
-            <!-- Price Summary Section -->
-            <div class="checkout-section price-summary">
-                <h3>
-                    {{ 'checkout.orderSummary.summary' | translate }}
-                </h3>
-                <div class="summary-row">
-                    <span>
-                        <nb-icon class="summary-icon" icon="shopping-cart-outline"></nb-icon>
-                        {{ 'checkout.orderSummary.subtotal' | translate }}
-                    </span>
-                    <span>{{subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
-                </div>
-                <div class="summary-row" *ngIf="selectedShippingMethod" @fadeInUp>
-                    <span>
-                        <nb-icon class="summary-icon" icon="car-outline"></nb-icon>
-                        {{ 'checkout.orderSummary.shipping' | translate }}
-                    </span>
-                    <span>
-                        <ng-container *ngIf="selectedShippingMethod === 'store'">
-                            {{ 'checkout.shipping.free' | translate }}
-                        </ng-container>
-                        <ng-container *ngIf="selectedShippingMethod !== 'store'">
-                            {{shipping | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}
-                        </ng-container>
-                    </span>
-                </div>
-                <div class="summary-row" *ngIf="paymentFee > 0" @fadeInUp>
-                    <span>
-                        <nb-icon class="summary-icon" icon="credit-card-outline"></nb-icon>
-                        {{ 'checkout.orderSummary.paymentFee' | translate }}
-                    </span>
-                    <span>{{paymentFee | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
-                </div>
-                <div class="summary-row total">
-                    <span>
-                        <nb-icon class="summary-icon" icon="checkmark-circle-2-outline"></nb-icon>
-                        {{ 'checkout.orderSummary.total' | translate }}
-                    </span>
-                    <span>{{calculateTotal() | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
-                </div>
-            </div>
-
             <!-- Loyalty Preview Section -->
             <div class="checkout-section loyalty-preview" *ngIf="calculateLoyaltyPoints() > 0 && userLoggedIn" @fadeIn
                 (click)="openLoyalityProgram()">
@@ -164,6 +122,70 @@
                         </p>
                     </div>
                 </div>
+            </div>
+
+            <!-- Rewards Section -->
+            <div *ngIf="userLoggedIn" @fadeInUp>
+                <nb-card class="rounded-card checkout-section rewards-section">
+                    <nb-card-header>
+                        <h3>
+                            {{ 'checkout.availableRewards' | translate }}
+                        </h3>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <!-- Active Reward -->
+                        <div class="active-reward" *ngIf="activeReward" @fadeSlide>
+                            <div class="reward-card active">
+                                <div class="reward-icon">
+                                    <nb-icon [icon]="activeReward.icon"></nb-icon>
+                                </div>
+                                <div class="reward-content">
+                                    <h4>{{activeReward.name | translate}}</h4>
+                                    <p>{{activeReward.description | translate}}</p>
+                                    <div class="button-container">
+                                        <button nbButton class="remove-reward-btn btn" (click)="removeReward()">
+                                            <nb-icon icon="close-circle-outline"></nb-icon>
+                                            {{ 'checkout.removeReward' | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="active-indicator">
+                                    <nb-icon icon="checkmark-circle-2"></nb-icon>
+                                    {{ 'checkout.active' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Available Rewards -->
+                        <div class="rewards-list"
+                            *ngIf="!activeReward && displayAvailableRewardsBasedOnPoints.length > 0" @fadeSlide>
+                            <div class="reward-card" *ngFor="let reward of displayAvailableRewardsBasedOnPoints"
+                                (click)="activateReward(reward)">
+                                <div class="reward-icon">
+                                    <nb-icon [icon]="reward.icon"></nb-icon>
+                                </div>
+                                <div class="reward-content">
+                                    <h4>{{reward.name | translate}}</h4>
+                                    <p>{{reward.description | translate}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div class="empty-rewards"
+                            *ngIf="!activeReward && displayAvailableRewardsBasedOnPoints.length === 0" @fadeSlide>
+                            <div class="empty-content">
+                                <nb-icon icon="gift-outline"></nb-icon>
+                                <h4>{{ 'checkout.rewards.noRewardsTitle' | translate }}</h4>
+                                <p>{{ 'checkout.rewards.noRewardsMessage' | translate }}</p>
+                                <button nbButton status="primary" (click)="navigateToLoyaltyProgram()">
+                                    <nb-icon icon="star-outline"></nb-icon>
+                                    {{ 'checkout.rewards.viewLoyaltyProgram' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
             </div>
 
             <!-- Shipping Address Section -->
@@ -474,8 +496,7 @@
                 </h3>
                 <div class="payment-options">
                     <div *ngFor="let method of paymentMethods" class="payment-option"
-                        [class.selected]="selectedPaymentMethod === method.id"
-                        (click)="selectedPaymentMethod = method.id">
+                        [class.selected]="selectedPaymentMethod === method.id" (click)="selectPaymentMethod(method.id)">
                         <div class="payment-icon">
                             <nb-icon [icon]="method.icon"></nb-icon>
                         </div>
@@ -488,6 +509,57 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Price Summary Section -->
+            <div class="checkout-section price-summary">
+                <h3>
+                    {{ 'checkout.orderSummary.summary' | translate }}
+                </h3>
+                <div class="summary-row">
+                    <span>
+                        <nb-icon class="summary-icon" icon="shopping-cart-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.subtotal' | translate }}
+                    </span>
+                    <span>{{subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="summary-row shipping" *ngIf="selectedShippingMethod" @fadeInUp>
+                    <span>
+                        <nb-icon class="summary-icon" icon="car-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.shipping' | translate }}
+                    </span>
+                    <div class="shipping-cost" [class.free-shipping]="isFreeShippingActive()">
+                        <span class="original-cost" *ngIf="isFreeShippingActive()">
+                            {{ getOriginalShippingCost() | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
+                        </span>
+                        <span class="final-cost">
+                            {{ isFreeShippingActive() ? '0' : shipping | currency:'':'':'1.0-0' }} {{ 'products.huf' |
+                            translate }}
+                        </span>
+                    </div>
+                </div>
+                <div class="summary-row" *ngIf="paymentFee > 0" @fadeInUp>
+                    <span>
+                        <nb-icon class="summary-icon" icon="credit-card-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.paymentFee' | translate }}
+                    </span>
+                    <span>{{paymentFee | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="summary-row" *ngIf="discountAmount > 0">
+                    <span>
+                        <nb-icon class="summary-icon" icon="star-outline"></nb-icon>
+                        {{ 'checkout.discount' | translate }}
+                    </span>
+                    <span class="discount">-{{discountAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate
+                        }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>
+                        <nb-icon class="summary-icon" icon="checkmark-circle-2-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.total' | translate }}
+                    </span>
+                    <span>{{total | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
                 </div>
             </div>
 
@@ -515,17 +587,32 @@
                     <span>{{ 'checkout.orderSummary.subtotal' | translate }}</span>
                     <span>{{subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
                 </div>
-                <div class="breakdown-item" *ngIf="shipping">
+                <div class="breakdown-item shipping" *ngIf="shipping || isFreeShippingActive()">
                     <span>{{ 'checkout.orderSummary.shipping' | translate }}</span>
-                    <span>{{shipping | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                    <div class="shipping-cost" [class.free-shipping]="isFreeShippingActive()">
+                        <span class="original-cost" *ngIf="isFreeShippingActive()">
+                            {{ getOriginalShippingCost() | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
+                        </span>
+                        <span class="final-cost">
+                            {{ isFreeShippingActive() ? '0' : shipping | currency:'':'':'1.0-0' }} {{ 'products.huf' |
+                            translate }}
+                        </span>
+                    </div>
                 </div>
                 <div class="breakdown-item" *ngIf="paymentFee">
                     <span>{{ 'checkout.orderSummary.paymentFee' | translate }}</span>
                     <span>{{paymentFee | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
                 </div>
+                <div class="breakdown-item" *ngIf="discountAmount > 0">
+                    <span>
+                        {{ 'checkout.discount' | translate }}
+                    </span>
+                    <span class="discount">-{{discountAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate
+                        }}</span>
+                </div>
                 <div class="breakdown-item total">
                     <span>{{ 'checkout.orderSummary.total' | translate }}</span>
-                    <span>{{calculateTotal() | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                    <span>{{total | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
                 </div>
             </div>
             <div class="action-buttons">

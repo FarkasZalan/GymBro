@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ShippingAddressSelectionDialogComponent } from '../shipping-address-selection-dialog/shipping-address-selection-dialog.component';
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { RewardText } from '../../loyalty-program/reward-text';
+import { Reward } from '../../loyalty-program/reward.model';
 
 @Component({
   selector: 'app-checkout-page',
@@ -76,7 +78,7 @@ export class CheckoutPageComponent implements OnInit {
   @ViewChild('form') guestForm: NgForm;  // Access the form for validation
   cartItems: any[] = [];
   subtotal: number = 0;
-  shipping: number = 2500; // Fix shipping cost
+  shipping: number = 0; // Fix shipping cost will be 2500 Huf
   total: number = 0;
 
   userLoggedIn: boolean = false;
@@ -139,6 +141,49 @@ export class CheckoutPageComponent implements OnInit {
   isSubmitting = false;
   addressForm: FormGroup;
 
+  // Rewards
+  availableRewards: Reward[] = [
+    {
+      id: RewardText.Discount10Id,
+      name: RewardText.Discount10Title,
+      description: RewardText.Discount10Description,
+      pointsRequired: 300,
+      icon: 'percent-outline'
+    },
+    {
+      id: RewardText.Discount20Id,
+      name: RewardText.Discount20Title,
+      description: RewardText.Discount20Description,
+      pointsRequired: 600,
+      icon: 'percent-outline'
+    },
+    {
+      id: RewardText.Discount30Id,
+      name: RewardText.Discount30Title,
+      description: RewardText.Discount30Description,
+      pointsRequired: 700,
+      icon: 'percent-outline'
+    },
+    {
+      id: RewardText.FreeShippingId,
+      name: RewardText.FreeShippingTitle,
+      description: RewardText.FreeShippingDescription,
+      pointsRequired: 850,
+      icon: 'car-outline'
+    },
+    {
+      id: RewardText.FiveThousandHufDiscountId,
+      name: RewardText.FiveThousandHufDiscountTitle,
+      description: RewardText.FiveThousandHufDiscountDescription,
+      pointsRequired: 1500,
+      icon: 'gift-outline'
+    }
+  ];
+  displayAvailableRewardsBasedOnPoints: Reward[] = [];
+  activeReward: Reward | null = null;
+  discountAmount: number = 0;
+  STANDARD_SHIPPING_COST: number = 2500;
+
   constructor(
     private cartService: CartService,
     private auth: AngularFireAuth,
@@ -187,6 +232,7 @@ export class CheckoutPageComponent implements OnInit {
           this.currentUser = currentUser;
           this.currentUserId = currentUser.id;
           this.currentLoyaltyPoints = currentUser.loyaltyPoints || 0;
+          this.loadAvailableRewards();
           if (this.currentLoyaltyPoints <= 300) {
             this.nextRewardThreshold = 300;
           } else if (this.currentLoyaltyPoints <= 600) {
@@ -233,9 +279,41 @@ export class CheckoutPageComponent implements OnInit {
     this.router.navigate(['product/loyaltyProgram']);
   }
 
+  isFreeShippingActive(): boolean {
+    return this.activeReward?.id === RewardText.FreeShippingId;
+  }
+
+  getOriginalShippingCost(): number {
+    // Return standard shipping cost if not store pickup
+    return this.selectedShippingMethod === 'store' ? 0 : this.STANDARD_SHIPPING_COST;
+  }
+
   calculateTotals() {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    this.total = this.subtotal + this.shipping;
+    const paymentFee = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod)?.additionalFee || 0;
+    this.shipping = this.selectedShippingMethod === 'dhl' ? 2500 : 0;
+
+    // Calculate discount if reward is active
+    this.discountAmount = 0;
+    if (this.activeReward) {
+      if (this.activeReward.id === RewardText.Discount10Id) {
+        this.discountAmount = this.subtotal * (10 / 100);
+      } else if (this.activeReward.id === RewardText.Discount20Id) {
+        this.discountAmount = this.subtotal * (20 / 100);
+      } else if (this.activeReward.id === RewardText.Discount30Id) {
+        this.discountAmount = this.subtotal * (30 / 100);
+      } else if (this.activeReward.id === RewardText.FreeShippingId) {
+        this.shipping = 0;
+      } else if (this.activeReward.id === RewardText.FiveThousandHufDiscountId) {
+        this.discountAmount = 5000;
+      }
+    }
+
+    // Calculate final total
+    this.total = this.subtotal + this.shipping + paymentFee - this.discountAmount;
+    if (this.total < 0) {
+      this.total = 0;
+    }
   }
 
   goToProduct(product: CartItem) {
@@ -295,11 +373,9 @@ export class CheckoutPageComponent implements OnInit {
     this.calculateTotals();
   }
 
-  calculateTotal(): number {
-    const baseTotal = this.subtotal + this.shipping;
-    const paymentMethod = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod);
-    const paymentFee = paymentMethod?.additionalFee || 0;
-    return baseTotal + paymentFee;
+  selectPaymentMethod(methodId: string) {
+    this.selectedPaymentMethod = methodId;
+    this.calculateTotals();
   }
 
   get paymentFee(): number {
@@ -333,37 +409,28 @@ export class CheckoutPageComponent implements OnInit {
     });
   }
 
-  async onPostalCodeBlur() {
-    const postalCode = this.addressForm.get('postalCode')?.value;
-    if (postalCode && postalCode.length === 4) {
-      try {
-        // Here you could add logic to auto-fill city based on postal code
-      } catch (error) {
-        console.error('Failed to fetch city:', error);
-      }
-    }
-  }
-
-  async onAddressSubmit() {
-    if (this.addressForm.valid) {
-      this.isSubmitting = true;
-      try {
-        // Handle address submission
-        console.log('Address submitted:', this.addressForm.value);
-      } catch (error) {
-        console.error('Failed to submit address:', error);
-      } finally {
-        this.isSubmitting = false;
-      }
-    }
-  }
-
   proceedToPayment() {
 
   }
 
   back() {
     this.location.back();
+  }
+
+  loadAvailableRewards() {
+    if (this.currentUser) {
+      this.displayAvailableRewardsBasedOnPoints = this.availableRewards.filter(reward => this.currentUser.loyaltyPoints >= reward.pointsRequired);
+    }
+  }
+
+  activateReward(reward: any) {
+    this.activeReward = reward;
+    this.calculateTotals();
+  }
+
+  removeReward() {
+    this.activeReward = null;
+    this.calculateTotals();
   }
 
 }

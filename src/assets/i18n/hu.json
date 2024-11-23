@@ -107,7 +107,9 @@
                 "reviewDeleted": "Értékelés eltávolítva!",
                 "responseCreated": "Válaszod létrehozva!",
                 "responseEdited": "Válaszod módosítva!",
-                "responseDeleted": "Válaszod törölve!"
+                "responseDeleted": "Válaszod törölve!",
+                "rewardRedeemed": "A jutalom sikeresen beváltva!\nA jutalmat a következő vásárlásnál használhatod fel.",
+                "rewardCancelled": "Jutalom beváltása megszakítva."
         },
         "profilePage": {
                 "profile": "Profil",
@@ -517,6 +519,9 @@
         "checkout": {
                 "title": "Összegzés",
                 "guestAddressName": "Vendég cím",
+                "availableRewards": "Kuponok",
+                "active": "Aktív",
+                "removeReward": "Kupon eltávolítása",
                 "shippingAddress": {
                         "title": "Szállítási cím",
                         "noAddress": "Nincs kiválasztott szállítási cím",
@@ -531,7 +536,7 @@
                         "total": "Végösszeg",
                         "items": "termék",
                         "summary": "Rendelés összesítése",
-                        "paymentFee": "Fizetési díj"
+                        "paymentFee": "Utánvéti díj"
                 },
                 "payment": {
                         "title": "Fizetési mód",
@@ -575,7 +580,13 @@
                         "benefit1": "Követheted rendelésed állapotát",
                         "benefit2": "Rendelési előzmények megtekintése",
                         "benefit3": "Hűségpontok gyűjtése"
-                }
+                },
+                "rewards": {
+                        "noRewardsTitle": "Nincs elérhető kupon",
+                        "noRewardsMessage": "Gyűjts pontokat vásárlásaiddal, és váltsd be kuponokra a kedvezményekért!",
+                        "viewLoyaltyProgram": "Hűségprogram megtekintése"
+                },
+                "discount": "Kedvezmény"
         },
         "loyaltyProgram": {
                 "title": "Gym Bro Hűségprogram",
@@ -584,7 +595,8 @@
                 "pointsOverview": {
                         "totalPoints": "Összes Pont",
                         "earnedThisMonth": "Ebben a Hónapban Szerzett",
-                        "rewardsRedeemed": "Beváltott Jutalmak",
+                        "availableRewards": "Elérhető Jutalmak",
+                        "pointsToNextReward": "Pont a következő jutalomig",
                         "points": "pont",
                         "point": "pont",
                         "loggedOutTitle": "Nincs bejelentkezett felhasználó",
@@ -597,10 +609,18 @@
                         "pointsNeeded": "pont szükséges",
                         "confirmRedeem": {
                                 "title": "Jutalom Beváltása",
-                                "message": "Biztosan be szeretnéd váltani ezt a jutalmat?",
+                                "message": "Biztosan be szeretnéd beváltani ezt a kupont?",
                                 "confirm": "Igen, Beváltom",
                                 "cancel": "Mégsem"
-                        }
+                        },
+                        "confirmCancel": {
+                                "title": "Jutalom Mégsem",
+                                "message": "Biztosan nem szeretnéd felhasználni ezt a kupont?",
+                                "confirm": "Igen, Tölés",
+                                "cancel": "Mégsem"
+                        },
+                        "cancelText": "Kupon törlése",
+                        "rewardAvailable": "Elérhető"
                 },
                 "rewards": {
                         "discount10": {
@@ -619,9 +639,9 @@
                                 "title": "Ingyenes Szállítás",
                                 "description": "Ingyenes szállítás a következő rendelésedhez"
                         },
-                        "giftCard": {
+                        "5000HufDiscount": {
                                 "title": "5000 Ft-os kupon",
-                                "description": "5000 Ft lejön a következő vásárlásodból"
+                                "description": "5000 Ft lejön a következő vásárlásod végösszegéből"
                         }
                 },
                 "notifications": {

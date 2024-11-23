@@ -107,7 +107,9 @@
       "reviewDeleted": "Review has been deleted!",
       "responseCreated": "Your response has been created!",
       "responseEdited": "Your response has been edited!",
-      "responseDeleted": "Your response has been deleted!"
+      "responseDeleted": "Your response has been deleted!",
+      "rewardRedeemed": "Reward successfully redeemed!\nYou can use your reward on your next purchase.",
+      "rewardCancelled": "Reward redemption cancelled."
    },
    "profilePage": {
       "profile": "Profile",
@@ -513,6 +515,9 @@
    "checkout": {
       "title": "Checkout",
       "guestAddressName": "Guest Address",
+      "availableRewards": "Coupons",
+      "active": "Active",
+      "removeReward": "Remove Coupon",
       "shippingAddress": {
          "title": "Shipping Address",
          "noAddress": "No shipping address selected",
@@ -527,7 +532,7 @@
          "total": "Total Amount",
          "items": "items",
          "summary": "Order Summary",
-         "paymentFee": "Payment Fee"
+         "paymentFee": "Delivery Fee"
       },
       "payment": {
          "title": "Payment Method",
@@ -572,7 +577,13 @@
          "benefit1": "Track your order status",
          "benefit2": "Access your order history",
          "benefit3": "Earn loyalty points"
-      }
+      },
+      "rewards": {
+         "noRewardsTitle": "No Rewards Available",
+         "noRewardsMessage": "Earn points with your purchases to unlock coupons and discounts!",
+         "viewLoyaltyProgram": "View Loyalty Program"
+      },
+      "discount": "Discount"
    },
    "loyaltyProgram": {
       "title": "Gym Bro Rewards",
@@ -581,7 +592,8 @@
       "pointsOverview": {
          "totalPoints": "Total Points",
          "earnedThisMonth": "Earned This Month",
-         "rewardsRedeemed": "Rewards Redeemed",
+         "availableRewards": "Available Rewards",
+         "pointsToNextReward": "Points to Next Reward",
          "points": "points",
          "point": "point",
          "loggedOutTitle": "You're not logged in",
@@ -594,10 +606,19 @@
          "pointsNeeded": "points needed",
          "confirmRedeem": {
             "title": "Redeem Reward",
-            "message": "Are you sure you want to redeem this reward?",
+            "message": "Are you sure you want to redeem this coupon?",
             "confirm": "Yes, Redeem",
             "cancel": "Cancel"
-         }
+         },
+         "confirmCancel": {
+            "title": "Cancel Reward",
+            "message": "Are you sure you want to cancel this coupon?",
+            "confirm": "Yes, Cancel",
+            "cancel": "Keep Reward",
+            "cancelText": "Cancel Coupon"
+         },
+         "cancelText": "Cancel Coupon",
+         "rewardAvailable": "Available"
       },
       "rewards": {
          "discount10": {
@@ -620,9 +641,9 @@
             "title": "VIP Status",
             "description": "Unlock exclusive VIP benefits for 30 days"
          },
-         "giftCard": {
-            "title": "5000 Ft Gift Card",
-            "description": "Get a 5000 Ft gift card to spend in store"
+         "5000HufDiscount": {
+            "title": "5000 HUF Discount",
+            "description": "Get a 5000 HUF discount on your next purchase"
          }
       },
       "notifications": {
@@ -638,6 +659,7 @@
          "joinPrompt": "Ready to start earning rewards? Join our loyalty program today!",
          "register": "Create Account",
          "login": "Already a Member? Sign In"
-      }
+      },
+      "cancelButton": "Cancel Reward"
    }
 }

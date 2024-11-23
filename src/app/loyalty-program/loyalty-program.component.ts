@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NbDialogService, NbToastrService } from '@nebular/theme';
-import { TranslateService } from '@ngx-translate/core';
 import { User } from '../profile/user.model';
 import { AuthService } from '../auth/auth.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Reward } from './reward.model';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { RewardText } from './reward-text';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-loyalty-program',
@@ -14,42 +16,41 @@ import { Location } from '@angular/common';
 })
 export class LoyaltyProgramComponent implements OnInit {
   currentPoints: number = 0;
-  pointsEarnedThisMonth: number = 0;
-  rewardsRedeemed: number = 0;
+  pointsThisMonth: number = 0;
 
-  availableRewards = [
+  availableRewards: Reward[] = [
     {
-      id: 'discount10',
-      nameKey: 'loyaltyProgram.rewards.discount10.title',
-      descriptionKey: 'loyaltyProgram.rewards.discount10.description',
+      id: RewardText.Discount10Id,
+      name: RewardText.Discount10Title,
+      description: RewardText.Discount10Description,
       pointsRequired: 300,
       icon: 'percent-outline'
     },
     {
-      id: 'discount20',
-      nameKey: 'loyaltyProgram.rewards.discount20.title',
-      descriptionKey: 'loyaltyProgram.rewards.discount20.description',
+      id: RewardText.Discount20Id,
+      name: RewardText.Discount20Title,
+      description: RewardText.Discount20Description,
       pointsRequired: 600,
       icon: 'percent-outline'
     },
     {
-      id: 'discount30',
-      nameKey: 'loyaltyProgram.rewards.discount30.title',
-      descriptionKey: 'loyaltyProgram.rewards.discount30.description',
+      id: RewardText.Discount30Id,
+      name: RewardText.Discount30Title,
+      description: RewardText.Discount30Description,
       pointsRequired: 700,
       icon: 'percent-outline'
     },
     {
-      id: 'freeShipping',
-      nameKey: 'loyaltyProgram.rewards.freeShipping.title',
-      descriptionKey: 'loyaltyProgram.rewards.freeShipping.description',
+      id: RewardText.FreeShippingId,
+      name: RewardText.FreeShippingTitle,
+      description: RewardText.FreeShippingDescription,
       pointsRequired: 850,
       icon: 'car-outline'
     },
     {
-      id: 'giftCard',
-      nameKey: 'loyaltyProgram.rewards.giftCard.title',
-      descriptionKey: 'loyaltyProgram.rewards.giftCard.description',
+      id: RewardText.FiveThousandHufDiscountId,
+      name: RewardText.FiveThousandHufDiscountTitle,
+      description: RewardText.FiveThousandHufDiscountDescription,
       pointsRequired: 1500,
       icon: 'gift-outline'
     }
@@ -63,11 +64,14 @@ export class LoyaltyProgramComponent implements OnInit {
     private auth: AngularFireAuth,
     private authService: AuthService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private db: AngularFirestore,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
     this.checkAuthStatus();
+    this.calculatePointsThisMonth();
   }
 
   checkAuthStatus() {
@@ -79,7 +83,6 @@ export class LoyaltyProgramComponent implements OnInit {
           this.currentUser = currentUser;
           this.currentUserId = currentUser.id;
           this.currentPoints = currentUser.loyaltyPoints || 0;
-
           if (this.currentUser === undefined) {
             this.userLoggedIn = false; // User is logged out
           }
@@ -102,7 +105,44 @@ export class LoyaltyProgramComponent implements OnInit {
     this.location.back();
   }
 
-  async redeemReward(reward: any) {
+  isRewardAvailable(rewardId: string): boolean {
+    if (rewardId === RewardText.Discount10Id) {
+      return this.currentUser.loyaltyPoints >= 300;
+    } else if (rewardId === RewardText.Discount20Id) {
+      return this.currentUser.loyaltyPoints >= 600;
+    } else if (rewardId === RewardText.Discount30Id) {
+      return this.currentUser.loyaltyPoints >= 700;
+    } else if (rewardId === RewardText.FreeShippingId) {
+      return this.currentUser.loyaltyPoints >= 850;
+    } else if (rewardId === RewardText.FiveThousandHufDiscountId) {
+      return this.currentUser.loyaltyPoints >= 1500;
+    }
+    return false;
+  }
 
+  calculatePointsThisMonth() {
+    // For demo purposes, showing random points between 0-100
+    // Later calculate this from actual purchase history
+    this.pointsThisMonth = Math.floor(Math.random() * 100);
+  }
+
+  getAvailableRewardsCount(): number {
+    if (!this.currentUser) return 0;
+    return this.availableRewards.filter(reward =>
+      this.currentUser!.loyaltyPoints >= reward.pointsRequired
+    ).length;
+  }
+
+  getNextRewardPoints(): number {
+    if (!this.currentUser) return 0;
+    const nextReward = this.availableRewards
+      .filter(reward => !this.isRewardAvailable(reward.id))
+      .sort((a, b) => a.pointsRequired - b.pointsRequired)
+      .find(reward => reward.pointsRequired > (this.currentUser?.loyaltyPoints || 0));
+
+    if (nextReward) {
+      return nextReward.pointsRequired - (this.currentUser.loyaltyPoints || 0);
+    }
+    return 0;
   }
 }

@@ -10,40 +10,7 @@
             <p class="loyalty-intro">{{ 'loyaltyProgram.intro' | translate }}</p>
         </div>
 
-        <!-- Login Section -->
-        <div class="login-prompt-container" *ngIf="!userLoggedIn">
-            <div class="login-prompt">
-                <div class="login-content">
-                    <div class="login-info">
-                        <nb-icon icon="person-outline" class="login-icon"></nb-icon>
-                        <p class="login-text">
-                            {{ 'checkout.login.alreadyMember' | translate }}
-                            <a (click)="navigateToLogin()" class="login-link">{{ 'checkout.login.loginHere' | translate
-                                }}</a>
-                            {{ 'checkout.login.or' | translate }}
-                            <a (click)="navigateToRegister()" class="login-link">{{ 'checkout.login.createAccount' |
-                                translate }}</a>
-                            {{ 'checkout.login.forBetterExperience' | translate }}
-                        </p>
-                        <ul class="benefits-list">
-                            <li>
-                                <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
-                                {{ 'checkout.login.benefit1' | translate }}
-                            </li>
-                            <li>
-                                <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
-                                {{ 'checkout.login.benefit2' | translate }}
-                            </li>
-                            <li>
-                                <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
-                                {{ 'checkout.login.benefit3' | translate }}
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <!-- benefits section -->
         <div class="benefits-grid">
             <div class="benefit-card">
                 <div class="benefit-icon">
@@ -56,34 +23,80 @@
             </div>
         </div><br>
 
+        <!-- points overview section for logged in users -->
         <div class="points-overview">
             <ng-container *ngIf="userLoggedIn; else loggedOutPoints">
                 <div class="current-points">
                     <div class="points-circle">
-                        <span class="points-number">{{currentPoints}}</span>
+                        <span class="points-number">{{currentUser?.loyaltyPoints || 0}}</span>
                         <span class="points-label">{{ 'loyaltyProgram.pointsOverview.totalPoints' | translate }}</span>
                     </div>
                 </div>
                 <div class="points-stats">
                     <div class="stat-item">
-                        <nb-icon icon="trending-up-outline"></nb-icon>
+                        <nb-icon icon="calendar-outline"></nb-icon>
                         <div class="stat-content">
+                            <span class="stat-value">{{pointsThisMonth}}</span>
                             <span class="stat-label">{{ 'loyaltyProgram.pointsOverview.earnedThisMonth' | translate
                                 }}</span>
-                            <span class="stat-value">+{{pointsEarnedThisMonth}}</span>
                         </div>
                     </div>
                     <div class="stat-item">
                         <nb-icon icon="gift-outline"></nb-icon>
                         <div class="stat-content">
-                            <span class="stat-label">{{ 'loyaltyProgram.pointsOverview.rewardsRedeemed' | translate
+                            <span class="stat-value">{{getAvailableRewardsCount()}}</span>
+                            <span class="stat-label">{{ 'loyaltyProgram.pointsOverview.availableRewards' | translate
                                 }}</span>
-                            <span class="stat-value">{{rewardsRedeemed}}</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <nb-icon icon="trending-up-outline"></nb-icon>
+                        <div class="stat-content">
+                            <span class="stat-value">{{getNextRewardPoints()}}</span>
+                            <span class="stat-label">{{ 'loyaltyProgram.pointsOverview.pointsToNextReward' | translate
+                                }}</span>
                         </div>
                     </div>
                 </div>
             </ng-container>
 
+            <!-- logged out section -->
+            <!-- Login Section -->
+            <div class="login-prompt-container" *ngIf="!userLoggedIn">
+                <div class="login-prompt">
+                    <div class="login-content">
+                        <div class="login-info">
+                            <nb-icon icon="person-outline" class="login-icon"></nb-icon>
+                            <p class="login-text">
+                                {{ 'checkout.login.alreadyMember' | translate }}
+                                <a (click)="navigateToLogin()" class="login-link">{{ 'checkout.login.loginHere' |
+                                    translate
+                                    }}</a>
+                                {{ 'checkout.login.or' | translate }}
+                                <a (click)="navigateToRegister()" class="login-link">{{ 'checkout.login.createAccount' |
+                                    translate }}</a>
+                                {{ 'checkout.login.forBetterExperience' | translate }}
+                            </p>
+                            <ul class="benefits-list">
+                                <li>
+                                    <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                                    {{ 'checkout.login.benefit1' | translate }}
+                                </li>
+                                <li>
+                                    <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                                    {{ 'checkout.login.benefit2' | translate }}
+                                </li>
+                                <li>
+                                    <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                                    {{ 'checkout.login.benefit3' | translate }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- logged out section -->
             <ng-template #loggedOutPoints>
                 <div class="logged-out-points">
                     <nb-icon icon="lock-outline"></nb-icon>
@@ -96,25 +109,28 @@
             </ng-template>
         </div>
 
-
+        <!-- rewards section -->
         <div class="rewards-section">
             <h3 class="rewards-title">{{ 'loyaltyProgram.rewardsSection.title' | translate }}</h3>
             <div class="rewards-grid">
                 <div *ngFor="let reward of availableRewards" class="reward-card"
-                    [class.locked]="currentPoints < reward.pointsRequired">
-                    <div class="reward-icon">
+                    [class.locked]="currentUser?.loyaltyPoints < reward.pointsRequired && !isRewardAvailable(reward.id)"
+                    [class.active]="isRewardAvailable(reward.id)">
+                    <div class="active-indicator" *ngIf="isRewardAvailable(reward.id)">
+                        <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                        {{ 'loyaltyProgram.rewardsSection.rewardAvailable' | translate }}
+                    </div>
+                    <div class="reward-icon" [class.active-icon]="isRewardAvailable(reward.id)">
                         <nb-icon [icon]="reward.icon"></nb-icon>
                     </div>
                     <div class="reward-details">
-                        <h4>{{reward.nameKey | translate}}</h4>
-                        <p>{{reward.descriptionKey | translate}}</p>
+                        <div class="reward-header">
+                            <h4>{{reward.name | translate}}</h4>
+                        </div>
+                        <p>{{reward.description | translate}}</p>
                         <div class="points-required">
                             <span>{{reward.pointsRequired}} {{ 'loyaltyProgram.pointsOverview.points' | translate
                                 }}</span>
-                            <button nbButton status="primary" [disabled]="currentPoints < reward.pointsRequired"
-                                (click)="redeemReward(reward)">
-                                {{ 'loyaltyProgram.rewardsSection.redeem' | translate }}
-                            </button>
                         </div>
                     </div>
                 </div>
