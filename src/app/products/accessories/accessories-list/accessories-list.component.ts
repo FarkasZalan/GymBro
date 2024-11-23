@@ -59,8 +59,8 @@ export class AccessoriesListComponent implements OnInit {
       this.originalAccessories = accessoriesCollection;
 
       // Sort default by name
-      this.accessories = this.productService.sortAccessoriesPriceByASC(this.accessories);
-      this.originalAccessories = this.productService.sortAccessoriesPriceByASC(this.originalAccessories);
+      this.accessories = this.productService.sortAccessoriesPriceByDESC(this.accessories);
+      this.originalAccessories = this.productService.sortAccessoriesPriceByDESC(this.originalAccessories);
 
       // Get the reviews for the products
       this.accessories.forEach((product) => {

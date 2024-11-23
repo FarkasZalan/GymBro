@@ -50,8 +50,19 @@
                             {{ getProductReviews(foodSupliment.id).length }} {{ 'review.reviewText' | translate }}
                         </span>
                     </div>
-                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
-                        'products.huf' | translate }}</h5>
+
+                    <!-- display the price and if there is a discount, display the discounted price -->
+                    <div class="price-container" *ngIf="getDefaultPrice(foodSupliment) as defaultPrice">
+                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                        </h5>
+                    </div>
+
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
@@ -106,8 +117,16 @@
                             {{ getProductReviews(organicProduct.id).length }} {{ 'review.reviewText' | translate }}
                         </span>
                     </div>
-                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
-                        'products.huf' | translate }}</h5>
+                    <div class="price-container" *ngIf="getDefaultPrice(organicProduct) as defaultPrice">
+                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                        </h5>
+                    </div>
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
@@ -162,8 +181,16 @@
                             {{ getProductReviews(cloth.id).length }} {{ 'review.reviewText' | translate }}
                         </span>
                     </div>
-                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
-                        'products.huf' | translate }}</h5>
+                    <div class="price-container" *ngIf="getDefaultPrice(cloth) as defaultPrice">
+                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                        </h5>
+                    </div>
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
@@ -218,8 +245,16 @@
                             {{ getProductReviews(accessory.id).length }} {{ 'review.reviewText' | translate }}
                         </span>
                     </div>
-                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
-                        'products.huf' | translate }}</h5>
+                    <div class="price-container" *ngIf="getDefaultPrice(accessory) as defaultPrice">
+                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                        </h5>
+                    </div>
                     <h5 class="price-display">{{
                         'products.stock' | translate }}: {{
                         defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>

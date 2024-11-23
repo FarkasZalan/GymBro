@@ -58,9 +58,9 @@ export class FoodSuplimentsListComponent implements OnInit {
       this.foodSupliments = foodSuplimentsCollection;
       this.originalFoodSuplimentList = foodSuplimentsCollection;
 
-      // Sort default by name
-      this.foodSupliments = this.productService.sortFoodSuplimentsByPriceASC(this.foodSupliments);
-      this.originalFoodSuplimentList = this.productService.sortFoodSuplimentsByPriceASC(this.originalFoodSuplimentList);
+      // Sort default by price
+      this.foodSupliments = this.productService.sortFoodSuplimentsByPriceDESC(this.foodSupliments);
+      this.originalFoodSuplimentList = this.productService.sortFoodSuplimentsByPriceDESC(this.originalFoodSuplimentList);
 
       // Get the reviews for the products
       this.foodSupliments.forEach((product) => {

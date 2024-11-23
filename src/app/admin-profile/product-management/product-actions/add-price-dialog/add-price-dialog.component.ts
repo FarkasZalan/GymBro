@@ -87,6 +87,10 @@ export class AddPriceDialogComponent implements OnInit {
   // for accessories handle
   accessoriesType: string = '';
 
+  // for discounted price
+  discountedPrice: number = 0;
+  isDiscountedPrice: boolean = false;
+
   constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
     this.selectedUnit = data.unit;
     this.editText = data.editText;
@@ -170,6 +174,11 @@ export class AddPriceDialogComponent implements OnInit {
         }
         this.availableFlavors.sort((a, b) => a.localeCompare(b));
         this.selectedFlavor = this.data.selectedFlavor;
+      }
+
+      // if discounted price is set
+      if (this.newPrice.discountedPrice !== 0 && this.newPrice.discountedPrice !== undefined) {
+        this.isDiscountedPrice = true;
       }
 
       if (this.productCategory === ProductViewText.CLOTHES) {
@@ -269,6 +278,9 @@ export class AddPriceDialogComponent implements OnInit {
 
   // Method to create new price and return to the parent page
   async addNewPrice() {
+    if (!this.isDiscountedPrice) {
+      this.newPrice.discountedPrice = 0
+    }
     let quantity = 0;
     if (this.priceForm.value.quantityInProduct !== undefined) {
       quantity = this.priceForm.value.quantityInProduct;
@@ -286,7 +298,10 @@ export class AddPriceDialogComponent implements OnInit {
       setAsDefaultPrice: this.isSetAsDefaultPrice,
       productFlavor: this.selectedFlavor,
       productSize: this.selectedSize,
-      productColor: this.selectedColor
+      productColor: this.selectedColor,
+      discountedPrice: this.priceForm.value.discountedPrice > 0
+        ? this.priceForm.value.discountedPrice
+        : 0
     };
 
 

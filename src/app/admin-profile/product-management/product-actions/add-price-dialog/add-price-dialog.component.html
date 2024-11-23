@@ -155,6 +155,31 @@
                                 'register.fieldRequired' | translate }}</span>
                         </div><br>
 
+                        <!-- discounted price block -->
+                        <!-- Aff discounted price Checkbox -->
+                        <div class="form-group">
+                            <label for="isDiscountedPrice" class="checkbox-container">
+                                <label for="isDiscountedPrice">{{ 'products.discountedPrice' | translate
+                                    }}</label>
+                                <input type="checkbox" [(ngModel)]="isDiscountedPrice" name="isDiscountedPrice"
+                                    id="isDiscountedPrice" #admin="ngModel">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <!-- Discounted Price block -->
+                        <div class="form-group" *ngIf="isDiscountedPrice" [@collapseField]>
+                            <label for="discountedPrice" class="label">{{ 'products.discountedPrice' | translate
+                                }}</label>
+                            <input type="number" class="form-control" name="discountedPrice" fullWidth placeholder="{{ 'products.price' | translate
+                                }} ({{ 'products.huf' | translate }})" required #discountedPrice="ngModel"
+                                [(ngModel)]="newPrice.discountedPrice" />
+                            <!-- price error block -->
+                            <span class="help-block" *ngIf="!discountedPrice.valid && discountedPrice.touched"
+                                [@zoomIn]>{{
+                                'register.fieldRequired' | translate }}</span>
+                        </div><br>
+
                         <!-- Product Stock block -->
                         <div class="form-group">
                             <label for="productStock" class="label">{{ 'products.productStock' | translate

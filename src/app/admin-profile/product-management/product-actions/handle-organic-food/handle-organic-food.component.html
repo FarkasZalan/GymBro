@@ -156,7 +156,19 @@
                                                 }}</span>
                                         </nb-card-header>
 
-                                        <h3>{{ price.productPrice }} {{ 'products.huf' | translate }}</h3>
+                                        <!-- display the price and if there is a discount, display the discounted price -->
+                                        <div class="price-container">
+                                            <h5 class="price-display" [class.has-discount]="price.discountedPrice > 0">
+                                                <span class="original-price"
+                                                    [class.crossed]="price.discountedPrice > 0">
+                                                    {{ price.productPrice }} {{ 'products.huf' | translate }}
+                                                </span>
+                                                <span class="discounted-price" *ngIf="price.discountedPrice > 0">
+                                                    {{ price.discountedPrice }} {{ 'products.huf' | translate }}
+                                                </span>
+                                            </h5>
+                                        </div>
+
                                         <p class="weight-text"><strong></strong> {{
                                             price.quantityInProduct }} {{ selectedUnit | translate }}</p>
                                     </div>

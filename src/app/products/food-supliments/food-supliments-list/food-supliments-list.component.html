@@ -44,8 +44,18 @@
                         </span>
                     </div>
 
-                    <h5 class="price-display"> {{ defaultPrice.productPrice | currency:'':'':'1.0-0' }} {{
-                        'products.huf' | translate }}</h5>
+                    <!-- display the price and if there is a discount, display the discounted price -->
+                    <div class="price-container" *ngIf="getDefaultPrice(foodSupliment) as defaultPrice">
+                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                            </span>
+                        </h5>
+                    </div>
+
                 </div>
             </nb-card-body>
         </nb-card>

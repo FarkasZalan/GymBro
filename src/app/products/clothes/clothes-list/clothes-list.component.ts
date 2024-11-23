@@ -59,7 +59,7 @@ export class ClothesListComponent implements OnInit {
       this.originaClothes = organicFoodCollection;
 
       // Sort default by name
-      this.clothes = this.productService.sortClothesPriceByASC(this.clothes);
+      this.clothes = this.productService.sortClothesPriceByDESC(this.clothes);
       this.originaClothes = this.productService.sortClothesPriceByDESC(this.originaClothes);
 
       // Get the reviews for the products

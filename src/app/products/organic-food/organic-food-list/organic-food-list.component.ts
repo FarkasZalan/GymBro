@@ -59,8 +59,8 @@ export class OrganicFoodListComponent implements OnInit {
       this.originalOrganicFood = organicFoodCollection;
 
       // Sort default by name
-      this.organicFoods = this.productService.sortOrganicProductsPriceByASC(this.organicFoods);
-      this.originalOrganicFood = this.productService.sortOrganicProductsPriceByASC(this.originalOrganicFood);
+      this.organicFoods = this.productService.sortOrganicProductsPriceByDESC(this.organicFoods);
+      this.originalOrganicFood = this.productService.sortOrganicProductsPriceByDESC(this.originalOrganicFood);
 
       // Get the reviews for the products
       this.organicFoods.forEach((product) => {

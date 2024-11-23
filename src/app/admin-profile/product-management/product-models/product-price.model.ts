@@ -5,6 +5,7 @@ export interface ProductPrice {
     productColor?: string;
     productSize?: string;
     productPrice: number;
+    discountedPrice?: number;
     productStock: number;
     setAsDefaultPrice: boolean;
 }

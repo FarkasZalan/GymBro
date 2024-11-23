@@ -106,28 +106,26 @@ export class ProductService {
         ).valueChanges();
     }
 
-    // Sort food supliments
+    // Sort food supplements
     sortFoodSuplimentsByPriceASC(foodSupliments: FoodSupliment[]) {
-        // Sort default by defaul price desc
         return foodSupliments.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            // Find the default prices
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceB - defaultPriceA;
+            // Sort in ascending order
+            return priceB - priceA;
         });
     }
 
     sortFoodSuplimentsByPriceDESC(foodSupliments: FoodSupliment[]) {
-        // Sort default by defaul price desc
         return foodSupliments.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            // Find the default prices
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceA - defaultPriceB;
+            // Sort in descending order
+            return priceA - priceB;
         });
     }
 
@@ -149,26 +147,20 @@ export class ProductService {
 
     // Sort organic products
     sortOrganicProductsPriceByASC(healthyProducts: OrganicFood[]) {
-        // Sort default by defaul price desc
         return healthyProducts.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceB - defaultPriceA;
+            return priceB - priceA;
         });
     }
 
     sortOrganicProductsPriceByDESC(healthyProducts: OrganicFood[]) {
-        // Sort default by defaul price desc
         return healthyProducts.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceA - defaultPriceB;
+            return priceA - priceB;
         });
     }
 
@@ -190,26 +182,20 @@ export class ProductService {
 
     // Sort clothes
     sortClothesPriceByASC(clothes: Clothes[]) {
-        // Sort default by defaul price desc
         return clothes.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceB - defaultPriceA;
+            return priceB - priceA;
         });
     }
 
     sortClothesPriceByDESC(clothes: Clothes[]) {
-        // Sort default by defaul price desc
         return clothes.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceA - defaultPriceB;
+            return priceA - priceB;
         });
     }
 
@@ -231,26 +217,20 @@ export class ProductService {
 
     // Sort accessories
     sortAccessoriesPriceByASC(accessories: Accessories[]) {
-        // Sort default by defaul price desc
         return accessories.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceB - defaultPriceA;
+            return priceB - priceA;
         });
     }
 
     sortAccessoriesPriceByDESC(accessories: Accessories[]) {
-        // Sort default by defaul price desc
         return accessories.sort((a, b) => {
-            // Find the default price for the food supplement
-            const defaultPriceA = a.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
-            const defaultPriceB = b.prices.find(price => price.setAsDefaultPrice)?.productPrice ?? Infinity;
+            const priceA = this.getDefaultPrice(a);
+            const priceB = this.getDefaultPrice(b);
 
-            // Sort in ascending order based on the default price
-            return defaultPriceA - defaultPriceB;
+            return priceA - priceB;
         });
     }
 
@@ -296,5 +276,16 @@ export class ProductService {
         return blogs.filter((a) => {
             return a.language === selectedLanguage
         });
+    }
+
+    // Helper method to get the effective price (product price or discounted price)
+    getDefaultPrice(product: any): any {
+        const defaultPrice = product.prices.find(price => price.setAsDefaultPrice);
+        if (!defaultPrice) return Infinity;
+
+        // Return discounted price if available, otherwise return regular price
+        return defaultPrice.discountedPrice > 0
+            ? defaultPrice.discountedPrice
+            : defaultPrice.productPrice;
     }
 }

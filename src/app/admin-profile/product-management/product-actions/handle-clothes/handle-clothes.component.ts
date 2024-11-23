@@ -157,7 +157,7 @@ export class HandleClothesComponent {
 
           // price, color, size
           this.productPrices = this.clothingObject.prices;
-
+          this.sortPrices();
           this.smallDescriptionLength = this.clothingObject.smallDescription.length;
           this.description = this.clothingObject.description;
 
@@ -412,7 +412,16 @@ export class HandleClothesComponent {
   }
 
   sortPrices() {
-    this.productPrices = this.productPrices.sort((a, b) => a.productPrice - b.productPrice);
+    this.productPrices = this.productPrices.sort((a, b) => {
+      const priceA = this.getEffectivePrice(a);
+      const priceB = this.getEffectivePrice(b);
+      return priceA - priceB;
+    });
+  }
+
+  // Helper method to get the effective price (product price or discounted price)
+  private getEffectivePrice(price: ProductPrice): number {
+    return price.discountedPrice > 0 ? price.discountedPrice : price.productPrice;
   }
 
   async addNewClothes() {

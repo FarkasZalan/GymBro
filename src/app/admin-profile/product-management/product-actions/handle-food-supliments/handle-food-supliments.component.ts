@@ -261,6 +261,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           if (this.isUnifiedImage) {
             this.unifiedImageUrl = this.foodSuplimentObject.prices[0].productImage;
           }
+          this.sortPrices();
 
           // flavor and allergies list
           this.selectedProteinType = this.foodSuplimentObject.proteinType;
@@ -607,7 +608,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           });
         }
 
-        // Check if a price with the same color and size already exists
+        // Check if a price with the same flavor and quantity already exists
         const existingIndex = this.productPrices.findIndex(price =>
           price.productFlavor === editedPrice.productFlavor &&
           price.quantityInProduct === editedPrice.quantityInProduct
@@ -636,7 +637,18 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   }
 
   sortPrices() {
-    this.productPrices = this.productPrices.sort((a, b) => a.productPrice - b.productPrice);
+    this.productPrices = this.productPrices.sort((a, b) => {
+      // Get effective prices (considering discounts)
+      const priceA = this.getEffectivePrice(a);
+      const priceB = this.getEffectivePrice(b);
+
+      return priceA - priceB;
+    });
+  }
+
+  // Helper method to get the effective price (product price or discounted price)
+  private getEffectivePrice(price: ProductPrice): number {
+    return price.discountedPrice > 0 ? price.discountedPrice : price.productPrice;
   }
 
   // Handle vitamin list addition or update

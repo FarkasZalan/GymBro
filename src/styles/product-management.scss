@@ -666,6 +666,42 @@ h3 {
     text-align: center;
 }
 
+.price-container {
+    margin: 10px 0;
+
+    .price-display {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        &.has-discount {
+            .original-price {
+                font-size: 0.9em;
+                color: #838383;
+                position: relative;
+
+                &.crossed::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    width: 100%;
+                    height: 2px;
+                    background: #ff7b00 !important;
+                    transform: translateY(-50%) rotate(-8deg);
+                }
+            }
+
+            .discounted-price {
+                color: #0b8e92;
+                font-weight: bold;
+                font-size: 1.1em;
+            }
+        }
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .row {
