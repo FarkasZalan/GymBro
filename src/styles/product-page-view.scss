@@ -553,10 +553,6 @@ input[type="number"] {
     color: #798181;
 }
 
-.unit-price {
-    font-size: 17px;
-}
-
 // related list
 .rounded-card {
     border-radius: 20px !important;
@@ -1450,6 +1446,74 @@ input[type="number"] {
             &::after {
                 content: '...';
                 animation: loadingDots 1.5s infinite;
+            }
+        }
+    }
+}
+
+.price-container {
+    margin: 10px 0;
+
+    .price-display {
+        display: flex;
+        gap: 10px;
+        color: #0b8e92;
+
+        &.has-discount {
+            .original-price {
+                font-size: 0.9em;
+                color: #838383;
+                position: relative;
+
+                &.crossed::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    width: 100%;
+                    height: 2px;
+                    background: #ff7b00;
+                    transform: translateY(-50%) rotate(-10deg);
+                }
+            }
+
+            .discounted-price {
+                color: #0b8e92;
+                font-weight: bold;
+                font-size: 1.1em;
+            }
+        }
+    }
+
+    .unit-price-display {
+        display: flex;
+        gap: 10px;
+        color: #313131;
+        font-weight: 600;
+        font-size: 19px;
+
+        &.has-discount {
+            .unit-price {
+                font-size: 0.9em;
+                color: #838383;
+                position: relative;
+
+                &.crossed::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    width: 100%;
+                    height: 2px;
+                    background: #ff7b00;
+                    transform: translateY(-50%) rotate(-10deg);
+                }
+            }
+
+            .discounted-unit-price {
+                color: #313131;
+                font-weight: bold;
+                font-size: 1.1em;
             }
         }
     }

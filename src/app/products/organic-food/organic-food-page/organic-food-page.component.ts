@@ -15,6 +15,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { CartService } from '../../../cart/cart.service';
 import { User } from '../../../profile/user.model';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
+import { ProductPrice } from '../../../admin-profile/product-management/product-models/product-price.model';
 
 @Component({
   selector: 'app-organic-food-page',
@@ -55,6 +56,7 @@ export class OrganicFoodPageComponent implements OnInit {
   productViewText = ProductViewText;
 
   selectedPrice: number = 0;
+  productPriceObject: ProductPrice;
   selectedImage: string = '';
 
   // Flavors, viatmins and Allergens
@@ -72,6 +74,7 @@ export class OrganicFoodPageComponent implements OnInit {
 
   // cart, unit price and loyality program
   unitPrice: number = 0;
+  discountedUnitPrice: number = 0;
   unitPriceUnit: string = '';
   cartQuantity: number = 1;
   loyaltyPoints: number = 0;
@@ -167,11 +170,12 @@ export class OrganicFoodPageComponent implements OnInit {
         this.allergens = organicFood.allergens;
         this.productId = organicFood.id;
 
-        this.selectedQuantityInProduct = this.getDefaultPrice(organicFood).quantityInProduct;
-        this.selectedPrice = this.getDefaultPrice(organicFood).productPrice;
-        this.selectedFlavor = this.getDefaultPrice(organicFood).productFlavor;
+        this.productPriceObject = this.getDefaultPrice(organicFood);
+        this.selectedQuantityInProduct = this.productPriceObject.quantityInProduct;
+        this.selectedPrice = this.productPriceObject.productPrice;
+        this.selectedFlavor = this.productPriceObject.productFlavor;
         this.loyaltyPoints = Math.round(this.selectedPrice / 100);
-        this.selectedImage = this.getDefaultPrice(organicFood).productImage;
+        this.selectedImage = this.productPriceObject.productImage;
         this.getReviews();
 
         // get the available flavors for default price
@@ -219,13 +223,14 @@ export class OrganicFoodPageComponent implements OnInit {
 
   selectQuantity(selectedQuantity: number) {
     this.selectedQuantityInProduct = selectedQuantity;
-    this.selectedPrice = this.getPriceBasedOnQuantity(this.organicFood, selectedQuantity).productPrice;
+    this.productPriceObject = this.getPriceBasedOnQuantity(this.organicFood, selectedQuantity);
+    this.selectedPrice = this.productPriceObject.productPrice;
     this.loyaltyPoints = Math.round(this.selectedPrice / 100);
-    this.selectedImage = this.getPriceBasedOnQuantity(this.organicFood, selectedQuantity).productImage;
+    this.selectedImage = this.productPriceObject.productImage;
 
     this.getAvailableFlavors(false);
 
-    if (this.getPriceBasedOnQuantity(this.organicFood, selectedQuantity).productStock === 0) {
+    if (this.productPriceObject.productStock === 0) {
       this.productIsInStock = false;
     } else {
       this.productIsInStock = true;
@@ -243,17 +248,17 @@ export class OrganicFoodPageComponent implements OnInit {
   }
 
   updateSelectedPriceAndStock() {
-    const selectedPriceObject = this.organicFood.prices.find(price =>
+    this.productPriceObject = this.organicFood.prices.find(price =>
       price.quantityInProduct === this.selectedQuantityInProduct &&
       price.productFlavor === this.selectedFlavor
     );
 
-    if (selectedPriceObject) {
-      this.selectedPrice = selectedPriceObject.productPrice;
-      this.productStock = selectedPriceObject.productStock;
+    if (this.productPriceObject) {
+      this.selectedPrice = this.productPriceObject.productPrice;
+      this.productStock = this.productPriceObject.productStock;
       this.loyaltyPoints = Math.round(this.selectedPrice / 100);
-      this.productIsInStock = selectedPriceObject.productStock > 0;
-      this.selectedImage = selectedPriceObject.productImage;
+      this.productIsInStock = this.productPriceObject.productStock > 0;
+      this.selectedImage = this.productPriceObject.productImage;
       this.getUnitPrice();
     }
   }
@@ -263,33 +268,57 @@ export class OrganicFoodPageComponent implements OnInit {
   }
 
   getUnitPrice() {
-    let quantityInKg: number;
-    if (this.organicFood.dosageUnit === this.productViewText.GRAM) {
-      // Convert grams to kilograms (1000 grams = 1 kg)
-      quantityInKg = this.selectedQuantityInProduct / 1000;
-      this.unitPriceUnit = this.productViewText.KG;
-    } else if (this.organicFood.dosageUnit === this.productViewText.POUNDS) {
-      // get the price of one pound
-      quantityInKg = this.selectedPrice / this.selectedQuantityInProduct;
-      this.unitPriceUnit = this.productViewText.POUNDS;
-    } else if (this.organicFood.dosageUnit === this.productViewText.PIECES) {
-      quantityInKg = this.selectedPrice / this.selectedQuantityInProduct;
-      this.unitPriceUnit = this.productViewText.PIECES;
-    } else {
-      // 1000 ml = 1 liter
-      quantityInKg = this.selectedQuantityInProduct / 1000;
-      this.unitPriceUnit = this.productViewText.LITER;
+    // Reset discounted unit price
+    this.discountedUnitPrice = 0;
+
+    // Calculate base unit based on dosage unit type
+    let baseUnit: number;
+
+    switch (this.organicFood.dosageUnit) {
+      case this.productViewText.GRAM:
+        // Convert grams to kg (1kg = 1000g)
+        baseUnit = this.selectedQuantityInProduct / 1000;
+        this.unitPriceUnit = this.productViewText.KG;
+        break;
+
+      case this.productViewText.POUNDS:
+        // For pounds, unit price is price per pound
+        this.unitPrice = this.selectedPrice / this.selectedQuantityInProduct;
+        if (this.productPriceObject.discountedPrice > 0) {
+          this.discountedUnitPrice = this.productPriceObject.discountedPrice / this.selectedQuantityInProduct;
+        }
+        this.unitPriceUnit = this.productViewText.POUNDS;
+        return; // Exit early since calculation is done
+
+      case this.productViewText.PIECES:
+      case this.productViewText.CAPSULE:
+        // For pieces/capsules, calculate price per unit
+        this.unitPrice = this.selectedPrice / this.selectedQuantityInProduct;
+        if (this.productPriceObject.discountedPrice > 0) {
+          this.discountedUnitPrice = this.productPriceObject.discountedPrice / this.selectedQuantityInProduct;
+        }
+        this.unitPriceUnit = this.organicFood.dosageUnit === this.productViewText.PIECES ?
+          this.productViewText.PCS : this.productViewText.CAPSULE;
+        return; // Exit early since calculation is done
+
+      default: // For liquids
+        // Convert ml to liters (1L = 1000ml)
+        baseUnit = this.selectedQuantityInProduct / 1000;
+        this.unitPriceUnit = this.productViewText.LITER;
     }
 
-    if (this.organicFood.dosageUnit !== this.productViewText.POUNDS) {
-      this.unitPrice = this.selectedPrice / quantityInKg;
-    } else {
-      this.unitPrice = quantityInKg;
+    // Calculate regular unit price
+    this.unitPrice = this.selectedPrice / baseUnit;
+
+    // Calculate discounted unit price if discount exists
+    if (this.productPriceObject.discountedPrice > 0) {
+      this.discountedUnitPrice = this.productPriceObject.discountedPrice / baseUnit;
     }
 
-    this.unitPrice = Math.round(this.unitPrice);
-    if (this.unitPrice < 1) {
-      this.unitPrice = 1;
+    // Round prices and ensure minimum of 1
+    this.unitPrice = Math.max(1, Math.round(this.unitPrice));
+    if (this.discountedUnitPrice > 0) {
+      this.discountedUnitPrice = Math.max(1, Math.round(this.discountedUnitPrice));
     }
 
     this.checkStock();
@@ -360,23 +389,29 @@ export class OrganicFoodPageComponent implements OnInit {
 
   addToCart() {
     if (this.cartQuantity > 0) {
-      const selectedPrice = this.organicFood.prices.find(price =>
+      this.productPriceObject = this.organicFood.prices.find(price =>
         price.quantityInProduct === this.selectedQuantityInProduct &&
         price.productFlavor === this.selectedFlavor
       );
 
+      // if there is a discount, use the discounted price, otherwise use the regular price
+      const priceToAdd = this.productPriceObject.discountedPrice > 0 ?
+        this.productPriceObject.discountedPrice :
+        this.selectedPrice;
+
+      // add the product to the cart
       this.cartService.addToCart({
         productId: this.organicFood.id,
         productName: this.organicFood.productName,
         quantity: this.cartQuantity,
-        price: this.selectedPrice,
+        price: priceToAdd,
         imageUrl: this.selectedImage || '',
         category: ProductViewText.ORGANIC_FOOD,
         flavor: this.selectedFlavor,
         size: this.selectedQuantityInProduct.toString(),
         productUnit: this.organicFood.dosageUnit,
         maxStockError: false,
-        maxStock: selectedPrice.productStock
+        maxStock: this.productPriceObject.productStock
       });
 
       this.errorMessageStock = false;

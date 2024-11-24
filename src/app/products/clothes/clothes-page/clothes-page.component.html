@@ -68,9 +68,19 @@
 
                 <!-- cart and amount section -->
                 <div class="col-md-4 form-group">
-                    <h3 class="product-price">{{ selectedPrice | currency:'':'':'1.0-0' }} {{ 'products.huf'
-                        | translate
-                        }}</h3>
+                    <!-- display the price and if there is a discount, display the discounted price -->
+                    <div class="price-container">
+                        <h3 class="price-display" [class.has-discount]="productPriceObject.discountedPrice > 0">
+                            <span class="original-price" [class.crossed]="productPriceObject.discountedPrice > 0">
+                                {{ productPriceObject.productPrice | currency:'':'':'1.0-0' }} {{ 'products.huf' |
+                                translate }}
+                            </span>
+                            <span class="discounted-price" *ngIf="productPriceObject.discountedPrice > 0">
+                                {{ productPriceObject.discountedPrice | currency:'':'':'1.0-0' }} {{ 'products.huf' |
+                                translate }}
+                            </span>
+                        </h3>
+                    </div>
 
                     <!-- Loyalty Program Points -->
                     <div class="loyalty-points">

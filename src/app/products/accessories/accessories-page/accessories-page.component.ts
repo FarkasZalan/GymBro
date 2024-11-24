@@ -15,6 +15,7 @@ import { DocumentHandlerService } from '../../../document.handler.service';
 import { User } from '../../../profile/user.model';
 import { ProductService } from '../../product.service';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
+import { ProductPrice } from '../../../admin-profile/product-management/product-models/product-price.model';
 
 @Component({
   selector: 'app-accessories-page',
@@ -55,6 +56,7 @@ export class AccessoriesPageComponent implements OnInit {
   productViewText = ProductViewText;
 
   selectedPrice: number = 0;
+  productPriceObject: ProductPrice;
   selectedImage: string = '';
 
   // sizes and colors
@@ -69,9 +71,7 @@ export class AccessoriesPageComponent implements OnInit {
 
   relatedProducts: Accessories[] = [];
 
-  // cart, unit price and loyality program
-  unitPrice: number = 0;
-  unitPriceUnit: string = '';
+  // cart and loyality program
   cartQuantity: number = 1;
   loyaltyPoints: number = 0;
 
@@ -156,18 +156,19 @@ export class AccessoriesPageComponent implements OnInit {
         this.accessories = { ...accessories };
         this.productId = accessories.id;
 
+        this.productPriceObject = this.getDefaultPrice(accessories);
         this.equipmentType = accessories.equipmentType;
-        this.selectedColor = this.getDefaultPrice(accessories).productColor;
+        this.selectedColor = this.productPriceObject.productColor;
 
-        this.selectedSizeInProduct = this.getDefaultPrice(accessories).productSize;
-        this.selectedPrice = this.getDefaultPrice(accessories).productPrice;
+        this.selectedSizeInProduct = this.productPriceObject.productSize;
+        this.selectedPrice = this.productPriceObject.productPrice;
         this.loyaltyPoints = Math.round(this.selectedPrice / 100);
-        this.selectedImage = this.getDefaultPrice(accessories).productImage;
+        this.selectedImage = this.productPriceObject.productImage;
         this.getReviews();
 
         this.getAvailableColors(true);
 
-        if (this.getDefaultPrice(accessories).productStock === 0) {
+        if (this.productPriceObject.productStock === 0) {
           this.productIsInStock = false;
         } else {
           this.productIsInStock = true;
@@ -211,13 +212,14 @@ export class AccessoriesPageComponent implements OnInit {
 
   selectSize(selectedSize: string) {
     this.selectedSizeInProduct = selectedSize;
-    this.selectedPrice = this.getPriceBasedOnSize(this.accessories, selectedSize).productPrice;
+    this.productPriceObject = this.getPriceBasedOnSize(this.accessories, selectedSize);
+    this.selectedPrice = this.productPriceObject.productPrice;
     this.loyaltyPoints = Math.round(this.selectedPrice / 100);
-    this.selectedImage = this.getPriceBasedOnSize(this.accessories, selectedSize).productImage;
+    this.selectedImage = this.productPriceObject.productImage;
 
     this.getAvailableColors(false);
 
-    if (this.getPriceBasedOnSize(this.accessories, selectedSize).productStock === 0) {
+    if (this.productPriceObject.productStock === 0) {
       this.productIsInStock = false;
     } else {
       this.productIsInStock = true;
@@ -234,17 +236,17 @@ export class AccessoriesPageComponent implements OnInit {
   }
 
   updateSelectedPriceAndStock() {
-    const selectedPriceObject = this.accessories.prices.find(price =>
+    this.productPriceObject = this.accessories.prices.find(price =>
       price.productColor === this.selectedColor &&
       price.productSize === this.selectedSizeInProduct
     );
 
-    if (selectedPriceObject) {
-      this.selectedPrice = selectedPriceObject.productPrice;
-      this.productStock = selectedPriceObject.productStock;
+    if (this.productPriceObject) {
+      this.selectedPrice = this.productPriceObject.productPrice;
+      this.productStock = this.productPriceObject.productStock;
       this.loyaltyPoints = Math.round(this.selectedPrice / 100);
-      this.productIsInStock = selectedPriceObject.productStock > 0;
-      this.selectedImage = selectedPriceObject.productImage;
+      this.productIsInStock = this.productPriceObject.productStock > 0;
+      this.selectedImage = this.productPriceObject.productImage;
     }
   }
 
@@ -294,22 +296,28 @@ export class AccessoriesPageComponent implements OnInit {
 
   addToCart() {
     if (this.cartQuantity > 0) {
-      const selectedPrice = this.accessories.prices.find(price =>
+      this.productPriceObject = this.accessories.prices.find(price =>
         price.productSize === this.selectedSizeInProduct &&
         price.productColor === this.selectedColor
       );
 
+      // if there is a discount, use the discounted price, otherwise use the regular price
+      const priceToAdd = this.productPriceObject.discountedPrice > 0 ?
+        this.productPriceObject.discountedPrice :
+        this.selectedPrice;
+
+      // add the product to the cart
       this.cartService.addToCart({
         productId: this.accessories.id,
         productName: this.accessories.productName,
         quantity: this.cartQuantity,
-        price: this.selectedPrice,
+        price: priceToAdd,
         imageUrl: this.selectedImage || '',
         category: ProductViewText.ACCESSORIES,
         size: this.selectedSizeInProduct,
         color: this.selectedColor,
         maxStockError: false,
-        maxStock: selectedPrice.productStock
+        maxStock: this.productPriceObject.productStock
       });
 
       this.errorMessageStock = false;
