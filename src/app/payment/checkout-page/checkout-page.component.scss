@@ -369,7 +369,8 @@
 
 .button-container {
     display: flex;
-    justify-content: center;
+    justify-content: center !important;
+    margin-top: 1rem !important;
 }
 
 @media (max-width: 768px) {
@@ -894,106 +895,6 @@
     .shipping-methods {
         .shipping-options {
             grid-template-columns: 1fr;
-        }
-    }
-}
-
-.sticky-summary {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    padding: 1rem 0;
-    border-top: 1px solid var(--border-basic-color-3);
-
-    .sticky-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 2rem;
-
-        .price-breakdown {
-            flex: 1;
-            display: flex;
-            gap: 2rem;
-
-            .breakdown-item {
-                display: flex;
-                flex-direction: column;
-                gap: 0.25rem;
-
-                span:first-child {
-                    font-size: 0.9rem;
-                    color: var(--text-hint-color);
-                }
-
-                span:last-child {
-                    font-weight: 600;
-                    color: var(--text-basic-color);
-                }
-
-                &.total {
-                    span:last-child {
-                        color: #0b8e92;
-                        font-size: 1.2rem;
-                    }
-                }
-            }
-        }
-
-        .action-buttons {
-            .proceed-btn {
-                min-width: 200px;
-            }
-        }
-    }
-}
-
-@media (max-width: 968px) {
-    .sticky-summary {
-        .sticky-content {
-            flex-direction: column;
-            gap: 1rem;
-            padding: 1rem;
-
-            .price-breakdown {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .action-buttons {
-                width: 100%;
-
-                .proceed-btn {
-                    width: 100%;
-                    min-width: unset;
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    .sticky-summary {
-        .sticky-content {
-            .price-breakdown {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-
-                .breakdown-item {
-                    &.total {
-                        grid-column: 1 / -1;
-                        text-align: center;
-                    }
-                }
-            }
         }
     }
 }
@@ -1573,13 +1474,6 @@
 // Price Summary Section
 .price-summary {
     .summary-row.shipping {
-        @include shipping-cost-styles;
-    }
-}
-
-// Sticky Summary Section
-.sticky-summary {
-    .breakdown-item.shipping {
         @include shipping-cost-styles;
     }
 }
