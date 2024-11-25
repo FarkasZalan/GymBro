@@ -17,6 +17,7 @@ export interface Order {
     paymentMethod: string;
     totalLoyaltyPoints: number;
     orderDate: Timestamp;
+    couponUsed: boolean;
     orderStatus: OrderStatus;
     isAdminChecked: boolean;
 }

@@ -129,6 +129,7 @@
                 "noAddresses": "Nincs egyetlen mentett cím sem!",
                 "shippingAddressForm": {
                         "newAddressTitle": "Új cím felvitele",
+                        "modifyAddressTitle": "Cím módosítása",
                         "addressName": "Cím típusa és elnevezése",
                         "country": "Ország",
                         "postalCode": "Irányítószám",
@@ -596,7 +597,7 @@
                 "intro": "Gyűjts pontokat minden vásárlással és oldd fel az exkluzív jutalmakat!",
                 "pointsOverview": {
                         "totalPoints": "Összes Pont",
-                        "earnedThisMonth": "Ebben a Hónapban Szerzett",
+                        "earnedThisMonth": "Ebben a Hónapban felhasznált kuponok",
                         "availableRewards": "Elérhető Jutalmak",
                         "pointsToNextReward": "Pont a következő jutalomig",
                         "points": "pont",

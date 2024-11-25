@@ -140,10 +140,10 @@ export class CheckoutPageComponent implements OnInit {
   // loyalty program
   currentLoyaltyPoints: number = 0;
   nextRewardThreshold: number = 0;
+  couponUsed: boolean = false;
 
   showAddressForm = false;
   isSubmitting = false;
-  addressForm: FormGroup;
 
   // Rewards
   availableRewards: Reward[] = [
@@ -454,14 +454,31 @@ export class CheckoutPageComponent implements OnInit {
       totalLoyaltyPoints: loyaltyPoints,
       orderDate: Timestamp.now(),
       orderStatus: OrderStatus.PENDING,
-      isAdminChecked: false
+      isAdminChecked: false,
+      couponUsed: this.couponUsed
     };
+
+    if (this.activeReward) {
+      if (this.activeReward.id === RewardText.Discount10Id) {
+        loyaltyPoints = loyaltyPoints - 300;
+      } else if (this.activeReward.id === RewardText.Discount20Id) {
+        loyaltyPoints = loyaltyPoints - 600;
+      } else if (this.activeReward.id === RewardText.Discount30Id) {
+        loyaltyPoints = loyaltyPoints - 700;
+      } else if (this.activeReward.id === RewardText.FreeShippingId) {
+        loyaltyPoints = loyaltyPoints - 850;
+      } else if (this.activeReward.id === RewardText.FiveThousandHufDiscountId) {
+        loyaltyPoints = loyaltyPoints - 1500;
+      }
+    }
 
     // Add the new order
     try {
       const documentumRef = await this.db.collection("orders").add(this.order);
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
+
+      await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
       // if everything was succes then open successfull dialog
       const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
         data: {
@@ -491,11 +508,13 @@ export class CheckoutPageComponent implements OnInit {
 
   activateCoupon(reward: any) {
     this.activeReward = reward;
+    this.couponUsed = true;
     this.calculateTotals();
   }
 
   removeCoupon() {
     this.activeReward = null;
+    this.couponUsed = false;
     this.calculateTotals();
   }
 

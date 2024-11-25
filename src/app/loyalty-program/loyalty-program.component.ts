@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { User } from '../profile/user.model';
 import { AuthService } from '../auth/auth.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -8,6 +8,8 @@ import { Reward } from './reward.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { RewardText } from './reward-text';
 import { MatDialog } from '@angular/material/dialog';
+import { UserService } from '../profile/user.service';
+import { Order } from '../payment/order.model';
 
 @Component({
   selector: 'app-loyalty-program',
@@ -15,6 +17,8 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./loyalty-program.component.scss']
 })
 export class LoyaltyProgramComponent implements OnInit {
+  @Input() openedFromProfile: boolean = false;
+
   currentPoints: number = 0;
   pointsThisMonth: number = 0;
 
@@ -66,7 +70,8 @@ export class LoyaltyProgramComponent implements OnInit {
     private router: Router,
     private location: Location,
     private db: AngularFirestore,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -83,6 +88,7 @@ export class LoyaltyProgramComponent implements OnInit {
           this.currentUser = currentUser;
           this.currentUserId = currentUser.id;
           this.currentPoints = currentUser.loyaltyPoints || 0;
+          this.calculatePointsThisMonth();
           if (this.currentUser === undefined) {
             this.userLoggedIn = false; // User is logged out
           }
@@ -121,9 +127,9 @@ export class LoyaltyProgramComponent implements OnInit {
   }
 
   calculatePointsThisMonth() {
-    // For demo purposes, showing random points between 0-100
-    // Later calculate this from actual purchase history
-    this.pointsThisMonth = Math.floor(Math.random() * 100);
+    this.userService.getUserMonthlyCouponsUsed(this.currentUserId).subscribe((orders: Order[]) => {
+      this.pointsThisMonth = orders.length;
+    });
   }
 
   getAvailableRewardsCount(): number {

@@ -129,6 +129,7 @@
       "noAddresses": "There is not a single saved address!",
       "shippingAddressForm": {
          "newAddressTitle": "Add new address",
+         "modifyAddressTitle": "Modify address",
          "addressName": "Address type and name",
          "country": "Country",
          "postalCode": "Postal code",
@@ -593,7 +594,7 @@
       "intro": "Earn points with every purchase and unlock exclusive rewards!",
       "pointsOverview": {
          "totalPoints": "Total Points",
-         "earnedThisMonth": "Earned This Month",
+         "earnedThisMonth": "Earned Coupons This Month",
          "availableRewards": "Available Rewards",
          "pointsToNextReward": "Points to Next Reward",
          "points": "points",

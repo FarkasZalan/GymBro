@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { User } from "./user.model";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { Order } from "../payment/order.model";
 
 @Injectable({
     providedIn: 'root'
@@ -37,5 +38,22 @@ export class UserService {
                     return user.updatePassword(newPassword) // Update password
                 }
             })
+    }
+
+    getUserOrders(userId: string) {
+        return this.db.collection<Order>('orders', ref =>
+            ref
+                .where('userId', '==', userId)
+                .orderBy('orderDate')
+        ).valueChanges();
+    }
+
+    getUserMonthlyCouponsUsed(userId: string) {
+        return this.db.collection<Order>('orders', ref =>
+            ref
+                .where('userId', '==', userId)
+                .where('couponUsed', '==', true)
+                .orderBy('orderDate')
+        ).valueChanges();
     }
 }

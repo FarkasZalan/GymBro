@@ -1,59 +1,87 @@
-.buttons {
-    display: block;
+.container {
+    padding: 20px;
     text-align: center;
 }
 
-.buttons button {
-    border: none;
-    background-size: cover;
-    border-radius: 10px;
+.delete-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-width: 300px;
 }
 
-.btn-logout {
+.delete-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.warning-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(227, 87, 87, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    i {
+        font-size: 40px;
+        color: #e35757;
+    }
+}
+
+.delete-title {
+    color: #2d3436;
+    font-size: 1.5rem;
+    margin: 20px 0;
+    font-weight: 500;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    min-width: 140px;
+    transition: all 0.3s ease;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+.btn-delete {
     background-color: #e35757 !important;
     color: white !important;
-    margin-right: 20px;
-    margin-left: 20px;
-    height: 50px;
-    min-width: 120px;
+    box-shadow: 0 4px 15px rgba(227, 87, 87, 0.2);
 
-}
-
-.btn-logout:hover {
-    background-color: #df1313 !important;
-}
-
-.btn-logout:focus {
-    outline: none;
-    box-shadow: none;
+    &:hover {
+        background-color: #df1313 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(227, 87, 87, 0.3);
+    }
 }
 
 .btn-cancel {
     background-color: #0b8e92 !important;
     color: white !important;
-    margin-right: 20px;
-    margin-left: 20px;
-    height: 50px;
-    width: 120px;
-}
+    box-shadow: 0 4px 15px rgba(11, 142, 146, 0.2);
 
-.btn-cancel:hover {
-    background-color: #15b2b8 !important;
-}
-
-.container {
-    margin-top: 30px;
-}
-
-.buttons button:focus {
-    outline: none;
-}
-
-.title {
-    margin: 20px;
-    font-size: 28px !important;
-}
-
-.container:focus {
-    outline: none;
+    &:hover {
+        background-color: #15b2b8 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(11, 142, 146, 0.3);
+    }
 }

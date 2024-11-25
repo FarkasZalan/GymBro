@@ -1,21 +1,21 @@
-<div class="dialog-container">
-    <nb-card class="dialog-card">
+<div class="container">
+    <nb-card class="delete-card">
         <nb-card-body>
-            <div class="dialog-content">
+            <div class="delete-content">
                 <!-- Warning Icon -->
                 <div class="warning-icon">
-                    <i class="fas fa-exclamation-circle"></i>
+                    <i class="fas fa-exclamation-triangle"></i>
                 </div>
 
-                <!-- Message -->
-                <h1 class="dialog-title">{{ text }}</h1>
+                <!-- Delete Title -->
+                <h1 class="delete-title">{{ text }}</h1>
 
-                <!-- Buttons -->
-                <div class="button-container">
-                    <button class="dialog-button delete-btn" (click)="confirm()">
+                <!-- Delete Buttons -->
+                <div class="buttons">
+                    <button type="submit" class="btn btn-delete" (click)="confirm()">
                         {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}
                     </button>
-                    <button class="dialog-button cancel-btn" (click)="cancel()">
+                    <button type="submit" class="btn btn-cancel" (click)="cancel()">
                         {{ 'header.cancel' | translate }}
                     </button>
                 </div>
