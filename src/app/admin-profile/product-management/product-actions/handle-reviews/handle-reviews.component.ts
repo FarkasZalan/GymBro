@@ -17,6 +17,8 @@ import { SuccessfullDialogComponent } from '../../../../successfull-dialog/succe
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { MatDialog } from '@angular/material/dialog';
 import { ReviewHandleComponent } from '../../../../products/review-handle/review-handle.component';
+import { AdminNotificationService } from '../../../admin-notification.service';
+import { AdminService } from '../../../admin.service';
 
 @Component({
   selector: 'app-handle-reviews',
@@ -70,7 +72,9 @@ export class HandleReviewsComponent implements OnInit {
     private documentHandler: DocumentHandlerService,
     private router: Router,
     private dialog: MatDialog,
-    private location: Location) { }
+    private location: Location,
+    private adminService: AdminService,
+    private adminNotificationService: AdminNotificationService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -133,16 +137,21 @@ export class HandleReviewsComponent implements OnInit {
   }
 
   // Function to mark a review as checked
-  async markReviewAsChecked(review: any) {
-    // Update the Firestore document
-    if (!review.checkedByAdmin && !review.checkedByAdminLocal) {
-      review.checkedByAdminLocal = true;
+  async markReviewAsChecked(review: ProductReeviews) {
+    if (!review.checkedByAdmin || review.reviewEdited) {
       await this.db
         .collection('reviews')
         .doc(this.productCategory)
         .collection('allReview')
         .doc(review.id)
-        .update({ checkedByAdmin: true, reviewEdited: false })
+        .update({
+          checkedByAdmin: true,
+          reviewEdited: false
+        });
+
+      // Update the notification count
+      const newCount = await this.adminService.getAllReviewsCount();
+      this.adminNotificationService.updateReviewsCount(newCount);
     }
   }
 

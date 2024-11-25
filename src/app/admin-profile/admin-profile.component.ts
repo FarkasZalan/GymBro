@@ -36,10 +36,17 @@ export class AdminProfileComponent implements OnInit {
   // number of the unchecked reviews
   uncheckedReviewsCount: number = 0;
 
+  // number of the new orders
+  numberOfNewOrders: number = 0;
+
   constructor(private adminService: AdminService) { }
 
   async ngOnInit(): Promise<void> {
     this.uncheckedReviewsCount = await this.adminService.getAllReviewsCount();
+
+    (await this.adminService.getAllNewOrders()).subscribe(newOrders => {
+      this.numberOfNewOrders = newOrders.length;
+    });
   }
 
   toggleCollapsedStatistics() {
@@ -95,5 +102,13 @@ export class AdminProfileComponent implements OnInit {
       this.isCollapsedItemsDetails = true;
       this.isCollapsedBlogDetails = true;
     }
+  }
+
+  openItemsPanel() {
+    this.isCollapsedItemsDetails = false;
+    this.isCollapsedOrders = true;
+    this.isCollapsedStatisticsDetails = true;
+    this.isCollapsedProfileDetails = true;
+    this.isCollapsedBlogDetails = true;
   }
 }

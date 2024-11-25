@@ -9,6 +9,8 @@ import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialo
 import { DeleteConfirmationDialogComponent } from '../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../delete-confirmation-dialog/delete-text';
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
+import { AdminNotificationService } from '../../admin-profile/admin-notification.service';
+import { AdminService } from '../../admin-profile/admin.service';
 
 @Component({
   selector: 'app-review-handle',
@@ -47,7 +49,13 @@ export class ReviewHandleComponent implements OnInit {
   responseDate = Timestamp.now();
   responseEdit: boolean = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, private db: AngularFirestore) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data,
+    public dialog: MatDialog,
+    private db: AngularFirestore,
+    private adminService: AdminService,
+    private adminNotificationService: AdminNotificationService
+  ) {
     this.userId = data.userId;
     this.category = data.category;
     this.productId = data.productId;
@@ -99,16 +107,25 @@ export class ReviewHandleComponent implements OnInit {
   }
 
   async createReview() {
+    // Set up the review properties
     this.review.rating = this.rating;
     this.review.date = Timestamp.now();
     this.review.text = this.reviewText;
     this.review.title = this.reviewTitle;
+    // Mark new reviews as unchecked to trigger admin notification
+    this.review.checkedByAdmin = false;
+
     try {
-      const documentRef = await this.db.collection("reviews").doc(this.category).collection("allReview").add(this.review);
-      // id the document created then save the document id in the field
+      // Add the review to Firestore
+      const documentRef = await this.db.collection("reviews")
+        .doc(this.category)
+        .collection("allReview")
+        .add(this.review);
+
+      // Update the document with its own ID for easier reference
       await documentRef.update({ id: documentRef.id });
 
-      // if everything was succes then open successfull dialog
+      // Show success message
       this.dialog.open(SuccessfullDialogComponent, {
         data: {
           text: SuccessFullDialogText.REVIEW_CREATED,
@@ -130,10 +147,15 @@ export class ReviewHandleComponent implements OnInit {
       .doc(this.category)
       .collection('allReview')
       .doc(this.reviewId)
-      .update({ response: this.reviewResponse, responseDate: this.responseDate })
+      .update({
+        response: this.reviewResponse,
+        responseDate: this.responseDate
+      });
 
-    // if everything was succes then open successfull dialog
-    const successfullText = this.responseEdit ? SuccessFullDialogText.RESPONSE_EDITED : SuccessFullDialogText.RESPONSE_CREATED
+    const newCount = await this.adminService.getAllReviewsCount();
+    this.adminNotificationService.updateReviewsCount(newCount);
+
+    const successfullText = this.responseEdit ? SuccessFullDialogText.RESPONSE_EDITED : SuccessFullDialogText.RESPONSE_CREATED;
     this.dialog.open(SuccessfullDialogComponent, {
       data: {
         text: successfullText,
@@ -149,19 +171,21 @@ export class ReviewHandleComponent implements OnInit {
       }
     });
 
-    // Wait for the dialog to close and get the user's confirmation
     const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
 
     if (confirmToDeleteAddress) {
-      // Update the Firestore document
-      this.db
+      await this.db
         .collection('reviews')
         .doc(this.category)
         .collection('allReview')
         .doc(this.reviewId)
-        .update({ response: '' })
+        .update({
+          response: ''
+        });
 
-      // if everything was succes then open successfull dialog
+      const newCount = await this.adminService.getAllReviewsCount();
+      this.adminNotificationService.updateReviewsCount(newCount);
+
       this.dialog.open(SuccessfullDialogComponent, {
         data: {
           text: SuccessFullDialogText.RESPONSE_DELETED,
@@ -172,7 +196,7 @@ export class ReviewHandleComponent implements OnInit {
   }
 
   async editReview() {
-    this.review.rating = this.rating;
+    // Update review object with current values
     this.review = {
       id: this.reviewId,
       userId: this.userId,
@@ -187,13 +211,21 @@ export class ReviewHandleComponent implements OnInit {
       response: this.reviewResponse,
       responseDate: this.responseDate,
       responseLikes: this.reviewResponseLikes,
+      // Mark edited reviews as unchecked to notify admin of changes
       checkedByAdmin: false,
+      // Flag to indicate this is an edited review
       reviewEdited: true
-    }
-    try {
-      await this.db.collection("reviews").doc(this.category).collection("allReview").doc(this.reviewId).update(this.review);
+    };
 
-      // if everything was succes then open successfull dialog
+    try {
+      // Update the review in Firestore
+      await this.db.collection("reviews")
+        .doc(this.category)
+        .collection("allReview")
+        .doc(this.reviewId)
+        .update(this.review);
+
+      // Show success message
       this.dialog.open(SuccessfullDialogComponent, {
         data: {
           text: SuccessFullDialogText.REVIEW_EDITED,
@@ -206,19 +238,28 @@ export class ReviewHandleComponent implements OnInit {
   }
 
   async removeReview() {
+    // Show confirmation dialog before deleting
     const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
       data: {
         text: DeleteConfirmationText.REVIEW_DELETE
       }
     });
 
-    // Wait for the dialog to close and get the user's confirmation
     const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
 
     if (confirmToDeleteAddress) {
-      // Delete the review from firestore
-      const deleteAddressRef = this.db.collection("reviews").doc(this.category).collection("allReview").doc(this.reviewId);
+      // Delete the review from Firestore
+      const deleteAddressRef = this.db.collection("reviews")
+        .doc(this.category)
+        .collection("allReview")
+        .doc(this.reviewId);
       await deleteAddressRef.delete();
+
+      // Update the notification count after deletion
+      const newCount = await this.adminService.getAllReviewsCount();
+      this.adminNotificationService.updateReviewsCount(newCount);
+
+      // Show success message
       this.dialog.open(SuccessfullDialogComponent, {
         data: {
           text: SuccessFullDialogText.DELETED_TEXT,

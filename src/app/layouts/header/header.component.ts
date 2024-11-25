@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../profile/user.model';
-import { filter, tap, map } from 'rxjs';
+import { filter, tap, map, combineLatest } from 'rxjs';
 import { LogOutComponent } from '../../auth/log-out/log-out.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,6 +18,8 @@ import { CartNotificationService } from '../../cart/cart-notification.service';
 import { trigger, style, animate, transition, keyframes } from '@angular/animations';
 import { ProductReeviews } from '../../admin-profile/product-management/product-models/product-reviews.model';
 import { ProductService } from '../../products/product.service';
+import { AdminService } from '../../admin-profile/admin.service';
+import { AdminNotificationService } from '../../admin-profile/admin-notification.service';
 
 @Component({
   selector: 'app-header',
@@ -65,6 +67,18 @@ export class HeaderComponent implements OnInit {
 
   cartNotification$ = this.cartNotificationService.notification$;
 
+  newOrdersCount$ = this.adminNotificationService.ordersCount$;
+  newReviewsCount$ = this.adminNotificationService.reviewsCount$;
+
+  adminNotificationCount$ = combineLatest([
+    this.newOrdersCount$,
+    this.newReviewsCount$
+  ]).pipe(
+    map(([orders, reviews]) => orders + reviews)
+  );
+
+  showNotificationPanel: boolean = false;
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private db: AngularFirestore,
@@ -76,7 +90,9 @@ export class HeaderComponent implements OnInit {
     private appComponent: AppComponent,
     private cartService: CartService,
     private productService: ProductService,
-    private cartNotificationService: CartNotificationService
+    private cartNotificationService: CartNotificationService,
+    private adminService: AdminService,
+    private adminNotificationService: AdminNotificationService
   ) { }
 
   ngOnInit(): void {
@@ -89,6 +105,8 @@ export class HeaderComponent implements OnInit {
           if (this.user === undefined) {
             this.authService.logOut();
             this.userLoggedIn = false; // User is logged out
+          } else if (this.user.isAdmin) {
+            this.checkAdminNotifications();
           }
         })
       } else {
@@ -260,5 +278,27 @@ export class HeaderComponent implements OnInit {
 
   hideNotification() {
     this.cartNotificationService.hideNotification();
+  }
+
+  private checkAdminNotifications() {
+    // Only proceed if the current user is an admin
+    if (this.user?.isAdmin) {
+      // Subscribe to new orders and update the order count in real-time
+      this.adminService.getAllNewOrders().then(async ordersObservable => {
+        ordersObservable.subscribe(newOrders => {
+          this.adminNotificationService.updateOrdersCount(newOrders.length);
+        });
+      });
+
+      // Subscribe to unchecked reviews and update the review count in real-time
+      // This will automatically update whenever reviews are added, edited, or checked
+      this.adminService.watchUncheckedReviews().subscribe(count => {
+        this.adminNotificationService.updateReviewsCount(count);
+      });
+    }
+  }
+
+  toggleNotificationPanel() {
+    this.showNotificationPanel = !this.showNotificationPanel;
   }
 }

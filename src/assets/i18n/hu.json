@@ -164,7 +164,13 @@
                 "items": "Termékek",
                 "blog": "Bejegyzések",
                 "users": "Felhasználók",
-                "reviews": "Értékelések"
+                "reviews": "Értékelések",
+                "notifications": {
+                        "notifications": "Értesítések",
+                        "newOrders": "Új rendelés",
+                        "newReviews": "Új értékelés",
+                        "noNewNotifications": "Nincs új értesítés"
+                }
         },
         "products": {
                 "add": "Hozzáadás",

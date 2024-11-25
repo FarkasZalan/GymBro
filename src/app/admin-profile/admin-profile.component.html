@@ -63,12 +63,18 @@
 </nb-card>
 
 <!-- orders details -->
-<nb-card class="container-collapse-component">
+<nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
+    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
             <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">{{
                 'profileMenu.orders' | translate }}
             </h2>
+
+            <!-- Icon for New Orders -->
+            <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
+                &#x26A0; <!-- warning icon -->
+            </div>
             <button class="toggle-button-collapse-component back-btn">
                 <span class="categorie-arrow" *ngIf="isCollapsedOrders">▼</span>
                 <span class="categorie-arrow" *ngIf="!isCollapsedOrders">▲</span>

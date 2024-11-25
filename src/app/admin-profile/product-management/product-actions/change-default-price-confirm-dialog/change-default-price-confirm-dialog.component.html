@@ -1,18 +1,25 @@
 <div class="container">
-    <!-- change default color/price title -->
-    <h1 id="title" class="title">{{ 'products.changeDefaultPriceText' | translate }}</h1>
-    <!-- change default address confirm buttons -->
-    <div class="container">
-        <nb-card>
-            <nb-card-body>
-                <div class="buttons">
-                    <button type="submit" class="btn btn-primary btn-logout" (click)="confirm()">{{
-                        'profileMenu.shippingAddressForm.changeDefaultAddressConfirm' |
-                        translate }}</button>
-                    <button type="submit" class="btn btn-primary btn-cancel" (click)="cancel()">{{ 'header.cancel' |
-                        translate }}</button>
+    <nb-card class="success-card">
+        <nb-card-body>
+            <div class="success-content">
+                <!-- Price Icon -->
+                <div class="warning-mark">
+                    <i class="fas fa-sack-dollar power-icon"></i>
                 </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
+
+                <!-- Message -->
+                <p class="dialog-title">{{ 'products.changeDefaultPriceText' | translate }}</p>
+
+                <!-- Buttons -->
+                <div class="button-container">
+                    <button (click)="confirm()" class="btn btn-confirm" type="submit">
+                        {{ 'profileMenu.shippingAddressForm.changeDefaultAddressConfirm' | translate }}
+                    </button>
+                    <button (click)="cancel()" class="btn btn-cancel" type="submit">
+                        {{ 'header.cancel' | translate }}
+                    </button>
+                </div>
+            </div>
+        </nb-card-body>
+    </nb-card>
 </div>

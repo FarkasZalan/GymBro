@@ -163,7 +163,13 @@
       "statistic": "Statistics",
       "items": "Products",
       "blog": "Blog posts",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "notifications": {
+         "notifications": "Notifications",
+         "newOrders": "New orders",
+         "newReviews": "New reviews",
+         "noNewNotifications": "No new notifications"
+      }
    },
    "products": {
       "add": "Add",

@@ -12,7 +12,7 @@ import {
     listAll,
     deleteObject
 } from "firebase/storage";
-import { map } from "rxjs";
+import { map, combineLatest, Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -46,6 +46,10 @@ export class AdminService {
                 ref
                     .where('productId', '==', productId) // get all the reviews for the selected product
             ).valueChanges();
+    }
+
+    async getAllNewOrders() {
+        return this.db.collection('orders', ref => ref.where('isAdminChecked', '==', false)).valueChanges();
     }
 
     async getProductUncheckedProductReviewsNumber(productCategory: string) {
@@ -177,5 +181,30 @@ export class AdminService {
                 });
         } catch (error) {
         }
+    }
+
+    // Watch unchecked reviews in real-time
+    watchUncheckedReviews(): Observable<number> {
+        const categories = [
+            ProductViewText.FOOD_SUPLIMENTS,
+            ProductViewText.ORGANIC_FOOD,
+            ProductViewText.CLOTHES,
+            ProductViewText.ACCESSORIES
+        ];
+
+        // Create an observable for each category
+        const categoryObservables = categories.map(category =>
+            this.db.collection(`reviews/${category}/allReview`, ref =>
+                ref.where('checkedByAdmin', '==', false)
+            ).valueChanges()
+        );
+
+        // Combine all category observables
+        return combineLatest(categoryObservables).pipe(
+            map(results => {
+                // Sum up the total number of unchecked reviews
+                return results.reduce((total, reviews) => total + reviews.length, 0);
+            })
+        );
     }
 }

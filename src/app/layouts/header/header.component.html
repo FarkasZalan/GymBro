@@ -56,7 +56,57 @@
 
         <!-- User information displayed if logged in -->
         <div *ngIf="userLoggedIn" class="header-container-user">
-            <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
+            <!-- Add notification badge if admin has notifications -->
+            <div class="admin-notification-wrapper" *ngIf="user?.isAdmin">
+                <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
+                    nbContextMenuTag="header-menu">
+                </nb-user>
+
+                <div class="notification-trigger" (click)="toggleNotificationPanel()">
+                    <i class="material-icons">notifications</i>
+                    <span class="notification-badge" *ngIf="(adminNotificationCount$ | async) > 0">
+                        {{adminNotificationCount$ | async}}
+                    </span>
+                </div>
+
+                <!-- Notification Panel -->
+                <div class="notification-panel" *ngIf="showNotificationPanel" [@slideInOut]>
+                    <div class="notification-header">
+                        <h3>{{ 'adminMenu.notifications.notifications' | translate }}</h3>
+                    </div>
+
+                    <div class="notification-content">
+                        <!-- New Orders Section -->
+                        <div class="notification-item" *ngIf="(newOrdersCount$ | async) > 0"
+                            routerLink="/admin-profile/orders">
+                            <i class="material-icons">shopping_basket</i>
+                            <div class="notification-details">
+                                <span class="notification-title">{{ 'adminMenu.notifications.newOrders' | translate
+                                    }}</span>
+                                <span class="notification-count">{{newOrdersCount$ | async}}</span>
+                            </div>
+                        </div>
+
+                        <!-- New Reviews Section -->
+                        <div class="notification-item" *ngIf="(newReviewsCount$ | async) > 0"
+                            routerLink="/admin-profile/">
+                            <i class="material-icons">rate_review</i>
+                            <div class="notification-details">
+                                <span class="notification-title">{{ 'adminMenu.notifications.newReviews' | translate
+                                    }}</span>
+                                <span class="notification-count">{{newReviewsCount$ | async}}</span>
+                            </div>
+                        </div>
+
+                        <!-- No Notifications Message -->
+                        <div class="no-notifications" *ngIf="(adminNotificationCount$ | async) === 0">
+                            {{ 'adminMenu.notifications.noNewNotifications' | translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- For non-admin users -->
+            <nb-user *ngIf="!user?.isAdmin" name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
                 nbContextMenuTag="header-menu">
             </nb-user>
         </div>

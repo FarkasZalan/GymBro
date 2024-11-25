@@ -631,3 +631,114 @@
 .cart-icon.pulse {
     animation: cartPulse 0.3s ease-in-out;
 }
+
+.admin-notification-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .notification-trigger {
+        position: relative;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff3d71;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 6px;
+            font-size: 12px;
+            min-width: 20px;
+            text-align: center;
+        }
+    }
+
+    .notification-panel {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 10px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        z-index: 1000;
+
+        .notification-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+
+            h3 {
+                margin: 0;
+                color: #2a2a2a;
+                font-size: 16px;
+            }
+        }
+
+        .notification-content {
+            max-height: 400px;
+            overflow-y: auto;
+
+            .notification-item {
+                display: flex;
+                align-items: center;
+                padding: 15px;
+                gap: 12px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                border-bottom: 1px solid #eee;
+
+                &:hover {
+                    background-color: #f8f9fa;
+                }
+
+                i {
+                    color: #0b8e92;
+                    font-size: 24px;
+                }
+
+                .notification-details {
+                    flex: 1;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .notification-title {
+                        color: #2a2a2a;
+                        font-weight: 500;
+                    }
+
+                    .notification-count {
+                        background: #0b8e92;
+                        color: white;
+                        padding: 3px 8px;
+                        border-radius: 12px;
+                        font-size: 12px;
+                    }
+                }
+            }
+
+            .no-notifications {
+                padding: 20px;
+                text-align: center;
+                color: #666;
+            }
+        }
+    }
+}

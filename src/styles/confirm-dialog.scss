@@ -42,7 +42,104 @@
 }
 
 .container {
-    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+}
+
+.success-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-width: 300px;
+}
+
+.success-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.dialog-title {
+    color: #2d3436;
+    font-size: 1.5rem;
+    margin: 20px 0;
+    font-weight: 500;
+}
+
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.btn-confirm {
+    background-color: #0b8e92 !important;
+    color: white !important;
+
+    &:hover {
+        background-color: #15b2b8 !important;
+    }
+}
+
+.btn-cancel {
+    background-color: #e35757 !important;
+    color: white !important;
+
+    &:hover {
+        background-color: #df1313 !important;
+    }
+}
+
+// Question Mark Styling
+.question-mark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #0b8e92;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+}
+
+.question-symbol {
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(11, 142, 146, 0.4);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(11, 142, 146, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(11, 142, 146, 0);
+    }
 }
 
 .buttons button:focus {
@@ -56,4 +153,51 @@
 
 .container:focus {
     outline: none;
+}
+
+// Icon Container Styling
+.warning-mark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #0b8e92;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+}
+
+.power-icon {
+    color: white;
+    font-size: 40px;
+    animation: powerRotate 0.3s ease-in-out;
+}
+
+@keyframes powerRotate {
+    0% {
+        transform: rotate(-180deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: rotate(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(11, 142, 146, 0.4);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(11, 142, 146, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(11, 142, 146, 0);
+    }
 }

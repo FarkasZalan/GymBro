@@ -11,6 +11,7 @@ import { HandleBlogsComponent } from './blog/blog-list/handle-blogs/handle-blogs
 import { BlogComponent } from './blog/blog.component';
 import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
 import { HandleReviewsComponent } from './product-management/product-actions/handle-reviews/handle-reviews.component';
+import { OrderListComponent } from './order-list/order-list.component';
 
 export const routes: Routes = [
     {
@@ -120,6 +121,12 @@ export const routes: Routes = [
             {
                 path: ':productCategory/reviews/:productId',
                 component: HandleReviewsComponent
+            },
+
+            // Orders
+            {
+                path: 'orders',
+                component: OrderListComponent
             },
         ]
     },
