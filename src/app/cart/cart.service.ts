@@ -94,6 +94,10 @@ export class CartService {
         localStorage.removeItem('cartItems');
     }
 
+    isCartEmpty(): boolean {
+        return this.cartItems.length === 0;
+    }
+
     getCartTotal(): number {
         return this.cartItems.reduce((total, item) =>
             total + (item.price * item.quantity), 0);

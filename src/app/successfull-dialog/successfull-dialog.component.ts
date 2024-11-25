@@ -90,6 +90,10 @@ export class SuccessfullDialogComponent implements OnInit {
       this.text = this.translate.instant("succesfullDialog.rewardCancelled");
       this.buttonText = this.translate.instant("succesfullDialog.ok");
     }
+    if (this.operation === SuccessFullDialogText.SUCCESSFULL_PAYMENT) {
+      this.text = this.translate.instant("succesfullDialog.successfullPayment");
+      this.buttonText = this.translate.instant("succesfullDialog.ok");
+    }
   }
 
   // Method to hide the dialog and optionally navigate back to the previous page

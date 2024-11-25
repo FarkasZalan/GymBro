@@ -19,4 +19,18 @@ export class CartNotificationService {
     hideNotification() {
         this.notificationSubject.next(null);
     }
+
+    showEmptyCartNotification() {
+        const emptyCartData: CartNotificationData = {
+            productName: '',
+            imageUrl: '../../../../../assets/images/no-products.jpg',
+            quantity: 0,
+            price: 0,
+            isEmptyCart: true
+        };
+        this.notificationSubject.next(emptyCartData);
+        setTimeout(() => {
+            this.notificationSubject.next(null);
+        }, 5000); // Show for 5 seconds
+    }
 } 

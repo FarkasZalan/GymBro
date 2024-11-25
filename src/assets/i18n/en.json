@@ -109,7 +109,8 @@
       "responseEdited": "Your response has been edited!",
       "responseDeleted": "Your response has been deleted!",
       "rewardRedeemed": "Reward successfully redeemed!\nYou can use your reward on your next purchase.",
-      "rewardCancelled": "Reward redemption cancelled."
+      "rewardCancelled": "Reward redemption cancelled.",
+      "successfullPayment": "Successfull payment!"
    },
    "profilePage": {
       "profile": "Profile",
@@ -624,27 +625,23 @@
       "rewards": {
          "discount10": {
             "title": "10% Discount",
-            "description": "Get 10% off your next purchase"
+            "description": "Get 10% off your purchase"
          },
          "discount20": {
             "title": "20% Discount",
-            "description": "Get 20% off your next purchase"
+            "description": "Get 20% off your purchase"
          },
          "discount30": {
             "title": "30% Discount",
-            "description": "Get 30% off your next purchase"
+            "description": "Get 30% off your purchase"
          },
          "freeShipping": {
             "title": "Free Shipping",
-            "description": "Get free shipping on your next order"
-         },
-         "vipStatus": {
-            "title": "VIP Status",
-            "description": "Unlock exclusive VIP benefits for 30 days"
+            "description": "Get free shipping on your purchase"
          },
          "5000HufDiscount": {
             "title": "5000 HUF Discount",
-            "description": "Get a 5000 HUF discount on your next purchase"
+            "description": "Get a 5000 HUF discount on your purchase"
          }
       },
       "notifications": {

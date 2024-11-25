@@ -251,7 +251,11 @@ export class HeaderComponent implements OnInit {
   // Navigate to cart page
   navigateToCart() {
     this.hideNotification();
-    this.router.navigate(['/cart']);
+    if (!this.cartService.isCartEmpty()) {
+      this.router.navigate(['/cart']);
+    } else {
+      this.cartNotificationService.showEmptyCartNotification();
+    }
   }
 
   hideNotification() {

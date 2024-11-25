@@ -9,13 +9,17 @@ import { User } from '../../profile/user.model';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import { Location } from '@angular/common';
 import { CartItem } from '../../cart/cart.model';
-import { EditShippingAddressComponent } from '../../profile/profile-shipping-address/edit-shipping-address/edit-shipping-address.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ShippingAddressSelectionDialogComponent } from '../shipping-address-selection-dialog/shipping-address-selection-dialog.component';
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormGroup, NgForm } from '@angular/forms';
 import { RewardText } from '../../loyalty-program/reward-text';
 import { Reward } from '../../loyalty-program/reward.model';
+import { Order } from '../order.model';
+import { OrderStatus } from '../order-status.modelts';
+import { Timestamp } from 'firebase/firestore';
+import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
+import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 
 @Component({
   selector: 'app-checkout-page',
@@ -184,6 +188,10 @@ export class CheckoutPageComponent implements OnInit {
   discountAmount: number = 0;
   STANDARD_SHIPPING_COST: number = 2500;
 
+  // order
+  order: Order;
+  errorMessage: boolean = false;
+
   constructor(
     private cartService: CartService,
     private auth: AngularFireAuth,
@@ -310,7 +318,7 @@ export class CheckoutPageComponent implements OnInit {
     }
 
     // Calculate final total
-    this.total = this.subtotal + this.shipping + paymentFee - this.discountAmount;
+    this.total = (this.subtotal - this.discountAmount) + this.shipping + paymentFee;
     if (this.total < 0) {
       this.total = 0;
     }
@@ -337,8 +345,29 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   addNewGuestAddress() {
-    this.shippingAddress = this.guestForm.value;
-    this.shippingAddress.addressName = ProductViewText.CHECKOUT_GUEST_ADDRESS_NAME;
+    this.guestFirstName = this.guestForm.value.firstName;
+    this.guestLastName = this.guestForm.value.lastName;
+    this.guestEmail = this.guestForm.value.email;
+    this.guestPhone = this.guestForm.value.phone;
+
+    this.shippingAddress = {
+      id: 'Guest',
+      addressName: ProductViewText.CHECKOUT_GUEST_ADDRESS_NAME,
+      addressType: '',
+      country: this.guestForm.value.country,
+      postalCode: this.guestForm.value.postalCode,
+      city: this.guestForm.value.city,
+      street: this.guestForm.value.streetName,
+      streetType: this.guestForm.value.streetType,
+      houseNumber: this.guestForm.value.houseNumber,
+      floor: this.guestForm.value.floor || '',
+      door: this.guestForm.value.door || '',
+      companyName: this.guestForm.value.companyName || '',
+      taxNumber: this.guestForm.value.taxNumber || '',
+      isSetAsDefaultAddress: false,
+      deleted: false
+    }
+
     this.displayGuestForm = false;
     this.isEditGuestForm = true;
   }
@@ -384,7 +413,7 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   calculateLoyaltyPoints(): number {
-    return Math.floor(this.total / 100);
+    return Math.floor((this.subtotal - this.discountAmount) / 100);
   }
 
   getLoyaltyProgress(): number {
@@ -409,8 +438,45 @@ export class CheckoutPageComponent implements OnInit {
     });
   }
 
-  proceedToPayment() {
+  async proceedToPayment() {
+    let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
+    this.order = {
+      productList: this.cartItems,
+      totalPrice: this.total,
+      userId: this.currentUserId || 'Guest',
+      firstName: this.guestFirstName || this.currentUser?.firstName || '',
+      lastName: this.guestLastName || this.currentUser?.lastName || '',
+      email: this.guestEmail || this.currentUser?.email || '',
+      phone: this.guestPhone || this.currentUser?.phone || '',
+      shippingMethod: this.selectedShippingMethod,
+      paymentMethod: this.selectedPaymentMethod,
+      shippingAddress: this.shippingAddress,
+      totalLoyaltyPoints: loyaltyPoints,
+      orderDate: Timestamp.now(),
+      orderStatus: OrderStatus.PENDING,
+      isAdminChecked: false
+    };
 
+    // Add the new order
+    try {
+      const documentumRef = await this.db.collection("orders").add(this.order);
+      // id the document created then save the document id in the field
+      await documentumRef.update({ id: documentumRef.id });
+      // if everything was succes then open successfull dialog
+      const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
+        data: {
+          text: SuccessFullDialogText.SUCCESSFULL_PAYMENT,
+          needToGoPrevoiusPage: false
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(() => {
+        this.cartService.clearCart();
+        this.back();
+      });
+    } catch (error) {
+      this.errorMessage = true;
+    }
   }
 
   back() {
@@ -423,12 +489,12 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
-  activateReward(reward: any) {
+  activateCoupon(reward: any) {
     this.activeReward = reward;
     this.calculateTotals();
   }
 
-  removeReward() {
+  removeCoupon() {
     this.activeReward = null;
     this.calculateTotals();
   }

@@ -64,6 +64,10 @@ export class CartComponent {
                 item.maxStockError = item.quantity > item.maxStock;
             });
         });
+
+        if (this.cartService.isCartEmpty()) {
+            this.location.back();
+        }
     }
 
     getTotalPrice() {

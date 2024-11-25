@@ -13,5 +13,6 @@ export enum SuccessFullDialogText {
     RESPONSE_EDITED = "response_edited",
     RESPONSE_DELETED = "response_deleted",
     REWARD_REDEEMED = "reward_redeemed",
-    REWARD_CANCELLED = "reward_cancelled"
+    REWARD_CANCELLED = "reward_cancelled",
+    SUCCESSFULL_PAYMENT = "successfull_payment"
 }

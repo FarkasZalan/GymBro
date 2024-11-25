@@ -1,18 +1,25 @@
-<div class="container">
-    <!-- delete title -->
-    <h1 id="title" class="title">{{ text }}</h1>
-    <!-- delete confirm buttons -->
-    <div class="container">
-        <nb-card>
-            <nb-card-body>
-                <div class="buttons">
-                    <button type="submit" class="btn btn-primary btn-logout" (click)="confirm()">{{
-                        'profileMenu.shippingAddressForm.deleteAddress' |
-                        translate }}</button>
-                    <button type="submit" class="btn btn-primary btn-cancel" (click)="cancel()">{{ 'header.cancel' |
-                        translate }}</button>
+<div class="dialog-container">
+    <nb-card class="dialog-card">
+        <nb-card-body>
+            <div class="dialog-content">
+                <!-- Warning Icon -->
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-circle"></i>
                 </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
+
+                <!-- Message -->
+                <h1 class="dialog-title">{{ text }}</h1>
+
+                <!-- Buttons -->
+                <div class="button-container">
+                    <button class="dialog-button delete-btn" (click)="confirm()">
+                        {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}
+                    </button>
+                    <button class="dialog-button cancel-btn" (click)="cancel()">
+                        {{ 'header.cancel' | translate }}
+                    </button>
+                </div>
+            </div>
+        </nb-card-body>
+    </nb-card>
 </div>

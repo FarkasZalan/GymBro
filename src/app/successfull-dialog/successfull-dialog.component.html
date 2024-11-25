@@ -1,13 +1,23 @@
 <div class="container">
-    <nb-card>
+    <nb-card class="success-card">
         <nb-card-body>
-            <div>
-                <img src="../../assets/images/succedImage.jpg" alt="Email sent image">
-                <br>
-                <p class="title">{{ text }}</p>
-                <!-- button -->
-                <div class="send-button-container">
-                    <button (click)="hideDialog()" class="btn btn-primary" type="submit" nbButton status="success">
+            <div class="success-content">
+                <!-- Success Animation -->
+                <div class="success-checkmark">
+                    <div class="check-icon">
+                        <span class="icon-line line-tip"></span>
+                        <span class="icon-line line-long"></span>
+                        <div class="icon-circle"></div>
+                        <div class="icon-fix"></div>
+                    </div>
+                </div>
+
+                <!-- Message -->
+                <p class="success-title">{{ text }}</p>
+
+                <!-- Button -->
+                <div class="button-container">
+                    <button (click)="hideDialog()" class="btn" type="submit" nbButton status="success">
                         {{ buttonText }}
                     </button>
                 </div>

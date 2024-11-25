@@ -3,4 +3,5 @@ export interface CartNotificationData {
     imageUrl: string;
     quantity: number;
     price: number;
+    isEmptyCart?: boolean;
 }

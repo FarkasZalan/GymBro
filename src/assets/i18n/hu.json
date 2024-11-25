@@ -109,7 +109,8 @@
                 "responseEdited": "Válaszod módosítva!",
                 "responseDeleted": "Válaszod törölve!",
                 "rewardRedeemed": "A jutalom sikeresen beváltva!\nA jutalmat a következő vásárlásnál használhatod fel.",
-                "rewardCancelled": "Jutalom beváltása megszakítva."
+                "rewardCancelled": "Jutalom beváltása megszakítva.",
+                "successfullPayment": "Sikeres fizetés!"
         },
         "profilePage": {
                 "profile": "Profil",
@@ -626,23 +627,23 @@
                 "rewards": {
                         "discount10": {
                                 "title": "10% Kedvezmény",
-                                "description": "10% kedvezmény a következő vásárlásodhoz"
+                                "description": "10% kedvezmény a vásárlásod összegéből"
                         },
                         "discount20": {
                                 "title": "20% Kedvezmény",
-                                "description": "20% kedvezmény a következő vásárlásodhoz"
+                                "description": "20% kedvezmény a vásárlásod összegéből"
                         },
                         "discount30": {
                                 "title": "30% Kedvezmény",
-                                "description": "30% kedvezmény a következő vásárlásodhoz"
+                                "description": "30% kedvezmény a vásárlásod összegéből"
                         },
                         "freeShipping": {
                                 "title": "Ingyenes Szállítás",
-                                "description": "Ingyenes szállítás a következő rendelésedhez"
+                                "description": "Ingyenes szállítás a vásárlásod összegéből"
                         },
                         "5000HufDiscount": {
                                 "title": "5000 Ft-os kupon",
-                                "description": "5000 Ft lejön a következő vásárlásod végösszegéből"
+                                "description": "5000 Ft lejön a vásárlásod összegéből"
                         }
                 },
                 "notifications": {

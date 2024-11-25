@@ -92,8 +92,7 @@
             </div>
 
             <!-- Loyalty Preview Section -->
-            <div class="checkout-section loyalty-preview" *ngIf="calculateLoyaltyPoints() > 0 && userLoggedIn" @fadeIn
-                (click)="openLoyalityProgram()">
+            <div class="checkout-section loyalty-preview" *ngIf="userLoggedIn" @fadeIn (click)="openLoyalityProgram()">
                 <h3 class="loyalty-title">
                     <nb-icon icon="star-outline" class="loyalty-icon"></nb-icon>
                     {{ 'checkout.loyalty.title' | translate }}
@@ -467,7 +466,7 @@
                                     <h4>{{activeReward.name | translate}}</h4>
                                     <p>{{activeReward.description | translate}}</p>
                                     <div class="button-container">
-                                        <button nbButton class="remove-reward-btn btn" (click)="removeReward()">
+                                        <button nbButton class="remove-reward-btn btn" (click)="removeCoupon()">
                                             <nb-icon icon="close-circle-outline"></nb-icon>
                                             {{ 'checkout.removeReward' | translate }}
                                         </button>
@@ -484,7 +483,7 @@
                         <div class="rewards-list"
                             *ngIf="!activeReward && displayAvailableRewardsBasedOnPoints.length > 0" @fadeSlide>
                             <div class="reward-card" *ngFor="let reward of displayAvailableRewardsBasedOnPoints"
-                                (click)="activateReward(reward)">
+                                (click)="activateCoupon(reward)">
                                 <div class="reward-icon">
                                     <nb-icon [icon]="reward.icon"></nb-icon>
                                 </div>
@@ -563,7 +562,7 @@
                 </div>
                 <div class="button-container">
                     <button nbButton status="success" class="proceed-btn btn"
-                        [disabled]="!selectedPaymentMethod || !shippingAddress || !selectedShippingMethod"
+                        [disabled]="!selectedPaymentMethod || shippingAddress === null || !selectedShippingMethod"
                         (click)="proceedToPayment()">
                         <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
                         {{ 'checkout.actions.placeOrder' | translate }}
