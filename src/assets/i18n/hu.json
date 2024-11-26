@@ -667,5 +667,25 @@
                         "register": "Fiók létrehozása",
                         "login": "Már tag vagy? Jelentkezz be"
                 }
+        },
+        "receipt": {
+                "title": "Rendelés visszaigazolás",
+                "orderId": "Rendelés azonosító",
+                "date": "Dátum",
+                "customerDetails": "Vásárló adatai",
+                "name": "Név",
+                "email": "E-mail",
+                "phone": "Telefonszám",
+                "shippingAddress": "Szállítási cím",
+                "orderItems": "Termékek",
+                "paymentSummary": "Fizetési összesítő",
+                "subtotal": "Részösszeg",
+                "shipping": "Szállítás",
+                "total": "Végösszeg",
+                "free": "Ingyenes",
+                "loyaltyPointsEarned": "Ezzel a rendeléssel {{points}} hűségpontot szereztél!",
+                "thankYou": "Köszönjük a vásárlást!",
+                "paidVia": "Fizetési mód",
+                "printReceipt": "Nyugta nyomtatása"
         }
 }

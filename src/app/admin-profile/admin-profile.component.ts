@@ -27,9 +27,8 @@ import { AdminService } from './admin.service';
   ]
 })
 export class AdminProfileComponent implements OnInit {
-  isCollapsedStatisticsDetails = false;
   isCollapsedProfileDetails = true;
-  isCollapsedItemsDetails = true;
+  isCollapsedItemsDetails = false;
   isCollapsedBlogDetails = true;
   isCollapsedOrders = true;
 
@@ -49,23 +48,11 @@ export class AdminProfileComponent implements OnInit {
     });
   }
 
-  toggleCollapsedStatistics() {
-    this.isCollapsedStatisticsDetails = !this.isCollapsedStatisticsDetails;
-
-    if (!this.isCollapsedStatisticsDetails) {
-      this.isCollapsedOrders = true;
-      this.isCollapsedProfileDetails = true;
-      this.isCollapsedItemsDetails = true;
-      this.isCollapsedBlogDetails = true;
-    }
-  }
-
   toggleCollapsedProfilDetails() {
     this.isCollapsedProfileDetails = !this.isCollapsedProfileDetails;
 
     if (!this.isCollapsedProfileDetails) {
       this.isCollapsedOrders = true;
-      this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedBlogDetails = true;
     }
@@ -76,7 +63,6 @@ export class AdminProfileComponent implements OnInit {
 
     if (!this.isCollapsedItemsDetails) {
       this.isCollapsedOrders = true;
-      this.isCollapsedStatisticsDetails = true;
       this.isCollapsedProfileDetails = true;
       this.isCollapsedBlogDetails = true;
     }
@@ -87,7 +73,6 @@ export class AdminProfileComponent implements OnInit {
 
     if (!this.isCollapsedBlogDetails) {
       this.isCollapsedOrders = true;
-      this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedProfileDetails = true;
     }
@@ -98,7 +83,6 @@ export class AdminProfileComponent implements OnInit {
 
     if (!this.isCollapsedOrders) {
       this.isCollapsedProfileDetails = true;
-      this.isCollapsedStatisticsDetails = true;
       this.isCollapsedItemsDetails = true;
       this.isCollapsedBlogDetails = true;
     }
@@ -107,7 +91,6 @@ export class AdminProfileComponent implements OnInit {
   openItemsPanel() {
     this.isCollapsedItemsDetails = false;
     this.isCollapsedOrders = true;
-    this.isCollapsedStatisticsDetails = true;
     this.isCollapsedProfileDetails = true;
     this.isCollapsedBlogDetails = true;
   }

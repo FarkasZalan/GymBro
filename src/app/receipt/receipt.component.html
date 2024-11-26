@@ -1,1 +1,223 @@
-<p>receipt works!</p>
+<div class="receipt-container" @zoomIn id="receipt">
+    <div class="receipt-header">
+        <div class="header-content">
+            <div class="title-section">
+                <nb-icon icon="shopping-bag-outline"></nb-icon>
+                <h2>{{ 'receipt.title' | translate }}</h2>
+            </div>
+            <div class="order-details">
+                <div class="detail-row">
+                    <span class="label">{{ 'receipt.orderId' | translate }}:</span>
+                    <span class="value">#{{order.id}}</span>
+                </div>
+                <div class="detail-row date-row">
+                    <span class="label">{{ 'receipt.date' | translate }}:</span>
+                    <span class="value">{{order.orderDate.toDate() | date:'yyyy/MM/dd'}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="receipt-body">
+        <div class="receipt-thank-you-section">
+            <div class="payment-status-section">
+                <nb-icon icon="checkmark-circle-2-outline" status="success"></nb-icon>
+                <h3>{{ 'receipt.thankYou' | translate }}</h3>
+                <div class="payment-method">
+                    <nb-icon
+                        [icon]="order.paymentMethod === productViewText.CHECKOUT_PAY_WITH_STRIPE ? 'credit-card-outline' : 'shopping-bag-outline'"></nb-icon>
+                    <span>{{ 'receipt.paidVia' | translate }} {{ order.paymentMethod | translate }}</span>
+                </div>
+            </div>
+        </div>
+
+        <nb-card class="checkout-section">
+            <h3>{{ 'receipt.customerDetails' | translate
+                }}</h3>
+            <div class="customer-info">
+                <div class="info-row">
+                    <span class="label">
+                        <nb-icon class="summary-icon" icon="person-outline"></nb-icon>
+                        {{ 'receipt.name' | translate }}:
+                    </span>
+                    <span class="value">{{order.firstName}} {{order.lastName}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">
+                        <nb-icon class="summary-icon" icon="email-outline"></nb-icon>
+                        {{ 'receipt.email' | translate }}:
+                    </span>
+                    <span class="value">{{order.email}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">
+                        <nb-icon class="summary-icon" icon="phone-outline"></nb-icon>
+                        {{ 'receipt.phone' | translate }}:
+                    </span>
+                    <span class="value">{{order.phone}}</span>
+                </div>
+            </div>
+        </nb-card>
+
+        <nb-card class="checkout-section">
+            <h3> {{ 'receipt.shippingAddress' | translate }}</h3>
+            <div class="address-container">
+                <nb-card class="rounded-card addressCard">
+                    <nb-card-header class="card-header">
+                        <strong>
+                            <nb-icon icon="pin-outline"></nb-icon>
+                            {{ order.shippingAddress.addressName | translate }}</strong>
+                    </nb-card-header>
+                    <nb-card-body class="address-details">
+                        <p>{{ order.shippingAddress.street }} {{ order.shippingAddress.streetType }}, {{
+                            order.shippingAddress.houseNumber }}</p>
+                        <p *ngIf="order.shippingAddress.floor || order.shippingAddress.door">
+                            {{ order.shippingAddress.floor ? (order.shippingAddress.floor + '/') : '' }}{{
+                            order.shippingAddress.door }}
+                        </p>
+                        <p>{{ order.shippingAddress.city }}, {{ order.shippingAddress.postalCode }}</p>
+                        <p>{{ order.shippingAddress.country }}</p>
+
+                        <!-- Company details if they exist -->
+                        <p *ngIf="order.shippingAddress.companyName">
+                            <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong>
+                            {{ order.shippingAddress.companyName }}
+                        </p>
+                        <p *ngIf="order.shippingAddress.taxNumber">
+                            <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
+                            {{ order.shippingAddress.taxNumber }}
+                        </p>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </nb-card>
+
+        <nb-card class="checkout-section cart-items-section">
+            <h3> {{ 'receipt.orderItems' | translate }}</h3>
+            <div class="items-list">
+                <nb-card class="cart-item" *ngFor="let item of order.productList" (click)="navigateToProduct(item)">
+                    <div class="item-image">
+                        <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.productName">
+                        <img *ngIf="!item.imageUrl" src="../../../assets/images/gym-bro-logo.png" alt="Product Image">
+                    </div>
+
+                    <div class="item-details">
+                        <h4>{{item.productName}}</h4>
+                        <div class="item-attributes">
+                            <span *ngIf="item.size" class="attribute">
+                                <nb-icon icon="cube-outline"></nb-icon>
+                                {{item.size | translate}} {{item.productUnit | translate}}
+                            </span>
+                            <span *ngIf="item.color" class="attribute">
+                                <nb-icon icon="color-palette-outline"></nb-icon>
+                                {{item.color | translate}}
+                            </span>
+                            <span *ngIf="item.flavor" class="attribute">
+                                <nb-icon icon="star-outline"></nb-icon>
+                                {{item.flavor | translate}}
+                            </span>
+                            <span class="attribute">
+                                <nb-icon icon="shopping-cart-outline"></nb-icon>
+                                x{{item.quantity}}
+                            </span>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="item-price">
+                        <div class="price-tag">{{(item.price * item.quantity) | currency:'':'':'1.0-0'}} {{
+                            'products.huf' |
+                            translate }}</div>
+                        <div class="unit-price">{{item.price | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}
+                            /
+                            {{'products.pcs' | translate}}</div>
+                    </div>
+                </nb-card>
+            </div>
+        </nb-card>
+
+        <nb-card class="checkout-section">
+            <h3> {{ 'receipt.paymentSummary' | translate }}</h3>
+            <div class="summary-details">
+                <div class="summary-row">
+                    <span>
+                        <nb-icon style="margin-right: 0.5rem;" class="summary-icon"
+                            icon="shopping-cart-outline"></nb-icon>
+                        {{ 'receipt.subtotal' | translate }}
+                    </span>
+                    <span>{{ order.subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>
+                        <nb-icon style="margin-right: 0.5rem;" class="summary-icon" icon="car-outline"></nb-icon>
+                        {{ 'receipt.shipping' | translate }} ({{order.shippingMethod | translate}})</span>
+                    <span *ngIf="order.shippingCost === 0">{{ 'receipt.free' | translate }}</span>
+                    <span *ngIf="order.shippingCost !== 0">{{order.shippingCost | currency:'':'':'1.0-0'}}
+                        {{ 'products.huf' | translate }}</span>
+                </div>
+
+                <div class="summary-row" *ngIf="order.cashOnDeliveryAmount > 0">
+                    <span>
+                        <nb-icon style="margin-right: 0.5rem;" class="summary-icon"
+                            icon="credit-card-outline"></nb-icon>
+                        {{ 'checkout.orderSummary.paymentFee' | translate }}
+                    </span>
+                    <span>{{order.cashOnDeliveryAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate
+                        }}</span>
+                </div>
+
+                <div class="summary-row" *ngIf="order.discountAmount > 0">
+                    <span>
+                        <nb-icon style="margin-right: 0.5rem;" class="summary-icon" icon="star-outline"></nb-icon>
+                        {{ 'checkout.discount' | translate }}
+                    </span>
+                    <span class="discount">-{{order.discountAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' |
+                        translate
+                        }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>
+                        <nb-icon style="margin-right: 0.5rem;" class="summary-icon"
+                            icon="checkmark-circle-2-outline"></nb-icon>
+                        {{ 'receipt.total' | translate }}
+                    </span>
+                    <span>{{order.totalPrice | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                </div>
+            </div>
+        </nb-card>
+
+        <div class="loyalty-points" *ngIf="order.totalLoyaltyPoints > 0">
+            <nb-icon icon="star"></nb-icon>
+            <span>{{ 'receipt.loyaltyPointsEarned' | translate: { points: order.totalLoyaltyPoints } }}</span>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button class="print-btn" class="btn" type="button" nbButton status="info" (click)="printReceipt()">
+            <nb-icon icon="printer-outline"></nb-icon>
+            {{ 'receipt.printReceipt' | translate }}
+        </button>
+
+        <button *ngIf="isFromCheckout" class="btn btn-primary basic-btn back-btn basic-form-btn" type="button" nbButton
+            status="success" (click)="goToProducts()">
+            <span class="arrow">
+                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                </svg>
+            </span>
+            {{ 'loginPage.goToItems' | translate }}
+        </button>
+
+        <button *ngIf="!isFromCheckout" class="btn btn-primary basic-btn back-btn basic-form-btn" type="button" nbButton
+            status="success" (click)="goBack()">
+            <span class="arrow">
+                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                </svg>
+            </span>
+            {{ 'loginPage.back' | translate }}
+        </button>
+    </div>
+</div>

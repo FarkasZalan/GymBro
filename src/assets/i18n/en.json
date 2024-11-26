@@ -666,5 +666,25 @@
          "login": "Already a Member? Sign In"
       },
       "cancelButton": "Cancel Reward"
+   },
+   "receipt": {
+      "title": "Order Confirmation",
+      "orderId": "Order ID",
+      "date": "Date",
+      "customerDetails": "Customer Details",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "shippingAddress": "Shipping Address",
+      "orderItems": "Order Items",
+      "paymentSummary": "Payment Summary",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "total": "Total",
+      "free": "Free",
+      "loyaltyPointsEarned": "You earned {{points}} loyalty points with this order!",
+      "thankYou": "Thank you for your purchase!",
+      "paidVia": "Paid via",
+      "printReceipt": "Print Receipt"
    }
 }

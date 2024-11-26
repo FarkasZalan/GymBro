@@ -82,6 +82,7 @@ export class CheckoutPageComponent implements OnInit {
   @ViewChild('form') guestForm: NgForm;  // Access the form for validation
   cartItems: any[] = [];
   subtotal: number = 0;
+  paymentFee: number = 0;
   shipping: number = 0; // Fix shipping cost will be 2500 Huf
   total: number = 0;
 
@@ -101,14 +102,14 @@ export class CheckoutPageComponent implements OnInit {
   selectedPaymentMethod: string = '';
   paymentMethods = [
     {
-      id: 'card',
+      id: ProductViewText.CHECKOUT_PAY_WITH_STRIPE,
       name: ProductViewText.CHECKOUT_PAY_WITH_STRIPE,
       description: ProductViewText.CHECKOUT_PAY_WITH_STRIPE_DESCRIPTION,
       icon: 'credit-card-outline',
       additionalFee: 0
     },
     {
-      id: 'cash',
+      id: ProductViewText.CHECKOUT_PAY_WITH_CASH,
       name: ProductViewText.CHECKOUT_PAY_WITH_CASH,
       description: ProductViewText.CHECKOUT_PAY_WITH_CASH_DESCRIPTION,
       icon: 'shopping-bag-outline',
@@ -118,7 +119,7 @@ export class CheckoutPageComponent implements OnInit {
 
   shippingMethods = [
     {
-      id: 'store',
+      id: ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE,
       name: ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE,
       description: ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_DESCRIPTION,
       price: 0,
@@ -126,7 +127,7 @@ export class CheckoutPageComponent implements OnInit {
       estimatedDays: '1-2'
     },
     {
-      id: 'dhl',
+      id: ProductViewText.CHECKOUT_SHIPPING_DHL_TITLE,
       name: ProductViewText.CHECKOUT_SHIPPING_DHL_TITLE,
       description: ProductViewText.CHECKOUT_SHIPPING_DHL_DESCRIPTION,
       price: 2500,
@@ -293,13 +294,13 @@ export class CheckoutPageComponent implements OnInit {
 
   getOriginalShippingCost(): number {
     // Return standard shipping cost if not store pickup
-    return this.selectedShippingMethod === 'store' ? 0 : this.STANDARD_SHIPPING_COST;
+    return this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? 0 : this.STANDARD_SHIPPING_COST;
   }
 
   calculateTotals() {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const paymentFee = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod)?.additionalFee || 0;
-    this.shipping = this.selectedShippingMethod === 'dhl' ? 2500 : 0;
+    this.paymentFee = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod)?.additionalFee || 0;
+    this.shipping = this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? 0 : this.STANDARD_SHIPPING_COST;
 
     // Calculate discount if reward is active
     this.discountAmount = 0;
@@ -318,7 +319,7 @@ export class CheckoutPageComponent implements OnInit {
     }
 
     // Calculate final total
-    this.total = (this.subtotal - this.discountAmount) + this.shipping + paymentFee;
+    this.total = (this.subtotal - this.discountAmount) + this.shipping + this.paymentFee;
     if (this.total < 0) {
       this.total = 0;
     }
@@ -407,11 +408,6 @@ export class CheckoutPageComponent implements OnInit {
     this.calculateTotals();
   }
 
-  get paymentFee(): number {
-    const paymentMethod = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod);
-    return paymentMethod?.additionalFee || 0;
-  }
-
   calculateLoyaltyPoints(): number {
     return Math.floor((this.subtotal - this.discountAmount) / 100);
   }
@@ -443,12 +439,16 @@ export class CheckoutPageComponent implements OnInit {
     this.order = {
       productList: this.cartItems,
       totalPrice: this.total,
+      subtotal: this.subtotal,
+      discountAmount: this.discountAmount,
+      cashOnDeliveryAmount: this.paymentFee,
       userId: this.currentUserId || 'Guest',
       firstName: this.guestFirstName || this.currentUser?.firstName || '',
       lastName: this.guestLastName || this.currentUser?.lastName || '',
       email: this.guestEmail || this.currentUser?.email || '',
       phone: this.guestPhone || this.currentUser?.phone || '',
       shippingMethod: this.selectedShippingMethod,
+      shippingCost: this.shipping,
       paymentMethod: this.selectedPaymentMethod,
       shippingAddress: this.shippingAddress,
       totalLoyaltyPoints: loyaltyPoints,
@@ -478,7 +478,9 @@ export class CheckoutPageComponent implements OnInit {
       // id the document created then save the document id in the field
       await documentumRef.update({ id: documentumRef.id });
 
-      await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
+      if (this.userLoggedIn) {
+        await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
+      }
       // if everything was succes then open successfull dialog
       const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
         data: {
@@ -489,7 +491,7 @@ export class CheckoutPageComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(() => {
         this.cartService.clearCart();
-        this.back();
+        this.router.navigate(['/receipt', documentumRef.id], { queryParams: { fromCheckout: 'true' } });
       });
     } catch (error) {
       this.errorMessage = true;

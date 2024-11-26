@@ -17,7 +17,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AdminRoutingModule } from './admin-profile-routing.module';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProfileModule } from '../profile/profile.module';
-import { StatisticsComponent } from './statistics/statistics.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { OrderListComponent } from './order-list/order-list.component';
 import { ProductsCategoriesComponent } from './product-management/products-categories/products-categories.component';
@@ -64,7 +63,6 @@ import { HandleReviewsComponent } from './product-management/product-actions/han
     declarations: [
         // Declaring components that belong to the Profile module
         AdminProfileComponent,
-        StatisticsComponent,
         BlogListComponent,
         OrderListComponent,
         ProductsCategoriesComponent,

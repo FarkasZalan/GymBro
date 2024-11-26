@@ -12,7 +12,11 @@ export interface Order {
     email: string;
     phone: string;
     shippingAddress: ShippingAddress;
+    subtotal: number;
+    discountAmount: number;
+    cashOnDeliveryAmount: number;
     totalPrice: number;
+    shippingCost: number;
     shippingMethod: string;
     paymentMethod: string;
     totalLoyaltyPoints: number;

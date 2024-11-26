@@ -27,6 +27,11 @@ export const routes: Routes = [
       .then(m => m.ProductModule),
   },
   {
+    path: 'receipt',
+    loadChildren: () => import('./receipt/receipt.module')
+      .then(m => m.ReceiptModule),
+  },
+  {
     path: 'blog',
     loadChildren: () => import('./user-blog-list/blog.module')
       .then(m => m.BlogModule),
