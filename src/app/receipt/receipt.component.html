@@ -66,7 +66,9 @@
                     <nb-card-header class="card-header">
                         <strong>
                             <nb-icon icon="pin-outline"></nb-icon>
-                            {{ order.shippingAddress.addressName | translate }}</strong>
+                            {{ order.shippingAddress.addressName ? (order.shippingAddress.addressName | translate) :
+                            (productViewText.CHECKOUT_GUEST_ADDRESS_NAME | translate) }}
+                        </strong>
                     </nb-card-header>
                     <nb-card-body class="address-details">
                         <p>{{ order.shippingAddress.street }} {{ order.shippingAddress.streetType }}, {{
