@@ -538,12 +538,12 @@
                         </span>
                     </div>
                 </div>
-                <div class="summary-row" *ngIf="paymentFee > 0" @fadeInUp>
+                <div class="summary-row" *ngIf="cashOnDeliveryAmount > 0" @fadeInUp>
                     <span>
                         <nb-icon class="summary-icon" icon="credit-card-outline"></nb-icon>
                         {{ 'checkout.orderSummary.paymentFee' | translate }}
                     </span>
-                    <span>{{paymentFee | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                    <span>{{cashOnDeliveryAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
                 </div>
                 <div class="summary-row" *ngIf="discountAmount > 0">
                     <span>
@@ -553,13 +553,21 @@
                     <span class="discount">-{{discountAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate
                         }}</span>
                 </div>
-                <div class="summary-row total">
+                <div class="summary-row total" [class.coupon-used]="couponUsed">
                     <span>
                         <nb-icon class="summary-icon" icon="checkmark-circle-2-outline"></nb-icon>
                         {{ 'checkout.orderSummary.total' | translate }}
                     </span>
-                    <span>{{total | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                    <div class="total-cost" [class.discounted]="couponUsed">
+                        <span class="original-cost" *ngIf="couponUsed">
+                            {{ total | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
+                        </span>
+                        <span class="final-cost">
+                            {{ calculateOriginalTotal() | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
+                        </span>
+                    </div>
                 </div>
+
                 <div class="button-container">
                     <button nbButton status="success" class="proceed-btn btn"
                         [disabled]="!selectedPaymentMethod || shippingAddress === null || !selectedShippingMethod"

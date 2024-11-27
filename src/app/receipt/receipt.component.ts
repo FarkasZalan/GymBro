@@ -28,6 +28,7 @@ export class ReceiptComponent implements OnInit {
   subtotal: number = 0;
   cashAmount: number = 0;
   discountAmount: number = 0;
+  originalTotal: number = 0;
 
   constructor(
     private router: Router,
@@ -43,6 +44,10 @@ export class ReceiptComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.documentHandler.getDocumentByID("orders", params['id']).subscribe((order: Order) => {
         this.order = order;
+        console.log(this.order);
+        if (this.order.couponUsed) {
+          this.originalTotal = this.order.subtotal + this.order.shippingCost + this.order.cashOnDeliveryAmount;
+        }
       });
     });
   }

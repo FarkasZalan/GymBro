@@ -179,13 +179,20 @@
                         translate
                         }}</span>
                 </div>
-                <div class="summary-row total">
+                <div class="summary-row total" [class.coupon-used]="order.couponUsed">
                     <span>
                         <nb-icon style="margin-right: 0.5rem;" class="summary-icon"
                             icon="checkmark-circle-2-outline"></nb-icon>
                         {{ 'receipt.total' | translate }}
                     </span>
-                    <span>{{order.totalPrice | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                    <div class="total-cost" [class.discounted]="order.couponUsed">
+                        <span class="final-cost" [class.final-cost-color]="order.couponUsed">
+                            {{ order.totalPrice | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
+                        </span>
+                        <span class="original-cost" *ngIf="order.couponUsed">
+                            {{ originalTotal | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
+                        </span>
+                    </div>
                 </div>
             </div>
         </nb-card>

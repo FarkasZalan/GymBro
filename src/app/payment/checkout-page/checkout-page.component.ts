@@ -82,7 +82,7 @@ export class CheckoutPageComponent implements OnInit {
   @ViewChild('form') guestForm: NgForm;  // Access the form for validation
   cartItems: any[] = [];
   subtotal: number = 0;
-  paymentFee: number = 0;
+  cashOnDeliveryAmount: number = 0;
   shipping: number = 0; // Fix shipping cost will be 2500 Huf
   total: number = 0;
 
@@ -299,7 +299,7 @@ export class CheckoutPageComponent implements OnInit {
 
   calculateTotals() {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    this.paymentFee = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod)?.additionalFee || 0;
+    this.cashOnDeliveryAmount = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod)?.additionalFee || 0;
     this.shipping = this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? 0 : this.STANDARD_SHIPPING_COST;
 
     // Calculate discount if reward is active
@@ -319,7 +319,7 @@ export class CheckoutPageComponent implements OnInit {
     }
 
     // Calculate final total
-    this.total = (this.subtotal - this.discountAmount) + this.shipping + this.paymentFee;
+    this.total = (this.subtotal - this.discountAmount) + this.shipping + this.cashOnDeliveryAmount;
     if (this.total < 0) {
       this.total = 0;
     }
@@ -395,7 +395,7 @@ export class CheckoutPageComponent implements OnInit {
   selectShippingMethod(methodId: string) {
     this.selectedShippingMethod = methodId;
 
-    if (methodId === 'store') {
+    if (methodId === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) {
       this.shipping = 0;
     } else {
       this.shipping = 2500;
@@ -410,6 +410,10 @@ export class CheckoutPageComponent implements OnInit {
 
   calculateLoyaltyPoints(): number {
     return Math.floor((this.subtotal - this.discountAmount) / 100);
+  }
+
+  calculateOriginalTotal(): number {
+    return this.subtotal + this.shipping + this.cashOnDeliveryAmount;
   }
 
   getLoyaltyProgress(): number {
@@ -441,7 +445,7 @@ export class CheckoutPageComponent implements OnInit {
       totalPrice: this.total,
       subtotal: this.subtotal,
       discountAmount: this.discountAmount,
-      cashOnDeliveryAmount: this.paymentFee,
+      cashOnDeliveryAmount: this.cashOnDeliveryAmount,
       userId: this.currentUserId || 'Guest',
       firstName: this.guestFirstName || this.currentUser?.firstName || '',
       lastName: this.guestLastName || this.currentUser?.lastName || '',
