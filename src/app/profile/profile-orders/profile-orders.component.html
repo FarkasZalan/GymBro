@@ -1,1 +1,116 @@
-<p>profile-orders works!</p>
+<div class="orders-container" [@zoomIn]>
+    <!-- No orders message -->
+    <div *ngIf="orders?.length === 0" class="product-empty-list-container">
+        <nb-card class="emptyCard" [@zoomIn]>
+            <nb-card-body>
+                <div>
+                    <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                    <p class="emptyCardText">{{ 'orders.noOrdersYet' | translate }}</p>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+
+    <!-- Orders list -->
+    <div class="col-12" *ngFor="let order of visibleOrders">
+        <nb-card class="order-card mb-3" [ngClass]="{ 
+            'new-order-card': !order.isUserChecked,
+            'cancelled-order': order.orderStatus === orderStatus.CANCELLED
+        }" (mouseenter)="markOrderAsChecked(order)">
+            <nb-card-body>
+                <!-- Order header with ID and date -->
+                <div class="order-header">
+                    <span class="order-id">{{ 'receipt.orderId' | translate }}: <span
+                            style="text-decoration: underline; cursor: pointer;" (click)="viewReceipt(order.id)">#{{
+                            order.id }}</span></span>
+                    <span class="order-date">{{ order.orderDate.toDate() | date: 'yyyy/MM/dd HH:mm' }}</span>
+                </div>
+
+                <!-- Order timeline -->
+                <div class="order-timeline" [ngClass]="getProgressClass(order)">
+                    <!-- Processing order display -->
+                    <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
+                        [ngClass]="{ active: isStatusActive(order, orderStatus.PROCESSING) }">
+                        <div class="timeline-icon">
+                            <i class="material-icons">pending</i>
+                        </div>
+                        <div class="timeline-content">{{ orderStatus.PROCESSING | translate }}</div>
+                    </div>
+
+                    <!-- Packed order display -->
+                    <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
+                        [ngClass]="{ active: isStatusActive(order, orderStatus.PACKED) }">
+                        <div class="timeline-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="timeline-content">
+                            {{ 'orderStatus.PACKED' | translate }}
+                        </div>
+                    </div>
+
+                    <!-- Shipped order display -->
+                    <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
+                        [ngClass]="{ 'active': isStatusActive(order, orderStatus.SHIPPED) || isStatusActive(order, orderStatus.DELIVERED) }">
+                        <div class="timeline-icon">
+                            <i class="material-icons">local_shipping</i>
+                        </div>
+                        <div class="timeline-content">{{ orderStatus.SHIPPED | translate }}</div>
+                    </div>
+
+                    <!-- Delivered order display -->
+                    <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
+                        [ngClass]="{ 'active': isStatusActive(order, orderStatus.DELIVERED) }">
+                        <div class="timeline-icon">
+                            <i class="material-icons">check_circle</i>
+                        </div>
+                        <div class="timeline-content">{{ orderStatus.DELIVERED | translate }}</div>
+                    </div>
+
+                    <!-- Cancelled order display -->
+                    <div class="timeline-cancelled" *ngIf="order.orderStatus === orderStatus.CANCELLED">
+                        <div class="timeline-icon">
+                            <i class="material-icons">cancel</i>
+                        </div>
+                        <div class="timeline-content">{{ orderStatus.CANCELLED | translate }}</div>
+                    </div>
+                </div>
+
+                <!-- Order summary -->
+                <div class="order-summary">
+                    <div class="order-items">
+                        <span class="items-count">{{ order.productList.length }} {{ 'orders.items' | translate }}</span>
+                        <span class="total-price">{{ order.totalPrice | currency:'':'':'1.0-0' }} {{ 'products.huf' |
+                            translate }}</span>
+                    </div>
+                </div>
+
+                <!-- Go to receipt button -->
+                <div class="order-actions">
+                    <button nbButton class="btn btn-primary view-receipt-btn" (click)="viewReceipt(order.id)">
+                        <i class="material-icons">receipt</i>
+                        {{ 'orders.viewReceipt' | translate }}
+                    </button>
+                </div>
+
+                <!-- New Order Badge -->
+                <div class="order-status-badge" *ngIf="!order.isUserChecked">
+                    <span class="new-badge">
+                        {{ 'orders.new' | translate }}
+                    </span>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+
+    <!-- Show more/less button -->
+    <div *ngIf="orders.length > initialOrderCount" class="show-more-container">
+        <button class="btn btn-primary show-more-button"
+            [ngClass]="{'has-unchecked-orders': hasUncheckedHiddenOrders()}" (click)="toggleOrdersDisplay()">
+            {{ (showAllOrders ? 'orders.showLess' : 'orders.showMore') | translate }}
+            {{ showAllOrders ? '' : ' (' + (orders.length - initialOrderCount) + ')' }}
+            <span *ngIf="getUncheckedHiddenOrdersCount() > 0" class="unchecked-count">
+                • {{ getUncheckedHiddenOrdersCount() }} {{ 'orders.new' | translate }}
+            </span>
+        </button>
+    </div>
+</div>

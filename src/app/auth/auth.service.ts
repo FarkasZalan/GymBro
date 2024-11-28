@@ -121,6 +121,7 @@ export class AuthService {
             this.cartService.clearCartOnLogout();
 
             this.auth.signOut();
+            this.router.navigate(['/']);
         } catch (error) { }
     }
 }

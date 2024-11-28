@@ -106,59 +106,95 @@
                 </div>
             </div>
             <!-- For non-admin users -->
-            <nb-user *ngIf="!user?.isAdmin" name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
-                nbContextMenuTag="header-menu">
-            </nb-user>
+            <div class="admin-notification-wrapper" *ngIf="!user?.isAdmin">
+                <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
+                    nbContextMenuTag="header-menu">
+                </nb-user>
+
+                <!-- Cart button displayed if user is not admin -->
+                <div class="header-container-user cart-button-container">
+                    <button class="cart-button" (click)="navigateToCart()">
+                        <i class="material-icons cart-icon">shopping_cart</i>
+                        <div class="cart-badge" *ngIf="(cartCount$ | async) > 0">
+                            {{ cartCount$ | async }}
+                        </div>
+                    </button>
+
+                    <!-- Enhanced cart notification -->
+                    <div class="cart-notification" *ngIf="cartNotification$ | async as notification" [@slideInOut]>
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <i
+                                    [class]="notification.isEmptyCart ? 'fas fa-shopping-cart' : 'fas fa-check-circle'"></i>
+                                <span class="notification-text">
+                                    {{ notification.isEmptyCart ? ('cart.empty' | translate) : ('cart.addedToCart' |
+                                    translate)
+                                    }}
+                                </span>
+                            </div>
+                            <div class="product-details" *ngIf="!notification.isEmptyCart">
+                                <img *ngIf="notification.imageUrl" [src]="notification.imageUrl"
+                                    [alt]="notification.productName" class="product-image">
+                                <img *ngIf="!notification.imageUrl" src="../../../assets/images/gym-bro-logo.png"
+                                    alt="Product Image" class="product-image">
+                                <div class="product-info">
+                                    <h4 class="notification-text">{{ notification.productName }}</h4>
+                                    <div class="quantity-price">
+                                        <span class="calculation notification-text">
+                                            {{ notification.quantity }} {{ 'products.pcs' | translate }}
+                                        </span>
+                                        <span class="total-price">
+                                            {{ notification.quantity * notification.price }} {{ 'products.huf' |
+                                            translate }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="notification-actions" *ngIf="!notification.isEmptyCart">
+                                <button class="btn continue-btn" (click)="navigateToCart()">
+                                    {{ 'cart.goToCart' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-trigger" (click)="toggleNotificationPanel()">
+                    <i class="material-icons">notifications</i>
+                    <span class="notification-badge" *ngIf="(userOrdersCount$ | async) > 0">
+                        {{userOrdersCount$ | async}}
+                    </span>
+                </div>
+
+                <!-- Notification Panel -->
+                <div class="notification-panel" *ngIf="showNotificationPanel && !user?.isAdmin" [@slideInOut]>
+                    <div class="notification-header">
+                        <h3>{{ 'adminMenu.notifications.notifications' | translate }}</h3>
+                    </div>
+
+                    <div class="notification-content">
+                        <!-- New Orders Section -->
+                        <div class="notification-item" *ngIf="(userOrdersCount$ | async) > 0" routerLink="/profile">
+                            <i class="material-icons">shopping_basket</i>
+                            <div class="notification-details">
+                                <span class="notification-title">{{ 'adminMenu.notifications.newOrders' | translate
+                                    }}</span>
+                                <span class="notification-count">{{userOrdersCount$ | async}}</span>
+                            </div>
+                        </div>
+
+                        <!-- No Notifications Message -->
+                        <div class="no-notifications" *ngIf="(userOrdersCount$ | async) === 0">
+                            {{ 'adminMenu.notifications.noNewNotifications' | translate }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Login icon displayed if user is not logged in -->
         <div *ngIf="!userLoggedIn" class="header-container-user">
             <i (click)="navigateToLogin()" class="material-icons login-icon">login</i>
-        </div>
-
-        <!-- Cart button displayed if user is not admin -->
-        <div *ngIf="userLoggedIn && !user.isAdmin || !userLoggedIn" class="header-container-user cart-button-container">
-            <button class="cart-button" (click)="navigateToCart()">
-                <i class="material-icons cart-icon">shopping_cart</i>
-                <div class="cart-badge" *ngIf="(cartCount$ | async) > 0">
-                    {{ cartCount$ | async }}
-                </div>
-            </button>
-
-            <!-- Enhanced cart notification -->
-            <div class="cart-notification" *ngIf="cartNotification$ | async as notification" [@slideInOut]>
-                <div class="notification-content">
-                    <div class="notification-header">
-                        <i [class]="notification.isEmptyCart ? 'fas fa-shopping-cart' : 'fas fa-check-circle'"></i>
-                        <span class="notification-text">
-                            {{ notification.isEmptyCart ? ('cart.empty' | translate) : ('cart.addedToCart' | translate)
-                            }}
-                        </span>
-                    </div>
-                    <div class="product-details" *ngIf="!notification.isEmptyCart">
-                        <img *ngIf="notification.imageUrl" [src]="notification.imageUrl"
-                            [alt]="notification.productName" class="product-image">
-                        <img *ngIf="!notification.imageUrl" src="../../../assets/images/gym-bro-logo.png"
-                            alt="Product Image" class="product-image">
-                        <div class="product-info">
-                            <h4 class="notification-text">{{ notification.productName }}</h4>
-                            <div class="quantity-price">
-                                <span class="calculation notification-text">
-                                    {{ notification.quantity }} {{ 'products.pcs' | translate }}
-                                </span>
-                                <span class="total-price">
-                                    {{ notification.quantity * notification.price }} {{ 'products.huf' | translate }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="notification-actions" *ngIf="!notification.isEmptyCart">
-                        <button class="btn continue-btn" (click)="navigateToCart()">
-                            {{ 'cart.goToCart' | translate }}
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Button to switch language -->

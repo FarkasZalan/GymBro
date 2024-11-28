@@ -16,7 +16,7 @@ import { FormGroup, NgForm } from '@angular/forms';
 import { RewardText } from '../../loyalty-program/reward-text';
 import { Reward } from '../../loyalty-program/reward.model';
 import { Order } from '../order.model';
-import { OrderStatus } from '../order-status.modelts';
+import { OrderStatus } from '../order-status';
 import { Timestamp } from 'firebase/firestore';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
@@ -457,8 +457,9 @@ export class CheckoutPageComponent implements OnInit {
       shippingAddress: this.shippingAddress,
       totalLoyaltyPoints: loyaltyPoints,
       orderDate: Timestamp.now(),
-      orderStatus: OrderStatus.PENDING,
+      orderStatus: OrderStatus.PROCESSING,
       isAdminChecked: false,
+      isUserChecked: false,
       couponUsed: this.couponUsed
     };
 
@@ -485,6 +486,7 @@ export class CheckoutPageComponent implements OnInit {
       if (this.userLoggedIn) {
         await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
       }
+
       // if everything was succes then open successfull dialog
       const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
         data: {

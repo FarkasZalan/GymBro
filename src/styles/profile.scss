@@ -103,27 +103,11 @@
 
 .arrow {
     /* Center vertically */
-    transform: translateY(-50%);
+    transform: translateY(-50%) !important;
     /* Adjust vertical centering */
     color: #0b8e92;
     /* Set the color of the arrow */
     font-size: 23px;
-    /* Adjust size as needed */
-    animation: arrowLift 3s ease-in-out infinite;
-}
-
-@keyframes arrowLift {
-
-    0%,
-    100% {
-        transform: translateY(-50%) translateY(-2px);
-        /* Move up */
-    }
-
-    50% {
-        transform: translateY(-50%) translateY(2px);
-        /* Move down */
-    }
 }
 
 .categorie-arrow {

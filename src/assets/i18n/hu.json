@@ -687,5 +687,20 @@
                 "thankYou": "Köszönjük a vásárlást!",
                 "paidVia": "Fizetési mód",
                 "printReceipt": "Nyugta nyomtatása"
+        },
+        "orders": {
+                "noOrdersYet": "Még nincsenek rendeléseid",
+                "items": "termék",
+                "viewReceipt": "Nyugta megtekintése",
+                "new": "Új",
+                "showMore": "További rendelések",
+                "showLess": "Kevesebb rendelés"
+        },
+        "orderStatus": {
+                "PROCESSING": "Feldolgozás alatt",
+                "SHIPPED": "Szállítás alatt",
+                "DELIVERED": "Kézbesítve",
+                "CANCELLED": "Törölve",
+                "PACKED": "Csomagolva"
         }
 }

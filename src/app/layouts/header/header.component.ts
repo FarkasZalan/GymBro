@@ -20,6 +20,8 @@ import { ProductReeviews } from '../../admin-profile/product-management/product-
 import { ProductService } from '../../products/product.service';
 import { AdminService } from '../../admin-profile/admin.service';
 import { AdminNotificationService } from '../../admin-profile/admin-notification.service';
+import { UserService } from '../../profile/user.service';
+import { UserNotificationService } from '../../profile/user-notification.service';
 
 @Component({
   selector: 'app-header',
@@ -79,6 +81,8 @@ export class HeaderComponent implements OnInit {
 
   showNotificationPanel: boolean = false;
 
+  userOrdersCount$ = this.userNotificationService.ordersCount$;
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private db: AngularFirestore,
@@ -92,7 +96,9 @@ export class HeaderComponent implements OnInit {
     private productService: ProductService,
     private cartNotificationService: CartNotificationService,
     private adminService: AdminService,
-    private adminNotificationService: AdminNotificationService
+    private adminNotificationService: AdminNotificationService,
+    private userService: UserService,
+    private userNotificationService: UserNotificationService
   ) { }
 
   ngOnInit(): void {
@@ -107,6 +113,8 @@ export class HeaderComponent implements OnInit {
             this.userLoggedIn = false; // User is logged out
           } else if (this.user.isAdmin) {
             this.checkAdminNotifications();
+          } else {
+            this.checkUserNotifications();
           }
         })
       } else {
@@ -294,6 +302,16 @@ export class HeaderComponent implements OnInit {
       // This will automatically update whenever reviews are added, edited, or checked
       this.adminService.watchUncheckedReviews().subscribe(count => {
         this.adminNotificationService.updateReviewsCount(count);
+      });
+    }
+  }
+
+  private checkUserNotifications() {
+    if (this.userLoggedIn && !this.user?.isAdmin) {
+      this.userService.getAllNewOrders().then(async ordersObservable => {
+        ordersObservable.subscribe(newOrders => {
+          this.userNotificationService.updateOrdersCount(newOrders.length);
+        });
       });
     }
   }

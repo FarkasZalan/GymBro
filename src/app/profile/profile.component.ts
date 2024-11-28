@@ -1,5 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from './user.service';
+import { UserNotificationService } from './user-notification.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,12 +27,27 @@ import { Component } from '@angular/core';
     ])
   ]
 })
-export class ProfileComponent {
-  isCollapsedProfileDetails = false;
-  isCollapsedOrders = true;
+export class ProfileComponent implements OnInit {
+  isCollapsedProfileDetails = true;
+  isCollapsedOrders = false;
   isCollapsedShippingAddress = true;
   isCollapsedPayemenetMethods = true;
   isCollapsedLoyaltyProgram = true;
+  numberOfNewOrders: number = 0;
+
+  constructor(
+    private userService: UserService,
+    private userNotificationService: UserNotificationService
+  ) { }
+
+  ngOnInit() {
+    this.userService.getAllNewOrders().then(async ordersObservable => {
+      ordersObservable.subscribe(newOrders => {
+        this.numberOfNewOrders = newOrders.length;
+        this.userNotificationService.updateOrdersCount(newOrders.length);
+      });
+    });
+  }
 
   toggleCollapsedProfilDetails() {
     this.isCollapsedProfileDetails = !this.isCollapsedProfileDetails;

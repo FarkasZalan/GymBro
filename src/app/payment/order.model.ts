@@ -1,6 +1,5 @@
 import { Timestamp } from "firebase/firestore";
 import { CartItem } from "../cart/cart.model";
-import { OrderStatus } from "./order-status.modelts";
 import { ShippingAddress } from "../profile/profile-shipping-address/shipping-address.model";
 
 export interface Order {
@@ -22,6 +21,7 @@ export interface Order {
     totalLoyaltyPoints: number;
     orderDate: Timestamp;
     couponUsed: boolean;
-    orderStatus: OrderStatus;
+    orderStatus: string;
     isAdminChecked: boolean;
+    isUserChecked: boolean;
 }

@@ -686,5 +686,20 @@
       "thankYou": "Thank you for your purchase!",
       "paidVia": "Paid via",
       "printReceipt": "Print Receipt"
+   },
+   "orders": {
+      "noOrdersYet": "You don't have any orders yet",
+      "items": "items",
+      "viewReceipt": "View Receipt",
+      "new": "New",
+      "showMore": "Show More",
+      "showLess": "Show Less"
+   },
+   "orderStatus": {
+      "PROCESSING": "Processing",
+      "SHIPPED": "Shipped",
+      "DELIVERED": "Delivered",
+      "CANCELLED": "Cancelled",
+      "PACKED": "Packed"
    }
 }

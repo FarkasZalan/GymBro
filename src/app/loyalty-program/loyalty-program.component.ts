@@ -127,8 +127,18 @@ export class LoyaltyProgramComponent implements OnInit {
   }
 
   calculatePointsThisMonth() {
+    const now = new Date();
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
     this.userService.getUserMonthlyCouponsUsed(this.currentUserId).subscribe((orders: Order[]) => {
-      this.pointsThisMonth = orders.length;
+      // Filter orders for current month only
+      const thisMonthOrders = orders.filter(order => {
+        const orderDate = order.orderDate.toDate(); // Assuming orderDate is a Firestore Timestamp
+        return orderDate >= firstDayOfMonth && orderDate <= lastDayOfMonth;
+      });
+
+      this.pointsThisMonth = thisMonthOrders.length;
     });
   }
 

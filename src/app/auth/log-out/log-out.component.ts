@@ -17,7 +17,6 @@ export class LogOutComponent {
   logOut() {
     this.authService.logOut();
     this.dialog.closeAll();
-    this.router.navigate(['/home']);
   }
 
   cancel() {
