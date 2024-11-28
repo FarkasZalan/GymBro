@@ -4,5 +4,6 @@ export enum DeleteConfirmationText {
     PRICE_DELETE = "products.deletePriceText",
     BLOG_DELETE = "blog.deleteBlogText",
     REVIEW_DELETE = "review.deleteReviewText",
-    RESPONSE_DELETE = "review.deleteResponseText"
+    RESPONSE_DELETE = "review.deleteResponseText",
+    ORDER_CANCEL = "orders.cancelOrderText"
 }

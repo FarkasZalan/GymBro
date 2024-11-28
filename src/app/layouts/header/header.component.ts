@@ -306,6 +306,14 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  navigateToAdminProfileToOrders() {
+    this.router.navigate(['/admin-profile'], { queryParams: { openOrders: 'true' } });
+  }
+
+  navigateToAdminProfileToReviews() {
+    this.router.navigate(['/admin-profile'], { queryParams: { openOrders: 'false' } });
+  }
+
   private checkUserNotifications() {
     if (this.userLoggedIn && !this.user?.isAdmin) {
       this.userService.getAllNewOrders().then(async ordersObservable => {

@@ -1,3 +1,28 @@
+<!-- orders details -->
+<nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
+    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">{{
+                'profileMenu.orders' | translate }}
+            </h2>
+
+            <!-- Icon for New Orders -->
+            <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
+                &#x26A0; <!-- warning icon -->
+            </div>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="categorie-arrow" *ngIf="isCollapsedOrders">▼</span>
+                <span class="categorie-arrow" *ngIf="!isCollapsedOrders">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
+            <app-orders></app-orders>
+        </div>
+    </nb-card-body>
+</nb-card>
+
 <!-- product categories -->
 <nb-card class="container-collapse-component" [class.has-unchecked-items]="uncheckedReviewsCount !== 0"
     [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails">
@@ -38,31 +63,6 @@
 
         <div *ngIf="!isCollapsedBlogDetails" [@collapseComponent] class="collapse-container">
             <app-blog></app-blog>
-        </div>
-    </nb-card-body>
-</nb-card>
-
-<!-- orders details -->
-<nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
-    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">{{
-                'profileMenu.orders' | translate }}
-            </h2>
-
-            <!-- Icon for New Orders -->
-            <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
-                &#x26A0; <!-- warning icon -->
-            </div>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="categorie-arrow" *ngIf="isCollapsedOrders">▼</span>
-                <span class="categorie-arrow" *ngIf="!isCollapsedOrders">▲</span>
-            </button>
-        </div>
-
-        <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
-            <app-order-list></app-order-list>
         </div>
     </nb-card-body>
 </nb-card>

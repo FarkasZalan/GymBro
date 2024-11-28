@@ -24,4 +24,5 @@ export interface Order {
     orderStatus: string;
     isAdminChecked: boolean;
     isUserChecked: boolean;
+    isModified: boolean;
 }

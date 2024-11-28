@@ -1,0 +1,125 @@
+.orders-summary-container {
+    padding: 1rem;
+}
+
+.orders-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    i {
+        font-size: 2rem;
+        margin-right: 1rem;
+    }
+
+    &.new-orders {
+        border-left: 4px solid #ff9800;
+
+        i {
+            color: #ff9800;
+        }
+    }
+
+    &.processing {
+        border-left: 4px solid #0b8e92;
+
+        i {
+            color: #0b8e92;
+        }
+    }
+
+    &.shipped {
+        border-left: 4px solid #4caf50;
+
+        i {
+            color: #4caf50;
+        }
+    }
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #666;
+    }
+}
+
+.view-all-orders {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+
+    .manage-orders-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(45deg, #0b8e92, #15b2b8);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        position: relative;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(11, 142, 146, 0.2);
+        }
+
+        i {
+            font-size: 1.2rem;
+        }
+
+        .new-orders-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff9800;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            animation: bounce 0.6s infinite alternate;
+        }
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-3px);
+    }
+}

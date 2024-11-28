@@ -14,7 +14,7 @@
     <!-- Orders list -->
     <div class="col-12" *ngFor="let order of visibleOrders">
         <nb-card class="order-card mb-3" [ngClass]="{ 
-            'new-order-card': !order.isUserChecked,
+            'new-order-card': !order.isAdminChecked,
             'cancelled-order': order.orderStatus === orderStatus.CANCELLED
         }" (mouseenter)="markOrderAsChecked(order)">
             <nb-card-body>
@@ -26,47 +26,49 @@
                     <span class="order-date">{{ order.orderDate.toDate() | date: 'yyyy/MM/dd HH:mm' }}</span>
                 </div>
 
-                <!-- Order timeline -->
+                <!-- Order timeline with status buttons -->
                 <div class="order-timeline" [ngClass]="getProgressClass(order)">
-                    <!-- Processing order display -->
+                    <!-- Processing status -->
                     <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
                         [ngClass]="{ active: isStatusActive(order, orderStatus.PROCESSING) }">
-                        <div class="timeline-icon">
+                        <div class="timeline-icon" (click)="updateOrderStatus(order, orderStatus.PROCESSING)"
+                            [class.clickable]="order.orderStatus !== orderStatus.CANCELLED">
                             <i class="material-icons">pending</i>
                         </div>
                         <div class="timeline-content">{{ orderStatus.PROCESSING | translate }}</div>
                     </div>
 
-                    <!-- Packed order display -->
+                    <!-- Packed status -->
                     <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
                         [ngClass]="{ active: isStatusActive(order, orderStatus.PACKED) }">
-                        <div class="timeline-icon">
+                        <div class="timeline-icon" (click)="updateOrderStatus(order, orderStatus.PACKED)"
+                            [class.clickable]="order.orderStatus !== orderStatus.CANCELLED">
                             <i class="fas fa-box"></i>
                         </div>
-                        <div class="timeline-content">
-                            {{ 'orderStatus.PACKED' | translate }}
-                        </div>
+                        <div class="timeline-content">{{ 'orderStatus.PACKED' | translate }}</div>
                     </div>
 
-                    <!-- Shipped order display -->
+                    <!-- Shipped status -->
                     <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
-                        [ngClass]="{ 'active': isStatusActive(order, orderStatus.SHIPPED) || isStatusActive(order, orderStatus.DELIVERED) }">
-                        <div class="timeline-icon">
+                        [ngClass]="{ active: isStatusActive(order, orderStatus.SHIPPED) }">
+                        <div class="timeline-icon" (click)="updateOrderStatus(order, orderStatus.SHIPPED)"
+                            [class.clickable]="order.orderStatus !== orderStatus.CANCELLED">
                             <i class="material-icons">local_shipping</i>
                         </div>
                         <div class="timeline-content">{{ orderStatus.SHIPPED | translate }}</div>
                     </div>
 
-                    <!-- Delivered order display -->
+                    <!-- Delivered status -->
                     <div class="timeline-item" *ngIf="order.orderStatus !== orderStatus.CANCELLED"
-                        [ngClass]="{ 'active': isStatusActive(order, orderStatus.DELIVERED) }">
-                        <div class="timeline-icon">
+                        [ngClass]="{ active: isStatusActive(order, orderStatus.DELIVERED) }">
+                        <div class="timeline-icon" (click)="updateOrderStatus(order, orderStatus.DELIVERED)"
+                            [class.clickable]="order.orderStatus !== orderStatus.CANCELLED">
                             <i class="material-icons">check_circle</i>
                         </div>
                         <div class="timeline-content">{{ orderStatus.DELIVERED | translate }}</div>
                     </div>
 
-                    <!-- Cancelled order display -->
+                    <!-- Cancelled status -->
                     <div class="timeline-cancelled" *ngIf="order.orderStatus === orderStatus.CANCELLED">
                         <div class="timeline-icon">
                             <i class="material-icons">cancel</i>
@@ -84,8 +86,13 @@
                     </div>
                 </div>
 
-                <!-- Go to receipt button -->
+                <!-- Action buttons -->
                 <div class="order-actions">
+                    <button nbButton class="btn btn-danger cancel-order-btn"
+                        *ngIf="order.orderStatus !== orderStatus.CANCELLED" (click)="cancelOrder(order)">
+                        <i class="material-icons">cancel</i>
+                        {{ 'orders.cancelOrder' | translate }}
+                    </button>
                     <button nbButton class="btn btn-primary view-receipt-btn" (click)="viewReceipt(order.id)">
                         <i class="material-icons">receipt</i>
                         {{ 'orders.viewReceipt' | translate }}
@@ -93,16 +100,9 @@
                 </div>
 
                 <!-- New Order Badge -->
-                <div class="order-status-badge" *ngIf="!order.isUserChecked && !order.isModified">
+                <div class="order-status-badge" *ngIf="!order.isAdminChecked">
                     <span class="new-badge">
                         {{ 'orders.new' | translate }}
-                    </span>
-                </div>
-
-                <!-- Modified Order Badge -->
-                <div class="order-status-badge" *ngIf="!order.isUserChecked && order.isModified">
-                    <span class="new-badge">
-                        {{ 'orders.modified' | translate }}
                     </span>
                 </div>
             </nb-card-body>

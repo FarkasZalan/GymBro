@@ -460,7 +460,8 @@ export class CheckoutPageComponent implements OnInit {
       orderStatus: OrderStatus.PROCESSING,
       isAdminChecked: false,
       isUserChecked: false,
-      couponUsed: this.couponUsed
+      couponUsed: this.couponUsed,
+      isModified: false
     };
 
     if (this.activeReward) {

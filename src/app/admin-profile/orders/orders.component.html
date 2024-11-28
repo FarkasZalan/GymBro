@@ -1,0 +1,37 @@
+<div class="orders-summary-container" [@zoomIn]>
+    <div class="orders-stats">
+        <div class="stat-card new-orders">
+            <i class="material-icons">new_releases</i>
+            <div class="stat-content">
+                <span class="stat-value">{{ newOrdersCount }}</span>
+                <span class="stat-label">{{ 'adminMenu.newOrders' | translate }}</span>
+            </div>
+        </div>
+
+        <div class="stat-card processing">
+            <i class="material-icons">pending</i>
+            <div class="stat-content">
+                <span class="stat-value">{{ processingOrdersCount }}</span>
+                <span class="stat-label">{{ 'adminMenu.processing' | translate }}</span>
+            </div>
+        </div>
+
+        <div class="stat-card shipped">
+            <i class="material-icons">local_shipping</i>
+            <div class="stat-content">
+                <span class="stat-value">{{ shippedOrdersCount }}</span>
+                <span class="stat-label">{{ 'adminMenu.shipped' | translate }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="view-all-orders">
+        <button nbButton class="manage-orders-btn" (click)="navigateToOrderManagement()">
+            <i class="material-icons">inventory</i>
+            <span>{{ 'adminMenu.manageOrders' | translate }}</span>
+            <div *ngIf="newOrdersCount > 0" class="new-orders-badge">
+                {{ newOrdersCount }}
+            </div>
+        </button>
+    </div>
+</div>

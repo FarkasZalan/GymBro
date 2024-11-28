@@ -170,7 +170,11 @@
                         "newOrders": "Új rendelés",
                         "newReviews": "Új értékelés",
                         "noNewNotifications": "Nincs új értesítés"
-                }
+                },
+                "newOrders": "Új rendelések",
+                "processing": "Feldolgozás alatt",
+                "shipped": "Szállítva",
+                "manageOrders": "Rendelések kezelése"
         },
         "products": {
                 "add": "Hozzáadás",
@@ -694,7 +698,10 @@
                 "viewReceipt": "Nyugta megtekintése",
                 "new": "Új",
                 "showMore": "További rendelések",
-                "showLess": "Kevesebb rendelés"
+                "showLess": "Kevesebb rendelés",
+                "cancelOrderText": "Biztosan törölni szeretnéd ezt a rendelést?",
+                "cancelOrder": "Rendelés törlése",
+                "modified": "Módosítva"
         },
         "orderStatus": {
                 "PROCESSING": "Feldolgozás alatt",

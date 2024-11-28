@@ -11,7 +11,7 @@ import { OrderStatus } from '../../payment/order-status';
 @Component({
   selector: 'app-profile-orders',
   templateUrl: './profile-orders.component.html',
-  styleUrls: ['./profile-orders.component.scss'],
+  styleUrls: ['../../../styles/order-list.scss'],
   animations: [
     trigger('zoomIn', [
       transition(':enter', [

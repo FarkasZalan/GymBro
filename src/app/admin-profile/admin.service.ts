@@ -13,6 +13,7 @@ import {
     deleteObject
 } from "firebase/storage";
 import { map, combineLatest, Observable } from "rxjs";
+import { OrderStatus } from "../payment/order-status";
 
 @Injectable({
     providedIn: 'root'
@@ -50,6 +51,22 @@ export class AdminService {
 
     async getAllNewOrders() {
         return this.db.collection('orders', ref => ref.where('isAdminChecked', '==', false)).valueChanges();
+    }
+
+    async getAllOrders() {
+        return this.db.collection('orders', ref => ref.orderBy('orderDate', 'desc')).valueChanges();
+    }
+
+    async markOrderAsChecked(orderId: string) {
+        return this.db.collection('orders').doc(orderId).update({ isAdminChecked: true });
+    }
+
+    async updateOrderStatus(orderId: string, newStatus: OrderStatus) {
+        return this.db.collection('orders').doc(orderId).update({ orderStatus: newStatus, isModified: true, isUserChecked: false });
+    }
+
+    async getOrdersByStatus(status: OrderStatus) {
+        return this.db.collection('orders', ref => ref.where('orderStatus', '==', status)).valueChanges();
     }
 
     async getProductUncheckedProductReviewsNumber(productCategory: string) {

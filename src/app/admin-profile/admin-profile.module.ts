@@ -18,7 +18,7 @@ import { AdminRoutingModule } from './admin-profile-routing.module';
 import { AdminProfileComponent } from './admin-profile.component';
 import { ProfileModule } from '../profile/profile.module';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
-import { OrderListComponent } from './order-list/order-list.component';
+import { OrderListComponent } from './orders/order-list/order-list.component';
 import { ProductsCategoriesComponent } from './product-management/products-categories/products-categories.component';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { AddPriceDialogComponent } from './product-management/product-actions/add-price-dialog/add-price-dialog.component';
@@ -37,6 +37,7 @@ import { UserBlogListComponent } from '../user-blog-list/user-blog-list.componen
 import { FilterPageComponent } from '../filter-page/filter-page.component';
 import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
 import { HandleReviewsComponent } from './product-management/product-actions/handle-reviews/handle-reviews.component';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
     imports: [
@@ -82,7 +83,8 @@ import { HandleReviewsComponent } from './product-management/product-actions/han
         BlogComponent,
         UserBlogListComponent,
         FilterPageComponent,
-        HandleReviewsComponent
+        HandleReviewsComponent,
+        OrdersComponent
     ],
 })
 export class AdminProfileModule {

@@ -1,6 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from './admin.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-admin-profile',
@@ -28,9 +29,9 @@ import { AdminService } from './admin.service';
 })
 export class AdminProfileComponent implements OnInit {
   isCollapsedProfileDetails = true;
-  isCollapsedItemsDetails = false;
+  isCollapsedItemsDetails = true;
   isCollapsedBlogDetails = true;
-  isCollapsedOrders = true;
+  isCollapsedOrders = false;
 
   // number of the unchecked reviews
   uncheckedReviewsCount: number = 0;
@@ -38,9 +39,19 @@ export class AdminProfileComponent implements OnInit {
   // number of the new orders
   numberOfNewOrders: number = 0;
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private route: ActivatedRoute) { }
 
   async ngOnInit(): Promise<void> {
+    this.route.queryParams.subscribe(params => {
+      if (params['openOrders'] === 'true') {
+        this.isCollapsedOrders = false;
+        this.isCollapsedItemsDetails = true;
+      } else if (params['openOrders'] === 'false') {
+        this.isCollapsedOrders = true;
+        this.isCollapsedItemsDetails = false;
+      }
+    });
+
     this.uncheckedReviewsCount = await this.adminService.getAllReviewsCount();
 
     (await this.adminService.getAllNewOrders()).subscribe(newOrders => {

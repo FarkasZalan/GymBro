@@ -78,7 +78,7 @@
                     <div class="notification-content">
                         <!-- New Orders Section -->
                         <div class="notification-item" *ngIf="(newOrdersCount$ | async) > 0"
-                            routerLink="/admin-profile/orders">
+                            (click)="navigateToAdminProfileToOrders()">
                             <i class="material-icons">shopping_basket</i>
                             <div class="notification-details">
                                 <span class="notification-title">{{ 'adminMenu.notifications.newOrders' | translate
@@ -89,7 +89,7 @@
 
                         <!-- New Reviews Section -->
                         <div class="notification-item" *ngIf="(newReviewsCount$ | async) > 0"
-                            routerLink="/admin-profile/">
+                            (click)="navigateToAdminProfileToReviews()">
                             <i class="material-icons">rate_review</i>
                             <div class="notification-details">
                                 <span class="notification-title">{{ 'adminMenu.notifications.newReviews' | translate
