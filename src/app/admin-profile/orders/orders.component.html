@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
+
 <div class="orders-summary-container" [@zoomIn]>
     <div class="orders-stats">
         <div class="stat-card new-orders">

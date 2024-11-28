@@ -708,5 +708,8 @@
       "DELIVERED": "Delivered",
       "CANCELLED": "Cancelled",
       "PACKED": "Packed"
+   },
+   "loading": {
+      "loading": "Loading..."
    }
 }

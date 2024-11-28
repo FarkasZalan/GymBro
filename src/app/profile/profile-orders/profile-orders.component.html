@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
+
 <div class="orders-container" [@zoomIn]>
     <!-- No orders message -->
     <div *ngIf="orders?.length === 0" class="product-empty-list-container">

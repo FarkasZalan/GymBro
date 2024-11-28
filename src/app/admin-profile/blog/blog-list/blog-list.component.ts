@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Blog } from '../blog.model';
 import { Location } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { LoadingService } from '../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-blog-list',
@@ -20,13 +21,13 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class BlogListComponent {
   blogId: string;
-  blogList: Blog[];
+  blogList: Blog[] | undefined;
 
-  constructor(private db: AngularFirestore, private router: Router, private location: Location) { }
+  constructor(private db: AngularFirestore, private router: Router, private location: Location, public loadingService: LoadingService) { }
 
-  ngOnInit(): void {
-    //load all the blogs
-    this.getAllBlogs();
+  async ngOnInit() {
+    this.blogList = undefined;
+    await this.getAllBlogs();
   }
 
   // Open new blog page
@@ -39,13 +40,15 @@ export class BlogListComponent {
     this.router.navigate(['admin-profile/edit-blog', blogId]);
   }
 
-  getAllBlogs() {
-    this.db
-      .collection("blog")
-      .valueChanges()
-      .subscribe((blogs: Blog[]) => {
-        this.blogList = blogs;
-      });
+  async getAllBlogs(): Promise<void> {
+    await this.loadingService.withLoading(async () => {
+      this.db
+        .collection("blog")
+        .valueChanges()
+        .subscribe((blogs: Blog[]) => {
+          this.blogList = blogs;
+        });
+    });
   }
 
   // Method to sort blogs by name

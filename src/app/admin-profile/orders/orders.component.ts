@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderStatus } from '../../payment/order-status';
 import { AdminService } from '../admin.service';
+import { LoadingService } from '../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-orders',
@@ -24,21 +25,24 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private adminService: AdminService,
-    private router: Router
+    private router: Router,
+    public loadingService: LoadingService
   ) { }
 
   async ngOnInit() {
-    // Get orders count by status
-    (await this.adminService.getAllNewOrders()).subscribe(orders => {
-      this.newOrdersCount = orders.length;
-    });
+    await this.loadingService.withLoading(async () => {
+      // Get orders count by status
+      (await this.adminService.getAllNewOrders()).subscribe(orders => {
+        this.newOrdersCount = orders.length;
+      });
 
-    (await this.adminService.getOrdersByStatus(OrderStatus.PROCESSING)).subscribe(orders => {
-      this.processingOrdersCount = orders.length;
-    });
+      (await this.adminService.getOrdersByStatus(OrderStatus.PROCESSING)).subscribe(orders => {
+        this.processingOrdersCount = orders.length;
+      });
 
-    (await this.adminService.getOrdersByStatus(OrderStatus.SHIPPED)).subscribe(orders => {
-      this.shippedOrdersCount = orders.length;
+      (await this.adminService.getOrdersByStatus(OrderStatus.SHIPPED)).subscribe(orders => {
+        this.shippedOrdersCount = orders.length;
+      });
     });
   }
 

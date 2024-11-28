@@ -7,6 +7,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { OrderStatus } from '../../payment/order-status';
+import { LoadingService } from '../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-profile-orders',
@@ -35,7 +36,8 @@ export class ProfileOrdersComponent implements OnInit {
     private userService: UserService,
     private auth: AngularFireAuth,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    public loadingService: LoadingService
   ) { }
 
   ngOnInit() {
@@ -58,15 +60,19 @@ export class ProfileOrdersComponent implements OnInit {
   }
 
   async loadOrders() {
-    const ordersObservable = await this.userService.getAllOrders(this.currentUserId);
-    ordersObservable.subscribe((orders: Order[]) => {
-      this.orders = orders;
+    await this.loadingService.withLoading(async () => {
+      const ordersObservable = await this.userService.getAllOrders(this.currentUserId);
+      ordersObservable.subscribe((orders: Order[]) => {
+        this.orders = orders;
+      });
     });
   }
 
   async markOrderAsChecked(order: Order) {
     if (!order.isUserChecked) {
-      await this.userService.markOrderAsChecked(order.id);
+      await this.loadingService.withLoading(async () => {
+        await this.userService.markOrderAsChecked(order.id);
+      });
     }
   }
 

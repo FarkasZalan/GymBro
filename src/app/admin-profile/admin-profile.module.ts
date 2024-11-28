@@ -38,6 +38,7 @@ import { FilterPageComponent } from '../filter-page/filter-page.component';
 import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
 import { HandleReviewsComponent } from './product-management/product-actions/handle-reviews/handle-reviews.component';
 import { OrdersComponent } from './orders/orders.component';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @NgModule({
     imports: [
@@ -84,8 +85,12 @@ import { OrdersComponent } from './orders/orders.component';
         UserBlogListComponent,
         FilterPageComponent,
         HandleReviewsComponent,
-        OrdersComponent
+        OrdersComponent,
+        LoadingSpinnerComponent
     ],
+    exports: [
+        LoadingSpinnerComponent
+    ]
 })
 export class AdminProfileModule {
 }

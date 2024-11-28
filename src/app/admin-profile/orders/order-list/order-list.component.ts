@@ -7,6 +7,7 @@ import { Order } from '../../../payment/order.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteConfirmationText } from '../../../delete-confirmation-dialog/delete-text';
 import { DeleteConfirmationDialogComponent } from '../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { LoadingService } from '../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-order-list',
@@ -30,7 +31,8 @@ export class OrderListComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public loadingService: LoadingService
   ) { }
 
   async ngOnInit() {
@@ -38,15 +40,19 @@ export class OrderListComponent implements OnInit {
   }
 
   async loadOrders() {
-    (await this.adminService.getAllOrders()).subscribe((orders: Order[]) => {
-      this.orders = orders;
+    await this.loadingService.withLoading(async () => {
+      (await this.adminService.getAllOrders()).subscribe((orders: Order[]) => {
+        this.orders = orders;
+      });
     });
   }
 
   async markOrderAsChecked(order: Order) {
-    if (!order.isAdminChecked) {
-      await this.adminService.markOrderAsChecked(order.id);
-    }
+    await this.loadingService.withLoading(async () => {
+      if (!order.isAdminChecked) {
+        await this.adminService.markOrderAsChecked(order.id);
+      }
+    });
   }
 
   viewReceipt(orderId: string) {
@@ -74,7 +80,9 @@ export class OrderListComponent implements OnInit {
 
     const result = await dialogRef.afterClosed().toPromise();
     if (result) {
-      await this.updateOrderStatus(order, OrderStatus.CANCELLED);
+      await this.loadingService.withLoading(async () => {
+        await this.updateOrderStatus(order, OrderStatus.CANCELLED);
+      });
     }
   }
 

@@ -15,6 +15,7 @@ import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmati
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
 import { Timestamp } from 'firebase/firestore';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { LoadingService } from '../../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-handle-blogs',
@@ -87,7 +88,8 @@ export class HandleBlogsComponent implements OnInit {
     private location: Location,
     private documentHandler: DocumentHandlerService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public loadingService: LoadingService
   ) { }
 
 
@@ -211,134 +213,136 @@ export class HandleBlogsComponent implements OnInit {
   }
 
   async addBlog() {
-    // Error handling for missing text
-    if (this.blogText === '') {
-      this.noTextError = true;
-      return;
-    }
-    this.noTextError = false;
-
-    if (this.selectedTags.length === 0) {
-      this.missingTagError = true;
-      return;
-    }
-    this.missingTagError = false;
-
-    // Check for title duplication
-    const blogTitle = this.documentHandler.makeUpperCaseEveryWordFirstLetter(this.createBlogForm.value.blogTitle);
-    const isDuplicate = await this.documentHandler.checkForDuplication("blog", "title", blogTitle, undefined, "");
-
-    if (isDuplicate) {
-      this.titleAlreadyInUse = true;
-      return;
-    }
-
-    this.titleAlreadyInUse = false;
-
-    // the current date
-    this.currentDate = Timestamp.now();
-
-    // Create new blog object (without image URL initially)
-    this.blogObject = {
-      id: "",
-      title: blogTitle,
-      language: this.selectedLanguage,
-      headerImageUrl: "",
-      blogTags: this.selectedTags,
-      htmlText: this.blogText,
-      date: this.currentDate,
-      description: this.createBlogForm.value.description
-    };
-
-    // Add the new blog
-    try {
-      // Add the new blog to Firestore and get the document reference
-      const docRef = await this.db.collection("blog").add(this.blogObject);
-
-      // Set the document ID as its own ID field
-      await docRef.update({ id: docRef.id });
-
-      // Upload image and get its URL
-      let imageUrl = '';
-      if (this.imageBase64 !== '') {
-        imageUrl = await this.uploadImage(docRef.id);
+    await this.loadingService.withLoading(async () => {
+      // Error handling for missing text
+      if (this.blogText === '') {
+        this.noTextError = true;
+        return;
       }
-      await docRef.update({ headerImageUrl: imageUrl });
-
-      this.errorMessage = false;
       this.noTextError = false;
-      // if everything was succes then open successfull dialog
-      this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.CREATED_TEXT,
-          needToGoPrevoiusPage: true
+
+      if (this.selectedTags.length === 0) {
+        this.missingTagError = true;
+        return;
+      }
+      this.missingTagError = false;
+
+      // Check for title duplication
+      const blogTitle = this.documentHandler.makeUpperCaseEveryWordFirstLetter(this.createBlogForm.value.blogTitle);
+      const isDuplicate = await this.documentHandler.checkForDuplication("blog", "title", blogTitle, undefined, "");
+
+      if (isDuplicate) {
+        this.titleAlreadyInUse = true;
+        return;
+      }
+
+      this.titleAlreadyInUse = false;
+
+      // the current date
+      this.currentDate = Timestamp.now();
+
+      // Create new blog object (without image URL initially)
+      this.blogObject = {
+        id: "",
+        title: blogTitle,
+        language: this.selectedLanguage,
+        headerImageUrl: "",
+        blogTags: this.selectedTags,
+        htmlText: this.blogText,
+        date: this.currentDate,
+        description: this.createBlogForm.value.description
+      };
+
+      // Add the new blog
+      try {
+        // Add the new blog to Firestore and get the document reference
+        const docRef = await this.db.collection("blog").add(this.blogObject);
+
+        // Set the document ID as its own ID field
+        await docRef.update({ id: docRef.id });
+
+        // Upload image and get its URL
+        let imageUrl = '';
+        if (this.imageBase64 !== '') {
+          imageUrl = await this.uploadImage(docRef.id);
         }
-      });
-    } catch (error) {
-      this.errorMessage = true;
-    }
+        await docRef.update({ headerImageUrl: imageUrl });
+
+        this.errorMessage = false;
+        this.noTextError = false;
+        // if everything was succes then open successfull dialog
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.CREATED_TEXT,
+            needToGoPrevoiusPage: true
+          }
+        });
+      } catch (error) {
+        this.errorMessage = true;
+      }
+    });
   }
 
   async editBlog() {
-    // Error handling for missing text
-    if (this.blogText === '') {
-      this.noTextError = true;
-      return;
-    }
-    this.noTextError = false;
-
-    if (this.selectedTags.length === 0) {
-      this.missingTagError = true;
-      return;
-    }
-    this.missingTagError = false;
-
-    // Check for title duplication
-    const blogTitle = this.documentHandler.makeUpperCaseEveryWordFirstLetter(this.createBlogForm.value.blogTitle);
-    const isDuplicate = await this.documentHandler.checkForDuplication("blog", "title", blogTitle, undefined, this.blogId);
-
-    if (isDuplicate) {
-      this.titleAlreadyInUse = true;
-      return;
-    }
-
-    this.titleAlreadyInUse = false;
-
-    // Upload image and get its URL
-    let imageUrl = this.imageBase64;
-    if (this.imageBase64 !== '' && this.imageBase64.startsWith("data:image")) {
-      imageUrl = await this.uploadImage(this.blogId);
-    }
-
-    // Create new blog object (without image URL initially)
-    this.blogObject = {
-      id: this.blogId,
-      title: blogTitle,
-      language: this.selectedLanguage,
-      headerImageUrl: imageUrl,
-      blogTags: this.selectedTags,
-      htmlText: this.blogText,
-      date: this.currentDate,
-      description: this.createBlogForm.value.description
-    };
-
-    // Add the new blog
-    try {
-      // Add the new blog to Firestore and get the document reference
-      const docRef = await this.db.collection("blog").doc(this.blogId).update(this.blogObject);
-
-      this.errorMessage = false;
+    await this.loadingService.withLoading(async () => {
+      // Error handling for missing text
+      if (this.blogText === '') {
+        this.noTextError = true;
+        return;
+      }
       this.noTextError = false;
-      // if everything was succes then open successfull dialog
-      this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.MODIFIED_TEXT,
-          needToGoPrevoiusPage: true
-        }
-      });
-    } catch (error) {
-      this.errorMessage = true;
-    }
+
+      if (this.selectedTags.length === 0) {
+        this.missingTagError = true;
+        return;
+      }
+      this.missingTagError = false;
+
+      // Check for title duplication
+      const blogTitle = this.documentHandler.makeUpperCaseEveryWordFirstLetter(this.createBlogForm.value.blogTitle);
+      const isDuplicate = await this.documentHandler.checkForDuplication("blog", "title", blogTitle, undefined, this.blogId);
+
+      if (isDuplicate) {
+        this.titleAlreadyInUse = true;
+        return;
+      }
+
+      this.titleAlreadyInUse = false;
+
+      // Upload image and get its URL
+      let imageUrl = this.imageBase64;
+      if (this.imageBase64 !== '' && this.imageBase64.startsWith("data:image")) {
+        imageUrl = await this.uploadImage(this.blogId);
+      }
+
+      // Create new blog object
+      this.blogObject = {
+        id: this.blogId,
+        title: blogTitle,
+        language: this.selectedLanguage,
+        headerImageUrl: imageUrl,
+        blogTags: this.selectedTags,
+        htmlText: this.blogText,
+        date: this.currentDate,
+        description: this.createBlogForm.value.description
+      };
+
+      try {
+        await this.db.collection("blog").doc(this.blogId).update(this.blogObject);
+
+        this.errorMessage = false;
+        this.noTextError = false;
+        // if everything was success then open successful dialog
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.MODIFIED_TEXT,
+            needToGoPrevoiusPage: true
+          }
+        });
+      } catch (error) {
+        this.errorMessage = true;
+      }
+    });
   }
 
   async deleteBlog() {
@@ -352,27 +356,29 @@ export class HandleBlogsComponent implements OnInit {
     const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
 
     if (confirmToDeleteAddress) {
-      try {
-        // Delete images from Firebase Storage
-        if (this.blogObject.headerImageUrl) {
-          try {
-            // Reference the file by its URL
-            const fileRef = this.storage.refFromURL(this.blogObject.headerImageUrl);
-            await fileRef.delete().toPromise();  // Attempt to delete the image
-          } catch (error) { }
-        }
-
-        // Delete the product from firestore
-        const deleteAddressRef = this.db.collection("blog").doc(this.blogId);
-        await deleteAddressRef.delete();
-        this.dialog.open(SuccessfullDialogComponent, {
-          data: {
-            text: SuccessFullDialogText.DELETED_TEXT,
-            needToGoPrevoiusPage: true
+      await this.loadingService.withLoading(async () => {
+        try {
+          // Delete images from Firebase Storage
+          if (this.blogObject.headerImageUrl) {
+            try {
+              // Reference the file by its URL
+              const fileRef = this.storage.refFromURL(this.blogObject.headerImageUrl);
+              await fileRef.delete().toPromise();  // Attempt to delete the image
+            } catch (error) { }
           }
-        });
-      } catch (error) {
-      }
+
+          // Delete the blog from firestore
+          const deleteAddressRef = this.db.collection("blog").doc(this.blogId);
+          await deleteAddressRef.delete();
+          this.dialog.open(SuccessfullDialogComponent, {
+            data: {
+              text: SuccessFullDialogText.DELETED_TEXT,
+              needToGoPrevoiusPage: true
+            }
+          });
+        } catch (error) {
+        }
+      });
     }
   }
 
