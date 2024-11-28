@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
+
 <div class="container" [@zoomIn]>
     <nb-card class="container">
         <nb-card-body class="login-col">
@@ -115,6 +118,76 @@
                     </div>
                 </div>
 
+                <!-- Flavors and Allergens Section -->
+                <hr>
+                <h3>{{ 'products.flavorsAndAllergens' | translate }}</h3>
+
+                <div *ngIf="isProtein" [@collapseField] class="row">
+                    <!-- Protein Type -->
+                    <div class="col-md-12 form-group">
+                        <label for="proteinType" class="label">{{ 'products.proteinType' | translate }}</label>
+                        <select class="form-control drop-down-list allow-selected-list-color selection"
+                            [(ngModel)]="selectedProteinType" name="proteinType" required #proteinType="ngModel">
+                            <option value="" disabled selected>{{ 'products.selectProteinType' | translate }}</option>
+                            <option *ngFor="let protein of availableProteins" [value]="protein">{{ protein | translate
+                                }}
+                            </option>
+                        </select>
+                        <span class="help-block" *ngIf="proteinType.touched && !proteinType.valid" [@zoomIn]>{{
+                            'register.fieldRequired' | translate }}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Flavors Section -->
+                    <div class="col-md-6 form-group">
+                        <label for="flavors" class="label">{{ 'products.productFlavors' | translate }}</label>
+                        <div class="multi-select-container">
+                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
+                                [(ngModel)]="selectedFlavors" #flavorSelect="ngModel">
+                                <option *ngFor="let flavor of availableFlavors" [value]="flavor"
+                                    [ngClass]="{'active': selectedFlavors.includes(flavor) && selectedFlavors.length > 0}"
+                                    (click)="selectionOfTheList(productViewText.FLAVORS, flavor)">
+                                    {{ flavor | translate }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- display the selected flavors -->
+                        <div *ngIf="selectedFlavors.length > 0">
+                            <div class="selected-items-display" *ngFor="let selected of selectedFlavors"
+                                (click)="removeItemFromTheList(productViewText.FLAVORS, selected)">
+                                {{ selected | translate }}
+                                <span style="cursor: pointer; color: red;">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Allergenes Section -->
+                    <div class="col-md-6 form-group">
+                        <label for="allregenes" class="label">{{ 'products.productAllergens' | translate }}</label>
+                        <div class="multi-select-container">
+                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
+                                [(ngModel)]="selectedAllergenes" #allergeneSelect="ngModel">
+                                <option *ngFor="let allergene of availableAllergens" [value]="allergene"
+                                    [ngClass]="{'active': selectedAllergenes.includes(allergene) && selectedAllergenes.length > 0}"
+                                    (click)="selectionOfTheList(productViewText.ALLERGENES, allergene)">
+                                    {{ allergene | translate}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- display the selected allergenes -->
+                        <div *ngIf="selectedAllergenes.length > 0">
+                            <div class="selected-items-display" *ngFor="let selected of selectedAllergenes"
+                                (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)">
+                                {{ selected | translate }}
+                                <span style="cursor: pointer; color: red;">&times;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Price and Weight/Pieces -->
                 <div *ngIf="selectedUnit!== ''" [@collapseField]>
                     <hr>
@@ -211,76 +284,6 @@
                                 (click)="addNewPrice()">
                                 {{ 'products.addNewPrice' | translate }}
                             </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Flavors and Allergens Section -->
-                <hr>
-                <h3>{{ 'products.flavorsAndAllergens' | translate }}</h3>
-
-                <div *ngIf="isProtein" [@collapseField] class="row">
-                    <!-- Protein Type -->
-                    <div class="col-md-12 form-group">
-                        <label for="proteinType" class="label">{{ 'products.proteinType' | translate }}</label>
-                        <select class="form-control drop-down-list allow-selected-list-color selection"
-                            [(ngModel)]="selectedProteinType" name="proteinType" required #proteinType="ngModel">
-                            <option value="" disabled selected>{{ 'products.selectProteinType' | translate }}</option>
-                            <option *ngFor="let protein of availableProteins" [value]="protein">{{ protein | translate
-                                }}
-                            </option>
-                        </select>
-                        <span class="help-block" *ngIf="proteinType.touched && !proteinType.valid" [@zoomIn]>{{
-                            'register.fieldRequired' | translate }}</span>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Flavors Section -->
-                    <div class="col-md-6 form-group">
-                        <label for="flavors" class="label">{{ 'products.productFlavors' | translate }}</label>
-                        <div class="multi-select-container">
-                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
-                                [(ngModel)]="selectedFlavors" #flavorSelect="ngModel">
-                                <option *ngFor="let flavor of availableFlavors" [value]="flavor"
-                                    [ngClass]="{'active': selectedFlavors.includes(flavor) && selectedFlavors.length > 0}"
-                                    (click)="selectionOfTheList(productViewText.FLAVORS, flavor)">
-                                    {{ flavor | translate }}
-                                </option>
-                            </select>
-                        </div>
-
-                        <!-- display the selected flavors -->
-                        <div *ngIf="selectedFlavors.length > 0">
-                            <div class="selected-items-display" *ngFor="let selected of selectedFlavors"
-                                (click)="removeItemFromTheList(productViewText.FLAVORS, selected)">
-                                {{ selected | translate }}
-                                <span style="cursor: pointer; color: red;">&times;</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Allergenes Section -->
-                    <div class="col-md-6 form-group">
-                        <label for="allregenes" class="label">{{ 'products.productAllergens' | translate }}</label>
-                        <div class="multi-select-container">
-                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
-                                [(ngModel)]="selectedAllergenes" #allergeneSelect="ngModel">
-                                <option *ngFor="let allergene of availableAllergens" [value]="allergene"
-                                    [ngClass]="{'active': selectedAllergenes.includes(allergene) && selectedAllergenes.length > 0}"
-                                    (click)="selectionOfTheList(productViewText.ALLERGENES, allergene)">
-                                    {{ allergene | translate}}
-                                </option>
-                            </select>
-                        </div>
-
-                        <!-- display the selected allergenes -->
-                        <div *ngIf="selectedAllergenes.length > 0">
-                            <div class="selected-items-display" *ngFor="let selected of selectedAllergenes"
-                                (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)">
-                                {{ selected | translate }}
-                                <span style="cursor: pointer; color: red;">&times;</span>
-                            </div>
                         </div>
                     </div>
                 </div>

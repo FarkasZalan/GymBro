@@ -492,6 +492,7 @@
                 "title": "Cím",
                 "text": "Vélemény részletezése",
                 "deleteReviewText": "Biztosan törölni szeretnéd az értékelésedet?",
+                "deleteReviewAdminText": "Biztosan törölni szeretnéd ezt az értékelést?",
                 "deleteResponseText": "Biztosan törölni szeretnéd a válaszod?",
                 "reviewText": "értékelés",
                 "new": "új",

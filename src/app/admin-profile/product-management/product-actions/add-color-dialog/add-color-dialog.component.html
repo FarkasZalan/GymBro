@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
+
 <div class="container-all-window">
     <!-- add price title -->
     <h1 *ngIf="!editText && productCategory !== productViewText.CLOTHES" id="title" class="title">{{

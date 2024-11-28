@@ -20,6 +20,7 @@ import { ProductColor } from '../../product-models/product-color.model';
 import { Accessories } from '../../product-models/accessories.model';
 import { ProductReeviews } from '../../product-models/product-reviews.model';
 import { Editor, Toolbar } from 'ngx-editor';
+import { LoadingService } from '../../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-handle-accessories',
@@ -99,7 +100,7 @@ export class HandleAccessoriesComponent {
   description: string = "";
 
 
-  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
+  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService, public loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.editor = new Editor();
@@ -469,122 +470,126 @@ export class HandleAccessoriesComponent {
   }
 
   async addNewAccessory() {
-    // error handleing
-    if (this.productPrices.length === 0) {
-      this.missingPricesErrorMessage = true;
-    } else {
-      this.missingPricesErrorMessage = false;
-    }
+    await this.loadingService.withLoading(async () => {
+      // error handling
+      if (this.productPrices.length === 0) {
+        this.missingPricesErrorMessage = true;
+      } else {
+        this.missingPricesErrorMessage = false;
+      }
 
-    const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.ACCESSORIES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName), undefined, ""
-    );
+      const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
+        "products", ProductViewText.ACCESSORIES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName), undefined, ""
+      );
 
-    if (checkForDuplication) {
-      this.productNameExistsError = true;
+      if (checkForDuplication) {
+        this.productNameExistsError = true;
 
-      return;
-    }
+        return;
+      }
 
-    const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
+      const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
 
-    if (!hasDefaultPrice) {
-      this.productPrices[0].setAsDefaultPrice = true;
-    }
+      if (!hasDefaultPrice) {
+        this.productPrices[0].setAsDefaultPrice = true;
+      }
 
-    // create new Accessory object
-    this.accessoryObject = {
-      id: "",
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName),
-      productCategory: this.selectedCategory,
-      description: this.createAccessoriesForm.value.description,
-      smallDescription: this.createAccessoriesForm.value.smallDescription,
-      useUnifiedImage: this.isUnifiedImage,
+      // create new Accessory object
+      this.accessoryObject = {
+        id: "",
+        productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName),
+        productCategory: this.selectedCategory,
+        description: this.createAccessoriesForm.value.description,
+        smallDescription: this.createAccessoriesForm.value.smallDescription,
+        useUnifiedImage: this.isUnifiedImage,
 
-      equipmentType: this.selectedAccessoryType,
+        equipmentType: this.selectedAccessoryType,
 
-      prices: []
-    }
+        prices: []
+      }
 
-    // Add the new accessory
-    try {
-      const documentumRef = await this.db.collection("products").doc(ProductViewText.ACCESSORIES).collection("allProduct").add(this.accessoryObject);
-      // id the document created then save the document id in the field
-      await documentumRef.update({ id: documentumRef.id });
-      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.ACCESSORIES, documentumRef.id, this.unifiedImageUrl, this.productPrices, this.selectedAccessoryType);
-      await documentumRef.update({ prices: this.productPrices });
-      this.errorMessage = false;
-      this.productNameExistsError = false;
-      this.missingPricesErrorMessage = false;
-      // if everything was succes then open successfull dialog
-      this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.CREATED_TEXT,
-          needToGoPrevoiusPage: true
-        }
-      });
-    } catch (error) {
-      this.errorMessage = true;
-    }
+      // Add the new accessory
+      try {
+        const documentumRef = await this.db.collection("products").doc(ProductViewText.ACCESSORIES).collection("allProduct").add(this.accessoryObject);
+        // id the document created then save the document id in the field
+        await documentumRef.update({ id: documentumRef.id });
+        this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.ACCESSORIES, documentumRef.id, this.unifiedImageUrl, this.productPrices, this.selectedAccessoryType);
+        await documentumRef.update({ prices: this.productPrices });
+        this.errorMessage = false;
+        this.productNameExistsError = false;
+        this.missingPricesErrorMessage = false;
+        // if everything was succes then open successfull dialog
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.CREATED_TEXT,
+            needToGoPrevoiusPage: true
+          }
+        });
+      } catch (error) {
+        this.errorMessage = true;
+      }
+    });
   }
 
   async editAccessory() {
-    // error handleing
-    if (this.productPrices.length === 0) {
-      this.missingPricesErrorMessage = true;
-    } else {
-      this.missingPricesErrorMessage = false;
-    }
+    await this.loadingService.withLoading(async () => {
+      // error handling
+      if (this.productPrices.length === 0) {
+        this.missingPricesErrorMessage = true;
+      } else {
+        this.missingPricesErrorMessage = false;
+      }
 
-    const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.ACCESSORIES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName), undefined, this.accessoryObject.id
-    );
+      const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
+        "products", ProductViewText.ACCESSORIES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName), undefined, this.accessoryObject.id
+      );
 
-    if (checkForDuplication) {
-      this.productNameExistsError = true;
+      if (checkForDuplication) {
+        this.productNameExistsError = true;
 
-      return;
-    }
+        return;
+      }
 
-    const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
+      const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
 
-    if (!hasDefaultPrice) {
-      this.productPrices[0].setAsDefaultPrice = true;
-    }
-    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.ACCESSORIES, this.accessoryId, this.unifiedImageUrl, this.productPrices, this.selectedAccessoryType);
+      if (!hasDefaultPrice) {
+        this.productPrices[0].setAsDefaultPrice = true;
+      }
+      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.ACCESSORIES, this.accessoryId, this.unifiedImageUrl, this.productPrices, this.selectedAccessoryType);
 
-    // create new Clothing object
-    this.accessoryObject = {
-      id: this.accessoryId,
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName),
-      productCategory: this.selectedCategory,
-      description: this.createAccessoriesForm.value.description,
-      smallDescription: this.createAccessoriesForm.value.smallDescription,
+      // create new Clothing object
+      this.accessoryObject = {
+        id: this.accessoryId,
+        productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createAccessoriesForm.value.productName),
+        productCategory: this.selectedCategory,
+        description: this.createAccessoriesForm.value.description,
+        smallDescription: this.createAccessoriesForm.value.smallDescription,
 
-      useUnifiedImage: this.isUnifiedImage,
-      equipmentType: this.selectedAccessoryType,
+        useUnifiedImage: this.isUnifiedImage,
+        equipmentType: this.selectedAccessoryType,
 
-      prices: this.productPrices
-    }
+        prices: this.productPrices
+      }
 
-    // Edit the accessory
-    try {
-      await this.db.collection("products").doc(ProductViewText.ACCESSORIES).collection("allProduct").doc(this.accessoryId).update(this.accessoryObject);
+      // Edit the accessory
+      try {
+        await this.db.collection("products").doc(ProductViewText.ACCESSORIES).collection("allProduct").doc(this.accessoryId).update(this.accessoryObject);
 
-      this.errorMessage = false;
-      this.productNameExistsError = false;
-      this.missingPricesErrorMessage = false;
+        this.errorMessage = false;
+        this.productNameExistsError = false;
+        this.missingPricesErrorMessage = false;
 
-      // if everything was succes then open successfull dialog
-      this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.MODIFIED_TEXT,
-          needToGoPrevoiusPage: true
-        }
-      });
-    } catch (error) {
-      this.errorMessage = true;
-    }
+        // if everything was succes then open successfull dialog
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.MODIFIED_TEXT,
+            needToGoPrevoiusPage: true
+          }
+        });
+      } catch (error) {
+        this.errorMessage = true;
+      }
+    });
   }
 
   async deleteAccessory() {
@@ -594,39 +599,38 @@ export class HandleAccessoriesComponent {
       }
     });
 
-    // Wait for the dialog to close and get the user's confirmation
     const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
 
     if (confirmToDeleteAddress) {
-      try {
-        // Delete images from Firebase Storage
-        const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
-          if (price.productImage) {
-            try {
-              // Reference the file by its URL
-              const fileRef = this.storage.refFromURL(price.productImage);
-              await fileRef.delete().toPromise();  // Attempt to delete the image
-            } catch (error) { }
-          }
-        });
+      await this.loadingService.withLoading(async () => {
+        try {
+          // Delete images from Firebase Storage
+          const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
+            if (price.productImage) {
+              try {
+                const fileRef = this.storage.refFromURL(price.productImage);
+                await fileRef.delete().toPromise();
+              } catch (error) { }
+            }
+          });
 
-        // Await all delete promises
-        await Promise.all(deleteImagePromises);
+          // Await all delete promises
+          await Promise.all(deleteImagePromises);
 
-        // Delete all the images from the product storage folder
-        await this.adminService.deleteAllFilesInFolder(ProductViewText.ACCESSORIES, this.accessoryId);
+          // Delete all the images from the product storage folder
+          await this.adminService.deleteAllFilesInFolder(ProductViewText.ACCESSORIES, this.accessoryId);
 
-        // Delete the product from firestore
-        const deleteAddressRef = this.db.collection("products").doc(ProductViewText.ACCESSORIES).collection("allProduct").doc(this.accessoryId);
-        await deleteAddressRef.delete();
-        this.dialog.open(SuccessfullDialogComponent, {
-          data: {
-            text: SuccessFullDialogText.DELETED_TEXT,
-            needToGoPrevoiusPage: true
-          }
-        });
-      } catch (error) {
-      }
+          // Delete the product from firestore
+          const deleteAddressRef = this.db.collection("products").doc(ProductViewText.ACCESSORIES).collection("allProduct").doc(this.accessoryId);
+          await deleteAddressRef.delete();
+          this.dialog.open(SuccessfullDialogComponent, {
+            data: {
+              text: SuccessFullDialogText.DELETED_TEXT,
+              needToGoPrevoiusPage: true
+            }
+          });
+        } catch (error) { }
+      });
     }
   }
 

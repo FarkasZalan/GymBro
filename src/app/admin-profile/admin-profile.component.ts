@@ -2,6 +2,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from './admin.service';
 import { ActivatedRoute } from '@angular/router';
+import { LoadingService } from '../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-admin-profile',
@@ -39,7 +40,7 @@ export class AdminProfileComponent implements OnInit {
   // number of the new orders
   numberOfNewOrders: number = 0;
 
-  constructor(private adminService: AdminService, private route: ActivatedRoute) { }
+  constructor(private adminService: AdminService, private route: ActivatedRoute, public loadingService: LoadingService) { }
 
   async ngOnInit(): Promise<void> {
     this.route.queryParams.subscribe(params => {
@@ -52,10 +53,14 @@ export class AdminProfileComponent implements OnInit {
       }
     });
 
-    this.uncheckedReviewsCount = await this.adminService.getAllReviewsCount();
+    await this.loadingService.withLoading(async () => {
+      this.uncheckedReviewsCount = await this.adminService.getAllReviewsCount();
+    });
 
-    (await this.adminService.getAllNewOrders()).subscribe(newOrders => {
-      this.numberOfNewOrders = newOrders.length;
+    await this.loadingService.withLoading(async () => {
+      (await this.adminService.getAllNewOrders()).subscribe(newOrders => {
+        this.numberOfNewOrders = newOrders.length;
+      });
     });
   }
 

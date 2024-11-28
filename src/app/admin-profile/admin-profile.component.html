@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
+
 <!-- orders details -->
 <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
     [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">

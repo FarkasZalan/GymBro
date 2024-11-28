@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
+
 <div class="container" [@zoomIn]>
     <nb-card class="container">
         <nb-card-body class="login-col">
@@ -86,106 +89,6 @@
                     </div>
                 </div>
 
-                <!-- Price and Weight/Pieces -->
-                <div *ngIf="selectedCategory !== ''" [@collapseField]>
-                    <hr>
-                    <h3>{{ 'products.priceAndQuantity' | translate }}</h3>
-
-                    <!-- Use unified image -->
-                    <div class="row chechkbox-row left-checkbox">
-                        <!-- Unified image checkbox -->
-                        <div class="col-md-3 form-group">
-                            <label class="checkbox-container">
-                                {{ 'products.unifiedImage' | translate }}
-                                <input type="checkbox" [(ngModel)]="isUnifiedImage" name="isUnifiedImage"
-                                    (ngModelChange)="onUnifiedImageChange($event)">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- unified image upload input -->
-                    <div *ngIf="isUnifiedImage" [@collapseField] class="form-group">
-                        <label for="productImage" class="label">{{ 'products.productImage' | translate
-                            }}</label>
-
-                        <!-- Button to Trigger Image Upload -->
-                        <div class="send-button-container blog-btn-container">
-                            <button class="btn btn-primary forgot-btn blog-btn" type="button" nbButton
-                                (click)="triggerImageUpload()">
-                                {{ 'products.uploadProductImage' | translate }}
-                            </button>
-                        </div>
-
-                        <!-- Hidden file input for Image Upload -->
-                        <input type="file" #fileInput accept="image/*" style="display: none"
-                            (change)="onFileSelected($event)" />
-
-                        <!-- Display selected image -->
-                        <div [@collapseField] *ngIf="unifiedImageUrl" class="image-preview-container">
-                            <button class="delete-image-button-unified-image btn" (click)="removeImage()"
-                                type="button">X</button>
-                            <img (click)="triggerImageUpload()" [src]="unifiedImageUrl" alt="Image Preview"
-                                class="image-preview" />
-                        </div>
-                        <br>
-                    </div>
-
-
-                    <div class="row">
-                        <!-- Display product prices dynamically in a 2-column layout -->
-                        <div class="list-container">
-                            <nb-card class="rounded-card categoryCard"
-                                *ngFor="let price of productPrices; let i = index">
-                                <nb-card-body class="category-image" (click)="editPrice(i)">
-                                    <!-- Product Image at the top -->
-                                    <div class="image-container text-center">
-                                        <img *ngIf="price.productImage !== ''" [src]="price.productImage"
-                                            alt="Product Image" class="card-image" />
-                                        <img *ngIf="price.productImage === ''"
-                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                                            class="card-image" />
-                                    </div>
-
-                                    <!-- Product Details (Price and Weight) below the image -->
-                                    <div class="details-container text-center">
-                                        <!-- show 'default' text if the current address is the default -->
-                                        <nb-card-header class="card-header">
-                                            <span *ngIf="price.setAsDefaultPrice">{{
-                                                'profileMenu.shippingAddressForm.defaultShippingAddress' | translate
-                                                }}</span>
-                                        </nb-card-header>
-
-                                        <!-- display the price and if there is a discount, display the discounted price -->
-                                        <div class="price-container">
-                                            <h5 class="price-display" [class.has-discount]="price.discountedPrice > 0">
-                                                <span class="original-price"
-                                                    [class.crossed]="price.discountedPrice > 0">
-                                                    {{ price.productPrice }} {{ 'products.huf' | translate }}
-                                                </span>
-                                                <span class="discounted-price" *ngIf="price.discountedPrice > 0">
-                                                    {{ price.discountedPrice }} {{ 'products.huf' | translate }}
-                                                </span>
-                                            </h5>
-                                        </div>
-
-                                        <p class="weight-text"><strong></strong> {{
-                                            price.quantityInProduct }} {{ selectedUnit | translate }}</p>
-                                    </div>
-                                </nb-card-body>
-                            </nb-card>
-                        </div>
-                        <!-- add new price card -->
-                        <div class="col-md-12 form-group container price-col">
-                            <!-- add button -->
-                            <button class="btn btn-primary basic-btn basic-form-btn add-price-btn"
-                                (click)="addNewPrice()">
-                                {{ 'products.addNewPrice' | translate }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Flavors and Allergens Section -->
                 <hr>
                 <h3>{{ 'products.flavorsAndAllergens' | translate }}</h3>
@@ -240,6 +143,105 @@
                                 {{ selected | translate }}
                                 <span style="cursor: pointer; color: red;">&times;</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price and Weight/Pieces -->
+                <div *ngIf="selectedCategory !== ''" [@collapseField]>
+                    <hr>
+                    <h3>{{ 'products.priceAndQuantity' | translate }}</h3>
+
+                    <!-- Use unified image -->
+                    <div class="row chechkbox-row left-checkbox">
+                        <!-- Unified image checkbox -->
+                        <div class="col-md-3 form-group">
+                            <label class="checkbox-container">
+                                {{ 'products.unifiedImage' | translate }}
+                                <input type="checkbox" [(ngModel)]="isUnifiedImage" name="isUnifiedImage"
+                                    (ngModelChange)="onUnifiedImageChange($event)">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- unified image upload input -->
+                    <div *ngIf="isUnifiedImage" [@collapseField] class="form-group">
+                        <label for="productImage" class="label">{{ 'products.productImage' | translate
+                            }}</label>
+
+                        <!-- Button to Trigger Image Upload -->
+                        <div class="send-button-container blog-btn-container">
+                            <button class="btn btn-primary forgot-btn blog-btn" type="button" nbButton
+                                (click)="triggerImageUpload()">
+                                {{ 'products.uploadProductImage' | translate }}
+                            </button>
+                        </div>
+
+                        <!-- Hidden file input for Image Upload -->
+                        <input type="file" #fileInput accept="image/*" style="display: none"
+                            (change)="onFileSelected($event)" />
+
+                        <!-- Display selected image -->
+                        <div [@collapseField] *ngIf="unifiedImageUrl" class="image-preview-container">
+                            <button class="delete-image-button-unified-image btn" (click)="removeImage()"
+                                type="button">X</button>
+                            <img (click)="triggerImageUpload()" [src]="unifiedImageUrl" alt="Image Preview"
+                                class="image-preview" />
+                        </div>
+                        <br>
+                    </div>
+
+                    <div class="row">
+                        <!-- Display product prices dynamically in a 2-column layout -->
+                        <div class="list-container">
+                            <nb-card class="rounded-card categoryCard"
+                                *ngFor="let price of productPrices; let i = index">
+                                <nb-card-body class="category-image" (click)="editPrice(i)">
+                                    <!-- Product Image at the top -->
+                                    <div class="image-container text-center">
+                                        <img *ngIf="price.productImage !== ''" [src]="price.productImage"
+                                            alt="Product Image" class="card-image" />
+                                        <img *ngIf="price.productImage === ''"
+                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                            class="card-image" />
+                                    </div>
+
+                                    <!-- Product Details (Price and Weight) below the image -->
+                                    <div class="details-container text-center">
+                                        <!-- show 'default' text if the current address is the default -->
+                                        <nb-card-header class="card-header">
+                                            <span *ngIf="price.setAsDefaultPrice">{{
+                                                'profileMenu.shippingAddressForm.defaultShippingAddress' | translate
+                                                }}</span>
+                                        </nb-card-header>
+
+                                        <!-- display the price and if there is a discount, display the discounted price -->
+                                        <div class="price-container">
+                                            <h5 class="price-display" [class.has-discount]="price.discountedPrice > 0">
+                                                <span class="original-price"
+                                                    [class.crossed]="price.discountedPrice > 0">
+                                                    {{ price.productPrice }} {{ 'products.huf' | translate }}
+                                                </span>
+                                                <span class="discounted-price" *ngIf="price.discountedPrice > 0">
+                                                    {{ price.discountedPrice }} {{ 'products.huf' | translate }}
+                                                </span>
+                                            </h5>
+                                        </div>
+
+                                        <p class="weight-text"><strong></strong> {{
+                                            price.quantityInProduct }} {{ selectedUnit | translate }}</p>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                        <!-- add new price card -->
+                        <div class="col-md-12 form-group container price-col">
+                            <!-- add button -->
+                            <button class="btn btn-primary basic-btn basic-form-btn add-price-btn"
+                                (click)="addNewPrice()">
+                                {{ 'products.addNewPrice' | translate }}
+                            </button>
                         </div>
                     </div>
                 </div>

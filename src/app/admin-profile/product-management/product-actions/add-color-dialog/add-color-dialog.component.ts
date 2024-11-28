@@ -8,6 +8,7 @@ import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/d
 import { ProductViewText } from '../../product-view-texts';
 import { ProductColor } from '../../product-models/product-color.model';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { LoadingService } from '../../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-add-color-dialog',
@@ -75,7 +76,7 @@ export class AddColorDialogComponent {
   ];
   selectedColor: string = '';
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService, public loadingService: LoadingService) {
     this.editText = data.editText;
     this.productCategory = data.productCategory;
     this.allColorsForProduct = data.allColors;
@@ -115,16 +116,18 @@ export class AddColorDialogComponent {
   }
 
   // Handle file selection and convert to Base64
-  onFileSelected(event: any) {
+  async onFileSelected(event: any) {
     const file = event.target.files[0];
 
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imageBase64 = reader.result as string; // Base64 string
-        this.imagePreview = this.imageBase64; // Preview for the user
-      };
-      reader.readAsDataURL(file);
+      await this.loadingService.withLoading(async () => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imageBase64 = reader.result as string; // Base64 string
+          this.imagePreview = this.imageBase64; // Preview for the user
+        };
+        reader.readAsDataURL(file);
+      });
     }
   }
 
@@ -135,12 +138,14 @@ export class AddColorDialogComponent {
 
   // Method to initiate password recovery
   async addNewPrice() {
-    this.newColor = {
-      imageUrl: this.imageBase64,
-      color: this.selectedColor,
-    };
+    await this.loadingService.withLoading(async () => {
+      this.newColor = {
+        imageUrl: this.imageBase64,
+        color: this.selectedColor,
+      };
 
-    this.dialogRef.close(this.newColor);
+      this.dialogRef.close(this.newColor);
+    });
   }
 
   async deleteColor() {
@@ -154,8 +159,10 @@ export class AddColorDialogComponent {
     const confirmToDeletePrice = await dialogRef.afterClosed().toPromise();
 
     if (confirmToDeletePrice) {
-      // Close the dialog and return to with boolean to delete this color
-      this.dialogRef.close(true);
+      await this.loadingService.withLoading(async () => {
+        // Close the dialog and return to with boolean to delete this color
+        this.dialogRef.close(true);
+      });
     }
   }
 

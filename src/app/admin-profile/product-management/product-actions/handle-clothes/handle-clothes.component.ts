@@ -18,8 +18,8 @@ import { Clothes } from '../../product-models/clothing.model';
 import { AdminService } from '../../../admin.service';
 import { AddColorDialogComponent } from '../add-color-dialog/add-color-dialog.component';
 import { ProductColor } from '../../product-models/product-color.model';
-import { ProductReeviews } from '../../product-models/product-reviews.model';
 import { Editor, Toolbar } from 'ngx-editor';
+import { LoadingService } from '../../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-handle-clothes',
@@ -109,7 +109,7 @@ export class HandleClothesComponent {
 
   description: string = "";
 
-  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService) { }
+  constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService, public loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.editor = new Editor();
@@ -425,122 +425,126 @@ export class HandleClothesComponent {
   }
 
   async addNewClothes() {
-    // error handleing
-    if (this.productPrices.length === 0) {
-      this.missingPricesErrorMessage = true;
-    } else {
-      this.missingPricesErrorMessage = false;
-    }
+    await this.loadingService.withLoading(async () => {
+      // error handleing
+      if (this.productPrices.length === 0) {
+        this.missingPricesErrorMessage = true;
+      } else {
+        this.missingPricesErrorMessage = false;
+      }
 
-    const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName), undefined, ""
-    );
+      const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
+        "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName)
+      );
 
-    if (checkForDuplication) {
-      this.productNameExistsError = true;
+      if (checkForDuplication) {
+        this.productNameExistsError = true;
 
-      return;
-    }
+        return;
+      }
 
-    const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
+      const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
 
-    if (!hasDefaultPrice) {
-      this.productPrices[0].setAsDefaultPrice = true;
-    }
+      if (!hasDefaultPrice) {
+        this.productPrices[0].setAsDefaultPrice = true;
+      }
 
-    // create new Clothes object
-    this.clothingObject = {
-      id: "",
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
-      productGender: this.selectedGender,
-      description: this.createClothesForm.value.description,
-      smallDescription: this.createClothesForm.value.smallDescription,
+      // create new Clothes object
+      this.clothingObject = {
+        id: "",
+        productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
+        productGender: this.selectedGender,
+        description: this.createClothesForm.value.description,
+        smallDescription: this.createClothesForm.value.smallDescription,
 
-      clothingType: this.selectedClothingType,
-      material: this.selectedMaterial,
+        clothingType: this.selectedClothingType,
+        material: this.selectedMaterial,
 
-      prices: [],
-    }
+        prices: [],
+      }
 
-    // Add the new healthy product
-    try {
-      const documentumRef = await this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").add(this.clothingObject);
-      // id the document created then save the document id in the field
-      await documentumRef.update({ id: documentumRef.id });
-      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, documentumRef.id, null, this.productPrices);
-      await documentumRef.update({ prices: this.productPrices });
-      this.errorMessage = false;
-      this.productNameExistsError = false;
-      this.missingPricesErrorMessage = false;
-      // if everything was succes then open successfull dialog
-      this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.CREATED_TEXT,
-          needToGoPrevoiusPage: true
-        }
-      });
-    } catch (error) {
-      this.errorMessage = true;
-    }
+      // Add the new healthy product
+      try {
+        const documentumRef = await this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").add(this.clothingObject);
+        // id the document created then save the document id in the field
+        await documentumRef.update({ id: documentumRef.id });
+        this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, documentumRef.id, null, this.productPrices);
+        await documentumRef.update({ prices: this.productPrices });
+        this.errorMessage = false;
+        this.productNameExistsError = false;
+        this.missingPricesErrorMessage = false;
+        // if everything was succes then open successfull dialog
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.CREATED_TEXT,
+            needToGoPrevoiusPage: true
+          }
+        });
+      } catch (error) {
+        this.errorMessage = true;
+      }
+    });
   }
 
   async editClothing() {
-    // error handleing
-    if (this.productPrices.length === 0) {
-      this.missingPricesErrorMessage = true;
-    } else {
-      this.missingPricesErrorMessage = false;
-    }
+    await this.loadingService.withLoading(async () => {
+      // error handleing
+      if (this.productPrices.length === 0) {
+        this.missingPricesErrorMessage = true;
+      } else {
+        this.missingPricesErrorMessage = false;
+      }
 
-    const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
-      "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName), undefined, this.clothingObject.id
-    );
+      const checkForDuplication = await this.documentumHandler.checkForDuplicationInnerCollection(
+        "products", ProductViewText.CLOTHES, "allProduct", "productName", this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName), undefined, this.clothingObject.id
+      );
 
-    if (checkForDuplication) {
-      this.productNameExistsError = true;
+      if (checkForDuplication) {
+        this.productNameExistsError = true;
 
-      return;
-    }
+        return;
+      }
 
-    const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
+      const hasDefaultPrice = this.productPrices.some(priceObj => priceObj.setAsDefaultPrice);
 
-    if (!hasDefaultPrice) {
-      this.productPrices[0].setAsDefaultPrice = true;
-    }
-    this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, this.clothingId, null, this.productPrices);
+      if (!hasDefaultPrice) {
+        this.productPrices[0].setAsDefaultPrice = true;
+      }
+      this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.CLOTHES, this.clothingId, null, this.productPrices);
 
-    // create new Clothing object
-    this.clothingObject = {
-      id: this.clothingId,
-      productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
-      productGender: this.selectedGender,
-      description: this.createClothesForm.value.description,
-      smallDescription: this.createClothesForm.value.smallDescription,
+      // create new Clothing object
+      this.clothingObject = {
+        id: this.clothingId,
+        productName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createClothesForm.value.productName),
+        productGender: this.selectedGender,
+        description: this.createClothesForm.value.description,
+        smallDescription: this.createClothesForm.value.smallDescription,
 
-      clothingType: this.selectedClothingType,
-      material: this.selectedMaterial,
+        clothingType: this.selectedClothingType,
+        material: this.selectedMaterial,
 
-      prices: this.productPrices,
-    }
+        prices: this.productPrices,
+      }
 
-    // Edit the clothes
-    try {
-      await this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").doc(this.clothingId).update(this.clothingObject);
+      // Edit the clothes
+      try {
+        await this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").doc(this.clothingId).update(this.clothingObject);
 
-      this.errorMessage = false;
-      this.productNameExistsError = false;
-      this.missingPricesErrorMessage = false;
+        this.errorMessage = false;
+        this.productNameExistsError = false;
+        this.missingPricesErrorMessage = false;
 
-      // if everything was succes then open successfull dialog
-      this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.MODIFIED_TEXT,
-          needToGoPrevoiusPage: true
-        }
-      });
-    } catch (error) {
-      this.errorMessage = true;
-    }
+        // if everything was succes then open successfull dialog
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.MODIFIED_TEXT,
+            needToGoPrevoiusPage: true
+          }
+        });
+      } catch (error) {
+        this.errorMessage = true;
+      }
+    });
   }
 
   async deleteClothes() {
@@ -554,34 +558,36 @@ export class HandleClothesComponent {
     const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
 
     if (confirmToDeleteAddress) {
-      try {
-        // Delete images from Firebase Storage
-        const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
-          if (price.productImage) {
-            try {
-              // Reference the file by its URL
-              const fileRef = this.storage.refFromURL(price.productImage);
-              await fileRef.delete().toPromise();  // Attempt to delete the image
-            } catch (error) { }
-          }
-        });
+      await this.loadingService.withLoading(async () => {
+        try {
+          // Delete images from Firebase Storage
+          const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
+            if (price.productImage) {
+              try {
+                // Reference the file by its URL
+                const fileRef = this.storage.refFromURL(price.productImage);
+                await fileRef.delete().toPromise();  // Attempt to delete the image
+              } catch (error) { }
+            }
+          });
 
-        // Await all delete promises
-        await Promise.all(deleteImagePromises);
+          // Await all delete promises
+          await Promise.all(deleteImagePromises);
 
-        // Delete all the images from the product storage folder
-        await this.adminService.deleteAllFilesInFolder(ProductViewText.CLOTHES, this.clothingId);
+          // Delete all the images from the product storage folder
+          await this.adminService.deleteAllFilesInFolder(ProductViewText.CLOTHES, this.clothingId);
 
-        // Delete the product from firestore
-        const deleteAddressRef = this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").doc(this.clothingId);
-        await deleteAddressRef.delete();
-        this.dialog.open(SuccessfullDialogComponent, {
-          data: {
-            text: SuccessFullDialogText.DELETED_TEXT,
-            needToGoPrevoiusPage: true
-          }
-        });
-      } catch { }
+          // Delete the product from firestore
+          const deleteAddressRef = this.db.collection("products").doc(ProductViewText.CLOTHES).collection("allProduct").doc(this.clothingId);
+          await deleteAddressRef.delete();
+          this.dialog.open(SuccessfullDialogComponent, {
+            data: {
+              text: SuccessFullDialogText.DELETED_TEXT,
+              needToGoPrevoiusPage: true
+            }
+          });
+        } catch { }
+      });
     }
   }
 

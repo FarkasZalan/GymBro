@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
+
 <div class="container" [@zoomIn]>
     <nb-card class="container">
         <nb-card-body style="overflow: hidden;">

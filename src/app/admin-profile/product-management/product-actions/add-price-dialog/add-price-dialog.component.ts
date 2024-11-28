@@ -10,6 +10,7 @@ import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/d
 import { ChangeDefaultPriceConfirmDialogComponent } from '../change-default-price-confirm-dialog/change-default-price-confirm-dialog.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ProductColor } from '../../product-models/product-color.model';
+import { LoadingService } from '../../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-add-price-dialog',
@@ -91,7 +92,7 @@ export class AddPriceDialogComponent implements OnInit {
   discountedPrice: number = 0;
   isDiscountedPrice: boolean = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>, private translate: TranslateService, public loadingService: LoadingService) {
     this.selectedUnit = data.unit;
     this.editText = data.editText;
     this.productCategory = data.productCategory;
@@ -258,16 +259,18 @@ export class AddPriceDialogComponent implements OnInit {
   }
 
   // Handle file selection and convert to Base64
-  onFileSelected(event: any) {
+  async onFileSelected(event: any) {
     const file = event.target.files[0];
 
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imageBase64 = reader.result as string; // Base64 string
-        this.imagePreview = this.imageBase64; // Preview for the user
-      };
-      reader.readAsDataURL(file);
+      await this.loadingService.withLoading(async () => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imageBase64 = reader.result as string;
+          this.imagePreview = this.imageBase64;
+        };
+        reader.readAsDataURL(file);
+      });
     }
   }
 
@@ -278,56 +281,32 @@ export class AddPriceDialogComponent implements OnInit {
 
   // Method to create new price and return to the parent page
   async addNewPrice() {
-    if (!this.isDiscountedPrice) {
-      this.newPrice.discountedPrice = 0
-    }
-    let quantity = 0;
-    if (this.priceForm.value.quantityInProduct !== undefined) {
-      quantity = this.priceForm.value.quantityInProduct;
-    }
-
-    if (this.unifiedImageUrl !== null) {
-      this.imageBase64 = this.unifiedImageUrl;
-    }
-
-    this.newPrice = {
-      quantityInProduct: quantity,
-      productImage: this.imageBase64,
-      productPrice: this.priceForm.value.productPrice,
-      productStock: this.priceForm.value.productStock,
-      setAsDefaultPrice: this.isSetAsDefaultPrice,
-      productFlavor: this.selectedFlavor,
-      productSize: this.selectedSize,
-      productColor: this.selectedColor,
-      discountedPrice: this.priceForm.value.discountedPrice > 0
-        ? this.priceForm.value.discountedPrice
-        : 0
-    };
-
-
-    let hasDefaultPrice = false;
-    if (this.allPricesForProduct.length > 0 && this.isSetAsDefaultPrice) {
-      // check if a default price already has been added before
-      hasDefaultPrice = this.allPricesForProduct.some(productPrice => productPrice.setAsDefaultPrice === true);
-    }
-    // If there's a default price already set, we need to handle it
-    if (hasDefaultPrice) {
-      const dialogRef = this.dialog.open(ChangeDefaultPriceConfirmDialogComponent);
-
-      // Wait for the dialog to close and get the user's confirmation
-      const confirmToSetDefault = await dialogRef.afterClosed().toPromise();
-
-      if (confirmToSetDefault) {
-        // Find the price where isSetAsDefaultAddress is true
-        this.newPrice.setAsDefaultPrice = true;
-      } else {
-        // User did not confirm, exit the method
-        return;
+    await this.loadingService.withLoading(async () => {
+      if (this.productCategory === ProductViewText.CLOTHES) {
+        this.newPrice.productColor = this.selectedColor;
       }
-    }
 
-    // Close the dialog and return the new product price object
-    this.dialogRef.close(this.newPrice);
+      if (this.productCategory === ProductViewText.ACCESSORIES && this.accessoriesType === this.productViewText.SHAKERS) {
+        this.newPrice.productColor = this.selectedColor;
+      }
+
+      if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.DRINKS) || (this.productCategory === ProductViewText.ORGANIC_FOOD && this.data.productInnerCategory === ProductViewText.HEALTHY_SNACKS)) {
+        this.newPrice.productFlavor = this.selectedFlavor;
+      }
+
+      if (this.productCategory === ProductViewText.CLOTHES || (this.productCategory === ProductViewText.ACCESSORIES && this.accessoriesType === this.productViewText.WEIGHT_LIFTING) || (this.productCategory === ProductViewText.ACCESSORIES && this.accessoriesType === this.productViewText.SHAKERS)) {
+        this.newPrice.productSize = this.selectedSize;
+      }
+
+      if (!this.isDiscountedPrice) {
+        this.newPrice.discountedPrice = 0;
+      }
+
+      this.newPrice.setAsDefaultPrice = this.isSetAsDefaultPrice;
+      this.newPrice.productImage = this.imageBase64;
+
+      this.dialogRef.close(this.newPrice);
+    });
   }
 
   async deletePrice() {
@@ -341,8 +320,10 @@ export class AddPriceDialogComponent implements OnInit {
     const confirmToDeletePrice = await dialogRef.afterClosed().toPromise();
 
     if (confirmToDeletePrice) {
-      // Close the dialog and return to with boolean to delete this price
-      this.dialogRef.close(true);
+      await this.loadingService.withLoading(async () => {
+        // Close the dialog and return to with boolean to delete this price
+        this.dialogRef.close(true);
+      });
     }
   }
 

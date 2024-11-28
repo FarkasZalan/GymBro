@@ -10,6 +10,7 @@ import { OrganicFood } from '../../product-models/organic-food';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AdminService } from '../../../admin.service';
 import { ProductReeviews } from '../../product-models/product-reviews.model';
+import { LoadingService } from '../../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-products-list',
@@ -45,34 +46,28 @@ export class ProductsListComponent implements OnInit {
   // Add property to store reviews
   productReviews: Map<string, ProductReeviews[]> = new Map();
 
-  constructor(private productServie: ProductService, private router: Router, private route: ActivatedRoute, private location: Location, private adminService: AdminService) { }
+  constructor(private productServie: ProductService,
+    private router: Router, private route: ActivatedRoute, private location: Location, private adminService: AdminService, public loadingService: LoadingService) { }
 
   ngOnInit() {
     // get the category of the products from the category component
     this.route.params.subscribe(params => {
       this.productCategory = params['productCategory'];
+      this.loadProducts();
+    });
+  }
+
+  // New method to handle product loading
+  private async loadProducts() {
+    await this.loadingService.withLoading(async () => {
       if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe(async (foodSuplimentsCollection: FoodSupliment[]) => {
           this.foodSupliments = foodSuplimentsCollection;
-
-          // Sort default by name
           this.foodSupliments = this.productServie.sortFoodSuplimentsByNameASC(this.foodSupliments);
 
           // check if products have any unchecked reviews and if yes then get those number
-          this.foodSupliments.forEach((product) => {
-            this.adminService.productUncheckedReviewsCount(product.id, ProductViewText.FOOD_SUPLIMENTS)
-              .subscribe((count) => {
-                this.productReviewCountMap[product.id] = count; // Store the count of unchecked reviews
-                this.productUncheckedReviewsMap[product.id] = count > 0; // Set if there are unchecked reviews
-              });
+          await this.loadProductReviews(this.foodSupliments);
 
-            this.productServie.getReviewsForProduct(product.id, ProductViewText.FOOD_SUPLIMENTS)
-              .subscribe(reviews => {
-                this.productReviews.set(product.id, reviews);
-              });
-          });
-
-          // if the collection doesn't have any products
           if (this.foodSupliments.length === 0) {
             this.emptyCollection = true;
           }
@@ -81,25 +76,10 @@ export class ProductsListComponent implements OnInit {
       if (this.productCategory === ProductViewText.ORGANIC_FOOD) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe(async (organicFoodCollection: OrganicFood[]) => {
           this.organicProducts = organicFoodCollection;
-
-          // Sort default by name
           this.organicProducts = this.productServie.sortOrganicProductsByNameASC(this.organicProducts);
 
-          // check if products have any unchecked reviews and if yes then get those number
-          this.organicProducts.forEach((product) => {
-            this.adminService.productUncheckedReviewsCount(product.id, ProductViewText.ORGANIC_FOOD)
-              .subscribe((count) => {
-                this.productReviewCountMap[product.id] = count; // Store the count of unchecked reviews
-                this.productUncheckedReviewsMap[product.id] = count > 0; // Set if there are unchecked reviews
-              });
+          await this.loadProductReviews(this.organicProducts);
 
-            this.productServie.getReviewsForProduct(product.id, ProductViewText.ORGANIC_FOOD)
-              .subscribe(reviews => {
-                this.productReviews.set(product.id, reviews);
-              });
-          });
-
-          // if the collection doesn't have any products
           if (this.organicProducts.length === 0) {
             this.emptyCollection = true;
           }
@@ -108,25 +88,10 @@ export class ProductsListComponent implements OnInit {
       if (this.productCategory === ProductViewText.CLOTHES) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe(async (clothesCollection: Clothes[]) => {
           this.clothes = clothesCollection;
-
-          // Sort default by name
           this.clothes = this.productServie.sortClothesByNameASC(this.clothes);
 
-          // check if products have any unchecked reviews and if yes then get those number
-          this.clothes.forEach((product) => {
-            this.adminService.productUncheckedReviewsCount(product.id, ProductViewText.CLOTHES)
-              .subscribe((count) => {
-                this.productReviewCountMap[product.id] = count; // Store the count of unchecked reviews
-                this.productUncheckedReviewsMap[product.id] = count > 0; // Set if there are unchecked reviews
-              });
+          await this.loadProductReviews(this.clothes);
 
-            this.productServie.getReviewsForProduct(product.id, ProductViewText.CLOTHES)
-              .subscribe(reviews => {
-                this.productReviews.set(product.id, reviews);
-              });
-          });
-
-          // if the collection doesn't have any products
           if (this.clothes.length === 0) {
             this.emptyCollection = true;
           }
@@ -135,31 +100,32 @@ export class ProductsListComponent implements OnInit {
       if (this.productCategory === ProductViewText.ACCESSORIES) {
         this.productServie.getAllProductByCategory(this.productCategory).subscribe(async (accessoriesCollection: Accessories[]) => {
           this.accessories = accessoriesCollection;
-
-          // Sort default by name
           this.accessories = this.productServie.sortAccessoriesByNameASC(this.accessories);
 
-          // check if products have any unchecked reviews and if yes then get those number
-          this.accessories.forEach((product) => {
-            this.adminService.productUncheckedReviewsCount(product.id, ProductViewText.ACCESSORIES)
-              .subscribe((count) => {
-                this.productReviewCountMap[product.id] = count; // Store the count of unchecked reviews
-                this.productUncheckedReviewsMap[product.id] = count > 0; // Set if there are unchecked reviews
-              });
+          await this.loadProductReviews(this.accessories);
 
-            this.productServie.getReviewsForProduct(product.id, ProductViewText.ACCESSORIES)
-              .subscribe(reviews => {
-                this.productReviews.set(product.id, reviews);
-              });
-          });
-
-          // if the collection doesn't have any products
           if (this.accessories.length === 0) {
             this.emptyCollection = true;
           }
         });
       }
     });
+  }
+
+  // Helper method to load reviews for products
+  private async loadProductReviews(products: any[]) {
+    for (const product of products) {
+      this.adminService.productUncheckedReviewsCount(product.id, this.productCategory)
+        .subscribe((count) => {
+          this.productReviewCountMap[product.id] = count;
+          this.productUncheckedReviewsMap[product.id] = count > 0;
+        });
+
+      this.productServie.getReviewsForProduct(product.id, this.productCategory)
+        .subscribe(reviews => {
+          this.productReviews.set(product.id, reviews);
+        });
+    }
   }
 
   // Method to get the reviews for the product

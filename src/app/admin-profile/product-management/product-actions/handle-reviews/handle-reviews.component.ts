@@ -13,12 +13,11 @@ import { Location } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { DeleteConfirmationDialogComponent } from '../../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/delete-text';
-import { SuccessfullDialogComponent } from '../../../../successfull-dialog/successfull-dialog.component';
-import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { MatDialog } from '@angular/material/dialog';
 import { ReviewHandleComponent } from '../../../../products/review-handle/review-handle.component';
 import { AdminNotificationService } from '../../../admin-notification.service';
 import { AdminService } from '../../../admin.service';
+import { LoadingService } from '../../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-handle-reviews',
@@ -74,7 +73,8 @@ export class HandleReviewsComponent implements OnInit {
     private dialog: MatDialog,
     private location: Location,
     private adminService: AdminService,
-    private adminNotificationService: AdminNotificationService) { }
+    private adminNotificationService: AdminNotificationService,
+    public loadingService: LoadingService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -138,21 +138,23 @@ export class HandleReviewsComponent implements OnInit {
 
   // Function to mark a review as checked
   async markReviewAsChecked(review: ProductReeviews) {
-    if (!review.checkedByAdmin || review.reviewEdited) {
-      await this.db
-        .collection('reviews')
-        .doc(this.productCategory)
-        .collection('allReview')
-        .doc(review.id)
-        .update({
-          checkedByAdmin: true,
-          reviewEdited: false
-        });
+    await this.loadingService.withLoading(async () => {
+      if (!review.checkedByAdmin || review.reviewEdited) {
+        await this.db
+          .collection('reviews')
+          .doc(this.productCategory)
+          .collection('allReview')
+          .doc(review.id)
+          .update({
+            checkedByAdmin: true,
+            reviewEdited: false
+          });
 
-      // Update the notification count
-      const newCount = await this.adminService.getAllReviewsCount();
-      this.adminNotificationService.updateReviewsCount(newCount);
-    }
+        // Update the notification count
+        const newCount = await this.adminService.getAllReviewsCount();
+        this.adminNotificationService.updateReviewsCount(newCount);
+      }
+    });
   }
 
   // Method to get the default price for a the products
@@ -222,22 +224,26 @@ export class HandleReviewsComponent implements OnInit {
   async removeReview(review: ProductReeviews) {
     const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
       data: {
-        text: DeleteConfirmationText.REVIEW_DELETE
+        text: DeleteConfirmationText.REVIEW_DELETE_ADMIN
       }
     });
 
-    // Wait for the dialog to close and get the user's confirmation
-    const confirmToDeleteAddress = await dialogRef.afterClosed().toPromise();
+    const confirmToDelete = await dialogRef.afterClosed().toPromise();
 
-    if (confirmToDeleteAddress) {
-      // Delete the review from firestore
-      const deleteAddressRef = this.db.collection("reviews").doc(this.productCategory).collection("allReview").doc(review.id);
-      await deleteAddressRef.delete();
-      this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.DELETED_TEXT,
-          needToGoPrevoiusPage: false
-        }
+    if (confirmToDelete) {
+      await this.loadingService.withLoading(async () => {
+        try {
+          // Delete the review
+          await this.db
+            .collection('reviews')
+            .doc(this.productCategory)
+            .collection('allReview')
+            .doc(review.id)
+            .delete();
+
+          // Update the reviews list
+          this.getReviews();
+        } catch (error) { }
       });
     }
   }
