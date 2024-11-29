@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { LoadingService } from '../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -28,32 +29,39 @@ export class ForgotPasswordComponent {
   emailToForgotPassword: string;
   emailSent = false;
 
-  constructor(private authService: AuthService, @Inject(MAT_DIALOG_DATA) public data, public dialog: MatDialog, public dialogRef: MatDialogRef<ForgotPasswordComponent>) {
+  constructor(
+    private authService: AuthService,
+    @Inject(MAT_DIALOG_DATA) public data,
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<ForgotPasswordComponent>,
+    public loadingService: LoadingService
+  ) {
     this.emailToForgotPassword = data.email; // Initialize email from injected data
   }
 
   // Method to initiate password recovery
-  forgotPassword() {
-    this.emailToForgotPassword = this.loginForm.value.email;
+  async forgotPassword() {
+    await this.loadingService.withLoading(async () => {
+      this.emailToForgotPassword = this.loginForm.value.email;
 
-    // send the password recovry email to the given email
-    this.authService.forgotPassword(this.emailToForgotPassword)
-      .then(success => {
-        if (success) {
-          this.errorMessage = false;
-          this.dialog.closeAll();
+      // send the password recovery email to the given email
+      const success = await this.authService.forgotPassword(this.emailToForgotPassword);
 
-          // Open success dialog to inform user
-          this.dialog.open(SuccessfullDialogComponent, {
-            data: {
-              text: SuccessFullDialogText.PASSWORD_EMAIL_SENT,
-              needToGoPrevoiusPage: false
-            }
-          })
-        } else {
-          this.errorMessage = true;
-        }
-      });
+      if (success) {
+        this.errorMessage = false;
+        this.dialog.closeAll();
+
+        // Open success dialog to inform user
+        this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.PASSWORD_EMAIL_SENT,
+            needToGoPrevoiusPage: false
+          }
+        });
+      } else {
+        this.errorMessage = true;
+      }
+    });
   }
 
   // Close all dialogs

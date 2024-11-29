@@ -1,7 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CurrencyPipe, Location } from '@angular/common';
-import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food';
+import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food.model';
 import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DocumentHandlerService } from '../../../document.handler.service';
@@ -16,6 +16,7 @@ import { CartService } from '../../../cart/cart.service';
 import { User } from '../../../profile/user.model';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 import { ProductPrice } from '../../../admin-profile/product-management/product-models/product-price.model';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-organic-food-page',
@@ -141,6 +142,9 @@ export class OrganicFoodPageComponent implements OnInit {
       nutritionalTable: null,
 
       allergens: [],
+
+      // date added
+      dateAdded: Timestamp.now(),
 
       prices: [],
       useUnifiedImage: false,

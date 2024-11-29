@@ -20,6 +20,7 @@ import { AddColorDialogComponent } from '../add-color-dialog/add-color-dialog.co
 import { ProductColor } from '../../product-models/product-color.model';
 import { Editor, Toolbar } from 'ngx-editor';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-handle-clothes',
@@ -109,6 +110,9 @@ export class HandleClothesComponent {
 
   description: string = "";
 
+  // date added
+  dateAdded: Timestamp;
+
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService, public loadingService: LoadingService) { }
 
   ngOnInit(): void {
@@ -135,7 +139,7 @@ export class HandleClothesComponent {
 
       clothingType: "",
       material: "",
-
+      dateAdded: Timestamp.now(),
       prices: [],
     }
     this.route.params.subscribe(params => {
@@ -154,6 +158,9 @@ export class HandleClothesComponent {
           // type, material
           this.selectedClothingType = this.clothingObject.clothingType;
           this.selectedMaterial = this.clothingObject.material;
+
+          // date added
+          this.dateAdded = this.clothingObject.dateAdded;
 
           // price, color, size
           this.productPrices = this.clothingObject.prices;
@@ -459,7 +466,7 @@ export class HandleClothesComponent {
 
         clothingType: this.selectedClothingType,
         material: this.selectedMaterial,
-
+        dateAdded: Timestamp.now(),
         prices: [],
       }
 
@@ -522,7 +529,7 @@ export class HandleClothesComponent {
 
         clothingType: this.selectedClothingType,
         material: this.selectedMaterial,
-
+        dateAdded: this.clothingObject.dateAdded,
         prices: this.productPrices,
       }
 

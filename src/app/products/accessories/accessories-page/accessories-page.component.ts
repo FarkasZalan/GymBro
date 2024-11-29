@@ -16,6 +16,7 @@ import { User } from '../../../profile/user.model';
 import { ProductService } from '../../product.service';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 import { ProductPrice } from '../../../admin-profile/product-management/product-models/product-price.model';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-accessories-page',
@@ -129,6 +130,9 @@ export class AccessoriesPageComponent implements OnInit {
       equipmentType: "",
       useUnifiedImage: false,
       productCategory: "",
+
+      // date added
+      dateAdded: Timestamp.now(),
 
       prices: []
     }

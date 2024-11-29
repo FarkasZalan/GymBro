@@ -13,8 +13,7 @@ export class AuthService {
     constructor(
         private auth: AngularFireAuth,
         private db: AngularFirestore,
-        private router: Router,
-        private cartService: CartService
+        private cartService: CartService,
     ) { }
 
     // Check if a user is authenticated by observing the auth state
@@ -121,7 +120,6 @@ export class AuthService {
             this.cartService.clearCartOnLogout();
 
             this.auth.signOut();
-            this.router.navigate(['/']);
         } catch (error) { }
     }
 }

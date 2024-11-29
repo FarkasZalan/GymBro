@@ -22,6 +22,20 @@
         border-left: 4px solid #ff3d71;
         background-color: #fff5f5;
     }
+
+    @media (max-width: 768px) {
+        padding: 1rem !important;
+        margin-bottom: 0.75rem !important;
+
+        .order-header {
+            flex-direction: column;
+            gap: 0.5rem;
+
+            .order-id {
+                font-size: 1rem !important;
+            }
+        }
+    }
 }
 
 .order-header {
@@ -105,6 +119,15 @@
 
         &::after {
             display: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        padding: 0.5rem !important;
+
+        &::before {
+            left: 1rem !important;
         }
     }
 }

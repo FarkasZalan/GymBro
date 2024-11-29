@@ -6,6 +6,7 @@ import { SuccessFullDialogText } from '../../../successfull-dialog/sucessfull-di
 import { User } from '../../user.model';
 import { DocumentHandlerService } from '../../../document.handler.service';
 import { UserService } from '../../user.service';
+import { LoadingService } from '../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-change-profile',
@@ -35,56 +36,66 @@ export class ChangeProfileComponent {
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data,
     private documentumHandler: DocumentHandlerService,
-    private userService: UserService
+    private userService: UserService,
+    public loadingService: LoadingService
   ) {
-    this.modifyUserId = data.userId;
+    this.initializeComponent();
+  }
 
-    // Fetch user details by ID when the component initializes
-    this.documentumHandler.getDocumentByID("users", this.modifyUserId).subscribe((user: User) => {
-      this.modifyUser = user;
-      this.loyaltyPoints = this.modifyUser.loyaltyPoints;
-      this.is10PercentDiscountActive = this.modifyUser.is10PercentDiscountActive;
-      this.is20PercentDiscountActive = this.modifyUser.is20PercentDiscountActive;
-      this.is30PercentDiscountActive = this.modifyUser.is30PercentDiscountActive;
-      this.is5000HufDiscountActive = this.modifyUser.is5000HufDiscountActive;
-      this.isFreeShippingActive = this.modifyUser.isFreeShippingActive;
-      this.userIsAdmin = this.modifyUser.isAdmin;
+  private async initializeComponent() {
+    await this.loadingService.withLoading(async () => {
+      this.modifyUserId = this.data.userId;
+
+      // Fetch user details by ID when the component initializes
+      this.documentumHandler.getDocumentByID("users", this.modifyUserId).subscribe((user: User) => {
+        this.modifyUser = user;
+        this.loyaltyPoints = this.modifyUser.loyaltyPoints;
+        this.is10PercentDiscountActive = this.modifyUser.is10PercentDiscountActive;
+        this.is20PercentDiscountActive = this.modifyUser.is20PercentDiscountActive;
+        this.is30PercentDiscountActive = this.modifyUser.is30PercentDiscountActive;
+        this.is5000HufDiscountActive = this.modifyUser.is5000HufDiscountActive;
+        this.isFreeShippingActive = this.modifyUser.isFreeShippingActive;
+        this.userIsAdmin = this.modifyUser.isAdmin;
+      });
     });
   }
 
   async changeData() {
-    // Retrieve password and confirmation from the form
-    this.password = this.modifyUserForm.value.password;
-    this.passwordAgain = this.modifyUserForm.value.passwordAgain;
+    await this.loadingService.withLoading(async () => {
+      // Retrieve password and confirmation from the form
+      this.password = this.modifyUserForm.value.password;
+      this.passwordAgain = this.modifyUserForm.value.passwordAgain;
 
-    if (this.password !== this.passwordAgain) {
-      this.errorMessage = true;
-    }
+      if (this.password !== this.passwordAgain) {
+        this.errorMessage = true;
+        return;
+      }
 
-    // Update password in the backend if valid
-    if (this.password !== "" && this.password !== null && this.password === this.passwordAgain) {
-      await this.userService.updatePassword(this.password);
-    }
+      // Update password in the backend if valid
+      if (this.password !== "" && this.password !== null && this.password === this.passwordAgain) {
+        await this.userService.updatePassword(this.password);
+      }
 
-    // Create an updated user object
-    this.modifyUser = {
-      id: this.modifyUserId,
-      firstName: this.modifyUserForm.value.firstName,
-      lastName: this.modifyUserForm.value.lastName,
-      email: this.modifyUser.email,
-      phone: this.modifyUserForm.value.phone,
-      isAdmin: this.userIsAdmin,
-      loyaltyPoints: this.loyaltyPoints,
-      is10PercentDiscountActive: this.is10PercentDiscountActive,
-      is20PercentDiscountActive: this.is20PercentDiscountActive,
-      is30PercentDiscountActive: this.is30PercentDiscountActive,
-      is5000HufDiscountActive: this.is5000HufDiscountActive,
-      isFreeShippingActive: this.isFreeShippingActive,
-      deleted: false
-    }
+      // Create an updated user object
+      this.modifyUser = {
+        id: this.modifyUserId,
+        firstName: this.modifyUserForm.value.firstName,
+        lastName: this.modifyUserForm.value.lastName,
+        email: this.modifyUser.email,
+        phone: this.modifyUserForm.value.phone,
+        isAdmin: this.userIsAdmin,
+        loyaltyPoints: this.loyaltyPoints,
+        is10PercentDiscountActive: this.is10PercentDiscountActive,
+        is20PercentDiscountActive: this.is20PercentDiscountActive,
+        is30PercentDiscountActive: this.is30PercentDiscountActive,
+        is5000HufDiscountActive: this.is5000HufDiscountActive,
+        isFreeShippingActive: this.isFreeShippingActive,
+        deleted: false
+      }
 
-    // Update user details and handle response
-    this.userService.updateUser(this.modifyUser).then((modified) => {
+      // Update user details and handle response
+      const modified = await this.userService.updateUser(this.modifyUser);
+
       if (modified) {
         this.errorMessage = false;
         this.goToBack();

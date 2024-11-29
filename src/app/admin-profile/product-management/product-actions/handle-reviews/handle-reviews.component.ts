@@ -6,7 +6,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentHandlerService } from '../../../../document.handler.service';
 import { FoodSupliment } from '../../product-models/food-supliment.model';
-import { OrganicFood } from '../../product-models/organic-food';
+import { OrganicFood } from '../../product-models/organic-food.model';
 import { Clothes } from '../../product-models/clothing.model';
 import { Accessories } from '../../product-models/accessories.model';
 import { Location } from '@angular/common';

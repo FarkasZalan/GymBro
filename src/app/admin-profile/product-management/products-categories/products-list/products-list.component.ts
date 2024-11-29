@@ -6,7 +6,7 @@ import { Clothes } from '../../product-models/clothing.model';
 import { Location } from '@angular/common';
 import { Accessories } from '../../product-models/accessories.model';
 import { ProductViewText } from '../../product-view-texts';
-import { OrganicFood } from '../../product-models/organic-food';
+import { OrganicFood } from '../../product-models/organic-food.model';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AdminService } from '../../../admin.service';
 import { ProductReeviews } from '../../product-models/product-reviews.model';

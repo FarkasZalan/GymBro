@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { ChangeDefaultAddressConfirmDialogComponent } from '../change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { AddressTypeText } from '../../profile-address-type-text';
+import { LoadingService } from '../../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-create-shipping-address',
@@ -64,24 +65,27 @@ export class CreateShippingAddressComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private translate: TranslateService,
-    private dialogRef: MatDialogRef<CreateShippingAddressComponent>) { }
+    private dialogRef: MatDialogRef<CreateShippingAddressComponent>,
+    public loadingService: LoadingService) { }
 
-  ngOnInit(): void {
-    //load the current user
-    this.auth.authState.subscribe((userAuth) => {
-      if (userAuth) {
-        this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
-          this.userId = currentUser.id;
+  async ngOnInit() {
+    await this.loadingService.withLoading(async () => {
+      //load the current user
+      this.auth.authState.subscribe((userAuth) => {
+        if (userAuth) {
+          this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
+            this.userId = currentUser.id;
 
-          // if no user logged-in then redirect to home page
-          if (this.userId === null) {
-            this.authService.logOut();
-            this.dialog.closeAll();
-            this.router.navigate(['/home']);
-          }
-        })
-      }
-    })
+            // if no user logged-in then redirect to home page
+            if (this.userId === null) {
+              this.authService.logOut();
+              this.dialog.closeAll();
+              this.router.navigate(['/home']);
+            }
+          })
+        }
+      })
+    });
   }
 
   // Function to change the selected address type
@@ -100,108 +104,85 @@ export class CreateShippingAddressComponent implements OnInit {
   }
 
   async addNewAddress() {
-    if (this.selectedAddressType === AddressTypeText.OTHER) {
-      this.addressName = this.createShippingAddressForm.value.addressName;
-    }
-    if (this.addressName === null || this.addressName === undefined || this.addressName === "") {
-      this.missingAddressNameError = true;
-    } else {
-      let errorCheck: boolean = false;
-
-      // check what is the shipping address type, name because of the duplication check
-      if (this.selectedAddressType === AddressTypeText.HOME) {
-        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-          "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.HOME, undefined, ""
-        );
+    await this.loadingService.withLoading(async () => {
+      if (this.selectedAddressType === AddressTypeText.OTHER) {
+        this.addressName = this.createShippingAddressForm.value.addressName;
       }
-      else if (this.selectedAddressType === AddressTypeText.WORK) {
-        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-          "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.WORK, undefined, ""
-        );
-      }
-      else {
-        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-          "users", this.userId, "shippingAddresses", "addressName", this.addressName, undefined, ""
-        );
-      }
-
-      if (errorCheck) {
-        this.errorMessage = true;
-        return; // Exit early if there's an error
+      if (this.addressName === null || this.addressName === undefined || this.addressName === "") {
+        this.missingAddressNameError = true;
       } else {
-        this.errorMessage = false;
-      }
+        let errorCheck: boolean = false;
 
-      // check if a default address already has been added before
-      let defaultCheck = false;
-
-      // if the user want to create a new default address
-      if (this.isSetAsDefaultAddress) {
-        defaultCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-          "users", this.userId, "shippingAddresses", "isSetAsDefaultAddress", undefined, this.isSetAsDefaultAddress, ""
-        );
-      }
-
-      // If there's a default address already set, we need to handle it
-      if (defaultCheck) {
-        const dialogRef = this.dialog.open(ChangeDefaultAddressConfirmDialogComponent);
-
-        // Wait for the dialog to close and get the user's confirmation
-        const confirmToSetDefault = await dialogRef.afterClosed().toPromise();
-
-        if (confirmToSetDefault) {
-          // Find the address where isSetAsDefaultAddress is true
-          const addressesRef = this.db.collection("users").doc(this.userId).collection("shippingAddresses").ref;
-          const defaultAddressSnapshot = await addressesRef.where("isSetAsDefaultAddress", "==", true).limit(1).get();
-
-          // Update the existing default address (if found) to set isSetAsDefaultAddress to false
-          if (!defaultAddressSnapshot.empty) {
-            const defaultAddress = defaultAddressSnapshot.docs[0];
-            await defaultAddress.ref.update({ isSetAsDefaultAddress: false });
-          }
-        } else {
-          // User did not confirm, exit the method
-          return;
+        // check what is the shipping address type, name because of the duplication check
+        if (this.selectedAddressType === AddressTypeText.HOME) {
+          errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+            "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.HOME, undefined, ""
+          );
         }
-      }
+        else if (this.selectedAddressType === AddressTypeText.WORK) {
+          errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+            "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.WORK, undefined, ""
+          );
+        }
+        else {
+          errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+            "users", this.userId, "shippingAddresses", "addressName", this.addressName, undefined, ""
+          );
+        }
 
-      // Prepare additional fields
-      if (this.createShippingAddressForm.value.taxNumber !== undefined && this.createShippingAddressForm.value.taxNumber !== null) {
-        this.taxNumber = this.createShippingAddressForm.value.taxNumber;
-      }
+        if (errorCheck) {
+          this.errorMessage = true;
+          return; // Exit early if there's an error
+        } else {
+          this.errorMessage = false;
+        }
 
-      if (this.createShippingAddressForm.value.companyName !== undefined && this.createShippingAddressForm.value.companyName !== null) {
-        this.companyName = this.createShippingAddressForm.value.companyName;
-      }
+        // check if a default address already has been added before
+        let defaultCheck = false;
 
-      // Add the new address with isSetAsDefaultAddress set to true
-      try {
-        const documentumRef = await this.db.collection("users").doc(this.userId).collection("shippingAddresses").add({
-          id: "",
-          addressName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.addressName),
-          addressType: this.selectedAddressType,
-          country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.country),
-          postalCode: this.createShippingAddressForm.value.postalCode,
-          city: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.city),
-          street: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.streetName),
-          streetType: this.createShippingAddressForm.value.streetType,
-          houseNumber: this.createShippingAddressForm.value.houseNumber,
-          floor: this.createShippingAddressForm.value.floor,
-          door: this.createShippingAddressForm.value.door,
-          isSetAsDefaultAddress: this.isSetAsDefaultAddress,
-          taxNumber: this.taxNumber,
-          companyName: this.companyName
-        });
-        // id the document created then save the document id in the field
-        await documentumRef.update({ id: documentumRef.id });
-        this.errorMessage = false;
-        this.missingAddressNameError = false;
+        // if the user want to create a new default address
+        if (this.isSetAsDefaultAddress) {
+          defaultCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+            "users", this.userId, "shippingAddresses", "isSetAsDefaultAddress", undefined, this.isSetAsDefaultAddress, ""
+          );
+        }
 
-        // Close dialog with success and the new address
-        this.dialogRef.close({
-          success: true,
-          address: {
-            id: documentumRef.id,
+        // If there's a default address already set, we need to handle it
+        if (defaultCheck) {
+          const dialogRef = this.dialog.open(ChangeDefaultAddressConfirmDialogComponent);
+
+          // Wait for the dialog to close and get the user's confirmation
+          const confirmToSetDefault = await dialogRef.afterClosed().toPromise();
+
+          if (confirmToSetDefault) {
+            // Find the address where isSetAsDefaultAddress is true
+            const addressesRef = this.db.collection("users").doc(this.userId).collection("shippingAddresses").ref;
+            const defaultAddressSnapshot = await addressesRef.where("isSetAsDefaultAddress", "==", true).limit(1).get();
+
+            // Update the existing default address (if found) to set isSetAsDefaultAddress to false
+            if (!defaultAddressSnapshot.empty) {
+              const defaultAddress = defaultAddressSnapshot.docs[0];
+              await defaultAddress.ref.update({ isSetAsDefaultAddress: false });
+            }
+          } else {
+            // User did not confirm, exit the method
+            return;
+          }
+        }
+
+        // Prepare additional fields
+        if (this.createShippingAddressForm.value.taxNumber !== undefined && this.createShippingAddressForm.value.taxNumber !== null) {
+          this.taxNumber = this.createShippingAddressForm.value.taxNumber;
+        }
+
+        if (this.createShippingAddressForm.value.companyName !== undefined && this.createShippingAddressForm.value.companyName !== null) {
+          this.companyName = this.createShippingAddressForm.value.companyName;
+        }
+
+        // Add the new address with isSetAsDefaultAddress set to true
+        try {
+          const documentumRef = await this.db.collection("users").doc(this.userId).collection("shippingAddresses").add({
+            id: "",
             addressName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.addressName),
             addressType: this.selectedAddressType,
             country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.country),
@@ -215,20 +196,45 @@ export class CreateShippingAddressComponent implements OnInit {
             isSetAsDefaultAddress: this.isSetAsDefaultAddress,
             taxNumber: this.taxNumber,
             companyName: this.companyName
-          }
-        });
+          });
+          // id the document created then save the document id in the field
+          await documentumRef.update({ id: documentumRef.id });
+          this.errorMessage = false;
+          this.missingAddressNameError = false;
 
-        // if everything was succes then open successfull dialog
-        this.dialog.open(SuccessfullDialogComponent, {
-          data: {
-            text: SuccessFullDialogText.CREATED_TEXT,
-            needToGoPrevoiusPage: false
-          }
-        });
-      } catch (error) {
-        this.errorMessage = true;
+          // Close dialog with success and the new address
+          this.dialogRef.close({
+            success: true,
+            address: {
+              id: documentumRef.id,
+              addressName: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.addressName),
+              addressType: this.selectedAddressType,
+              country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.country),
+              postalCode: this.createShippingAddressForm.value.postalCode,
+              city: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.city),
+              street: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.createShippingAddressForm.value.streetName),
+              streetType: this.createShippingAddressForm.value.streetType,
+              houseNumber: this.createShippingAddressForm.value.houseNumber,
+              floor: this.createShippingAddressForm.value.floor,
+              door: this.createShippingAddressForm.value.door,
+              isSetAsDefaultAddress: this.isSetAsDefaultAddress,
+              taxNumber: this.taxNumber,
+              companyName: this.companyName
+            }
+          });
+
+          // if everything was succes then open successfull dialog
+          this.dialog.open(SuccessfullDialogComponent, {
+            data: {
+              text: SuccessFullDialogText.CREATED_TEXT,
+              needToGoPrevoiusPage: false
+            }
+          });
+        } catch (error) {
+          this.errorMessage = true;
+        }
       }
-    }
+    });
   }
 
   // Update the back method to match the edit component

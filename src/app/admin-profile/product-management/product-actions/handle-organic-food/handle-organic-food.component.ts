@@ -12,7 +12,7 @@ import { SuccessfullDialogComponent } from '../../../../successfull-dialog/succe
 import { SuccessFullDialogText } from '../../../../successfull-dialog/sucessfull-dialog-text';
 import { AdminService } from '../../../admin.service';
 import { NutritionalTable } from '../../product-models/nutritional-table.model';
-import { OrganicFood } from '../../product-models/organic-food';
+import { OrganicFood } from '../../product-models/organic-food.model';
 import { ProductPrice } from '../../product-models/product-price.model';
 import { ProductViewText } from '../../product-view-texts';
 import { Location } from '@angular/common';
@@ -20,6 +20,7 @@ import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.co
 import { Editor, Toolbar } from 'ngx-editor';
 import { ProductReeviews } from '../../product-models/product-reviews.model';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-handle-organic-food',
@@ -150,6 +151,8 @@ export class HandleOrganicFoodComponent {
 
   description: string = "";
 
+  // date added
+  dateAdded: Timestamp;
 
   constructor(
     private route: ActivatedRoute,
@@ -194,6 +197,9 @@ export class HandleOrganicFoodComponent {
 
       nutritionalTable: null,
 
+      // date added
+      dateAdded: Timestamp.now(),
+
       allergens: [],
 
       prices: [],
@@ -224,6 +230,9 @@ export class HandleOrganicFoodComponent {
           // flavor and allergies list
           this.selectedFlavors = this.organicFoodObject.flavors;
           this.selectedAllergenes = this.organicFoodObject.allergens;
+
+          // date added
+          this.dateAdded = this.organicFoodObject.dateAdded;
 
           // safety
           this.isSafeForConsumptionDuringBreastfeeding = this.organicFoodObject.safeForConsumptionDuringBreastfeeding;
@@ -520,6 +529,9 @@ export class HandleOrganicFoodComponent {
 
         allergens: this.selectedAllergenes,
 
+        // date added
+        dateAdded: Timestamp.now(),
+
         prices: [],
         useUnifiedImage: this.isUnifiedImage,
       }
@@ -603,6 +615,9 @@ export class HandleOrganicFoodComponent {
         nutritionalTable: this.nutritionalTable,
 
         allergens: this.selectedAllergenes,
+
+        // date added
+        dateAdded: this.organicFoodObject.dateAdded,
 
         prices: this.productPrices,
         useUnifiedImage: this.isUnifiedImage,

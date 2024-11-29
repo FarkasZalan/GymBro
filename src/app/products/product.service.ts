@@ -5,9 +5,11 @@ import { Blog } from "../admin-profile/blog/blog.model";
 import { Accessories } from "../admin-profile/product-management/product-models/accessories.model";
 import { Clothes } from "../admin-profile/product-management/product-models/clothing.model";
 import { FoodSupliment } from "../admin-profile/product-management/product-models/food-supliment.model";
-import { OrganicFood } from "../admin-profile/product-management/product-models/organic-food";
-import { Observable } from "rxjs";
+import { OrganicFood } from "../admin-profile/product-management/product-models/organic-food.model";
+import { Observable, map, combineLatest } from "rxjs";
 import { ProductReeviews } from "../admin-profile/product-management/product-models/product-reviews.model";
+import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
+import { ProductPrice } from "../admin-profile/product-management/product-models/product-price.model";
 
 @Injectable({
     providedIn: 'root'
@@ -63,6 +65,14 @@ export class ProductService {
                 .where('blogTags', 'array-contains-any', tags)
                 .orderBy('date')
                 .limit(6)
+        ).valueChanges();
+    }
+
+    getLatestBlogs(limit: number) {
+        return this.db.collection<Blog>('blog', ref =>
+            ref
+                .orderBy('date', 'desc')
+                .limit(limit)
         ).valueChanges();
     }
 
@@ -279,13 +289,119 @@ export class ProductService {
     }
 
     // Helper method to get the effective price (product price or discounted price)
-    getDefaultPrice(product: any): any {
+    getDefaultPrice(product: any): number {
         const defaultPrice = product.prices.find(price => price.setAsDefaultPrice);
-        if (!defaultPrice) return Infinity;
+        return defaultPrice?.productPrice || 0;
+    }
 
-        // Return discounted price if available, otherwise return regular price
-        return defaultPrice.discountedPrice > 0
-            ? defaultPrice.discountedPrice
-            : defaultPrice.productPrice;
+    // Get discounted products across all categories
+    getDiscountedProducts(limit: number): Observable<any[]> {
+        // Get products from each category
+        const foodSuppliments$ = this.getDiscountedFromCollection(ProductViewText.FOOD_SUPLIMENTS, limit);
+        const organicFood$ = this.getDiscountedFromCollection(ProductViewText.ORGANIC_FOOD, limit);
+        const clothes$ = this.getDiscountedFromCollection(ProductViewText.CLOTHES, limit);
+        const accessories$ = this.getDiscountedFromCollection(ProductViewText.ACCESSORIES, limit);
+
+        // Combine all observables
+        return combineLatest([
+            foodSuppliments$,
+            organicFood$,
+            clothes$,
+            accessories$
+        ]).pipe(
+            map(([foods, organic, clothes, accessories]) => {
+                // Combine all products and sort by discount percentage
+                const allProducts = [...foods, ...organic, ...clothes, ...accessories]
+                    .sort((a, b) => this.getDiscountPercentage(b) - this.getDiscountPercentage(a))
+                    .slice(0, limit);
+
+                return allProducts.map(product => ({
+                    id: product.id,
+                    productName: product.productName,
+                    imageUrl: this.getDiscountedPrice(product).productImage,
+                    originalPrice: this.getDiscountedPrice(product).productPrice,
+                    discountedPrice: this.getDiscountedPrice(product).discountedPrice
+                }));
+            })
+        );
+    }
+
+    // Get new arrivals across all categories
+    getNewArrivals(limit: number): Observable<any[]> {
+        // Get latest products from each category
+        const foodSuppliments$ = this.getLatestFromCollection(ProductViewText.FOOD_SUPLIMENTS, limit);
+        const organicFood$ = this.getLatestFromCollection(ProductViewText.ORGANIC_FOOD, limit);
+        const clothes$ = this.getLatestFromCollection(ProductViewText.CLOTHES, limit);
+        const accessories$ = this.getLatestFromCollection(ProductViewText.ACCESSORIES, limit);
+
+        // Combine all observables
+        return combineLatest([
+            foodSuppliments$,
+            organicFood$,
+            clothes$,
+            accessories$
+        ]).pipe(
+            map(([foods, organic, clothes, accessories]) => {
+                // Combine all products and sort by date
+                const allProducts = [...foods, ...organic, ...clothes, ...accessories]
+                    .sort((a, b) => b.dateAdded - a.dateAdded)
+                    .slice(0, limit);
+
+                return allProducts.map(product => ({
+                    id: product.id,
+                    productName: product.productName,
+                    imageUrl: this.getDefaultProductImage(product),
+                    price: this.getDefaultPrice(product)
+                }));
+            })
+        );
+    }
+
+    private getDiscountedFromCollection(collection: string, limit: number): Observable<any[]> {
+        return this.db.collection('products')
+            .doc(collection)
+            .collection('allProduct')
+            .valueChanges()
+            .pipe(
+                map(products => products.filter(product => {
+                    // Get the default price entry
+                    const defaultPrice = product.prices.find(price => price.setAsDefaultPrice);
+                    // Check if it has a valid discounted price
+                    return defaultPrice &&
+                        defaultPrice.discountedPrice &&
+                        defaultPrice.discountedPrice > 0 &&
+                        defaultPrice.discountedPrice < defaultPrice.productPrice;
+                })),
+                map(products => products.slice(0, limit))
+            );
+    }
+
+    private getLatestFromCollection(collection: string, limit: number): Observable<any[]> {
+        return this.db.collection('products')
+            .doc(collection)
+            .collection('allProduct', ref =>
+                ref.orderBy('dateAdded', 'desc')
+                    .limit(limit))
+            .valueChanges();
+    }
+
+    private getDiscountPercentage(product: any): number {
+        const defaultPrice = product.prices.find(price => price.setAsDefaultPrice);
+        if (!defaultPrice || !defaultPrice.discountedPrice || defaultPrice.discountedPrice <= 0) {
+            return 0;
+        }
+        return ((defaultPrice.productPrice - defaultPrice.discountedPrice) / defaultPrice.productPrice) * 100;
+    }
+
+    private getDefaultProductImage(product: any): string {
+        if (product.useUnifiedImage && product.prices.length > 0) {
+            return product.prices[0].productImage;
+        }
+        return product.prices.length > 0 ? product.prices[0].productImage : '';
+    }
+
+    private getDiscountedPrice(product: any): ProductPrice {
+        const discountedPrice: ProductPrice = product.prices.find(price => price.discountedPrice > 0);
+        return discountedPrice;
     }
 }

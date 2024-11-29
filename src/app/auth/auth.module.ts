@@ -17,6 +17,7 @@ import { SuccessfullDialogComponent } from '../successfull-dialog/successfull-di
 import { RegisterComponent } from './register/register.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { TermsComponent } from './register/terms/terms.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { TermsComponent } from './register/terms/terms.component';
         NbCheckboxModule,
         AuthRoutingModule,
         NbAuthModule,
-        TranslateModule
+        TranslateModule,
+        SharedModule
     ],
     declarations: [
         LoginComponent,

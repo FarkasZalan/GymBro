@@ -1,3 +1,6 @@
+<!-- Loading spinner -->
+<app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
+
 <!-- New Address title -->
 <h1 id="title" class="title">{{ 'profileMenu.shippingAddressForm.modifyAddressTitle' | translate }}</h1>
 <!-- address form -->

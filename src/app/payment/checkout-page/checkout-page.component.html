@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
+
 <div class="container" [@zoomIn]>
     <!-- Login Section -->
     <div class="login-prompt-container" *ngIf="!userLoggedIn" @fadeSlide>

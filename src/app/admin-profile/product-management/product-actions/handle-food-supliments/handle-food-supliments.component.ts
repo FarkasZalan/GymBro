@@ -20,6 +20,7 @@ import { AddPriceDialogComponent } from '../add-price-dialog/add-price-dialog.co
 import { AdminService } from '../../../admin.service';
 import { Editor, Toolbar } from 'ngx-editor';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-handle-food-supliments',
@@ -195,6 +196,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
   description: string = "";
 
+  // date added
+  dateAdded: Timestamp;
+
   constructor(
     private route: ActivatedRoute,
     private storage: AngularFireStorage,
@@ -242,6 +246,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
       vitaminList: [],
       genderList: [],
+      dateAdded: Timestamp.now(),
 
       prices: [],
       useUnifiedImage: this.isUnifiedImage,
@@ -286,6 +291,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
           if ((this.selectedCategory === ProductViewText.JOIN_SUPPORT || (this.selectedCategory === ProductViewText.VITAMINS_AND_MINERALS))) {
             this.selectedGenders = this.foodSuplimentObject.genderList;
           }
+
+          // date added
+          this.dateAdded = this.foodSuplimentObject.dateAdded;
 
           //vitamin
           this.vitaminList = this.foodSuplimentObject.vitaminList;
@@ -805,6 +813,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         proteinType: this.selectedProteinType,
         allergens: this.selectedAllergenes,
 
+        // date added
+        dateAdded: Timestamp.now(),
+
         vitaminList: this.vitaminList,
         genderList: this.selectedGenders,
 
@@ -902,6 +913,9 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
         proteinType: this.selectedProteinType,
         allergens: this.selectedAllergenes,
+
+        // date added
+        dateAdded: this.foodSuplimentObject.dateAdded,
 
         vitaminList: this.vitaminList,
         genderList: this.selectedGenders,

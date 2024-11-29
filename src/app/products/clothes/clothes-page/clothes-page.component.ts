@@ -15,6 +15,7 @@ import { User } from '../../../profile/user.model';
 import { ProductService } from '../../product.service';
 import { ReviewHandleComponent } from '../../review-handle/review-handle.component';
 import { ProductPrice } from '../../../admin-profile/product-management/product-models/product-price.model';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-clothes-page',
@@ -152,6 +153,9 @@ export class ClothesPageComponent implements OnInit {
       description: "",
       clothingType: "",
       material: "",
+
+      // date added
+      dateAdded: Timestamp.now(),
 
       prices: []
     }

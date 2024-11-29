@@ -21,6 +21,7 @@ import { Accessories } from '../../product-models/accessories.model';
 import { ProductReeviews } from '../../product-models/product-reviews.model';
 import { Editor, Toolbar } from 'ngx-editor';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-handle-accessories',
@@ -99,6 +100,8 @@ export class HandleAccessoriesComponent {
 
   description: string = "";
 
+  // date added
+  dateAdded: Timestamp;
 
   constructor(private route: ActivatedRoute, private storage: AngularFireStorage, private db: AngularFirestore, private location: Location, public dialog: MatDialog, private documentumHandler: DocumentHandlerService, private adminService: AdminService, public loadingService: LoadingService) { }
 
@@ -125,7 +128,7 @@ export class HandleAccessoriesComponent {
       useUnifiedImage: this.isUnifiedImage,
 
       equipmentType: "",
-
+      dateAdded: Timestamp.now(),
       prices: []
     }
     this.route.params.subscribe(params => {
@@ -150,6 +153,8 @@ export class HandleAccessoriesComponent {
 
           this.smallDescriptionLength = this.accessoryObject.smallDescription.length;
           this.description = this.accessoryObject.description;
+
+          this.dateAdded = this.accessoryObject.dateAdded;
 
           this.isUnifiedImage = this.accessoryObject.useUnifiedImage;
           if (this.isUnifiedImage) {
@@ -504,7 +509,7 @@ export class HandleAccessoriesComponent {
         useUnifiedImage: this.isUnifiedImage,
 
         equipmentType: this.selectedAccessoryType,
-
+        dateAdded: Timestamp.now(),
         prices: []
       }
 
@@ -567,7 +572,7 @@ export class HandleAccessoriesComponent {
 
         useUnifiedImage: this.isUnifiedImage,
         equipmentType: this.selectedAccessoryType,
-
+        dateAdded: this.accessoryObject.dateAdded,
         prices: this.productPrices
       }
 

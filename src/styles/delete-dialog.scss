@@ -9,6 +9,10 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     min-width: 300px;
+
+    @media (max-width: 768px) {
+        min-width: 250px !important;
+    }
 }
 
 .delete-content {
@@ -16,6 +20,10 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
+
+    @media (max-width: 768px) {
+        padding: 1rem !important;
+    }
 }
 
 .warning-icon {
@@ -32,6 +40,15 @@
         font-size: 40px;
         color: #e35757;
     }
+
+    @media (max-width: 768px) {
+        width: 60px !important;
+        height: 60px !important;
+
+        i {
+            font-size: 30px !important;
+        }
+    }
 }
 
 .delete-title {
@@ -46,6 +63,15 @@
     display: flex;
     gap: 40px;
     margin-top: 20px;
+
+    @media (max-width: 768px) {
+        gap: 20px !important;
+
+        .btn {
+            min-width: 100px !important;
+            padding: 8px 20px !important;
+        }
+    }
 }
 
 .btn {

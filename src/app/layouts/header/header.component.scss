@@ -176,22 +176,37 @@
 .search-container {
     position: relative;
     display: flex;
-
     align-items: center;
-    width: 100%;
+    width: auto;
+
+    @media (max-width: 768px) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #0b8e92;
+        z-index: 1000;
+        padding: 0 1rem;
+
+        &.expanded {
+            .search-input {
+                width: 100%;
+            }
+        }
+    }
 }
 
 .search-input {
     width: 400px;
     border-radius: 50px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-left: 15px;
-    padding-right: 15px;
-    box-sizing: border-box;
+    padding: 8px 15px;
     font-size: 19px;
     outline: none;
-    /* Remove the inner border on focus */
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 }
 
 .close-icon {
@@ -747,5 +762,12 @@
                 color: #666;
             }
         }
+    }
+}
+
+// Add this to hide elements on mobile
+@media (max-width: 768px) {
+    .hide-on-mobile {
+        display: none !important;
     }
 }

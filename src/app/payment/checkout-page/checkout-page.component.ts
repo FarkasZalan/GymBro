@@ -20,6 +20,7 @@ import { OrderStatus } from '../order-status';
 import { Timestamp } from 'firebase/firestore';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
+import { LoadingService } from '../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -201,7 +202,8 @@ export class CheckoutPageComponent implements OnInit {
     private db: AngularFirestore,
     private location: Location,
     private dialog: MatDialog,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    public loadingService: LoadingService
   ) { }
 
   ngOnInit() {
@@ -222,49 +224,52 @@ export class CheckoutPageComponent implements OnInit {
     this.checkAuthStatus();
   }
 
-  loadCartItems() {
-    this.cartService.cartItems$.subscribe(items => {
-      this.cartItems = items;
-      if (this.cartItems.length === 0) {
-        this.router.navigate(['/']);
-      }
-      this.calculateTotals();
+  async loadCartItems() {
+    await this.loadingService.withLoading(async () => {
+      this.cartService.cartItems$.subscribe(items => {
+        this.cartItems = items;
+        if (this.cartItems.length === 0) {
+          this.router.navigate(['/']);
+        }
+        this.calculateTotals();
+      });
     });
   }
 
-  checkAuthStatus() {
-    // check if user logged in for reviews
-    this.auth.authState.subscribe((userAuth) => {
-      if (userAuth) {
-        this.userLoggedIn = true;
-        this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
-          this.currentUser = currentUser;
-          this.currentUserId = currentUser.id;
-          this.currentLoyaltyPoints = currentUser.loyaltyPoints || 0;
-          this.loadAvailableRewards();
-          if (this.currentLoyaltyPoints <= 300) {
-            this.nextRewardThreshold = 300;
-          } else if (this.currentLoyaltyPoints <= 600) {
-            this.nextRewardThreshold = 600;
-          } else if (this.currentLoyaltyPoints <= 700) {
-            this.nextRewardThreshold = 700;
-          } else if (this.currentLoyaltyPoints <= 850) {
-            this.nextRewardThreshold = 850;
-          } else if (this.currentLoyaltyPoints > 850) {
-            this.nextRewardThreshold = 1500;
-          }
-          this.getDefaultAddress(currentUser).then((address) => {
-            this.shippingAddress = address;
+  async checkAuthStatus() {
+    await this.loadingService.withLoading(async () => {
+      this.auth.authState.subscribe((userAuth) => {
+        if (userAuth) {
+          this.userLoggedIn = true;
+          this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
+            this.currentUser = currentUser;
+            this.currentUserId = currentUser.id;
+            this.currentLoyaltyPoints = currentUser.loyaltyPoints || 0;
+            this.loadAvailableRewards();
+            if (this.currentLoyaltyPoints <= 300) {
+              this.nextRewardThreshold = 300;
+            } else if (this.currentLoyaltyPoints <= 600) {
+              this.nextRewardThreshold = 600;
+            } else if (this.currentLoyaltyPoints <= 700) {
+              this.nextRewardThreshold = 700;
+            } else if (this.currentLoyaltyPoints <= 850) {
+              this.nextRewardThreshold = 850;
+            } else if (this.currentLoyaltyPoints > 850) {
+              this.nextRewardThreshold = 1500;
+            }
+            this.getDefaultAddress(currentUser).then((address) => {
+              this.shippingAddress = address;
+            });
+            if (this.currentUser === undefined) {
+              this.userLoggedIn = false; // User is logged out
+              this.displayGuestForm = true;
+            }
           });
-          if (this.currentUser === undefined) {
-            this.userLoggedIn = false; // User is logged out
-            this.displayGuestForm = true;
-          }
-        });
-      } else {
-        this.userLoggedIn = false; // User is logged out
-        this.displayGuestForm = true;
-      }
+        } else {
+          this.userLoggedIn = false; // User is logged out
+          this.displayGuestForm = true;
+        }
+      });
     });
   }
 
@@ -302,7 +307,11 @@ export class CheckoutPageComponent implements OnInit {
     this.cashOnDeliveryAmount = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod)?.additionalFee || 0;
     this.shipping = this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? 0 : this.STANDARD_SHIPPING_COST;
 
-    // Calculate discount if reward is active
+    if (this.selectedPaymentMethod === '') {
+      this.shipping = 0;
+    }
+
+    // Calculate discount if coupon is active
     this.discountAmount = 0;
     if (this.activeReward) {
       if (this.activeReward.id === RewardText.Discount10Id) {
@@ -330,18 +339,20 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   // Go to Edit Address
-  editAddress() {
-    const dialogRef = this.dialog.open(ShippingAddressSelectionDialogComponent, {
-      data: {
-        userId: this.currentUserId
-      }
-    });
+  async editAddress() {
+    await this.loadingService.withLoading(async () => {
+      const dialogRef = this.dialog.open(ShippingAddressSelectionDialogComponent, {
+        data: {
+          userId: this.currentUserId
+        }
+      });
 
-    dialogRef.afterClosed().subscribe((result: ShippingAddress) => {
-      if (result) {
-        this.shippingAddress = result;
-        this.changeDetector.detectChanges();
-      }
+      dialogRef.afterClosed().subscribe((result: ShippingAddress) => {
+        if (result) {
+          this.shippingAddress = result;
+          this.changeDetector.detectChanges();
+        }
+      });
     });
   }
 
@@ -377,18 +388,20 @@ export class CheckoutPageComponent implements OnInit {
     this.displayGuestForm = true;
   }
 
-  openAddressSelection() {
-    const dialogRef = this.dialog.open(ShippingAddressSelectionDialogComponent, {
-      data: {
-        userId: this.currentUserId
-      }
-    });
+  async openAddressSelection() {
+    await this.loadingService.withLoading(async () => {
+      const dialogRef = this.dialog.open(ShippingAddressSelectionDialogComponent, {
+        data: {
+          userId: this.currentUserId
+        }
+      });
 
-    dialogRef.afterClosed().subscribe((result: ShippingAddress) => {
-      if (result) {
-        this.shippingAddress = result;
-        this.changeDetector.detectChanges();
-      }
+      dialogRef.afterClosed().subscribe((result: ShippingAddress) => {
+        if (result) {
+          this.shippingAddress = result;
+          this.changeDetector.detectChanges();
+        }
+      });
     });
   }
 
@@ -398,7 +411,7 @@ export class CheckoutPageComponent implements OnInit {
     if (methodId === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) {
       this.shipping = 0;
     } else {
-      this.shipping = 2500;
+      this.shipping = this.STANDARD_SHIPPING_COST;
     }
     this.calculateTotals();
   }
@@ -413,7 +426,11 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   calculateOriginalTotal(): number {
-    return this.subtotal + this.shipping + this.cashOnDeliveryAmount;
+    if (this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_DHL_TITLE) {
+      return this.subtotal + this.STANDARD_SHIPPING_COST + this.cashOnDeliveryAmount;
+    } else {
+      return this.subtotal + this.shipping + this.cashOnDeliveryAmount;
+    }
   }
 
   getLoyaltyProgress(): number {
@@ -439,70 +456,72 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   async proceedToPayment() {
-    let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
-    this.order = {
-      productList: this.cartItems,
-      totalPrice: this.total,
-      subtotal: this.subtotal,
-      discountAmount: this.discountAmount,
-      cashOnDeliveryAmount: this.cashOnDeliveryAmount,
-      userId: this.currentUserId || 'Guest',
-      firstName: this.guestFirstName || this.currentUser?.firstName || '',
-      lastName: this.guestLastName || this.currentUser?.lastName || '',
-      email: this.guestEmail || this.currentUser?.email || '',
-      phone: this.guestPhone || this.currentUser?.phone || '',
-      shippingMethod: this.selectedShippingMethod,
-      shippingCost: this.shipping,
-      paymentMethod: this.selectedPaymentMethod,
-      shippingAddress: this.shippingAddress,
-      totalLoyaltyPoints: loyaltyPoints,
-      orderDate: Timestamp.now(),
-      orderStatus: OrderStatus.PROCESSING,
-      isAdminChecked: false,
-      isUserChecked: false,
-      couponUsed: this.couponUsed,
-      isModified: false
-    };
+    await this.loadingService.withLoading(async () => {
+      let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
+      this.order = {
+        productList: this.cartItems,
+        totalPrice: this.total,
+        subtotal: this.subtotal,
+        discountAmount: this.discountAmount,
+        cashOnDeliveryAmount: this.cashOnDeliveryAmount,
+        userId: this.currentUserId || 'Guest',
+        firstName: this.guestFirstName || this.currentUser?.firstName || '',
+        lastName: this.guestLastName || this.currentUser?.lastName || '',
+        email: this.guestEmail || this.currentUser?.email || '',
+        phone: this.guestPhone || this.currentUser?.phone || '',
+        shippingMethod: this.selectedShippingMethod,
+        shippingCost: this.shipping,
+        paymentMethod: this.selectedPaymentMethod,
+        shippingAddress: this.shippingAddress,
+        totalLoyaltyPoints: loyaltyPoints,
+        orderDate: Timestamp.now(),
+        orderStatus: OrderStatus.PROCESSING,
+        isAdminChecked: false,
+        isUserChecked: false,
+        couponUsed: this.couponUsed,
+        isModified: false
+      };
 
-    if (this.activeReward) {
-      if (this.activeReward.id === RewardText.Discount10Id) {
-        loyaltyPoints = loyaltyPoints - 300;
-      } else if (this.activeReward.id === RewardText.Discount20Id) {
-        loyaltyPoints = loyaltyPoints - 600;
-      } else if (this.activeReward.id === RewardText.Discount30Id) {
-        loyaltyPoints = loyaltyPoints - 700;
-      } else if (this.activeReward.id === RewardText.FreeShippingId) {
-        loyaltyPoints = loyaltyPoints - 850;
-      } else if (this.activeReward.id === RewardText.FiveThousandHufDiscountId) {
-        loyaltyPoints = loyaltyPoints - 1500;
-      }
-    }
-
-    // Add the new order
-    try {
-      const documentumRef = await this.db.collection("orders").add(this.order);
-      // id the document created then save the document id in the field
-      await documentumRef.update({ id: documentumRef.id });
-
-      if (this.userLoggedIn) {
-        await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
-      }
-
-      // if everything was succes then open successfull dialog
-      const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
-        data: {
-          text: SuccessFullDialogText.SUCCESSFULL_PAYMENT,
-          needToGoPrevoiusPage: false
+      if (this.activeReward) {
+        if (this.activeReward.id === RewardText.Discount10Id) {
+          loyaltyPoints = loyaltyPoints - 300;
+        } else if (this.activeReward.id === RewardText.Discount20Id) {
+          loyaltyPoints = loyaltyPoints - 600;
+        } else if (this.activeReward.id === RewardText.Discount30Id) {
+          loyaltyPoints = loyaltyPoints - 700;
+        } else if (this.activeReward.id === RewardText.FreeShippingId) {
+          loyaltyPoints = loyaltyPoints - 850;
+        } else if (this.activeReward.id === RewardText.FiveThousandHufDiscountId) {
+          loyaltyPoints = loyaltyPoints - 1500;
         }
-      });
+      }
 
-      dialogRef.afterClosed().subscribe(() => {
-        this.cartService.clearCart();
-        this.router.navigate(['/receipt', documentumRef.id], { queryParams: { fromCheckout: 'true' } });
-      });
-    } catch (error) {
-      this.errorMessage = true;
-    }
+      // Add the new order
+      try {
+        const documentumRef = await this.db.collection("orders").add(this.order);
+        // id the document created then save the document id in the field
+        await documentumRef.update({ id: documentumRef.id });
+
+        if (this.userLoggedIn) {
+          await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
+        }
+
+        // if everything was succes then open successfull dialog
+        const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
+          data: {
+            text: SuccessFullDialogText.SUCCESSFULL_PAYMENT,
+            needToGoPrevoiusPage: false
+          }
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+          this.cartService.clearCart();
+          this.router.navigate(['/receipt', documentumRef.id], { queryParams: { fromCheckout: 'true' } });
+        });
+      } catch (error) {
+        this.errorMessage = true;
+      }
+    });
   }
 
   back() {

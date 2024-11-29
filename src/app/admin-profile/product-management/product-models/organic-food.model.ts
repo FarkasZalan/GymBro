@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import { NutritionalTable } from "./nutritional-table.model";
 import { ProductPrice } from "./product-price.model";
 import { ProductReeviews } from "./product-reviews.model";
@@ -11,6 +12,7 @@ export interface OrganicFood {
     ingredients: string;
     description: string;
     dosageUnit: string;
+    dateAdded: Timestamp;
 
     flavors: string[];
 

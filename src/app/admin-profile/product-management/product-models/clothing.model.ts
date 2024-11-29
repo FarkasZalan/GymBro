@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import { ProductPrice } from "./product-price.model";
 import { ProductReeviews } from "./product-reviews.model";
 
@@ -8,6 +9,7 @@ export interface Clothes {
     productGender: string;
     smallDescription: string;
     description: string;
+    dateAdded: Timestamp;
 
     // type and material
     clothingType: string;

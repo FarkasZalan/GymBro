@@ -1,3 +1,6 @@
+<!-- loading spinner -->
+<app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
+
 <!-- register title -->
 <h1 id="title" class="title">{{ 'loginPage.register' | translate }}</h1>
 <!-- register form -->

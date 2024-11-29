@@ -1,1 +1,117 @@
-<p>home works!</p>
+<!-- Hero Section -->
+<section class="hero-section" @fadeIn>
+    <div class="hero-content">
+        <h1>Welcome to GymBro</h1>
+        <p>Your One-Stop Shop for Fitness & Wellness</p>
+        <button nbButton status="primary" size="large" (click)="navigateToCategory('/product/' + 'foodSupliments')">
+            SHOP NOW
+        </button>
+    </div>
+</section>
+
+<!-- Add after hero section -->
+<div class="promotion-banner" @fadeIn>
+    <div class="promotion-content">
+        <span>🔥 Flash Sale! Up to 50% OFF on Premium Supplements</span>
+        <div class="timer">
+            <div class="time-block">
+                <div class="number">24</div>
+                <div class="label">Hours</div>
+            </div>
+            <div class="time-block">
+                <div class="number">60</div>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="time-block">
+                <div class="number">60</div>
+                <div class="label">Seconds</div>
+            </div>
+        </div>
+        <button nbButton status="control">Shop Now</button>
+    </div>
+</div>
+
+<!-- Add to hero section -->
+<div class="scroll-indicator">
+    <nb-icon icon="chevron-down-outline"></nb-icon>
+</div>
+
+<!-- Categories Section -->
+<section class="categories-section" @fadeIn>
+    <h2>Shop by Category</h2>
+    <div class="categories-list">
+        <nb-card *ngFor="let category of categories" (click)="navigateToCategory(category.route)" @zoomIn>
+            <div class="category-image" [style.backgroundImage]="'url(' + category.image + ')'">
+                <div class="category-overlay">
+                    <nb-icon [icon]="category.icon" class="category-icon"></nb-icon>
+                    <h3>{{category.name}}</h3>
+                </div>
+            </div>
+        </nb-card>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="featured-section" @fadeIn>
+    <h2>Special Offers</h2>
+    <div class="products-grid">
+        <nb-card *ngFor="let product of discountedProducts" @zoomIn>
+            <nb-card-body (click)="navigateToProduct(product.id)">
+                <span class="badge discount">SALE</span>
+                <img [src]="product.imageUrl || '../../../assets/images/gym-bro-logo.png'" [alt]="product.productName">
+                <div class="product-content">
+                    <h4 class="product-name">{{product.productName}}</h4>
+                    <div class="price-container">
+                        <span class="original-price">{{product.originalPrice}} HUF</span>
+                        <span class="discounted-price">{{product.discountedPrice}} HUF</span>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</section>
+
+<!-- Latest Blogs Section -->
+<section class="blogs-section" @fadeIn>
+    <h2>Latest from Our Blog</h2>
+    <div class="blogs-grid">
+        <nb-card class="blogCard" *ngFor="let blog of featuredBlogs" (click)="navigateToBlog(blog.id)" @zoomIn>
+            <nb-card-body>
+                <div class="image-container">
+                    <img [src]="blog.headerImageUrl || '../../../assets/images/gym-bro-logo.png'" [alt]="blog.title">
+                </div>
+                <div class="details-container">
+                    <h4 class="blog-title">{{blog.title}}</h4>
+                    <div class="description-container">
+                        <p class="description">{{blog.description}}</p>
+                    </div>
+                    <p class="read-more blog-title">{{ 'blog.readMore' | translate }}
+                        <span class="arrow-blog">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                                <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                            </svg>
+                        </span>
+                    </p>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</section>
+
+<!-- New Arrivals Section -->
+<section class="new-arrivals-section" @fadeIn>
+    <h2>New Arrivals</h2>
+    <div class="products-grid">
+        <nb-card *ngFor="let product of newArrivals" @zoomIn>
+            <nb-card-body (click)="navigateToProduct(product.id)">
+                <span class="badge new">NEW</span>
+                <img [src]="product.imageUrl || '../../../assets/images/gym-bro-logo.png'" [alt]="product.productName">
+                <div class="product-content">
+                    <h4>{{product.productName}}</h4>
+                    <span class="price">{{product.price}} HUF</span>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</section>

@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import { ProductPrice } from "./product-price.model";
 
 export interface Accessories {
@@ -7,6 +8,7 @@ export interface Accessories {
     productCategory: string;
     description: string;
     smallDescription: string;
+    dateAdded: Timestamp;
 
     // shakers or weight lifting
     equipmentType: string;

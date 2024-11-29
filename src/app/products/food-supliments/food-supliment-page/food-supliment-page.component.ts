@@ -16,6 +16,7 @@ import { ReviewHandleComponent } from '../../review-handle/review-handle.compone
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { CartService } from '../../../cart/cart.service';
 import { ProductPrice } from '../../../admin-profile/product-management/product-models/product-price.model';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-food-supliment-page',
@@ -139,6 +140,9 @@ export class FoodSuplimentPageComponent implements OnInit {
       safeForConsumptionDuringPregnancy: true,
 
       nutritionalTable: null,
+
+      // date added
+      dateAdded: Timestamp.now(),
 
       proteinType: "",
       allergens: [],

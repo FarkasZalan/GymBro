@@ -12,6 +12,11 @@ input[type='text'] {
     margin: 0 auto;
     padding: 20px;
     border-radius: 50px !important;
+
+    @media (max-width: 768px) {
+        padding: 1rem !important;
+        border-radius: 25px !important;
+    }
 }
 
 .nb-theme-default nb-card {
@@ -30,6 +35,17 @@ input[type='text'] {
     &.left {
         font-size: 21px !important;
         transform: translateX(0); // Move to left
+    }
+
+    @media (max-width: 768px) {
+        &.center {
+            font-size: 18px !important;
+            transform: translateX(35%) !important;
+        }
+
+        &.left {
+            font-size: 17px !important;
+        }
     }
 }
 
@@ -68,6 +84,12 @@ input[type='text'] {
         text-transform: uppercase;
         font-weight: bold;
         cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 1rem !important;
+        }
     }
 }
 

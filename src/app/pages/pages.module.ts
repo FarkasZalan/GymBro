@@ -10,6 +10,7 @@ import { NotFoundComponent } from '../not-found/not-found.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import { FormsModule } from '@angular/forms';
         NbEvaIconsModule,
         MatIconModule,
         TranslateModule,
-        FormsModule
+        FormsModule,
+        SharedModule
     ]
 })
 export class PagesModule {

@@ -8,6 +8,7 @@ import { CreateShippingAddressComponent } from "../../profile/profile-shipping-a
 import { EditShippingAddressComponent } from "../../profile/profile-shipping-address/edit-shipping-address/edit-shipping-address.component";
 import { ShippingAddress } from "../../profile/profile-shipping-address/shipping-address.model";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { LoadingService } from "../../loading-spinner/loading.service";
 
 @Component({
     selector: 'app-shipping-address-selection-dialog',
@@ -33,7 +34,8 @@ export class ShippingAddressSelectionDialogComponent implements OnInit {
         public dialogRef: MatDialogRef<ShippingAddressSelectionDialogComponent>,
         private dialogService: NbDialogService,
         @Inject(MAT_DIALOG_DATA) public data,
-        private changeDetector: ChangeDetectorRef
+        private changeDetector: ChangeDetectorRef,
+        public loadingService: LoadingService
     ) { }
 
     ngOnInit() {
@@ -41,33 +43,35 @@ export class ShippingAddressSelectionDialogComponent implements OnInit {
         this.getAllShippingAddress(this.userId);
     }
 
-    getAllShippingAddress(userId: string) {
-        this.db
-            .collection("users")
-            .doc(userId)
-            .collection("shippingAddresses")
-            .valueChanges()
-            .subscribe((addresses: ShippingAddress[]) => {
-                this.shippingAddresses = addresses;
+    async getAllShippingAddress(userId: string) {
+        await this.loadingService.withLoading(async () => {
+            this.db
+                .collection("users")
+                .doc(userId)
+                .collection("shippingAddresses")
+                .valueChanges()
+                .subscribe((addresses: ShippingAddress[]) => {
+                    this.shippingAddresses = addresses;
 
-                // Subscribe to language changes and reapply translations
-                this.translate.stream([
-                    'profileMenu.shippingAddressForm.home',
-                    'profileMenu.shippingAddressForm.work'
-                ]).subscribe(translations => {
-                    this.shippingAddresses = this.shippingAddresses.map(address => {
-                        if (address.addressType === AddressTypeText.HOME) {
-                            address.addressName = translations['profileMenu.shippingAddressForm.home'];
-                        }
-                        if (address.addressType === AddressTypeText.WORK) {
-                            address.addressName = translations['profileMenu.shippingAddressForm.work'];
-                        }
-                        return address;
+                    // Subscribe to language changes and reapply translations
+                    this.translate.stream([
+                        'profileMenu.shippingAddressForm.home',
+                        'profileMenu.shippingAddressForm.work'
+                    ]).subscribe(translations => {
+                        this.shippingAddresses = this.shippingAddresses.map(address => {
+                            if (address.addressType === AddressTypeText.HOME) {
+                                address.addressName = translations['profileMenu.shippingAddressForm.home'];
+                            }
+                            if (address.addressType === AddressTypeText.WORK) {
+                                address.addressName = translations['profileMenu.shippingAddressForm.work'];
+                            }
+                            return address;
+                        });
+
+                        this.shippingAddresses = this.sortAddresses(this.shippingAddresses);
                     });
-
-                    this.shippingAddresses = this.sortAddresses(this.shippingAddresses);
                 });
-            });
+        });
     }
 
     sortAddresses(addresses: ShippingAddress[]): ShippingAddress[] {

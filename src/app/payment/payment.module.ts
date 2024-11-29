@@ -21,6 +21,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
 import { PaymentRoutingModule } from './payment-routing.module';
 import { ShippingAddressSelectionDialogComponent } from './shipping-address-selection-dialog/shipping-address-selection-dialog.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     imports: [
@@ -41,7 +42,8 @@ import { ShippingAddressSelectionDialogComponent } from './shipping-address-sele
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
-        NgxEditorModule
+        NgxEditorModule,
+        SharedModule
     ],
     declarations: [
         CheckoutPageComponent,

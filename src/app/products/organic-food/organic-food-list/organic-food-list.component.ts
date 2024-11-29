@@ -5,7 +5,7 @@ import { ProductViewText } from '../../../admin-profile/product-management/produ
 import { FilterPageComponent } from '../../../filter-page/filter-page.component';
 import { Filter } from '../../../filter-page/filter.model';
 import { ProductService } from '../../product.service';
-import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food';
+import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food.model';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
 

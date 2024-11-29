@@ -22,6 +22,7 @@ import { AdminService } from '../../admin-profile/admin.service';
 import { AdminNotificationService } from '../../admin-profile/admin-notification.service';
 import { UserService } from '../../profile/user.service';
 import { UserNotificationService } from '../../profile/user-notification.service';
+import { LoadingService } from '../../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-header',
@@ -98,31 +99,32 @@ export class HeaderComponent implements OnInit {
     private adminService: AdminService,
     private adminNotificationService: AdminNotificationService,
     private userService: UserService,
-    private userNotificationService: UserNotificationService
+    private userNotificationService: UserNotificationService,
+    public loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
-    //load the current user
-    this.auth.authState.subscribe((userAuth) => {
-      if (userAuth) {
-        this.userLoggedIn = true;
-        this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
-          this.user = currentUser;
-          if (this.user === undefined) {
-            this.authService.logOut();
-            this.userLoggedIn = false; // User is logged out
-          } else if (this.user.isAdmin) {
-            this.checkAdminNotifications();
-          } else {
-            this.checkUserNotifications();
-          }
-        })
-      } else {
-        this.userLoggedIn = false; // User is logged out
-      }
-    })
-
-
+    // Wrap the auth state subscription in loadingService
+    this.loadingService.withLoading(async () => {
+      this.auth.authState.subscribe((userAuth) => {
+        if (userAuth) {
+          this.userLoggedIn = true;
+          this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
+            this.user = currentUser;
+            if (this.user === undefined) {
+              this.authService.logOut();
+              this.userLoggedIn = false; // User is logged out
+            } else if (this.user.isAdmin) {
+              this.checkAdminNotifications();
+            } else {
+              this.checkUserNotifications();
+            }
+          });
+        } else {
+          this.userLoggedIn = false; // User is logged out
+        }
+      });
+    });
 
     // Get the current language
     this.language = this.appComponent.getBrowserLanguage();
@@ -131,7 +133,6 @@ export class HeaderComponent implements OnInit {
     } else {
       this.languageSwithButtonText = 'en';
     }
-
 
     // Translate userMenu items
     this.translate.onLangChange.subscribe(() => {

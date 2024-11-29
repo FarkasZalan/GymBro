@@ -26,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NGX_EDITOR_CONFIG_TOKEN, NgxEditorModule } from 'ngx-editor';
 import { ngxEditorConfigFactory } from './editor.header';
+import { HomeModule } from './home/home.module';
 
 // Factory function to create an instance of TranslateHttpLoader
 // This loader will be used to fetch translation files over HTTP using the provided HttpClient.
@@ -41,6 +42,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    HomeModule,
     // Nebular theme modules for menu
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
