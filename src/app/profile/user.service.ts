@@ -57,8 +57,8 @@ export class UserService {
         ).valueChanges();
     }
 
-    async getAllNewOrders() {
-        return this.db.collection('orders', ref => ref.where('isUserChecked', '==', false)).valueChanges();
+    async getAllNewOrdersForUser(userId: string) {
+        return this.db.collection('orders', ref => ref.where('userId', '==', userId).where('isUserChecked', '==', false)).valueChanges();
     }
 
     async markOrderAsChecked(orderId: string) {

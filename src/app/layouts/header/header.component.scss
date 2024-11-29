@@ -84,7 +84,8 @@
 }
 
 .header-container-user {
-    margin-right: 10px;
+    margin-left: 8px !important;
+    margin-right: 5px !important;
 }
 
 .login-icon:hover {
@@ -230,7 +231,7 @@
 }
 
 .search-icon {
-    font-size: 37px;
+    font-size: 40px;
     color: white;
     cursor: pointer;
     transition: transform 0.3s ease, color 0.3s ease;
@@ -767,7 +768,29 @@
 
 // Add this to hide elements on mobile
 @media (max-width: 768px) {
-    .hide-on-mobile {
+    .hidden-mobile {
         display: none !important;
     }
+
+    .search-container.expanded {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 10px 16px;
+        background-color: inherit;
+        /* Maintains header background color */
+    }
+
+    .search-container.expanded .search-input {
+        margin: 0;
+        width: calc(100% - 40px);
+        /* Accounts for the close icon */
+    }
+}
+
+.mobile-hideable {
+    display: flex;
+    align-items: center;
 }

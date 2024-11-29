@@ -2,6 +2,10 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { UserNotificationService } from './user-notification.service';
+import { User } from './user.model';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AuthService } from '../auth/auth.service';
+import { LoadingService } from '../loading-spinner/loading.service';
 
 @Component({
   selector: 'app-profile',
@@ -35,16 +39,37 @@ export class ProfileComponent implements OnInit {
   isCollapsedLoyaltyProgram = true;
   numberOfNewOrders: number = 0;
 
+  currentUser: User;
+
   constructor(
     private userService: UserService,
-    private userNotificationService: UserNotificationService
+    private userNotificationService: UserNotificationService,
+    public loadingService: LoadingService,
+    private auth: AngularFireAuth,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
-    this.userService.getAllNewOrders().then(async ordersObservable => {
-      ordersObservable.subscribe(newOrders => {
-        this.numberOfNewOrders = newOrders.length;
-        this.userNotificationService.updateOrdersCount(newOrders.length);
+    this.loadingService.withLoading(async () => {
+      this.auth.authState.subscribe((userAuth) => {
+        if (userAuth) {
+          this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
+            this.currentUser = currentUser;
+            if (this.currentUser === undefined) {
+              this.authService.logOut();
+            }
+
+            // Get the number of new orders for the user
+            this.userService.getAllNewOrdersForUser(this.currentUser.id).then(async ordersObservable => {
+              ordersObservable.subscribe(newOrders => {
+                this.numberOfNewOrders = newOrders.length;
+                this.userNotificationService.updateOrdersCount(newOrders.length);
+              });
+            });
+          });
+        } else {
+          this.currentUser = undefined; // User is logged out
+        }
       });
     });
   }

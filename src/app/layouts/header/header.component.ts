@@ -317,8 +317,9 @@ export class HeaderComponent implements OnInit {
 
   private checkUserNotifications() {
     if (this.userLoggedIn && !this.user?.isAdmin) {
-      this.userService.getAllNewOrders().then(async ordersObservable => {
+      this.userService.getAllNewOrdersForUser(this.user.id).then(async ordersObservable => {
         ordersObservable.subscribe(newOrders => {
+          console.log(newOrders)
           this.userNotificationService.updateOrdersCount(newOrders.length);
         });
       });

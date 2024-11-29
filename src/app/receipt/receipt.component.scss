@@ -388,67 +388,7 @@
     }
 }
 
-@media (max-width: 768px) {
-    .receipt-container {
-        margin: 1rem;
-    }
 
-    .receipt-header {
-        padding: 1.5rem;
-
-        .header-content {
-            .title-section {
-                margin-bottom: 1.5rem;
-
-                nb-icon {
-                    font-size: 2rem;
-                }
-
-                h2 {
-                    font-size: 1.5rem;
-                }
-            }
-
-            .order-details {
-                .detail-row {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    gap: 0.25rem;
-
-                    .label {
-                        min-width: unset;
-                    }
-                }
-            }
-        }
-    }
-
-    .customer-info {
-        .info-row {
-            flex-direction: column;
-            gap: 0.25rem;
-
-            .label {
-                min-width: unset;
-            }
-        }
-    }
-
-    .receipt-body {
-        padding: 1.5rem;
-    }
-
-    .cart-items-section {
-        .cart-item {
-            grid-template-columns: 1fr;
-            text-align: center;
-
-            .item-price {
-                text-align: center;
-            }
-        }
-    }
-}
 
 @media print {
 
