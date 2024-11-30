@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { map, Observable } from "rxjs";
-import { Blog } from "./admin-profile/blog/blog.model";
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +16,20 @@ export class DocumentHandlerService {
     return this.db.collection(mainCollection).doc(mainDocumentId).collection(innerCollection).doc(innerDocumentId).valueChanges();
   }
 
-  // When register a user then it's useful for upper and lowercase handleing
+  /**
+   * Converts the first letter of a string to uppercase and the rest to lowercase
+   * @param name - The input string to be processed
+   * @returns The string with the first letter capitalized and the rest in lowercase
+   */
   makeUpperCaseUserName(name: string) {
     return name[0].toUpperCase() + name.slice(1).toLowerCase();
   }
 
-  // When create a new address it can be useful because of the lowercase and uppercase typo
+  /**
+   * Converts the first letter of each word in a string to uppercase
+   * @param text - The input string to be processed
+   * @returns The string with each word's first letter capitalized
+   */
   makeUpperCaseEveryWordFirstLetter(text: string) {
     text = text.trim();  // Trim leading/trailing whitespaces
     text = text.replace(/\s+/g, " ");  // Replace multiple spaces with a single space

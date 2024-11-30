@@ -1,6 +1,11 @@
 import { TranslateService } from "@ngx-translate/core";
 import { NgxEditorConfig } from "ngx-editor";
 
+/**
+ * This is necessary to translate the ngx-editor labels on the blog and product editor pages
+ * @param translateService - Instance of TranslateService for internationalization
+ * @returns NgxEditorConfig - Configuration object for ngx-editor
+ */
 export function ngxEditorConfigFactory(translateService: TranslateService): NgxEditorConfig {
     return {
         locals: {

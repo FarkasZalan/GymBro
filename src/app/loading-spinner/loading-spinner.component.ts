@@ -49,5 +49,10 @@ import { Component, Input } from '@angular/core';
   `]
 })
 export class LoadingSpinnerComponent {
+  /**
+ * Controls whether the spinner appears as an overlay
+ * @default false - spinner appears inline
+   * When true, spinner covers the entire viewport
+   */
   @Input() overlay: boolean = false;
 } 

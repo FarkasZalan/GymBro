@@ -53,24 +53,26 @@
             </div>
         </div>
 
-        <!-- Hide these containers on mobile when search is expanded -->
+        <!-- Mobile-hideable container - hides elements when search is expanded -->
         <div class="mobile-hideable" [ngClass]="{ 'hidden-mobile': searchExpanded }">
-            <!-- User information displayed if logged in -->
+            <!-- User information section -->
             <div *ngIf="userLoggedIn" class="header-container-user">
-                <!-- Add notification badge if admin has notifications -->
+                <!-- Admin section with notifications -->
                 <div class="admin-notification-wrapper" *ngIf="user?.isAdmin">
                     <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
                         nbContextMenuTag="header-menu">
                     </nb-user>
 
+                    <!-- Admin notification bell with badge -->
                     <div class="notification-trigger" (click)="toggleNotificationPanel()">
                         <i class="material-icons">notifications</i>
+                        <!-- Notification badge - shows count from adminNotificationCount$ observable -->
                         <span class="notification-badge" *ngIf="(adminNotificationCount$ | async) > 0">
                             {{adminNotificationCount$ | async}}
                         </span>
                     </div>
 
-                    <!-- Notification Panel -->
+                    <!-- Admin Notification Panel with slide animation -->
                     <div class="notification-panel" *ngIf="showNotificationPanel" [@slideInOut]>
                         <div class="notification-header">
                             <h3>{{ 'adminMenu.notifications.notifications' | translate }}</h3>
@@ -106,22 +108,25 @@
                         </div>
                     </div>
                 </div>
-                <!-- For non-admin users -->
+
+                <!-- Regular user section -->
                 <div class="admin-notification-wrapper" *ngIf="!user?.isAdmin">
+                    <!-- User menu -->
                     <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
                         nbContextMenuTag="header-menu">
                     </nb-user>
 
-                    <!-- Cart button displayed if user is not admin -->
+                    <!-- Cart section with loading state -->
                     <div class="header-container-user cart-button-container">
                         <button class="cart-button" (click)="navigateToCart()">
                             <i class="material-icons cart-icon">shopping_cart</i>
+                            <!-- Cart badge - shows count from cartCount$ observable -->
                             <div class="cart-badge" *ngIf="(cartCount$ | async) > 0">
                                 {{ cartCount$ | async }}
                             </div>
                         </button>
 
-                        <!-- Enhanced cart notification -->
+                        <!-- Cart notification with loading state -->
                         <div class="cart-notification" *ngIf="cartNotification$ | async as notification" [@slideInOut]>
                             <div class="notification-content">
                                 <div class="notification-header">
@@ -160,14 +165,16 @@
                         </div>
                     </div>
 
+                    <!-- User notification bell with badge -->
                     <div class="notification-trigger" (click)="toggleNotificationPanel()">
                         <i class="material-icons">notifications</i>
+                        <!-- User notification badge - shows count from userOrdersCount$ observable -->
                         <span class="notification-badge" *ngIf="(userOrdersCount$ | async) > 0">
                             {{userOrdersCount$ | async}}
                         </span>
                     </div>
 
-                    <!-- Notification Panel -->
+                    <!-- User Notification Panel -->
                     <div class="notification-panel" *ngIf="showNotificationPanel && !user?.isAdmin" [@slideInOut]>
                         <div class="notification-header">
                             <h3>{{ 'adminMenu.notifications.notifications' | translate }}</h3>
@@ -193,7 +200,7 @@
                 </div>
             </div>
 
-            <!-- Login icon displayed if user is not logged in -->
+            <!-- Non-logged in user section -->
             <div *ngIf="!userLoggedIn" class="header-container-user">
                 <div class="admin-notification-wrapper">
                     <i (click)="navigateToLogin()" class="material-icons login-icon">login</i>
@@ -248,7 +255,7 @@
                 </div>
             </div>
 
-            <!-- Button to switch language -->
+            <!-- Language switch button -->
             <div class="header-container-user">
                 <div class="admin-notification-wrapper">
                     <button (click)="switchLanguage()" class="languageswitch-btn">{{
@@ -256,6 +263,6 @@
                         }}</button>
                 </div>
             </div>
-
-
         </div>
+    </div>
+</div>

@@ -111,12 +111,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/product/' + ProductViewText.FOOD_SUPLIMENTS]);
   }
 
+  /**
+   * Navigates to product detail with selected price
+   * @param product Product with category, ID and price info
+   */
   navigateToProduct(product: DiscountedPrice) {
-    this.router.navigate(['/product/' + product.category + '/' + product.id], {
-      queryParams: {
-        selectedPrice: JSON.stringify(product.selectedPrice)
-      }
-    });
+    this.router.navigate(
+      ['/product/' + product.category + '/' + product.id],
+      { queryParams: { selectedPrice: JSON.stringify(product.selectedPrice) } }
+    );
   }
 
   navigateToLoyalty() {

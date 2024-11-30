@@ -60,19 +60,22 @@ export class HeaderComponent implements OnInit {
   searchExpanded: boolean = false;
   searcForProductText: string = '';
   searchResults: Product[] = []; // Store search results
-  // Add property to store reviews
+  // Map to store reviews for products
   productReviews: Map<string, ProductReeviews[]> = new Map();
 
-  // Observable to track the total number of items in the cart
+  // Observable for cart notifications, transforms cart items into total count
   cartCount$ = this.cartService.cartItems$.pipe(
     map(items => items.reduce((count, item) => count + item.quantity, 0))
   );
 
+  // Observable for cart notifications (add/remove items)
   cartNotification$ = this.cartNotificationService.notification$;
 
+  // Admin notification observables for new orders and reviews
   newOrdersCount$ = this.adminNotificationService.ordersCount$;
   newReviewsCount$ = this.adminNotificationService.reviewsCount$;
 
+  // Combines admin notifications into a single total count
   adminNotificationCount$ = combineLatest([
     this.newOrdersCount$,
     this.newReviewsCount$
@@ -80,8 +83,10 @@ export class HeaderComponent implements OnInit {
     map(([orders, reviews]) => orders + reviews)
   );
 
+  // Controls visibility of notification panel
   showNotificationPanel: boolean = false;
 
+  // Observable for user's order notifications
   userOrdersCount$ = this.userNotificationService.ordersCount$;
 
   constructor(private sidebarService: NbSidebarService,
@@ -289,32 +294,30 @@ export class HeaderComponent implements OnInit {
     this.cartNotificationService.hideNotification();
   }
 
+  /**
+   * Checks and sets up admin notifications if user is an admin
+   * Subscribes to new orders and unchecked reviews
+   */
   private checkAdminNotifications() {
-    // Only proceed if the current user is an admin
     if (this.user?.isAdmin) {
-      // Subscribe to new orders and update the order count in real-time
+      // Subscribe to new orders count
       this.adminService.getAllNewOrders().then(async ordersObservable => {
         ordersObservable.subscribe(newOrders => {
           this.adminNotificationService.updateOrdersCount(newOrders.length);
         });
       });
 
-      // Subscribe to unchecked reviews and update the review count in real-time
-      // This will automatically update whenever reviews are added, edited, or checked
+      // Subscribe to unchecked reviews count
       this.adminService.watchUncheckedReviews().subscribe(count => {
         this.adminNotificationService.updateReviewsCount(count);
       });
     }
   }
 
-  navigateToAdminProfileToOrders() {
-    this.router.navigate(['/admin-profile'], { queryParams: { openOrders: 'true' } });
-  }
-
-  navigateToAdminProfileToReviews() {
-    this.router.navigate(['/admin-profile'], { queryParams: { openOrders: 'false' } });
-  }
-
+  /**
+   * Checks and sets up user notifications for regular users
+   * Subscribes to user's new orders
+   */
   private checkUserNotifications() {
     if (this.userLoggedIn && !this.user?.isAdmin) {
       this.userService.getAllNewOrdersForUser(this.user.id).then(async ordersObservable => {
@@ -325,7 +328,21 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  /**
+   * Toggles visibility of notification panel
+   */
   toggleNotificationPanel() {
     this.showNotificationPanel = !this.showNotificationPanel;
+  }
+
+  /**
+   * Navigation methods for admin notifications
+   */
+  navigateToAdminProfileToOrders() {
+    this.router.navigate(['/admin-profile'], { queryParams: { openOrders: 'true' } });
+  }
+
+  navigateToAdminProfileToReviews() {
+    this.router.navigate(['/admin-profile'], { queryParams: { openOrders: 'false' } });
   }
 }

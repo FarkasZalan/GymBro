@@ -7,23 +7,28 @@ import { CartNotificationService } from './cart-notification.service';
     providedIn: 'root'
 })
 export class CartService {
-    // BehaviorSubject to store and manage cart items state
+    // BehaviorSubject to manage cart state, initialized as empty array
     private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
 
-    // Observable to expose cart items to components
+    // Public Observable that components can subscribe to for cart updates
+    // Using $ suffix as per Angular convention for Observables
     cartItems$ = this.cartItemsSubject.asObservable();
 
     constructor(private cartNotificationService: CartNotificationService) {
-        // Load saved cart items from localStorage on service initialization
         this.loadCartItems();
     }
 
-    // Get current cart items
+    /**
+     * Getter for current cart items state
+     * @returns Current array of cart items
+     */
     private get cartItems(): CartItem[] {
         return this.cartItemsSubject.value;
     }
 
-    // Load cart items from localStorage
+    /**
+     * Loads cart items from localStorage on service initialization
+     */
     private loadCartItems(): void {
         const savedCart = localStorage.getItem('cartItems');
         if (savedCart) {
@@ -31,15 +36,21 @@ export class CartService {
         }
     }
 
-    // Save current cart state to localStorage
+    /**
+     * Persists current cart state to localStorage
+     */
     private saveCartItems(): void {
         localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
     }
 
-    // Add new item to cart or update quantity if item already exists
+    /**
+     * Adds item to cart or updates quantity if item exists
+     * Shows notification after successful addition
+     * @param item CartItem to be added
+     */
     addToCart(item: CartItem): void {
         const currentItems = this.cartItems;
-        // Check if item already exists in cart
+        // Check for existing item by matching all relevant properties
         const existingItemIndex = currentItems.findIndex(
             cartItem =>
                 cartItem.productId === item.productId &&
@@ -49,17 +60,15 @@ export class CartService {
         );
 
         if (existingItemIndex !== -1) {
-            // Update quantity if item exists
             currentItems[existingItemIndex].quantity += item.quantity;
         } else {
-            // Add new item if it doesn't exist
             currentItems.push(item);
         }
 
         this.cartItemsSubject.next(currentItems);
         this.saveCartItems();
 
-        // Show enhanced notification
+        // Show notification with item details
         this.cartNotificationService.showNotification({
             productName: item.productName,
             imageUrl: item.selectedPrice.productImage,
@@ -70,7 +79,11 @@ export class CartService {
         });
     }
 
-    // Update quantity of specific item in cart
+    /**
+     * Updates quantity of specific cart item
+     * @param index Index of item in cart
+     * @param quantity New quantity value
+     */
     updateQuantity(index: number, quantity: number): void {
         const currentItems = this.cartItems;
         if (currentItems[index]) {
@@ -80,17 +93,20 @@ export class CartService {
         }
     }
 
-    // Remove specific item from cart
+    /**
+     * Removes specific item from cart
+     * @param index Index of item to remove
+     */
     removeFromCart(index: number): void {
-        const currentItems = [...this.cartItems]; // Make a copy of the current items
-        const removedItem = currentItems[index]; // Save the removed item for undo
-
-        currentItems.splice(index, 1); // Remove the item
-        this.cartItemsSubject.next(currentItems); // Update the BehaviorSubject
-        this.saveCartItems(); // Persist the changes
+        const currentItems = [...this.cartItems];
+        currentItems.splice(index, 1);
+        this.cartItemsSubject.next(currentItems);
+        this.saveCartItems();
     }
 
-    // Clear all items from cart
+    /**
+     * Utility methods for cart operations
+     */
     clearCart(): void {
         this.cartItemsSubject.next([]);
         localStorage.removeItem('cartItems');
@@ -100,6 +116,10 @@ export class CartService {
         return this.cartItems.length === 0;
     }
 
+    /**
+     * Calculates total price of all items in cart
+     * Considers discounted prices when available
+     */
     getCartTotal(): number {
         return this.cartItems.reduce((total, item) => {
             const price = item.selectedPrice.discountedPrice > 0
@@ -109,14 +129,19 @@ export class CartService {
         }, 0);
     }
 
+    /**
+     * Calculates total number of items in cart
+     */
     getCartCount(): number {
         return this.cartItems.reduce((count, item) =>
             count + item.quantity, 0);
     }
 
-    // Method specifically for logout cleanup
+    /**
+     * Clears cart and removes from localStorage on user logout
+     */
     clearCartOnLogout(): void {
         this.clearCart();
-        localStorage.removeItem('cartItems'); // Explicitly remove from localStorage
+        localStorage.removeItem('cartItems');
     }
 } 
