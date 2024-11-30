@@ -179,8 +179,22 @@ export class FoodSuplimentPageComponent implements OnInit {
         this.productId = foodSupliment.id;
         this.vitaminList = foodSupliment.vitaminList;
 
-        // set the default price
-        this.productPriceObject = this.getDefaultPrice(foodSupliment);
+        // Read and parse the selectedPrice from query parameters
+        this.route.queryParams.subscribe(queryParams => {
+          if (queryParams['selectedPrice']) {
+            try {
+              const parsedPrice: ProductPrice = JSON.parse(queryParams['selectedPrice']);
+
+              this.productPriceObject = parsedPrice;
+            } catch (e) {
+              this.productPriceObject = this.getDefaultPrice(foodSupliment);
+            }
+          } else {
+            this.productPriceObject = this.getDefaultPrice(foodSupliment);
+          }
+        });
+
+        // Set other properties based on the selected price
         this.selectedQuantityInProduct = this.productPriceObject.quantityInProduct;
         this.selectedPrice = this.productPriceObject.productPrice;
         this.selectedFlavor = this.productPriceObject.productFlavor;
@@ -188,6 +202,7 @@ export class FoodSuplimentPageComponent implements OnInit {
         this.selectedImage = this.productPriceObject.productImage;
         this.getReviews();
 
+        // get the available flavors
         this.getAvailableFlavors(true);
 
         if (this.getDefaultPrice(foodSupliment).productStock === 0) {
@@ -416,20 +431,13 @@ export class FoodSuplimentPageComponent implements OnInit {
         price.productFlavor === this.selectedFlavor
       );
 
-      // if there is a discount, use the discounted price, otherwise use the regular price
-      const priceToAdd = this.productPriceObject.discountedPrice > 0 ?
-        this.productPriceObject.discountedPrice :
-        this.selectedPrice;
-
       // add the product to the cart
       this.cartService.addToCart({
         productId: this.foodSupliment.id,
         productName: this.foodSupliment.productName,
         quantity: this.cartQuantity,
-        price: priceToAdd,
-        imageUrl: this.selectedImage || '',
+        selectedPrice: this.productPriceObject,
         category: ProductViewText.FOOD_SUPLIMENTS,
-        flavor: this.selectedFlavor,
         size: this.selectedQuantityInProduct.toString(),
         productUnit: this.foodSupliment.dosageUnit,
         maxStockError: false,

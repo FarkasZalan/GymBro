@@ -160,7 +160,22 @@ export class AccessoriesPageComponent implements OnInit {
         this.accessories = { ...accessories };
         this.productId = accessories.id;
 
-        this.productPriceObject = this.getDefaultPrice(accessories);
+        // Read and parse the selectedPrice from query parameters
+        this.route.queryParams.subscribe(queryParams => {
+          if (queryParams['selectedPrice']) {
+            try {
+              const parsedPrice: ProductPrice = JSON.parse(queryParams['selectedPrice']);
+
+              this.productPriceObject = parsedPrice;
+            } catch (e) {
+              this.productPriceObject = this.getDefaultPrice(accessories);
+            }
+          } else {
+            this.productPriceObject = this.getDefaultPrice(accessories);
+          }
+        });
+
+        // Set other properties based on the selected price
         this.equipmentType = accessories.equipmentType;
         this.selectedColor = this.productPriceObject.productColor;
 
@@ -305,21 +320,14 @@ export class AccessoriesPageComponent implements OnInit {
         price.productColor === this.selectedColor
       );
 
-      // if there is a discount, use the discounted price, otherwise use the regular price
-      const priceToAdd = this.productPriceObject.discountedPrice > 0 ?
-        this.productPriceObject.discountedPrice :
-        this.selectedPrice;
-
       // add the product to the cart
       this.cartService.addToCart({
         productId: this.accessories.id,
         productName: this.accessories.productName,
         quantity: this.cartQuantity,
-        price: priceToAdd,
-        imageUrl: this.selectedImage || '',
+        selectedPrice: this.productPriceObject,
         category: ProductViewText.ACCESSORIES,
         size: this.selectedSizeInProduct,
-        color: this.selectedColor,
         maxStockError: false,
         maxStock: this.productPriceObject.productStock
       });

@@ -44,8 +44,8 @@ export class CartService {
             cartItem =>
                 cartItem.productId === item.productId &&
                 cartItem.size === item.size &&
-                cartItem.color === item.color &&
-                cartItem.flavor === item.flavor
+                cartItem.selectedPrice.productColor === item.selectedPrice.productColor &&
+                cartItem.selectedPrice.productFlavor === item.selectedPrice.productFlavor
         );
 
         if (existingItemIndex !== -1) {
@@ -62,9 +62,11 @@ export class CartService {
         // Show enhanced notification
         this.cartNotificationService.showNotification({
             productName: item.productName,
-            imageUrl: item.imageUrl,
+            imageUrl: item.selectedPrice.productImage,
             quantity: item.quantity,
-            price: item.price
+            price: item.selectedPrice.discountedPrice > 0
+                ? item.selectedPrice.discountedPrice
+                : item.selectedPrice.productPrice
         });
     }
 
@@ -99,8 +101,12 @@ export class CartService {
     }
 
     getCartTotal(): number {
-        return this.cartItems.reduce((total, item) =>
-            total + (item.price * item.quantity), 0);
+        return this.cartItems.reduce((total, item) => {
+            const price = item.selectedPrice.discountedPrice > 0
+                ? item.selectedPrice.discountedPrice
+                : item.selectedPrice.productPrice;
+            return total + (price * item.quantity);
+        }, 0);
     }
 
     getCartCount(): number {

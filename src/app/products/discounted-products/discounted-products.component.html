@@ -15,7 +15,10 @@
         <!-- Products grid -->
         <div *ngIf="!emptyCollection" class="product-list-container">
             <nb-card class="rounded-card productCard" *ngFor="let product of discountedProducts" [@zoomIn]>
-                <nb-card-body class="product-image" (click)="navigateToProduct(product.category, product.id)">
+                <nb-card-body class="product-image" (click)="navigateToProduct(product)">
+                    <span class="category-badge">
+                        <nb-icon [icon]="getCategoryIcon(product.category)"></nb-icon>
+                    </span>
                     <span class="badge discount">{{ 'home.sale' | translate }}</span>
 
                     <div class="details-container text-center">
@@ -40,10 +43,10 @@
                         <div class="price-container">
                             <h5 class="price-display has-discount">
                                 <span class="original-price crossed">
-                                    {{ product.originalPrice }} {{ 'products.huf' | translate }}
+                                    {{ product.selectedPrice.productPrice }} {{ 'products.huf' | translate }}
                                 </span>
                                 <span class="discounted-price">
-                                    {{ product.discountedPrice }} {{ 'products.huf' | translate }}
+                                    {{ product.selectedPrice.discountedPrice }} {{ 'products.huf' | translate }}
                                 </span>
                             </h5>
                         </div>

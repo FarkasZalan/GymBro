@@ -72,7 +72,9 @@ export class CartComponent {
 
     getTotalPrice() {
         return this.cartItems$.pipe(
-            map(items => items.reduce((total, item) => total + (item.price * item.quantity), 0))
+            map(items => items.reduce((total, item) => total + (item.selectedPrice.discountedPrice > 0
+                ? item.selectedPrice.discountedPrice
+                : item.selectedPrice.productPrice) * item.quantity, 0))
         );
     }
 
@@ -102,7 +104,11 @@ export class CartComponent {
 
     // Navigate to product page
     navigateToProduct(item: CartItem) {
-        this.router.navigate(['/product', item.category, item.productId]);
+        this.router.navigate(['/product', item.category, item.productId], {
+            queryParams: {
+                selectedPrice: JSON.stringify(item.selectedPrice)
+            }
+        });
     }
 
     // Increment quantity of item in the cart

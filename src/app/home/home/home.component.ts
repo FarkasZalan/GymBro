@@ -9,6 +9,7 @@ import { Product } from '../../admin-profile/product-management/product-models/p
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { NgbCarousel } from '@ng-bootstrap/ng-bootstrap';
+import { DiscountedPrice } from '../../products/discounted-price.model';
 
 @Component({
   selector: 'app-home',
@@ -110,8 +111,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/product/' + ProductViewText.FOOD_SUPLIMENTS]);
   }
 
-  navigateToProduct(category: string, productId: string) {
-    this.router.navigate(['/product/' + category + '/' + productId]);
+  navigateToProduct(product: DiscountedPrice) {
+    this.router.navigate(['/product/' + product.category + '/' + product.id], {
+      queryParams: {
+        selectedPrice: JSON.stringify(product.selectedPrice)
+      }
+    });
   }
 
   navigateToLoyalty() {
@@ -158,5 +163,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     const itemsPerSlide = 3;
     const totalSlides = Math.ceil(totalItems / itemsPerSlide);
     return Array.from({ length: totalSlides }, (_, i) => i);
+  }
+
+  getCategoryIcon(category: string): string {
+    if (category === ProductViewText.FOOD_SUPLIMENTS) {
+      return 'flash-outline';
+    } else if (category === ProductViewText.ORGANIC_FOOD) {
+      return 'heart-outline';
+    } else if (category === ProductViewText.CLOTHES) {
+      return 'pricetags-outline';
+    } else if (category === ProductViewText.ACCESSORIES) {
+      return 'shield-outline';
+    }
   }
 }

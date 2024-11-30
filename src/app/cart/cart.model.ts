@@ -1,14 +1,13 @@
+import { ProductPrice } from "../admin-profile/product-management/product-models/product-price.model";
+
 export interface CartItem {
     productId: string;
     productName: string;
     quantity: number;
-    price: number;
-    imageUrl: string;
     category: string;
     size?: string;
     productUnit?: string;
-    color?: string;
-    flavor?: string;
+    selectedPrice?: ProductPrice;
     maxStockError?: boolean;
     maxStock?: number;
 }

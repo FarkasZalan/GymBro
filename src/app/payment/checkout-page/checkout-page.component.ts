@@ -303,11 +303,13 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   calculateTotals() {
-    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    this.subtotal = this.cartItems.reduce((sum, item) => sum + (item.selectedPrice.discountedPrice > 0
+      ? (item.selectedPrice.discountedPrice * item.quantity)
+      : (item.selectedPrice.productPrice * item.quantity)), 0);
     this.cashOnDeliveryAmount = this.paymentMethods.find(m => m.id === this.selectedPaymentMethod)?.additionalFee || 0;
     this.shipping = this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? 0 : this.STANDARD_SHIPPING_COST;
 
-    if (this.selectedPaymentMethod === '') {
+    if (this.selectedShippingMethod === '') {
       this.shipping = 0;
     }
 
@@ -335,7 +337,11 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   goToProduct(product: CartItem) {
-    this.router.navigate(['/product', product.category, product.productId]);
+    this.router.navigate(['/product', product.category, product.productId], {
+      queryParams: {
+        selectedPrice: JSON.stringify(product.selectedPrice)
+      }
+    });
   }
 
   // Go to Edit Address

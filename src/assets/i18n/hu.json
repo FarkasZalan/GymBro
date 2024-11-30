@@ -748,6 +748,8 @@
                 },
                 "latestBlogs": "Legújabb Blog Bejegyzések",
                 "new": "Új",
-                "sale": "Akciós"
+                "sale": "Akciós",
+                "viewAllDiscountedProducts": "Összes Akciós Termék",
+                "viewAllBlogs": "Összes Blog Bejegyzés"
         }
 }

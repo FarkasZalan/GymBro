@@ -167,14 +167,27 @@ export class OrganicFoodPageComponent implements OnInit {
     });
 
     this.route.params.subscribe(params => {
-      // get the food supliment product by id
       this.documentHandler.getInnerDocumentByID("products", ProductViewText.ORGANIC_FOOD, "allProduct", params['productId']).subscribe(async (organicFood: OrganicFood) => {
-        // make a copy from the object
         this.organicFood = { ...organicFood };
         this.allergens = organicFood.allergens;
         this.productId = organicFood.id;
 
-        this.productPriceObject = this.getDefaultPrice(organicFood);
+        // Read and parse the selectedPrice from query parameters
+        this.route.queryParams.subscribe(queryParams => {
+          if (queryParams['selectedPrice']) {
+            try {
+              const parsedPrice: ProductPrice = JSON.parse(queryParams['selectedPrice']);
+
+              this.productPriceObject = parsedPrice;
+            } catch (e) {
+              this.productPriceObject = this.getDefaultPrice(organicFood);
+            }
+          } else {
+            this.productPriceObject = this.getDefaultPrice(organicFood);
+          }
+        });
+
+        // Set other properties based on the selected price
         this.selectedQuantityInProduct = this.productPriceObject.quantityInProduct;
         this.selectedPrice = this.productPriceObject.productPrice;
         this.selectedFlavor = this.productPriceObject.productFlavor;
@@ -398,20 +411,13 @@ export class OrganicFoodPageComponent implements OnInit {
         price.productFlavor === this.selectedFlavor
       );
 
-      // if there is a discount, use the discounted price, otherwise use the regular price
-      const priceToAdd = this.productPriceObject.discountedPrice > 0 ?
-        this.productPriceObject.discountedPrice :
-        this.selectedPrice;
-
       // add the product to the cart
       this.cartService.addToCart({
         productId: this.organicFood.id,
         productName: this.organicFood.productName,
         quantity: this.cartQuantity,
-        price: priceToAdd,
-        imageUrl: this.selectedImage || '',
+        selectedPrice: this.productPriceObject,
         category: ProductViewText.ORGANIC_FOOD,
-        flavor: this.selectedFlavor,
         size: this.selectedQuantityInProduct.toString(),
         productUnit: this.organicFood.dosageUnit,
         maxStockError: false,

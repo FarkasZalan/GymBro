@@ -11,6 +11,7 @@ import { ProductReeviews } from "../admin-profile/product-management/product-mod
 import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
 import { ProductPrice } from "../admin-profile/product-management/product-models/product-price.model";
 import { Product } from "../admin-profile/product-management/product-models/product.model";
+import { DiscountedPrice } from "./discounted-price.model";
 
 @Injectable({
     providedIn: 'root'
@@ -322,13 +323,12 @@ export class ProductService {
                 const finalProducts = hasLimit && limit ? sortedProducts.slice(0, limit) : sortedProducts;
 
                 // Map to simplified product structure
-                return finalProducts.map(product => ({
+                return finalProducts.map((product: DiscountedPrice) => ({
                     id: product.id,
                     productName: product.productName,
                     imageUrl: this.getDiscountedPrice(product).productImage,
-                    originalPrice: this.getDiscountedPrice(product).productPrice,
-                    discountedPrice: this.getDiscountedPrice(product).discountedPrice,
-                    category: product.category
+                    category: product.category,
+                    selectedPrice: this.getDiscountedPrice(product)
                 }));
             })
         );
@@ -417,7 +417,7 @@ export class ProductService {
                     .sort((a, b) => b.dateAdded - a.dateAdded)
                     .slice(0, limit);
 
-                return allProducts.map(product => ({
+                return allProducts.map((product: DiscountedPrice) => ({
                     id: product.id,
                     productName: product.productName,
                     imageUrl: this.getDefaultProductImage(product),

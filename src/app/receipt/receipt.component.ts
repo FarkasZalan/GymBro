@@ -6,6 +6,8 @@ import { DocumentHandlerService } from '../document.handler.service';
 import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
 import { style, transition, trigger } from '@angular/animations';
 import { animate } from '@angular/animations';
+import { Product } from '../admin-profile/product-management/product-models/product.model';
+import { CartItem } from '../cart/cart.model';
 
 @Component({
   selector: 'app-receipt',
@@ -56,8 +58,12 @@ export class ReceiptComponent implements OnInit {
     });
   }
 
-  navigateToProduct(product: any) {
-    this.router.navigate(['/product', product.category, product.productId]);
+  navigateToProduct(product: CartItem) {
+    this.router.navigate(['/product/' + product.category + '/' + product.productId], {
+      queryParams: {
+        selectedPrice: JSON.stringify(product.selectedPrice)
+      }
+    });
   }
 
   goBack() {

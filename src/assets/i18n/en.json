@@ -747,6 +747,8 @@
       },
       "latestBlogs": "Latest Blog Posts",
       "new": "New",
-      "sale": "Sale"
+      "sale": "Sale",
+      "viewAllDiscountedProducts": "View All Discounted Products",
+      "viewAllBlogs": "View All Blog Posts"
    }
 }

@@ -54,8 +54,8 @@
             <section class="featured-section" @fadeIn>
                 <div class="section-header">
                     <h2>{{ 'home.specialOffers' | translate }}</h2>
-                    <button nbButton class="view-all-btn" status="primary" (click)="navigateToDiscountedProducts()">
-                        {{ 'home.viewAllDiscounts' | translate }}
+                    <button nbButton class="view-all-btn btn" status="primary" (click)="navigateToDiscountedProducts()">
+                        {{ 'home.viewAllDiscountedProducts' | translate }}
                         <nb-icon icon="arrow-forward-outline"></nb-icon>
                     </button>
                 </div>
@@ -63,16 +63,19 @@
                     <ng-template ngbSlide *ngFor="let i of getCarouselSlides(discountedProducts.length)">
                         <div class="products-grid">
                             <nb-card *ngFor="let product of getDiscountedProductsSlice(i*3, (i+1)*3)" @zoomIn>
-                                <nb-card-body (click)="navigateToProduct(product.category, product.id)">
+                                <nb-card-body (click)="navigateToProduct(product)">
+                                    <span class="category-badge">
+                                        <nb-icon [icon]="getCategoryIcon(product.category)"></nb-icon>
+                                    </span>
                                     <span class="badge discount">{{ 'home.sale' | translate }}</span>
                                     <img [src]="product?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
                                         [alt]="product?.productName">
                                     <div class="product-content">
                                         <h4 class="product-name">{{product?.productName}}</h4>
                                         <div class="price-container">
-                                            <span class="original-price">{{product?.originalPrice |
+                                            <span class="original-price">{{product?.selectedPrice.productPrice |
                                                 currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
-                                            <span class="discounted-price">{{product?.discountedPrice |
+                                            <span class="discounted-price">{{product?.selectedPrice.discountedPrice |
                                                 currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
                                         </div>
                                     </div>
@@ -106,7 +109,10 @@
                     <ng-template ngbSlide *ngFor="let i of getCarouselSlides(newArrivals.length)">
                         <div class="products-grid">
                             <nb-card *ngFor="let product of getNewArrivalsSlice(i*3, (i+1)*3)" @zoomIn>
-                                <nb-card-body (click)="navigateToProduct(product.category, product.id)">
+                                <nb-card-body (click)="navigateToProduct(product)">
+                                    <span class="category-badge">
+                                        <nb-icon [icon]="getCategoryIcon(product.category)"></nb-icon>
+                                    </span>
                                     <span class="badge new">{{ 'home.new' | translate }}</span>
                                     <img [src]="product?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
                                         [alt]="product?.productName">
@@ -160,7 +166,7 @@
             <section class="blogs-section" @fadeIn>
                 <div class="section-header">
                     <h2>{{ 'home.latestBlogs' | translate }}</h2>
-                    <button nbButton class="view-all-btn" status="primary" (click)="navigateToBlogs()">
+                    <button nbButton class="view-all-btn btn" status="primary" (click)="navigateToBlogs()">
                         {{ 'home.viewAllBlogs' | translate }}
                         <nb-icon icon="arrow-forward-outline"></nb-icon>
                     </button>

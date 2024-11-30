@@ -319,7 +319,6 @@ export class HeaderComponent implements OnInit {
     if (this.userLoggedIn && !this.user?.isAdmin) {
       this.userService.getAllNewOrdersForUser(this.user.id).then(async ordersObservable => {
         ordersObservable.subscribe(newOrders => {
-          console.log(newOrders)
           this.userNotificationService.updateOrdersCount(newOrders.length);
         });
       });

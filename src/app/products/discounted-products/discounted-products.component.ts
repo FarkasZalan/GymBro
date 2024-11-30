@@ -5,6 +5,7 @@ import { Product } from '../../admin-profile/product-management/product-models/p
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ProductReeviews } from '../../admin-profile/product-management/product-models/product-reviews.model';
+import { DiscountedPrice } from '../discounted-price.model';
 
 @Component({
     selector: 'app-discounted-products',
@@ -34,7 +35,7 @@ export class DiscountedProductsComponent implements OnInit {
     }
 
     private loadDiscountedProducts(): void {
-        this.productService.getDiscountedProducts(0, false).subscribe(products => {
+        this.productService.getDiscountedProducts(0, false).subscribe((products: Product[]) => {
             this.discountedProducts = products;
             this.emptyCollection = products.length === 0;
             this.loadReviewsForProducts();
@@ -50,8 +51,12 @@ export class DiscountedProductsComponent implements OnInit {
         });
     }
 
-    navigateToProduct(category: string, productId: string): void {
-        this.router.navigate(['/product', category, productId]);
+    navigateToProduct(product: DiscountedPrice) {
+        this.router.navigate(['/product/' + product.category + '/' + product.id], {
+            queryParams: {
+                selectedPrice: JSON.stringify(product.selectedPrice)
+            }
+        });
     }
 
     getProductReviews(productId: string): ProductReeviews[] {
@@ -64,5 +69,17 @@ export class DiscountedProductsComponent implements OnInit {
 
         const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
         return Math.round((totalRating / reviews.length) * 100) / 100;
+    }
+
+    getCategoryIcon(category: string): string {
+        if (category === ProductViewText.FOOD_SUPLIMENTS) {
+            return 'flash-outline';
+        } else if (category === ProductViewText.ORGANIC_FOOD) {
+            return 'heart-outline';
+        } else if (category === ProductViewText.CLOTHES) {
+            return 'pricetags-outline';
+        } else if (category === ProductViewText.ACCESSORIES) {
+            return 'shield-outline';
+        }
     }
 } 

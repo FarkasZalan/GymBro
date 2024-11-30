@@ -99,24 +99,27 @@
             <div class="items-list">
                 <nb-card class="cart-item" *ngFor="let item of order.productList" (click)="navigateToProduct(item)">
                     <div class="item-image">
-                        <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.productName">
-                        <img *ngIf="!item.imageUrl" src="../../../assets/images/gym-bro-logo.png" alt="Product Image">
+                        <img *ngIf="item.selectedPrice.productImage" [src]="item.selectedPrice.productImage"
+                            [alt]="item.productName">
+                        <img *ngIf="!item.selectedPrice.productImage" src="../../../assets/images/gym-bro-logo.png"
+                            alt="Product Image">
                     </div>
 
                     <div class="item-details">
                         <h4>{{item.productName}}</h4>
                         <div class="item-attributes">
-                            <span *ngIf="item.size" class="attribute">
+                            <span *ngIf="item.selectedPrice.productSize" class="attribute">
                                 <nb-icon icon="cube-outline"></nb-icon>
-                                {{item.size | translate}} {{item.productUnit | translate}}
+                                {{item.selectedPrice.productSize | translate}} {{item.selectedPrice.productUnit |
+                                translate}}
                             </span>
-                            <span *ngIf="item.color" class="attribute">
+                            <span *ngIf="item.selectedPrice.productColor" class="attribute">
                                 <nb-icon icon="color-palette-outline"></nb-icon>
-                                {{item.color | translate}}
+                                {{item.selectedPrice.productColor | translate}}
                             </span>
-                            <span *ngIf="item.flavor" class="attribute">
+                            <span *ngIf="item.selectedPrice.productFlavor" class="attribute">
                                 <nb-icon icon="star-outline"></nb-icon>
-                                {{item.flavor | translate}}
+                                {{item.selectedPrice.productFlavor | translate}}
                             </span>
                             <span class="attribute">
                                 <nb-icon icon="shopping-cart-outline"></nb-icon>
@@ -129,10 +132,15 @@
 
 
                     <div class="item-price">
-                        <div class="price-tag">{{(item.price * item.quantity) | currency:'':'':'1.0-0'}} {{
+                        <div class="price-tag">{{(item.selectedPrice.discountedPrice > 0
+                            ? (item.selectedPrice.discountedPrice * item.quantity)
+                            : (item.selectedPrice.productPrice * item.quantity)) | currency:'':'':'1.0-0'}} {{
                             'products.huf' |
                             translate }}</div>
-                        <div class="unit-price">{{item.price | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}
+                        <div class="unit-price">{{item.selectedPrice.discountedPrice > 0
+                            ? (item.selectedPrice.discountedPrice)
+                            : (item.selectedPrice.productPrice) | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate
+                            }}
                             /
                             {{'products.pcs' | translate}}</div>
                     </div>
