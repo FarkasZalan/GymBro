@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { NgxEditorModule } from 'ngx-editor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { NgxEditorModule } from 'ngx-editor';
         CommonModule,
         FormsModule,
         RouterModule,
+        BrowserAnimationsModule,
         NbCardModule,
         NbMenuModule,
         NbInputModule,

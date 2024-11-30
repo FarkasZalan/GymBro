@@ -712,5 +712,35 @@
    },
    "loading": {
       "loading": "Loading..."
+   },
+   "home": {
+      "hero": {
+         "mainText": "BUILD YOUR DREAM BODY",
+         "subText": "WITH PREMIUM QUALITY PRODUCTS",
+         "description": "Discover our premium supplements, sportswear, and expert blog posts for optimal results!",
+         "shopNow": "Shop Now",
+         "features": {
+            "shop": {
+               "title": "Premium Products",
+               "description": "Wide selection of quality supplements and sports equipment"
+            },
+            "loyalty": {
+               "title": "Loyalty Program",
+               "description": "Earn points and redeem them for exclusive discounts"
+            },
+            "blog": {
+               "title": "Expert Blog",
+               "description": "Useful tips and advice for training and nutrition"
+            }
+         }
+      },
+      "shopByCategory": "Shop by Category",
+      "loyaltyProgram": {
+         "title": "GymBro Loyalty Program",
+         "description": "Join our loyalty program and earn points with every purchase!",
+         "benefit1": "Exclusive discounts and offers",
+         "benefit2": "Earn points with every purchase",
+         "benefit3": "Special rewards and surprises"
+      }
    }
 }
