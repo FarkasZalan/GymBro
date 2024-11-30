@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="feature-grid">
-                    <div class="feature-item">
+                    <div class="feature-item" (click)="goToDiscountedProducts()">
                         <div class="feature-icon">
                             <nb-icon icon="shopping-bag-outline"></nb-icon>
                         </div>
@@ -27,7 +27,7 @@
                         <p>{{ 'home.hero.features.shop.description' | translate }}</p>
                     </div>
 
-                    <div class="feature-item">
+                    <div class="feature-item" (click)="goToLoyalty()">
                         <div class="feature-icon">
                             <nb-icon icon="star-outline"></nb-icon>
                         </div>
@@ -35,7 +35,7 @@
                         <p>{{ 'home.hero.features.loyalty.description' | translate }}</p>
                     </div>
 
-                    <div class="feature-item">
+                    <div class="feature-item" (click)="goToBlogs()">
                         <div class="feature-icon">
                             <nb-icon icon="book-outline"></nb-icon>
                         </div>
@@ -51,7 +51,7 @@
     <nb-card class="main-content-card">
         <nb-card-body>
             <!-- Special Offers Section -->
-            <section class="featured-section" @fadeIn>
+            <section class="featured-section" @fadeIn #discountedProductsSection>
                 <div class="section-header">
                     <h2>{{ 'home.specialOffers' | translate }}</h2>
                     <button nbButton class="view-all-btn btn" status="primary" (click)="navigateToDiscountedProducts()">
@@ -129,7 +129,7 @@
             </section>
 
             <!-- Loyalty Program Promo -->
-            <section class="loyalty-promo-section" @fadeIn>
+            <section class="loyalty-promo-section" @fadeIn #loyaltySection>
                 <nb-card class="promo-card">
                     <nb-card-body>
                         <div class="promo-content">
@@ -151,7 +151,7 @@
                                     </li>
                                 </ul>
                                 <button nbButton class="btn primary-btn" status="primary" (click)="navigateToLoyalty()">
-                                    {{ 'home.loyaltyProgram.joinNow' | translate }}
+                                    {{ 'home.loyaltyProgram.moreInfo' | translate }}
                                 </button>
                             </div>
                             <div class="promo-image">
@@ -163,7 +163,7 @@
             </section>
 
             <!-- Latest Blogs Section -->
-            <section class="blogs-section" @fadeIn>
+            <section class="blogs-section" @fadeIn #blogsSection>
                 <div class="section-header">
                     <h2>{{ 'home.latestBlogs' | translate }}</h2>
                     <button nbButton class="view-all-btn btn" status="primary" (click)="navigateToBlogs()">

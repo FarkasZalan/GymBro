@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../../products/product.service';
 import { Blog } from '../../admin-profile/blog/blog.model';
@@ -31,6 +31,9 @@ import { DiscountedPrice } from '../../products/discounted-price.model';
   ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  @ViewChild('discountedProductsSection') discountedProductsSection!: ElementRef;
+  @ViewChild('loyaltySection') loyaltySection!: ElementRef;
+  @ViewChild('blogsSection') blogsSection!: ElementRef;
   featuredBlogs: Blog[] = [];
   discountedProducts: Product[] = [];
   newArrivals: Product[] = [];
@@ -120,6 +123,21 @@ export class HomeComponent implements OnInit, OnDestroy {
       ['/product/' + product.category + '/' + product.id],
       { queryParams: { selectedPrice: JSON.stringify(product.selectedPrice) } }
     );
+  }
+
+  // Scroll to the discounted products section element
+  goToDiscountedProducts() {
+    this.discountedProductsSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Scroll to the loyalty section element
+  goToLoyalty() {
+    this.loyaltySection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Scroll to the blogs section element
+  goToBlogs() {
+    this.blogsSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   navigateToLoyalty() {

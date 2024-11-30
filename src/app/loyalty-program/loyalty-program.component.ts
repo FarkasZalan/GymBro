@@ -69,8 +69,6 @@ export class LoyaltyProgramComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private location: Location,
-    private db: AngularFirestore,
-    private dialog: MatDialog,
     private userService: UserService
   ) { }
 
