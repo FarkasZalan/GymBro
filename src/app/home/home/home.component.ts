@@ -34,25 +34,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   newArrivals: Product[] = [];
   categories = [
     {
-      name: this.translate.instant('menu.foodSuplimentsMenu.foodSupliments'),
+      name: 'menu.foodSuplimentsMenu.foodSupliments',
       icon: 'flash-outline',
       route: '/product/' + ProductViewText.FOOD_SUPLIMENTS,
       image: '../../../assets/images/food-supliments-image.jpg'
     },
     {
-      name: this.translate.instant('menu.organicFoodMenu.organicFood'),
+      name: 'menu.organicFoodMenu.organicFood',
       icon: 'heart-outline',
       route: '/product/' + ProductViewText.ORGANIC_FOOD,
       image: '../../../assets/images/healthy-food-image.jpg'
     },
     {
-      name: this.translate.instant('menu.clothingMenu.clothing'),
+      name: 'menu.clothingMenu.clothing',
       icon: 'pricetags-outline',
       route: '/product/' + ProductViewText.CLOTHES,
       image: '../../../assets/images/clothing-image.jpg'
     },
     {
-      name: this.translate.instant('menu.accessoriesMenu.accessories'),
+      name: 'menu.accessoriesMenu.accessories',
       icon: 'shield-outline',
       route: '/product/' + ProductViewText.ACCESSORIES,
       image: '../../../assets/images/gym-accessories-image.jpg'
@@ -118,15 +118,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   navigateToShop() {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/product/' + ProductViewText.FOOD_SUPLIMENTS]);
+  }
+
+  navigateToProduct(category: string, productId: string) {
+    this.router.navigate(['/product/' + category + '/' + productId]);
   }
 
   navigateToLoyalty() {
     this.router.navigate(['/product/loyaltyProgram']);
-  }
-
-  navigateToPromo() {
-    this.router.navigate(['/products'], { queryParams: { promo: true } });
   }
 
   private startCountdown() {

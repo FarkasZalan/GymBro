@@ -10,6 +10,7 @@ import { Observable, map, combineLatest } from "rxjs";
 import { ProductReeviews } from "../admin-profile/product-management/product-models/product-reviews.model";
 import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
 import { ProductPrice } from "../admin-profile/product-management/product-models/product-price.model";
+import { Product } from "../admin-profile/product-management/product-models/product.model";
 
 @Injectable({
     providedIn: 'root'
@@ -296,13 +297,11 @@ export class ProductService {
 
     // Get discounted products across all categories
     getDiscountedProducts(limit: number): Observable<any[]> {
-        // Get products from each category
         const foodSuppliments$ = this.getDiscountedFromCollection(ProductViewText.FOOD_SUPLIMENTS, limit);
         const organicFood$ = this.getDiscountedFromCollection(ProductViewText.ORGANIC_FOOD, limit);
         const clothes$ = this.getDiscountedFromCollection(ProductViewText.CLOTHES, limit);
         const accessories$ = this.getDiscountedFromCollection(ProductViewText.ACCESSORIES, limit);
 
-        // Combine all observables
         return combineLatest([
             foodSuppliments$,
             organicFood$,
@@ -310,17 +309,24 @@ export class ProductService {
             accessories$
         ]).pipe(
             map(([foods, organic, clothes, accessories]) => {
+                // Add category to each product array before combining
+                const foodsWithCategory = foods.map(p => ({ ...p, category: ProductViewText.FOOD_SUPLIMENTS }));
+                const organicWithCategory = organic.map(p => ({ ...p, category: ProductViewText.ORGANIC_FOOD }));
+                const clothesWithCategory = clothes.map(p => ({ ...p, category: ProductViewText.CLOTHES }));
+                const accessoriesWithCategory = accessories.map(p => ({ ...p, category: ProductViewText.ACCESSORIES }));
+
                 // Combine all products and sort by discount percentage
-                const allProducts = [...foods, ...organic, ...clothes, ...accessories]
+                const allProducts = [...foodsWithCategory, ...organicWithCategory, ...clothesWithCategory, ...accessoriesWithCategory]
                     .sort((a, b) => this.getDiscountPercentage(b) - this.getDiscountPercentage(a))
                     .slice(0, limit);
 
-                return allProducts.map(product => ({
+                return allProducts.map((product) => ({
                     id: product.id,
                     productName: product.productName,
                     imageUrl: this.getDiscountedPrice(product).productImage,
                     originalPrice: this.getDiscountedPrice(product).productPrice,
-                    discountedPrice: this.getDiscountedPrice(product).discountedPrice
+                    discountedPrice: this.getDiscountedPrice(product).discountedPrice,
+                    category: product.category
                 }));
             })
         );
@@ -342,8 +348,14 @@ export class ProductService {
             accessories$
         ]).pipe(
             map(([foods, organic, clothes, accessories]) => {
+                // Add category to each product array before combining
+                const foodsWithCategory = foods.map(p => ({ ...p, category: ProductViewText.FOOD_SUPLIMENTS }));
+                const organicWithCategory = organic.map(p => ({ ...p, category: ProductViewText.ORGANIC_FOOD }));
+                const clothesWithCategory = clothes.map(p => ({ ...p, category: ProductViewText.CLOTHES }));
+                const accessoriesWithCategory = accessories.map(p => ({ ...p, category: ProductViewText.ACCESSORIES }));
+
                 // Combine all products and sort by date
-                const allProducts = [...foods, ...organic, ...clothes, ...accessories]
+                const allProducts = [...foodsWithCategory, ...organicWithCategory, ...clothesWithCategory, ...accessoriesWithCategory]
                     .sort((a, b) => b.dateAdded - a.dateAdded)
                     .slice(0, limit);
 
@@ -351,7 +363,8 @@ export class ProductService {
                     id: product.id,
                     productName: product.productName,
                     imageUrl: this.getDefaultProductImage(product),
-                    price: this.getDefaultPrice(product)
+                    price: this.getDefaultPrice(product),
+                    category: product.category
                 }));
             })
         );

@@ -11,7 +11,8 @@
                             <span class="subtext">{{ 'home.hero.subText' | translate }}</span>
                         </h1>
                         <p class="hero-description">{{ 'home.hero.description' | translate }}</p>
-                        <button nbButton status="success" size="large" (click)="navigateToShop()">
+                        <button nbButton class="primary-btn btn" status="success" size="large"
+                            (click)="navigateToShop()">
                             {{ 'home.hero.shopNow' | translate }}
                         </button>
                     </div>
@@ -59,7 +60,7 @@
                     <div class="products-grid">
                         <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
                             <nb-card-body
-                                (click)="navigateToProduct(discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.id)">
+                                (click)="navigateToProduct(discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.category, discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.id)">
                                 <span class="badge discount">SALE</span>
                                 <img [src]="discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
                                     [alt]="discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.productName">
@@ -92,7 +93,7 @@
                         <div class="category-image" [style.backgroundImage]="'url(' + category.image + ')'">
                             <div class="category-overlay">
                                 <nb-icon [icon]="category.icon" class="category-icon"></nb-icon>
-                                <h3>{{category.name}}</h3>
+                                <h3>{{category.name | translate}}</h3>
                             </div>
                         </div>
                     </nb-card>
@@ -109,7 +110,7 @@
                     <div class="products-grid">
                         <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
                             <nb-card-body
-                                (click)="navigateToProduct(newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.id)">
+                                (click)="navigateToProduct(newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.category, newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.id)">
                                 <span class="badge new">NEW</span>
                                 <img [src]="newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
                                     [alt]="newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.productName">

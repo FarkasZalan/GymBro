@@ -719,7 +719,7 @@
                         "mainText": "ÉPÍTSD FEL ÁLMAID TESTÉT",
                         "subText": "A LEGJOBB MINŐSÉGŰ TERMÉKEKKEL",
                         "description": "Fedezd fel prémium táplálékkiegészítőinket, sportruházatunkat és olvasd el szakértői blogbejegyzéseinket az optimális eredményekért!",
-                        "shopNow": "Vásárolj Most",
+                        "shopNow": "Vásárlás",
                         "features": {
                                 "shop": {
                                         "title": "Prémium Termékek",
@@ -735,13 +735,17 @@
                                 }
                         }
                 },
+                "specialOffers": "Akciós Ajánlatok",
+                "newArrivals": "Új Termékek",
                 "shopByCategory": "Vásárolj kategória szerint",
                 "loyaltyProgram": {
                         "title": "GymBro Hűségprogram",
                         "description": "Csatlakozz hűségprogramunkhoz és gyűjtsd a pontokat minden vásárlás után!",
                         "benefit1": "Exkluzív kedvezmények és ajánlatok",
                         "benefit2": "Pontok gyűjtése minden vásárlás után",
-                        "benefit3": "Különleges ajándékok és meglepetések"
-                }
+                        "benefit3": "Különleges ajándékok és meglepetések",
+                        "joinNow": "Csatlakozz Most"
+                },
+                "latestBlogs": "Legújabb Blog Bejegyzések"
         }
 }

@@ -242,10 +242,10 @@ section {
     max-width: 1400px;
     padding: 0 1rem;
     justify-content: center;
-    min-height: 580px;
+    min-height: 610px !important;
 
     nb-card {
-        height: 550px !important;
+        height: 610px !important;
 
         border-radius: 20px;
         overflow: hidden;
@@ -323,7 +323,7 @@ section {
             text-align: start;
             color: #0b8e92;
             padding-top: 0 !important;
-            margin-bottom: 10px !important;
+            margin-bottom: 20px !important;
             margin-top: auto;
         }
     }
