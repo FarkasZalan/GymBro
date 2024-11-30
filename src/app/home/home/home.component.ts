@@ -59,9 +59,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   ];
 
-  promoEndTime: Date = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
-  timeLeft: any = { days: 0, hours: 0, minutes: 0, seconds: 0 };
-
   private autoSlideSubscription?: Subscription;
   currentIndexDiscounted = 0;
   currentIndexNewArrivals = 0;
@@ -94,8 +91,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.newArrivals = products;
     });
 
-    this.startCountdown();
-
     // Start the auto-sliding after getting the data
     this.startAutoSlide();
   }
@@ -127,22 +122,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   navigateToLoyalty() {
     this.router.navigate(['/product/loyaltyProgram']);
-  }
-
-  private startCountdown() {
-    interval(1000)
-      .pipe(takeWhile(() => new Date() < this.promoEndTime))
-      .subscribe(() => {
-        const now = new Date().getTime();
-        const distance = this.promoEndTime.getTime() - now;
-
-        this.timeLeft = {
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000)
-        };
-      });
   }
 
   private startAutoSlide() {

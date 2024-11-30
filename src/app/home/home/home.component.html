@@ -57,7 +57,7 @@
                     <button class="nav-arrow prev" (click)="slidePrev('discounted')">
                         <nb-icon icon="chevron-left-outline"></nb-icon>
                     </button>
-                    <div class="products-grid">
+                    <div class="products-grid" [@slideAnimation]="currentIndexDiscounted">
                         <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
                             <nb-card-body
                                 (click)="navigateToProduct(discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.category, discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.id)">
@@ -69,10 +69,12 @@
                                         discountedProducts.length]?.productName}}</h4>
                                     <div class="price-container">
                                         <span class="original-price">{{discountedProducts[(currentIndexDiscounted + i) %
-                                            discountedProducts.length]?.originalPrice}} HUF</span>
+                                            discountedProducts.length]?.originalPrice | currency:'':'':'1.0-0'}} {{
+                                            'products.huf' | translate }}</span>
                                         <span class="discounted-price">{{discountedProducts[(currentIndexDiscounted + i)
                                             %
-                                            discountedProducts.length]?.discountedPrice}} HUF</span>
+                                            discountedProducts.length]?.discountedPrice | currency:'':'':'1.0-0'}} {{
+                                            'products.huf' | translate }}</span>
                                     </div>
                                 </div>
                             </nb-card-body>
@@ -107,7 +109,7 @@
                     <button class="nav-arrow prev" (click)="slidePrev('newArrivals')">
                         <nb-icon icon="chevron-left-outline"></nb-icon>
                     </button>
-                    <div class="products-grid">
+                    <div class="products-grid" [@slideAnimation]="currentIndexNewArrivals">
                         <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
                             <nb-card-body
                                 (click)="navigateToProduct(newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.category, newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.id)">
@@ -119,7 +121,8 @@
                                         newArrivals.length]?.productName}}
                                     </h4>
                                     <span class="price">{{newArrivals[(currentIndexNewArrivals + i) %
-                                        newArrivals.length]?.price}} HUF</span>
+                                        newArrivals.length]?.price | currency:'':'':'1.0-0'}} {{ 'products.huf' |
+                                        translate }}</span>
                                 </div>
                             </nb-card-body>
                         </nb-card>
@@ -171,7 +174,7 @@
                     <button class="nav-arrow prev" (click)="slidePrev('blogs')">
                         <nb-icon icon="chevron-left-outline"></nb-icon>
                     </button>
-                    <div class="blogs-grid">
+                    <div class="blogs-grid" [@slideAnimation]="currentIndexBlogs">
                         <nb-card class="blogCard" *ngFor="let i of [0,1,2]"
                             (click)="navigateToBlog(featuredBlogs[(currentIndexBlogs + i) % featuredBlogs.length]?.id)"
                             @zoomIn>
