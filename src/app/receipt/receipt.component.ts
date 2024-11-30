@@ -29,7 +29,8 @@ export class ReceiptComponent implements OnInit {
   cashAmount: number = 0;
   discountAmount: number = 0;
   originalTotal: number = 0;
-
+  freeShippingByCoupon: boolean = false;
+  STANDARD_SHIPPING_COST: number = 2500;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -44,9 +45,12 @@ export class ReceiptComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.documentHandler.getDocumentByID("orders", params['id']).subscribe((order: Order) => {
         this.order = order;
-        console.log(this.order);
         if (this.order.couponUsed) {
           this.originalTotal = this.order.subtotal + this.order.shippingCost + this.order.cashOnDeliveryAmount;
+          if (order.shippingMethod === ProductViewText.CHECKOUT_SHIPPING_DHL_TITLE && this.order.shippingCost === 0) {
+            this.freeShippingByCoupon = true;
+            this.originalTotal = this.order.subtotal + this.STANDARD_SHIPPING_COST + this.order.cashOnDeliveryAmount;
+          }
         }
       });
     });

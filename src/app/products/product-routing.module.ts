@@ -11,6 +11,7 @@ import { OrganicFoodPageComponent } from './organic-food/organic-food-page/organ
 import { ClothesPageComponent } from './clothes/clothes-page/clothes-page.component';
 import { AccessoriesPageComponent } from './accessories/accessories-page/accessories-page.component';
 import { LoyaltyProgramComponent } from '../loyalty-program/loyalty-program.component';
+import { DiscountedProductsComponent } from './discounted-products/discounted-products.component';
 
 const routes: Routes = [{
     path: '',
@@ -60,6 +61,12 @@ const routes: Routes = [{
         {
             path: 'loyaltyProgram',
             component: LoyaltyProgramComponent
+        },
+
+        // Discounted products
+        {
+            path: 'discountedProducts',
+            component: DiscountedProductsComponent
         }
     ],
 }];

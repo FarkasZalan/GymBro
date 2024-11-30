@@ -29,7 +29,7 @@ import { OrganicFoodPageComponent } from './organic-food/organic-food-page/organ
 import { AccessoriesPageComponent } from './accessories/accessories-page/accessories-page.component';
 import { ClothesPageComponent } from './clothes/clothes-page/clothes-page.component';
 import { ReviewHandleComponent } from './review-handle/review-handle.component';
-
+import { DiscountedProductsComponent } from './discounted-products/discounted-products.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -61,7 +61,8 @@ import { ReviewHandleComponent } from './review-handle/review-handle.component';
         OrganicFoodPageComponent,
         AccessoriesPageComponent,
         ClothesPageComponent,
-        ReviewHandleComponent
+        ReviewHandleComponent,
+        DiscountedProductsComponent
     ],
     providers: [
         CurrencyPipe

@@ -1,0 +1,55 @@
+<div class="container">
+    <!-- Empty collection message -->
+    <div *ngIf="emptyCollection" class="product-empty-list-container">
+        <nb-card class="emptyCard" [@zoomIn]>
+            <nb-card-body>
+                <div>
+                    <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                    <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+
+    <div class="row">
+        <!-- Products grid -->
+        <div *ngIf="!emptyCollection" class="product-list-container">
+            <nb-card class="rounded-card productCard" *ngFor="let product of discountedProducts" [@zoomIn]>
+                <nb-card-body class="product-image" (click)="navigateToProduct(product.category, product.id)">
+                    <span class="badge discount">{{ 'home.sale' | translate }}</span>
+
+                    <div class="details-container text-center">
+                        <div class="image-container text-center">
+                            <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.productName"
+                                class="card-image" />
+                            <img *ngIf="!product.imageUrl" src="../../../assets/images/gym-bro-logo.png"
+                                [alt]="product.productName" class="card-image" />
+                        </div>
+
+                        <h4>{{ product.productName }}</h4>
+
+                        <!-- Rating display -->
+                        <div *ngIf="getProductReviews(product.id).length > 0" class="average-rating-product-display">
+                            <i [attr.data-star]="getAverageRating(product.id)"></i>
+                            <span class="rating-number-product-display">
+                                {{ getProductReviews(product.id).length }} {{ 'review.reviewText' | translate }}
+                            </span>
+                        </div>
+
+                        <!-- Price display -->
+                        <div class="price-container">
+                            <h5 class="price-display has-discount">
+                                <span class="original-price crossed">
+                                    {{ product.originalPrice }} {{ 'products.huf' | translate }}
+                                </span>
+                                <span class="discounted-price">
+                                    {{ product.discountedPrice }} {{ 'products.huf' | translate }}
+                                </span>
+                            </h5>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+</div>

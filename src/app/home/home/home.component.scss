@@ -848,53 +848,6 @@ html {
     }
 }
 
-// Add smooth sliding transition
-.slide-transition {
-    transition: transform 0.5s ease-in-out;
-}
-
-// Add styles for navigation arrows
-.slide-container {
-    position: relative;
-
-    .nav-arrow {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-        background: rgba(255, 255, 255, 0.9);
-        color: #0b8e92;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-
-        &:hover {
-            background: #0b8e92;
-            color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        &.prev {
-            left: -20px;
-        }
-
-        &.next {
-            right: -20px;
-        }
-
-        nb-icon {
-            font-size: 1.5rem;
-        }
-    }
-}
-
 // Add responsive styles for arrows
 @media (max-width: 768px) {
     .slide-container .nav-arrow {
@@ -931,4 +884,152 @@ html {
 .carousel-wrapper {
     overflow: hidden;
     width: 100%;
+}
+
+// Update carousel styles
+::ng-deep {
+    .carousel {
+        .carousel-indicators {
+            bottom: -40px;
+
+            button {
+                background-color: #0b8e92;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                margin: 0 5px;
+            }
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.8;
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+                opacity: 1;
+                background: #0b8e92;
+                transform: translateY(-50%) scale(1.1);
+
+                .carousel-control-prev-icon,
+                .carousel-control-next-icon {
+                    filter: brightness(0) invert(1);
+                }
+            }
+
+            &:active {
+                transform: translateY(-50%) scale(0.95);
+            }
+
+            .carousel-control-prev-icon,
+            .carousel-control-next-icon {
+                filter: invert(45%) sepia(82%) saturate(385%) hue-rotate(140deg) brightness(92%) contrast(101%);
+                transition: all 0.3s ease-in-out;
+            }
+        }
+
+        .carousel-control-prev {
+            left: 10px;
+        }
+
+        .carousel-control-next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            button {
+                background-color: #0b8e92;
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    transform: scale(1.2);
+                }
+
+                &.active {
+                    transform: scale(1.3);
+                }
+            }
+        }
+    }
+}
+
+// Update grid layouts
+.products-grid,
+.blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 0 2rem;
+    margin: 0 auto;
+}
+
+@media (max-width: 992px) {
+
+    .products-grid,
+    .blogs-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+
+    .products-grid,
+    .blogs-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding: 0 2rem;
+
+    h2 {
+        margin: 0;
+    }
+
+    .view-all-btn {
+        background: transparent;
+        color: #0b8e92;
+        border: 2px solid #0b8e92;
+        border-radius: 25px;
+        padding: 0.5rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+
+        nb-icon {
+            transition: transform 0.3s ease;
+        }
+
+        &:hover {
+            background: #0b8e92;
+            color: white;
+
+            nb-icon {
+                transform: translateX(5px);
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+
+        .view-all-btn {
+            margin: 0 auto;
+        }
+    }
 }

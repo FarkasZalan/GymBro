@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Product } from '../../admin-profile/product-management/product-models/product.model';
 import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
+import { NgbCarousel } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home',
@@ -64,43 +65,36 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentIndexNewArrivals = 0;
   currentIndexBlogs = 0;
   displayCount = 3; // Number of items to show at once
-  slideInterval = 6000; // Time between slides in milliseconds
-
-  private autoSlideTimer?: any;
+  discountedInterval = 4000;  // 4 seconds
+  newArrivalsInterval = 5000; // 5 seconds
+  blogsInterval = 6000;       // 6 seconds
 
   constructor(
     private router: Router,
-    private productService: ProductService,
-    private translate: TranslateService
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
-    // Get featured blogs
-    this.productService.getLatestBlogs(6).subscribe((blogs: Blog[]) => {
-      this.featuredBlogs = blogs;
+    // Get featured blogs (max 9)
+    this.productService.getLatestBlogs(9).subscribe((blogs: Blog[]) => {
+      this.featuredBlogs = blogs.slice(0, 9);  // Ensure max 9 items
     });
 
-    // Get discounted products
-    this.productService.getDiscountedProducts(6).subscribe((products: Product[]) => {
-      this.discountedProducts = products;
-      console.log(this.discountedProducts);
+    // Get discounted products (max 9)
+    this.productService.getDiscountedProducts(9, true).subscribe((products: Product[]) => {
+      this.discountedProducts = products.slice(0, 9);  // Ensure max 9 items
     });
 
-    // Get new arrivals
-    this.productService.getNewArrivals(6).subscribe((products: Product[]) => {
-      this.newArrivals = products;
+    // Get new arrivals (max 9)
+    this.productService.getNewArrivals(9).subscribe((products: Product[]) => {
+      this.newArrivals = products.slice(0, 9);  // Ensure max 9 items
     });
-
-    // Start the auto-sliding after getting the data
-    this.startAutoSlide();
   }
 
   ngOnDestroy() {
+    // Clean up any remaining subscriptions
     if (this.autoSlideSubscription) {
       this.autoSlideSubscription.unsubscribe();
-    }
-    if (this.autoSlideTimer) {
-      clearInterval(this.autoSlideTimer);
     }
   }
 
@@ -124,66 +118,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigate(['/product/loyaltyProgram']);
   }
 
-  private startAutoSlide() {
-    this.autoSlideTimer = setInterval(() => {
-      if (this.discountedProducts.length > 0) {
-        this.slideNext('discounted');
-      }
-      if (this.newArrivals.length > 0) {
-        this.slideNext('newArrivals');
-      }
-      if (this.featuredBlogs.length > 0) {
-        this.slideNext('blogs');
-      }
-    }, this.slideInterval);
+  navigateToBlogs() {
+    this.router.navigate(['/blog']);
   }
 
-  slideNext(type: 'discounted' | 'newArrivals' | 'blogs') {
-    this.resetAutoSlideTimer();
-    const items = type === 'discounted' ? this.discountedProducts :
-      type === 'newArrivals' ? this.newArrivals :
-        this.featuredBlogs;
-
-    if (!items.length) return;
-
-    switch (type) {
-      case 'discounted':
-        this.currentIndexDiscounted = (this.currentIndexDiscounted + 1) % items.length;
-        break;
-      case 'newArrivals':
-        this.currentIndexNewArrivals = (this.currentIndexNewArrivals + 1) % items.length;
-        break;
-      case 'blogs':
-        this.currentIndexBlogs = (this.currentIndexBlogs + 1) % items.length;
-        break;
-    }
+  navigateToDiscountedProducts() {
+    this.router.navigate(['/product/discountedProducts']);
   }
 
-  slidePrev(type: 'discounted' | 'newArrivals' | 'blogs') {
-    this.resetAutoSlideTimer();
-    const items = type === 'discounted' ? this.discountedProducts :
-      type === 'newArrivals' ? this.newArrivals :
-        this.featuredBlogs;
-
-    if (!items.length) return;
-
-    switch (type) {
-      case 'discounted':
-        this.currentIndexDiscounted = (this.currentIndexDiscounted - 1 + items.length) % items.length;
-        break;
-      case 'newArrivals':
-        this.currentIndexNewArrivals = (this.currentIndexNewArrivals - 1 + items.length) % items.length;
-        break;
-      case 'blogs':
-        this.currentIndexBlogs = (this.currentIndexBlogs - 1 + items.length) % items.length;
-        break;
-    }
+  getDiscountedProductsSlice(start: number, end: number): Product[] {
+    return this.discountedProducts.slice(start, end);
   }
 
-  private resetAutoSlideTimer() {
-    if (this.autoSlideTimer) {
-      clearInterval(this.autoSlideTimer);
-    }
-    this.startAutoSlide();
+  getNewArrivalsSlice(start: number, end: number): Product[] {
+    return this.newArrivals.slice(start, end);
+  }
+
+  getBlogsSlice(start: number, end: number): Blog[] {
+    return this.featuredBlogs.slice(start, end);
+  }
+
+  getDiscountedProduct(index: number): Product | undefined {
+    // Handle circular array access
+    const normalizedIndex = ((index % this.discountedProducts.length) + this.discountedProducts.length) % this.discountedProducts.length;
+    return this.discountedProducts[normalizedIndex];
+  }
+
+  getNewArrivalProduct(index: number): Product | undefined {
+    const normalizedIndex = ((index % this.newArrivals.length) + this.newArrivals.length) % this.newArrivals.length;
+    return this.newArrivals[normalizedIndex];
+  }
+
+  getBlog(index: number): Blog | undefined {
+    const normalizedIndex = ((index % this.featuredBlogs.length) + this.featuredBlogs.length) % this.featuredBlogs.length;
+    return this.featuredBlogs[normalizedIndex];
+  }
+
+  getCarouselSlides(totalItems: number): number[] {
+    const itemsPerSlide = 3;
+    const totalSlides = Math.ceil(totalItems / itemsPerSlide);
+    return Array.from({ length: totalSlides }, (_, i) => i);
   }
 }

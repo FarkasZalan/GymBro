@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { NgxEditorModule } from 'ngx-editor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         MatInputModule,
         MatButtonModule,
         NgxEditorModule,
-        SharedModule
+        SharedModule,
+        NgbModule,
+        NgbCarouselModule,
     ],
     exports: [
         HomeComponent

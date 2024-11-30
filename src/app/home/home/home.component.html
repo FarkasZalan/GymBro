@@ -52,38 +52,35 @@
         <nb-card-body>
             <!-- Special Offers Section -->
             <section class="featured-section" @fadeIn>
-                <h2>{{ 'home.specialOffers' | translate }}</h2>
-                <div class="slide-container">
-                    <button class="nav-arrow prev" (click)="slidePrev('discounted')">
-                        <nb-icon icon="chevron-left-outline"></nb-icon>
-                    </button>
-                    <div class="products-grid" [@slideAnimation]="currentIndexDiscounted">
-                        <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
-                            <nb-card-body
-                                (click)="navigateToProduct(discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.category, discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.id)">
-                                <span class="badge discount">{{ 'home.sale' | translate }}</span>
-                                <img [src]="discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
-                                    [alt]="discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.productName">
-                                <div class="product-content">
-                                    <h4 class="product-name">{{discountedProducts[(currentIndexDiscounted + i) %
-                                        discountedProducts.length]?.productName}}</h4>
-                                    <div class="price-container">
-                                        <span class="original-price">{{discountedProducts[(currentIndexDiscounted + i) %
-                                            discountedProducts.length]?.originalPrice | currency:'':'':'1.0-0'}} {{
-                                            'products.huf' | translate }}</span>
-                                        <span class="discounted-price">{{discountedProducts[(currentIndexDiscounted + i)
-                                            %
-                                            discountedProducts.length]?.discountedPrice | currency:'':'':'1.0-0'}} {{
-                                            'products.huf' | translate }}</span>
-                                    </div>
-                                </div>
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
-                    <button class="nav-arrow next" (click)="slideNext('discounted')">
-                        <nb-icon icon="chevron-right-outline"></nb-icon>
+                <div class="section-header">
+                    <h2>{{ 'home.specialOffers' | translate }}</h2>
+                    <button nbButton class="view-all-btn" status="primary" (click)="navigateToDiscountedProducts()">
+                        {{ 'home.viewAllDiscounts' | translate }}
+                        <nb-icon icon="arrow-forward-outline"></nb-icon>
                     </button>
                 </div>
+                <ngb-carousel #discountedCarousel [interval]="discountedInterval" [pauseOnHover]="true">
+                    <ng-template ngbSlide *ngFor="let i of getCarouselSlides(discountedProducts.length)">
+                        <div class="products-grid">
+                            <nb-card *ngFor="let product of getDiscountedProductsSlice(i*3, (i+1)*3)" @zoomIn>
+                                <nb-card-body (click)="navigateToProduct(product.category, product.id)">
+                                    <span class="badge discount">{{ 'home.sale' | translate }}</span>
+                                    <img [src]="product?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
+                                        [alt]="product?.productName">
+                                    <div class="product-content">
+                                        <h4 class="product-name">{{product?.productName}}</h4>
+                                        <div class="price-container">
+                                            <span class="original-price">{{product?.originalPrice |
+                                                currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                                            <span class="discounted-price">{{product?.discountedPrice |
+                                                currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                                        </div>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
             </section>
 
 
@@ -105,32 +102,24 @@
             <!-- New Arrivals Section -->
             <section class="new-arrivals-section" @fadeIn>
                 <h2>{{ 'home.newArrivals' | translate }}</h2>
-                <div class="slide-container">
-                    <button class="nav-arrow prev" (click)="slidePrev('newArrivals')">
-                        <nb-icon icon="chevron-left-outline"></nb-icon>
-                    </button>
-                    <div class="products-grid" [@slideAnimation]="currentIndexNewArrivals">
-                        <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
-                            <nb-card-body
-                                (click)="navigateToProduct(newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.category, newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.id)">
-                                <span class="badge new">{{ 'home.new' | translate }}</span>
-                                <img [src]="newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
-                                    [alt]="newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.productName">
-                                <div class="product-content">
-                                    <h4 class="product-name">{{newArrivals[(currentIndexNewArrivals + i) %
-                                        newArrivals.length]?.productName}}
-                                    </h4>
-                                    <span class="price">{{newArrivals[(currentIndexNewArrivals + i) %
-                                        newArrivals.length]?.price | currency:'':'':'1.0-0'}} {{ 'products.huf' |
-                                        translate }}</span>
-                                </div>
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
-                    <button class="nav-arrow next" (click)="slideNext('newArrivals')">
-                        <nb-icon icon="chevron-right-outline"></nb-icon>
-                    </button>
-                </div>
+                <ngb-carousel #newArrivalsCarousel [interval]="newArrivalsInterval" [pauseOnHover]="true">
+                    <ng-template ngbSlide *ngFor="let i of getCarouselSlides(newArrivals.length)">
+                        <div class="products-grid">
+                            <nb-card *ngFor="let product of getNewArrivalsSlice(i*3, (i+1)*3)" @zoomIn>
+                                <nb-card-body (click)="navigateToProduct(product.category, product.id)">
+                                    <span class="badge new">{{ 'home.new' | translate }}</span>
+                                    <img [src]="product?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
+                                        [alt]="product?.productName">
+                                    <div class="product-content">
+                                        <h4 class="product-name">{{product?.productName}}</h4>
+                                        <span class="price">{{product?.price | currency:'':'':'1.0-0'}} {{
+                                            'products.huf' | translate }}</span>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
             </section>
 
             <!-- Loyalty Program Promo -->
@@ -169,45 +158,46 @@
 
             <!-- Latest Blogs Section -->
             <section class="blogs-section" @fadeIn>
-                <h2>{{ 'home.latestBlogs' | translate }}</h2>
-                <div class="slide-container">
-                    <button class="nav-arrow prev" (click)="slidePrev('blogs')">
-                        <nb-icon icon="chevron-left-outline"></nb-icon>
-                    </button>
-                    <div class="blogs-grid" [@slideAnimation]="currentIndexBlogs">
-                        <nb-card class="blogCard" *ngFor="let i of [0,1,2]"
-                            (click)="navigateToBlog(featuredBlogs[(currentIndexBlogs + i) % featuredBlogs.length]?.id)"
-                            @zoomIn>
-                            <nb-card-body>
-                                <span class="badge new">{{ 'home.new' | translate }}</span>
-                                <div class="image-container">
-                                    <img [src]="featuredBlogs[(currentIndexBlogs + i) % featuredBlogs.length]?.headerImageUrl || '../../../assets/images/gym-bro-logo.png'"
-                                        [alt]="featuredBlogs[(currentIndexBlogs + i) % featuredBlogs.length]?.title">
-                                </div>
-                                <div class="details-container">
-                                    <h4 class="blog-title">{{featuredBlogs[(currentIndexBlogs + i) %
-                                        featuredBlogs.length]?.title}}</h4>
-                                    <div class="description-container">
-                                        <p class="description">{{featuredBlogs[(currentIndexBlogs + i) %
-                                            featuredBlogs.length]?.description}}</p>
-                                    </div>
-                                    <p class="read-more blog-title">{{ 'blog.readMore' | translate }}
-                                        <span class="arrow-blog">
-                                            <svg width="16" height="16" viewBox="0 0 16 16"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
-                                                <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
-                                            </svg>
-                                        </span>
-                                    </p>
-                                </div>
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
-                    <button class="nav-arrow next" (click)="slideNext('blogs')">
-                        <nb-icon icon="chevron-right-outline"></nb-icon>
+                <div class="section-header">
+                    <h2>{{ 'home.latestBlogs' | translate }}</h2>
+                    <button nbButton class="view-all-btn" status="primary" (click)="navigateToBlogs()">
+                        {{ 'home.viewAllBlogs' | translate }}
+                        <nb-icon icon="arrow-forward-outline"></nb-icon>
                     </button>
                 </div>
+                <ngb-carousel #blogsCarousel [interval]="blogsInterval" [pauseOnHover]="true">
+                    <ng-template ngbSlide *ngFor="let i of getCarouselSlides(featuredBlogs.length)">
+                        <div class="blogs-grid">
+                            <nb-card class="blogCard" *ngFor="let blog of getBlogsSlice(i*3, (i+1)*3)"
+                                (click)="navigateToBlog(blog.id)" @zoomIn>
+                                <nb-card-body>
+                                    <span class="badge new">{{ 'home.new' | translate }}</span>
+                                    <div class="image-container">
+                                        <img [src]="blog?.headerImageUrl || '../../../assets/images/gym-bro-logo.png'"
+                                            [alt]="blog?.title">
+                                    </div>
+                                    <div class="details-container">
+                                        <h4 class="blog-title">{{blog?.title}}</h4>
+                                        <div class="description-container">
+                                            <p class="description">{{blog?.description}}</p>
+                                        </div>
+                                        <p class="read-more blog-title">{{ 'blog.readMore' | translate }}
+                                            <span class="arrow-blog">
+                                                <svg width="16" height="16" viewBox="0 0 16 16"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92"
+                                                        stroke-width="2" />
+                                                    <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92"
+                                                        stroke-width="2" />
+                                                </svg>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
             </section>
         </nb-card-body>
     </nb-card>

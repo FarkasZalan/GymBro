@@ -151,13 +151,20 @@
                     </span>
                     <span>{{ order.subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
                 </div>
-                <div class="summary-row">
+                <div class="summary-row shipping">
                     <span>
                         <nb-icon style="margin-right: 0.5rem;" class="summary-icon" icon="car-outline"></nb-icon>
                         {{ 'receipt.shipping' | translate }} ({{order.shippingMethod | translate}})</span>
-                    <span *ngIf="order.shippingCost === 0">{{ 'receipt.free' | translate }}</span>
-                    <span *ngIf="order.shippingCost !== 0">{{order.shippingCost | currency:'':'':'1.0-0'}}
-                        {{ 'products.huf' | translate }}</span>
+                    <div class="shipping-cost" [class.free-shipping]="freeShippingByCoupon">
+                        <span class="original-cost" *ngIf="freeShippingByCoupon">
+                            {{ STANDARD_SHIPPING_COST | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
+                        </span>
+                        <span class="final-cost">
+                            {{ freeShippingByCoupon ? '0' : STANDARD_SHIPPING_COST | currency:'':'':'1.0-0' }} {{
+                            'products.huf' |
+                            translate }}
+                        </span>
+                    </div>
                 </div>
 
                 <div class="summary-row" *ngIf="order.cashOnDeliveryAmount > 0">

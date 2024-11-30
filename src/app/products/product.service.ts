@@ -296,31 +296,33 @@ export class ProductService {
     }
 
     // Get discounted products across all categories
-    getDiscountedProducts(limit: number): Observable<any[]> {
-        const foodSuppliments$ = this.getDiscountedFromCollection(ProductViewText.FOOD_SUPLIMENTS, limit);
-        const organicFood$ = this.getDiscountedFromCollection(ProductViewText.ORGANIC_FOOD, limit);
-        const clothes$ = this.getDiscountedFromCollection(ProductViewText.CLOTHES, limit);
-        const accessories$ = this.getDiscountedFromCollection(ProductViewText.ACCESSORIES, limit);
+    getDiscountedProducts(limit?: number, hasLimit: boolean = true): Observable<any[]> {
+        // Get discounted products from each category
+        const categoryObservables = [
+            ProductViewText.FOOD_SUPLIMENTS,
+            ProductViewText.ORGANIC_FOOD,
+            ProductViewText.CLOTHES,
+            ProductViewText.ACCESSORIES
+        ].map(category => this.getDiscountedProductsByCategory(category));
 
-        return combineLatest([
-            foodSuppliments$,
-            organicFood$,
-            clothes$,
-            accessories$
-        ]).pipe(
+        return combineLatest(categoryObservables).pipe(
             map(([foods, organic, clothes, accessories]) => {
-                // Add category to each product array before combining
-                const foodsWithCategory = foods.map(p => ({ ...p, category: ProductViewText.FOOD_SUPLIMENTS }));
-                const organicWithCategory = organic.map(p => ({ ...p, category: ProductViewText.ORGANIC_FOOD }));
-                const clothesWithCategory = clothes.map(p => ({ ...p, category: ProductViewText.CLOTHES }));
-                const accessoriesWithCategory = accessories.map(p => ({ ...p, category: ProductViewText.ACCESSORIES }));
+                // Combine products with their categories
+                const allProducts = [
+                    ...this.addCategoryToProducts(foods, ProductViewText.FOOD_SUPLIMENTS),
+                    ...this.addCategoryToProducts(organic, ProductViewText.ORGANIC_FOOD),
+                    ...this.addCategoryToProducts(clothes, ProductViewText.CLOTHES),
+                    ...this.addCategoryToProducts(accessories, ProductViewText.ACCESSORIES)
+                ];
 
-                // Combine all products and sort by discount percentage
-                const allProducts = [...foodsWithCategory, ...organicWithCategory, ...clothesWithCategory, ...accessoriesWithCategory]
-                    .sort((a, b) => this.getDiscountPercentage(b) - this.getDiscountPercentage(a))
-                    .slice(0, limit);
+                // Sort by discount percentage
+                const sortedProducts = this.sortByDiscountPercentage(allProducts);
 
-                return allProducts.map((product) => ({
+                // Apply limit if needed
+                const finalProducts = hasLimit && limit ? sortedProducts.slice(0, limit) : sortedProducts;
+
+                // Map to simplified product structure
+                return finalProducts.map(product => ({
                     id: product.id,
                     productName: product.productName,
                     imageUrl: this.getDiscountedPrice(product).productImage,
@@ -330,6 +332,62 @@ export class ProductService {
                 }));
             })
         );
+    }
+
+    private getDiscountedProductsByCategory(category: string): Observable<any[]> {
+        return this.db.collection('products')
+            .doc(category)
+            .collection('allProduct')
+            .valueChanges()
+            .pipe(
+                map(products => products.filter(product => this.hasValidDiscount(product)))
+            );
+    }
+
+    private hasValidDiscount(product: any): boolean {
+        // Check if any price in the prices array has a valid discount, not just the default one
+        return product.prices?.some(price =>
+            price.discountedPrice > 0 &&
+            price.discountedPrice < price.productPrice
+        ) || false;
+    }
+
+    private addCategoryToProducts(products: any[], category: string): any[] {
+        return products.map(product => ({ ...product, category }));
+    }
+
+    private sortByDiscountPercentage(products: any[]): any[] {
+        return products.sort((a, b) => this.getDiscountPercentage(b) - this.getDiscountPercentage(a));
+    }
+
+    private getDiscountPercentage(product: any): number {
+        // Find the price with the highest discount percentage
+        const maxDiscount = Math.max(...product.prices.map(price => {
+            if (!price.discountedPrice) return 0;
+            return ((price.productPrice - price.discountedPrice) / price.productPrice) * 100;
+        }));
+        return maxDiscount;
+    }
+
+    private getDiscountedPrice(product: any): ProductPrice {
+        // First try to find a default price with a discount
+        const defaultPrice = product.prices.find(price =>
+            price.setAsDefaultPrice &&
+            price.discountedPrice > 0 &&
+            price.discountedPrice < price.productPrice
+        );
+
+        // If no discounted default price, find the price with the highest discount
+        if (!defaultPrice) {
+            return product.prices.reduce((best, current) => {
+                if (!current.discountedPrice) return best;
+                const currentDiscount = (current.productPrice - current.discountedPrice) / current.productPrice;
+                const bestDiscount = best ? (best.productPrice - best.discountedPrice) / best.productPrice : 0;
+                return currentDiscount > bestDiscount ? current : best;
+            }, null) || product.prices.find(price => price.setAsDefaultPrice);
+        }
+
+        return defaultPrice;
     }
 
     // Get new arrivals across all categories
@@ -370,25 +428,6 @@ export class ProductService {
         );
     }
 
-    private getDiscountedFromCollection(collection: string, limit: number): Observable<any[]> {
-        return this.db.collection('products')
-            .doc(collection)
-            .collection('allProduct')
-            .valueChanges()
-            .pipe(
-                map(products => products.filter(product => {
-                    // Get the default price entry
-                    const defaultPrice = product.prices.find(price => price.setAsDefaultPrice);
-                    // Check if it has a valid discounted price
-                    return defaultPrice &&
-                        defaultPrice.discountedPrice &&
-                        defaultPrice.discountedPrice > 0 &&
-                        defaultPrice.discountedPrice < defaultPrice.productPrice;
-                })),
-                map(products => products.slice(0, limit))
-            );
-    }
-
     private getLatestFromCollection(collection: string, limit: number): Observable<any[]> {
         return this.db.collection('products')
             .doc(collection)
@@ -398,23 +437,10 @@ export class ProductService {
             .valueChanges();
     }
 
-    private getDiscountPercentage(product: any): number {
-        const defaultPrice = product.prices.find(price => price.setAsDefaultPrice);
-        if (!defaultPrice || !defaultPrice.discountedPrice || defaultPrice.discountedPrice <= 0) {
-            return 0;
-        }
-        return ((defaultPrice.productPrice - defaultPrice.discountedPrice) / defaultPrice.productPrice) * 100;
-    }
-
     private getDefaultProductImage(product: any): string {
         if (product.useUnifiedImage && product.prices.length > 0) {
             return product.prices[0].productImage;
         }
         return product.prices.length > 0 ? product.prices[0].productImage : '';
-    }
-
-    private getDiscountedPrice(product: any): ProductPrice {
-        const discountedPrice: ProductPrice = product.prices.find(price => price.discountedPrice > 0);
-        return discountedPrice;
     }
 }
