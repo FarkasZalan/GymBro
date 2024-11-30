@@ -24,6 +24,10 @@
         <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of foodSupliments" [@zoomIn]>
             <nb-card-body class="product-image" (click)="goToProductPage(foodSupliment.id)">
 
+                <!-- display the sale badge if there is a discount -->
+                <span *ngIf="getDefaultPrice(foodSupliment).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
+                    translate }}</span>
+
                 <div *ngIf="getDefaultPrice(foodSupliment) as defaultPrice" class="details-container text-center">
                     <div class="image-container text-center">
                         <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"

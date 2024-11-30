@@ -746,6 +746,8 @@
                         "benefit3": "Különleges ajándékok és meglepetések",
                         "joinNow": "Csatlakozz Most"
                 },
-                "latestBlogs": "Legújabb Blog Bejegyzések"
+                "latestBlogs": "Legújabb Blog Bejegyzések",
+                "new": "Új",
+                "sale": "Akciós"
         }
 }

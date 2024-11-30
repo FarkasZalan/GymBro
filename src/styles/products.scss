@@ -51,6 +51,25 @@
     margin-top: auto;
 }
 
+.badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    z-index: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &.discount {
+        background-color: white !important;
+        color: red !important;
+    }
+}
+
 .details-container {
     display: flex;
     flex-direction: column;
@@ -432,6 +451,7 @@ h5 {
     max-height: 500px;
     overflow: hidden;
     /* To prevent overflow of the button overlay */
+    position: relative;
 
     &:hover {
         cursor: pointer;
@@ -444,6 +464,11 @@ h5 {
         h5,
         p {
             color: #0b8e92 !important;
+        }
+
+        .badge {
+            color: white !important;
+            background-color: red !important;
         }
     }
 

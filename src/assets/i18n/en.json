@@ -745,6 +745,8 @@
          "benefit3": "Special rewards and surprises",
          "joinNow": "Join Now"
       },
-      "latestBlogs": "Latest Blog Posts"
+      "latestBlogs": "Latest Blog Posts",
+      "new": "New",
+      "sale": "Sale"
    }
 }

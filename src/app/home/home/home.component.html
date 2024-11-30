@@ -61,7 +61,7 @@
                         <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
                             <nb-card-body
                                 (click)="navigateToProduct(discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.category, discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.id)">
-                                <span class="badge discount">SALE</span>
+                                <span class="badge discount">{{ 'home.sale' | translate }}</span>
                                 <img [src]="discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
                                     [alt]="discountedProducts[(currentIndexDiscounted + i) % discountedProducts.length]?.productName">
                                 <div class="product-content">
@@ -113,7 +113,7 @@
                         <nb-card *ngFor="let i of [0,1,2]" @zoomIn>
                             <nb-card-body
                                 (click)="navigateToProduct(newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.category, newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.id)">
-                                <span class="badge new">NEW</span>
+                                <span class="badge new">{{ 'home.new' | translate }}</span>
                                 <img [src]="newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.imageUrl || '../../../assets/images/gym-bro-logo.png'"
                                     [alt]="newArrivals[(currentIndexNewArrivals + i) % newArrivals.length]?.productName">
                                 <div class="product-content">
@@ -179,6 +179,7 @@
                             (click)="navigateToBlog(featuredBlogs[(currentIndexBlogs + i) % featuredBlogs.length]?.id)"
                             @zoomIn>
                             <nb-card-body>
+                                <span class="badge new">{{ 'home.new' | translate }}</span>
                                 <div class="image-container">
                                     <img [src]="featuredBlogs[(currentIndexBlogs + i) % featuredBlogs.length]?.headerImageUrl || '../../../assets/images/gym-bro-logo.png'"
                                         [alt]="featuredBlogs[(currentIndexBlogs + i) % featuredBlogs.length]?.title">
