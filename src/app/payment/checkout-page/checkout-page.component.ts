@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { CartService } from '../../cart/cart.service';
 import { ShippingAddress } from '../../profile/profile-shipping-address/shipping-address.model';
@@ -21,6 +21,10 @@ import { Timestamp } from 'firebase/firestore';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { LoadingService } from '../../loading-spinner/loading.service';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { environment } from '../../../environments/environment';
+
+declare var Stripe;
 
 @Component({
   selector: 'app-checkout-page',
@@ -193,6 +197,10 @@ export class CheckoutPageComponent implements OnInit {
   // order
   order: Order;
   errorMessage: boolean = false;
+  paymentSuccess: boolean = false;
+
+  // stripe
+  stripeStatus: string;
 
   constructor(
     private cartService: CartService,
@@ -203,7 +211,9 @@ export class CheckoutPageComponent implements OnInit {
     private location: Location,
     private dialog: MatDialog,
     private changeDetector: ChangeDetectorRef,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    private functions: AngularFireFunctions,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -222,6 +232,27 @@ export class CheckoutPageComponent implements OnInit {
     }
     this.loadCartItems();
     this.checkAuthStatus();
+    this.stripeStatus = this.getStripeStatus();
+    const savedOrder = localStorage.getItem('savedOrder');
+    this.order = savedOrder ? JSON.parse(savedOrder) : null;
+    this.selectedPaymentMethod = this.order ? this.order.paymentMethod : '';
+    this.selectedShippingMethod = this.order ? this.order.shippingMethod : '';
+    this.shippingAddress = this.order ? this.order.shippingAddress : this.shippingAddress;
+    // Clear localStorage after retrieving the data
+    localStorage.removeItem('savedOrder');
+    localStorage.removeItem('selectedPayment');
+    if (this.stripeStatus === 'success') {
+      console.log(this.order);
+      this.paymentSuccess = true;
+      this.addOrderToFirebase();
+    } else {
+      this.paymentSuccess = false;
+    }
+  }
+
+  getStripeStatus() {
+    let action = this.route.snapshot.queryParamMap.get('action');
+    return action || '';
   }
 
   async loadCartItems() {
@@ -463,7 +494,7 @@ export class CheckoutPageComponent implements OnInit {
 
   async proceedToPayment() {
     await this.loadingService.withLoading(async () => {
-      let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
+      // Prepare order data
       this.order = {
         productList: this.cartItems,
         totalPrice: this.total,
@@ -479,7 +510,7 @@ export class CheckoutPageComponent implements OnInit {
         shippingCost: this.shipping,
         paymentMethod: this.selectedPaymentMethod,
         shippingAddress: this.shippingAddress,
-        totalLoyaltyPoints: loyaltyPoints,
+        totalLoyaltyPoints: this.userLoggedIn ? this.calculateLoyaltyPoints() : 0,
         orderDate: Timestamp.now(),
         orderStatus: OrderStatus.PROCESSING,
         isAdminChecked: false,
@@ -487,6 +518,41 @@ export class CheckoutPageComponent implements OnInit {
         couponUsed: this.couponUsed,
         isModified: false
       };
+
+      // Save the order and payment method to localStorage
+      localStorage.setItem('savedOrder', JSON.stringify(this.order));
+      localStorage.setItem('selectedPayment', this.selectedPaymentMethod);
+
+      // Check the payment method
+      if (this.selectedPaymentMethod === ProductViewText.CHECKOUT_PAY_WITH_STRIPE) {
+        const stripe = Stripe(environment.stripe.publishableKey);
+
+        await this.loadingService.withLoading(async () => {
+          this.functions.httpsCallable('stripeCheckout')({
+            cartItems: this.cartItems,
+            shippingCost: this.shipping
+          }).subscribe((result: any) => {
+            stripe.redirectToCheckout({
+              sessionId: result.id
+            }).then((redirectResult) => {
+              if (redirectResult.error) {
+                console.error("Stripe redirection error:", redirectResult.error.message);
+              }
+            });
+          });
+        });
+      } else {
+        // Handle non-Stripe payment methods
+        this.paymentSuccess = true
+        this.addOrderToFirebase();
+      }
+    });
+  }
+
+  async addOrderToFirebase() {
+    if (this.paymentSuccess) {
+      // Calculate loyalty points
+      let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
 
       if (this.activeReward) {
         if (this.activeReward.id === RewardText.Discount10Id) {
@@ -527,7 +593,7 @@ export class CheckoutPageComponent implements OnInit {
       } catch (error) {
         this.errorMessage = true;
       }
-    });
+    }
   }
 
   back() {

@@ -65,10 +65,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     NgxEditorModule.forRoot(),
     // Firebase
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireFunctionsModule,
     AngularFireAuthModule,
     MatDialogModule,
     AngularFirestoreModule,
-    AngularFireFunctionsModule,
     AngularFireStorageModule,
     // Translate
     TranslateModule.forRoot({

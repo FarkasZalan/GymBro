@@ -22,6 +22,7 @@ import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
 import { PaymentRoutingModule } from './payment-routing.module';
 import { ShippingAddressSelectionDialogComponent } from './shipping-address-selection-dialog/shipping-address-selection-dialog.component';
 import { SharedModule } from '../shared/shared.module';
+import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functions';
 
 @NgModule({
     imports: [
@@ -43,14 +44,16 @@ import { SharedModule } from '../shared/shared.module';
         MatInputModule,
         MatButtonModule,
         NgxEditorModule,
-        SharedModule
+        SharedModule,
+        AngularFireFunctionsModule,
     ],
     declarations: [
         CheckoutPageComponent,
         ShippingAddressSelectionDialogComponent
     ],
     providers: [
-        CurrencyPipe
+        CurrencyPipe,
+        { provide: REGION, useValue: 'europe-central2' }
     ]
 })
 export class PaymentModule {

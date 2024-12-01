@@ -20,7 +20,7 @@
 
 <!-- Blog list -->
 <div *ngIf="blogList.length !== 0" class="list-container">
-    <nb-card *ngFor="let blog of blogList" class="rounded-card blogCard" (click)="openBlog(blog.id)" [@zoomIn]>
+    <nb-card *ngFor="let blog of blogList" class="rounded-card-blog blogCard" (click)="openBlog(blog.id)" [@zoomIn]>
         <nb-card-body class="product-image">
             <div class="details-container text-center">
                 <div class="image-container text-center">

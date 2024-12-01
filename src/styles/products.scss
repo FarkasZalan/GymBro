@@ -369,6 +369,11 @@ nb-card-body {
     max-width: 300px !important;
 }
 
+.rounded-card-blog {
+    border-radius: 20px !important;
+    max-width: 350px !important;
+}
+
 .rounded-product-card {
     border-radius: 20px !important;
     max-width: 300px !important;
@@ -728,10 +733,7 @@ h5 {
 }
 
 .blogCard {
-    // Increase the width of the address card
-    width: calc(50% - 40px);
-    /* Ensure the card takes up half of the container width */
-    max-width: 280px;
+    width: 350px !important;
     height: 550px !important;
     flex: 1 1 calc(50% - 20px);
     /* Two columns with space between */

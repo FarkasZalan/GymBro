@@ -23,7 +23,8 @@
 
     <!-- Display each blog as an nb-card -->
     <div class="list-container">
-        <nb-card *ngFor="let blog of blogList" class="rounded-card productCard" (click)="editBlogs(blog.id)" [@zoomIn]>
+        <nb-card *ngFor="let blog of blogList" class="rounded-card-blog blogCard" (click)="editBlogs(blog.id)"
+            [@zoomIn]>
             <nb-card-body class="product-image">
                 <div class="details-container text-center">
                     <div class="image-container text-center">
