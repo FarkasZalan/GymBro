@@ -2,6 +2,7 @@ import * as admin from "firebase-admin";
 import Stripe from "stripe";
 import { onCall } from 'firebase-functions/v2/https';
 import { environment } from "./envinronment";
+import { publicEnvironment } from "./envinronment-public";
 
 const stripe = new Stripe(environment.stripe.secretKey);
 
@@ -82,8 +83,8 @@ export const stripeCheckout = onCall(
           },
         ],
         discounts: discountCoupon ? [{ coupon: discountCoupon }] : [], // Apply the coupon
-        success_url: "http://localhost:4200/checkout?action=success",
-        cancel_url: "http://localhost:4200/checkout?action=cancel",
+        success_url: publicEnvironment.stripe.successUrl,
+        cancel_url: publicEnvironment.stripe.cancelUrl,
       });
 
       return { id: paymentIntent.id };
