@@ -53,6 +53,7 @@ import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functio
     ],
     providers: [
         CurrencyPipe,
+        // Firebase functions region
         { provide: REGION, useValue: 'europe-central2' }
     ]
 })

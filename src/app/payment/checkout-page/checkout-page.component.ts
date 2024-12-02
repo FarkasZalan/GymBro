@@ -240,9 +240,7 @@ export class CheckoutPageComponent implements OnInit {
     this.shippingAddress = this.order ? this.order.shippingAddress : this.shippingAddress;
     // Clear localStorage after retrieving the data
     localStorage.removeItem('savedOrder');
-    localStorage.removeItem('selectedPayment');
     if (this.stripeStatus === 'success') {
-      console.log(this.order);
       this.paymentSuccess = true;
       this.addOrderToFirebase();
     } else {
@@ -521,7 +519,6 @@ export class CheckoutPageComponent implements OnInit {
 
       // Save the order and payment method to localStorage
       localStorage.setItem('savedOrder', JSON.stringify(this.order));
-      localStorage.setItem('selectedPayment', this.selectedPaymentMethod);
 
       // Check the payment method
       if (this.selectedPaymentMethod === ProductViewText.CHECKOUT_PAY_WITH_STRIPE) {
@@ -530,15 +527,22 @@ export class CheckoutPageComponent implements OnInit {
         await this.loadingService.withLoading(async () => {
           this.functions.httpsCallable('stripeCheckout')({
             cartItems: this.cartItems,
-            shippingCost: this.shipping
+            shippingCost: this.shipping,
+            activeReward: this.activeReward
           }).subscribe((result: any) => {
-            stripe.redirectToCheckout({
-              sessionId: result.id
-            }).then((redirectResult) => {
-              if (redirectResult.error) {
-                console.error("Stripe redirection error:", redirectResult.error.message);
-              }
-            });
+            if (result.error) {
+              this.errorMessage = true;
+              console.error("Stripe error:", result.error.message);
+            } else {
+              stripe.redirectToCheckout({
+                sessionId: result.id
+              }).then((redirectResult) => {
+                if (redirectResult.error) {
+                  this.errorMessage = true;
+                  console.error("Stripe redirection error:", redirectResult.error.message);
+                }
+              });
+            }
           });
         });
       } else {
@@ -551,6 +555,7 @@ export class CheckoutPageComponent implements OnInit {
 
   async addOrderToFirebase() {
     if (this.paymentSuccess) {
+      this.order.orderDate = Timestamp.now();
       // Calculate loyalty points
       let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
 
