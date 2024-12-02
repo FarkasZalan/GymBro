@@ -10,7 +10,7 @@ import { NotFoundComponent } from '../not-found/not-found.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../loading-spinner/shared.module';
 
 @NgModule({
     declarations: [

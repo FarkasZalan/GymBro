@@ -600,7 +600,8 @@
                         "noRewardsMessage": "Gyűjts pontokat vásárlásaiddal, és váltsd be kuponokra a kedvezményekért!",
                         "viewLoyaltyProgram": "Hűségprogram megtekintése"
                 },
-                "discount": "Kedvezmény"
+                "discount": "Kedvezmény",
+                "minimum2000HufError": "A minimum rendelési érték 2000 Ft!"
         },
         "loyaltyProgram": {
                 "title": "Gym Bro Hűségprogram",

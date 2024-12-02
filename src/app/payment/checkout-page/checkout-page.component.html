@@ -579,6 +579,18 @@
                     </div>
                 </div>
 
+                <!-- Error block -->
+                <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'basicErrorMessage' | translate }}
+                </span>
+
+                <!-- Minimum 2000 huf block -->
+                <span *ngIf="minimum200HufError" class="help-block-login-error" [@zoomIn]>
+                    <i class="fas fa-exclamation-triangle icon"></i>
+                    {{ 'checkout.minimum2000HufError' | translate }}
+                </span>
+
                 <div class="button-container">
                     <button nbButton status="success" class="proceed-btn btn"
                         [disabled]="!selectedPaymentMethod || shippingAddress === null || !selectedShippingMethod"

@@ -24,7 +24,7 @@ import { CreateShippingAddressComponent } from './profile-shipping-address/creat
 import { ChangeDefaultAddressConfirmDialogComponent } from './profile-shipping-address/change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
 import { EditShippingAddressComponent } from './profile-shipping-address/edit-shipping-address/edit-shipping-address.component';
 import { LoyaltyProgramComponent } from '../loyalty-program/loyalty-program.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../loading-spinner/shared.module';
 
 @NgModule({
     imports: [

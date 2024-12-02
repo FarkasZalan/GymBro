@@ -11,6 +11,7 @@ import { ChangeDefaultPriceConfirmDialogComponent } from '../change-default-pric
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ProductColor } from '../../product-models/product-color.model';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { DefaultImageUrl } from '../../../default-image-url';
 
 @Component({
   selector: 'app-add-price-dialog',
@@ -62,6 +63,7 @@ export class AddPriceDialogComponent implements OnInit {
   productCategory: string;
   allPricesForProduct: ProductPrice[] = [];
   productViewText = ProductViewText;
+  defaultImage = DefaultImageUrl;
 
   // for food supliments and organic food
   availableFlavors: string[] = [];
@@ -237,8 +239,8 @@ export class AddPriceDialogComponent implements OnInit {
         setAsDefaultPrice: false
       }
       if (this.unifiedImageUrl === null) {
-        this.imageBase64 = '';
-        this.imagePreview = '';
+        this.imageBase64 = DefaultImageUrl.productUrl;
+        this.imagePreview = DefaultImageUrl.productUrl;
       } else {
         this.imageBase64 = this.unifiedImageUrl;
         this.imagePreview = this.imageBase64;
@@ -275,7 +277,7 @@ export class AddPriceDialogComponent implements OnInit {
   }
 
   removeImage() {
-    this.imageBase64 = '';
+    this.imageBase64 = DefaultImageUrl.productUrl;
     this.imagePreview = this.imageBase64;
   }
 

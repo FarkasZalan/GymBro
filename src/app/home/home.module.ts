@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbMenuModule } from '@nebular/theme';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../loading-spinner/shared.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { NbAuthModule } from '@nebular/auth';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

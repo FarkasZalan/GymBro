@@ -59,7 +59,7 @@
             <div *ngIf="userLoggedIn" class="header-container-user">
                 <!-- Admin section with notifications -->
                 <div class="admin-notification-wrapper" *ngIf="user?.isAdmin">
-                    <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
+                    <nb-user name={{userFirstName}} [picture]="false" [nbContextMenu]="userMenu"
                         nbContextMenuTag="header-menu">
                     </nb-user>
 
@@ -112,7 +112,7 @@
                 <!-- Regular user section -->
                 <div class="admin-notification-wrapper" *ngIf="!user?.isAdmin">
                     <!-- User menu -->
-                    <nb-user name={{user.firstName}} [picture]="false" [nbContextMenu]="userMenu"
+                    <nb-user name={{userFirstName}} [picture]="false" [nbContextMenu]="userMenu"
                         nbContextMenuTag="header-menu">
                     </nb-user>
 

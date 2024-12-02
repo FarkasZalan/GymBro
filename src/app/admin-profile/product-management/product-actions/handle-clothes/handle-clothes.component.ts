@@ -21,6 +21,7 @@ import { ProductColor } from '../../product-models/product-color.model';
 import { Editor, Toolbar } from 'ngx-editor';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
 import { Timestamp } from 'firebase/firestore';
+import { DefaultImageUrl } from '../../../default-image-url';
 
 @Component({
   selector: 'app-handle-clothes',
@@ -224,8 +225,8 @@ export class HandleClothesComponent {
     dialogRef.afterClosed().subscribe((newColor: ProductColor) => {
       if (newColor) {
         // Ensure color product image is not null
-        if (newColor.imageUrl === null || newColor.imageUrl === undefined) {
-          newColor.imageUrl = "";
+        if (newColor.imageUrl === null || newColor.imageUrl === undefined || newColor.imageUrl === '') {
+          newColor.imageUrl = DefaultImageUrl.productUrl;
         }
 
         // Check if the color already exists in the array
@@ -259,8 +260,8 @@ export class HandleClothesComponent {
       } else if (editedColor && typeof editedColor === 'object') {
         // If an edited color is returned, update the clothingColors array
         // Ensure product image is not null
-        if (editedColor.imageUrl === null || editedColor.imageUrl === undefined) {
-          editedColor.imageUrl = "";
+        if (editedColor.imageUrl === null || editedColor.imageUrl === undefined || editedColor.imageUrl === '') {
+          editedColor.imageUrl = DefaultImageUrl.productUrl;
         }
 
         // Check if the color already exists in the array
@@ -320,8 +321,8 @@ export class HandleClothesComponent {
     dialogRef.afterClosed().subscribe((newPrice: ProductPrice) => {
       if (newPrice) {
         // Ensure product image is not null
-        if (newPrice.productImage === null || newPrice.productImage === undefined) {
-          newPrice.productImage = "";
+        if (newPrice.productImage === null || newPrice.productImage === undefined || newPrice.productImage === '') {
+          newPrice.productImage = DefaultImageUrl.productUrl;
         }
 
         // if new price is the default then change the old default value to false
@@ -376,8 +377,8 @@ export class HandleClothesComponent {
       } else if (editedPrice && typeof editedPrice === 'object') {
         // If an edited price is returned, update the productPrices array
         // Ensure product image is not null
-        if (editedPrice.productImage === null || editedPrice.productImage === undefined) {
-          editedPrice.productImage = "";
+        if (editedPrice.productImage === null || editedPrice.productImage === undefined || editedPrice.productImage === '') {
+          editedPrice.productImage = DefaultImageUrl.productUrl;
         }
 
         // if edited price is the default then change the old default value to false
@@ -569,7 +570,7 @@ export class HandleClothesComponent {
         try {
           // Delete images from Firebase Storage
           const deleteImagePromises = this.productPrices.map(async (price: ProductPrice) => {
-            if (price.productImage) {
+            if (price.productImage && price.productImage !== DefaultImageUrl.productUrl) {
               try {
                 // Reference the file by its URL
                 const fileRef = this.storage.refFromURL(price.productImage);

@@ -14,6 +14,7 @@ import {
 } from "firebase/storage";
 import { map, combineLatest, Observable } from "rxjs";
 import { OrderStatus } from "../payment/order-status";
+import { DefaultImageUrl } from "./default-image-url";
 
 @Injectable({
     providedIn: 'root'
@@ -122,6 +123,11 @@ export class AdminService {
 
     async uploadImagesAndSaveProduct(productCategory: string, productId: string, unifiedImageUrl: string, productPrices?: ProductPrice[], accessoryType?: string) {
         const uploadPromises = productPrices.map(async (price: ProductPrice) => {
+            // Check if productImage is empty and set it to the default image
+            if (price.productImage === '') {
+                price.productImage = DefaultImageUrl.productUrl;
+                return;
+            }
             // Check if productImage is a Base64 string (indicating a new upload) or a URL (existing image)
             if (price.productImage && price.productImage.startsWith("data:image")) {
                 let base64Data = price.productImage;

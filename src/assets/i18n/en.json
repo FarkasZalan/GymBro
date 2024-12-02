@@ -597,7 +597,8 @@
          "noRewardsMessage": "Earn points with your purchases to unlock coupons and discounts!",
          "viewLoyaltyProgram": "View Loyalty Program"
       },
-      "discount": "Discount"
+      "discount": "Discount",
+      "minimum2000HufError": "The minimum order value is 2000 HUF!"
    },
    "loyaltyProgram": {
       "title": "Gym Bro Rewards",

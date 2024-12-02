@@ -10,6 +10,7 @@ import { interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { NgbCarousel } from '@ng-bootstrap/ng-bootstrap';
 import { DiscountedPrice } from '../../products/discounted-price.model';
+import { DefaultImageUrl } from '../../admin-profile/default-image-url';
 
 @Component({
   selector: 'app-home',
@@ -37,6 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   featuredBlogs: Blog[] = [];
   discountedProducts: Product[] = [];
   newArrivals: Product[] = [];
+  defaultImage = DefaultImageUrl;
   categories = [
     {
       name: 'menu.foodSuplimentsMenu.foodSupliments',

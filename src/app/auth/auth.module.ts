@@ -17,7 +17,7 @@ import { SuccessfullDialogComponent } from '../successfull-dialog/successfull-di
 import { RegisterComponent } from './register/register.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { TermsComponent } from './register/terms/terms.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../loading-spinner/shared.module';
 
 @NgModule({
     imports: [

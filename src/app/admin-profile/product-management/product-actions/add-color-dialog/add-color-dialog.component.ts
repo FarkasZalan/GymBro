@@ -9,6 +9,7 @@ import { ProductViewText } from '../../product-view-texts';
 import { ProductColor } from '../../product-models/product-color.model';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { DefaultImageUrl } from '../../../default-image-url';
 
 @Component({
   selector: 'app-add-color-dialog',
@@ -102,7 +103,7 @@ export class AddColorDialogComponent {
       this.imagePreview = this.imageBase64;
     } else {
       this.newColor = {
-        imageUrl: '',
+        imageUrl: DefaultImageUrl.productUrl,
         color: ''
       }
       this.imageBase64 = '';
@@ -132,7 +133,7 @@ export class AddColorDialogComponent {
   }
 
   removeImage() {
-    this.imageBase64 = '';
+    this.imageBase64 = DefaultImageUrl.productUrl;
     this.imagePreview = this.imageBase64;
   }
 

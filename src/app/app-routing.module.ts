@@ -28,7 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'receipt',
-    loadChildren: () => import('./receipt/receipt.module')
+    loadChildren: () => import('./payment/receipt/receipt.module')
       .then(m => m.ReceiptModule),
   },
   {

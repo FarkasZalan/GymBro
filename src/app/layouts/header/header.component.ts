@@ -54,6 +54,7 @@ export class HeaderComponent implements OnInit {
   userLoggedIn: boolean = false;
   userMenu = [];
   user: User;
+  userFirstName: string = "";
   language: string = "";
   languageSwithButtonText: string = "";
 
@@ -116,6 +117,7 @@ export class HeaderComponent implements OnInit {
           this.userLoggedIn = true;
           this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {
             this.user = currentUser;
+            this.userFirstName = this.user.firstName;
             if (this.user === undefined) {
               this.authService.logOut();
               this.userLoggedIn = false; // User is logged out
@@ -277,7 +279,13 @@ export class HeaderComponent implements OnInit {
 
   // Open logout confirmation dialog
   logOut() {
-    this.dialog.open(LogOutComponent);
+    // Check if there's already an open dialog
+    if (this.dialog.openDialogs.length > 0) {
+      this.dialog.closeAll();
+    }
+
+    // Open the logout confirmation dialog
+    const dialogRef = this.dialog.open(LogOutComponent);
   }
 
   // Navigate to cart page

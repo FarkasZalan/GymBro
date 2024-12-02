@@ -21,7 +21,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
 import { PaymentRoutingModule } from './payment-routing.module';
 import { ShippingAddressSelectionDialogComponent } from './shipping-address-selection-dialog/shipping-address-selection-dialog.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../loading-spinner/shared.module';
 import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functions';
 
 @NgModule({

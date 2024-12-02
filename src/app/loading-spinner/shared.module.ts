@@ -1,7 +1,7 @@
-// src/app/shared/shared.module.ts
+// this is necessary for the loading spinner can import for every module
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { LoadingSpinnerComponent } from './loading-spinner.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({

@@ -38,7 +38,7 @@ import { FilterPageComponent } from '../filter-page/filter-page.component';
 import { HandleOrganicFoodComponent } from './product-management/product-actions/handle-organic-food/handle-organic-food.component';
 import { HandleReviewsComponent } from './product-management/product-actions/handle-reviews/handle-reviews.component';
 import { OrdersComponent } from './orders/orders.component';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../loading-spinner/shared.module';
 
 @NgModule({
     imports: [

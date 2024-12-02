@@ -242,11 +242,7 @@
                                 <nb-card-body class="category-image" (click)="editPrice(i)">
                                     <!-- Product Image at the top -->
                                     <div class="image-container text-center">
-                                        <img *ngIf="price.productImage !== ''" [src]="price.productImage"
-                                            alt="Product Image" class="card-image" />
-                                        <img *ngIf="price.productImage === ''"
-                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                                            class="card-image" />
+                                        <img [src]="price.productImage" alt="Product Image" class="card-image" />
                                     </div>
 
                                     <!-- Product Details (Price and Weight) below the image -->

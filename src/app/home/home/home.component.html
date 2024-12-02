@@ -1,7 +1,8 @@
 <!-- Add this class to your nb-layout or the root element -->
 <div class="home-layout">
     <!-- Dynamic Hero Section -->
-    <section class="hero-section" @fadeIn>
+    <section class="hero-section" @fadeIn
+        [ngStyle]="{'background': 'url(' + defaultImage.homePageUrl + ') no-repeat center center fixed'}">
         <nb-card class="hero-card">
             <nb-card-body>
                 <div class="hero-content">

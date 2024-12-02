@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Order } from '../payment/order.model';
-import { DocumentHandlerService } from '../document.handler.service';
-import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
+import { Order } from '../order.model';
+import { DocumentHandlerService } from '../../document.handler.service';
+import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
 import { style, transition, trigger } from '@angular/animations';
 import { animate } from '@angular/animations';
-import { Product } from '../admin-profile/product-management/product-models/product.model';
-import { CartItem } from '../cart/cart.model';
+import { Product } from '../../admin-profile/product-management/product-models/product.model';
+import { CartItem } from '../../cart/cart.model';
 
 @Component({
   selector: 'app-receipt',

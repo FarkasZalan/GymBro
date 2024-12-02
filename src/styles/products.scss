@@ -175,13 +175,15 @@ nb-card-body {
 
 .card-image {
     width: 100%;
-    max-height: 300px;
+    height: 300px;
     object-fit: cover;
     /* Ensures the image covers the entire area without distortion */
     border-radius: 8px;
     /* Optional: if you want rounded corners on the image */
     transition: filter 0.3s ease, transform 0.3s ease;
     /* Smooth transition */
+    will-change: transform;
+    /* Optimizes hover transitions */
 }
 
 .card-image-category {

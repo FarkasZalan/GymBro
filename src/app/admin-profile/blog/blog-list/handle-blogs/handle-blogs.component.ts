@@ -16,6 +16,7 @@ import { DeleteConfirmationText } from '../../../../delete-confirmation-dialog/d
 import { Timestamp } from 'firebase/firestore';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { DefaultImageUrl } from '../../../default-image-url';
 
 @Component({
   selector: 'app-handle-blogs',
@@ -113,7 +114,7 @@ export class HandleBlogsComponent implements OnInit {
       id: "",
       title: "",
       htmlText: "",
-      headerImageUrl: "",
+      headerImageUrl: DefaultImageUrl.blogUrl,
       date: Timestamp.now(),
       language: "",
       blogTags: [],
@@ -208,7 +209,7 @@ export class HandleBlogsComponent implements OnInit {
   }
 
   removeImage() {
-    this.imageBase64 = '';
+    this.imageBase64 = DefaultImageUrl.blogUrl;
     this.imagePreview = this.imageBase64;
   }
 
@@ -246,7 +247,7 @@ export class HandleBlogsComponent implements OnInit {
         id: "",
         title: blogTitle,
         language: this.selectedLanguage,
-        headerImageUrl: "",
+        headerImageUrl: DefaultImageUrl.blogUrl,
         blogTags: this.selectedTags,
         htmlText: this.blogText,
         date: this.currentDate,
@@ -262,9 +263,11 @@ export class HandleBlogsComponent implements OnInit {
         await docRef.update({ id: docRef.id });
 
         // Upload image and get its URL
-        let imageUrl = '';
-        if (this.imageBase64 !== '') {
+        let imageUrl = "";
+        if (this.imageBase64 !== DefaultImageUrl.blogUrl) {
           imageUrl = await this.uploadImage(docRef.id);
+        } else {
+          imageUrl = DefaultImageUrl.blogUrl;
         }
         await docRef.update({ headerImageUrl: imageUrl });
 
@@ -311,8 +314,10 @@ export class HandleBlogsComponent implements OnInit {
 
       // Upload image and get its URL
       let imageUrl = this.imageBase64;
-      if (this.imageBase64 !== '' && this.imageBase64.startsWith("data:image")) {
+      if (this.imageBase64 !== DefaultImageUrl.blogUrl && this.imageBase64.startsWith("data:image")) {
         imageUrl = await this.uploadImage(this.blogId);
+      } else if (this.imageBase64 === '') {
+        imageUrl = DefaultImageUrl.blogUrl;
       }
 
       // Create new blog object
@@ -359,7 +364,7 @@ export class HandleBlogsComponent implements OnInit {
       await this.loadingService.withLoading(async () => {
         try {
           // Delete images from Firebase Storage
-          if (this.blogObject.headerImageUrl) {
+          if (this.blogObject.headerImageUrl && this.blogObject.headerImageUrl !== DefaultImageUrl.blogUrl) {
             try {
               // Reference the file by its URL
               const fileRef = this.storage.refFromURL(this.blogObject.headerImageUrl);

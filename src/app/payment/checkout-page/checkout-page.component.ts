@@ -24,6 +24,9 @@ import { LoadingService } from '../../loading-spinner/loading.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { environment } from '../../../environments/environment';
 
+// Declare the Stripe global variable, which is part of the Stripe.js library,
+// ensuring TypeScript recognizes it as an external object and avoids errors
+// when referencing it in the code.
 declare var Stripe;
 
 @Component({
@@ -196,11 +199,14 @@ export class CheckoutPageComponent implements OnInit {
 
   // order
   order: Order;
-  errorMessage: boolean = false;
   paymentSuccess: boolean = false;
 
   // stripe
   stripeStatus: string;
+
+  // errors
+  errorMessage: boolean = false;
+  minimum200HufError: boolean = false;
 
   constructor(
     private cartService: CartService,
@@ -492,63 +498,70 @@ export class CheckoutPageComponent implements OnInit {
 
   async proceedToPayment() {
     await this.loadingService.withLoading(async () => {
-      // Prepare order data
-      this.order = {
-        productList: this.cartItems,
-        totalPrice: this.total,
-        subtotal: this.subtotal,
-        discountAmount: this.discountAmount,
-        cashOnDeliveryAmount: this.cashOnDeliveryAmount,
-        userId: this.currentUserId || 'Guest',
-        firstName: this.guestFirstName || this.currentUser?.firstName || '',
-        lastName: this.guestLastName || this.currentUser?.lastName || '',
-        email: this.guestEmail || this.currentUser?.email || '',
-        phone: this.guestPhone || this.currentUser?.phone || '',
-        shippingMethod: this.selectedShippingMethod,
-        shippingCost: this.shipping,
-        paymentMethod: this.selectedPaymentMethod,
-        shippingAddress: this.shippingAddress,
-        totalLoyaltyPoints: this.userLoggedIn ? this.calculateLoyaltyPoints() : 0,
-        orderDate: Timestamp.now(),
-        orderStatus: OrderStatus.PROCESSING,
-        isAdminChecked: false,
-        isUserChecked: false,
-        couponUsed: this.couponUsed,
-        isModified: false
-      };
-
-      // Save the order and payment method to localStorage
-      localStorage.setItem('savedOrder', JSON.stringify(this.order));
-
-      // Check the payment method
-      if (this.selectedPaymentMethod === ProductViewText.CHECKOUT_PAY_WITH_STRIPE) {
-        const stripe = Stripe(environment.stripe.publishableKey);
-
-        await this.loadingService.withLoading(async () => {
-          this.functions.httpsCallable('stripeCheckout')({
-            cartItems: this.cartItems,
-            shippingCost: this.shipping,
-            activeReward: this.activeReward
-          }).subscribe((result: any) => {
-            if (result.error) {
-              this.errorMessage = true;
-              console.error("Stripe error:", result.error.message);
-            } else {
-              stripe.redirectToCheckout({
-                sessionId: result.id
-              }).then((redirectResult) => {
-                if (redirectResult.error) {
-                  this.errorMessage = true;
-                  console.error("Stripe redirection error:", redirectResult.error.message);
-                }
-              });
-            }
-          });
-        });
+      if (this.total < 2000) {
+        this.minimum200HufError = true;
+        return;
       } else {
-        // Handle non-Stripe payment methods
-        this.paymentSuccess = true
-        this.addOrderToFirebase();
+        this.minimum200HufError = false;
+
+        // Prepare order data
+        this.order = {
+          productList: this.cartItems,
+          totalPrice: this.total,
+          subtotal: this.subtotal,
+          discountAmount: this.discountAmount,
+          cashOnDeliveryAmount: this.cashOnDeliveryAmount,
+          userId: this.currentUserId || 'Guest',
+          firstName: this.guestFirstName || this.currentUser?.firstName || '',
+          lastName: this.guestLastName || this.currentUser?.lastName || '',
+          email: this.guestEmail || this.currentUser?.email || '',
+          phone: this.guestPhone || this.currentUser?.phone || '',
+          shippingMethod: this.selectedShippingMethod,
+          shippingCost: this.shipping,
+          paymentMethod: this.selectedPaymentMethod,
+          shippingAddress: this.shippingAddress,
+          totalLoyaltyPoints: this.userLoggedIn ? this.calculateLoyaltyPoints() : 0,
+          orderDate: Timestamp.now(),
+          orderStatus: OrderStatus.PROCESSING,
+          isAdminChecked: false,
+          isUserChecked: false,
+          couponUsed: this.couponUsed,
+          isModified: false
+        };
+
+        // Save the order and payment method to localStorage
+        localStorage.setItem('savedOrder', JSON.stringify(this.order));
+
+        // Check the payment method
+        if (this.selectedPaymentMethod === ProductViewText.CHECKOUT_PAY_WITH_STRIPE) {
+          const stripe = Stripe(environment.stripe.publishableKey);
+
+          await this.loadingService.withLoading(async () => {
+            this.functions.httpsCallable('stripeCheckout')({
+              cartItems: this.cartItems,
+              shippingCost: this.shipping,
+              activeReward: this.activeReward
+            }).subscribe((result: any) => {
+              if (result.error) {
+                this.errorMessage = true;
+                console.error("Stripe error:", result.error.message);
+              } else {
+                stripe.redirectToCheckout({
+                  sessionId: result.id
+                }).then((redirectResult) => {
+                  if (redirectResult.error) {
+                    this.errorMessage = true;
+                    console.error("Stripe redirection error:", redirectResult.error.message);
+                  }
+                });
+              }
+            });
+          });
+        } else {
+          // Handle non-Stripe payment methods
+          this.paymentSuccess = true
+          this.addOrderToFirebase();
+        }
       }
     });
   }
