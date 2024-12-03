@@ -24,10 +24,10 @@
         <nb-card *ngFor="let address of shippingAddresses" class="rounded-card addressCard"
             (click)="selectAddress(address)">
             <nb-card-header class="card-header">
+                <strong class="default-label">{{ address.addressName }}</strong>
                 <span *ngIf="address.isSetAsDefaultAddress" class="default-badge">
                     {{ 'profileMenu.shippingAddressForm.defaultShippingAddress' | translate }}
                 </span>
-                <strong class="default-label">{{ address.addressName }}</strong>
             </nb-card-header>
             <nb-card-body class="address-details">
                 <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
@@ -42,6 +42,31 @@
                     <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
                     {{ address.taxNumber }}
                 </p>
+
+                <!-- Billing Address Section -->
+                <!-- billing same as shipping -->
+                <div *ngIf="!address.isBillingDifferentFromShipping && address.companyName" class="
+                billing-address-section">
+                    <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                    <p>{{ address.street }} {{ address.streetType }}, {{
+                        address.houseNumber }}</p>
+                    <p>{{ address.floor ? (address.floor + '/') : '' }}{{
+                        address.door }}</p>
+                    <p>{{ address.city }}, {{ address.postalCode }}</p>
+                    <p>{{ address.country }}</p>
+                </div>
+
+                <!-- billing different from shipping -->
+                <div *ngIf="address.isBillingDifferentFromShipping && address.companyName" class="
+                    billing-address-section">
+                    <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                    <p>{{ address.billingAddress.street }} {{ address.billingAddress.streetType }}, {{
+                        address.billingAddress.houseNumber }}</p>
+                    <p>{{ address.billingAddress.floor ? (address.billingAddress.floor + '/') : '' }}{{
+                        address.billingAddress.door }}</p>
+                    <p>{{ address.billingAddress.city }}, {{ address.billingAddress.postalCode }}</p>
+                    <p>{{ address.billingAddress.country }}</p>
+                </div>
             </nb-card-body>
             <nb-card-footer>
                 <button class="edit-btn" (click)="editAddress(address.id); $event.stopPropagation()">

@@ -32,9 +32,9 @@
             </div>
 
             <!-- Cart items list (only shown when cart has items) -->
-            <div *ngIf="(cartItems$ | async)?.length > 0">
+            <div *ngIf="(cartItems$ | async)?.length > 0" #cartItems>
                 <!-- Cart item list with quantity controls and price calculations -->
-                <div *ngFor="let item of cartItems$ | async; let i = index" class="cart-item"
+                <div *ngFor="let item of (visibleCartItems$ | async); let i = index" class="cart-item"
                     (click)="navigateToProduct(item)" [@removeItem]="'in'">
                     <!-- Product image and details -->
                     <div class="item-image">
@@ -95,6 +95,14 @@
                     <button class="remove-btn" (click)="$event.stopPropagation(); removeItem(i)"
                         nbTooltip="{{ 'cart.remove' | translate }}">
                         <nb-icon class="remove-icon" icon="trash-2-outline"></nb-icon>
+                    </button>
+                </div>
+
+                <!-- Show more/less button -->
+                <div *ngIf="(cartItems$ | async)?.length > initialCartItemCount" class="show-more-container">
+                    <button class="btn btn-primary show-more-button" (click)="toggleCartItemsDisplay()">
+                        {{ (showAllCartItems ? 'cart.showLess' : 'cart.showMore') | translate }}
+                        {{ showAllCartItems ? '' : ' (' + ((cartItems$ | async)?.length - initialCartItemCount) + ')' }}
                     </button>
                 </div>
 

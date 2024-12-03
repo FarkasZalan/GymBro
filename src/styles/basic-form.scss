@@ -70,8 +70,17 @@ input[type='password'] {
     margin-top: 20px;
 }
 
+.billingAddress {
+    margin-top: 15px !important;
+    font-size: 22px !important;
+    color: #0b8e92;
+    border-bottom: 2px solid #0b8e92;
+    padding-bottom: 8px;
+}
+
 .container-addresses {
-    max-height: 80vh;
+    max-height: 80vh !important;
+    max-width: 760px !important;
     /* Set a maximum height (80% of the viewport height) */
     margin-top: 10px;
     overflow-y: auto;
@@ -241,10 +250,12 @@ ul.custom-list li::before {
 }
 
 .emptyCard {
-    background-color: #fff6f6;
+    background-color: #f9f9f9;
     margin-bottom: auto;
     width: 800px;
     text-align: center;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
     @media (max-width: 992px) {
         width: 90% !important;
@@ -281,10 +292,17 @@ ul.custom-list li::before {
 
 .address-details {
     font-size: 16px !important;
+    flex: 1 1 calc(50% - 20px);
 }
 
 .list-container p {
     cursor: pointer;
+    color: #555;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: #0b8e92;
+    }
 }
 
 .list-container nb-card-body {
@@ -453,5 +471,26 @@ ul.custom-list li::before {
 
     .emptyCard {
         width: 200px;
+    }
+}
+
+.billingAddress-container {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+    background-color: #0b8e92;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #15b2b8;
     }
 }

@@ -1,7 +1,7 @@
 export interface ShippingAddress {
     id?: string;
     addressName: string;
-    addressType: string;
+    addressType?: string;
     country: string;
     postalCode: string;
     city: string;
@@ -10,8 +10,11 @@ export interface ShippingAddress {
     houseNumber: string;
     floor?: number;
     door?: number;
-    isSetAsDefaultAddress: boolean;
+    isSetAsDefaultAddress?: boolean;
     companyName?: string;
     taxNumber?: string;
-    deleted: boolean;
+
+    // New fields for billing address
+    isBillingDifferentFromShipping?: boolean;
+    billingAddress?: ShippingAddress;
 }

@@ -1,0 +1,413 @@
+<!-- Loading spinner -->
+<app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
+
+<!-- Address action title -->
+<h1 *ngIf="isEditing" id="title" class="title">{{ 'profileMenu.shippingAddressForm.modifyAddressTitle' |
+    translate }}
+</h1>
+<h1 *ngIf="!isEditing" id="title" class="title">{{ 'profileMenu.shippingAddressForm.newAddressTitle' |
+    translate }}
+</h1>
+
+<!-- address form -->
+<div class="container-addresses">
+    <nb-card>
+        <nb-card-body class="login-col">
+
+            <div class="row">
+                <div class="col">
+                    <form (ngSubmit)="saveAddress()" #form="ngForm">
+                        <div class="row">
+                            <div class="col-8">
+                                <!-- Country block -->
+                                <div class="form-group">
+                                    <label for="country" class="label">{{ 'profileMenu.shippingAddressForm.country'
+                                        |
+                                        translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.country"
+                                        name="country" minlength="1" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.country' | translate }}*"
+                                        #country="ngModel">
+                                    <span class="help-block" *ngIf="country.touched && !country.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <!-- Postal code block -->
+                                <div class="form-group">
+                                    <label for="postalCode" class="label">{{
+                                        'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.postalCode"
+                                        name="postalCode" minlength="1" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"
+                                        #postalCode="ngModel">
+                                    <span class="help-block" *ngIf="postalCode.touched && !postalCode.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <!-- City block -->
+                                <div class="form-group">
+                                    <label for="city" class="label">{{
+                                        'profileMenu.shippingAddressForm.city' | translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.city"
+                                        name="city" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.city' | translate }}*"
+                                        #city="ngModel">
+                                    <span class="help-block" *ngIf="city.touched && !city.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <!-- Street block -->
+                                <div class="form-group">
+                                    <label for="streetName" class="label">{{
+                                        'profileMenu.shippingAddressForm.streetName' | translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.street"
+                                        name="streetName" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.streetName' | translate }}*"
+                                        #streetName="ngModel">
+                                    <span class="help-block" *ngIf="streetName.touched && !streetName.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <!-- Street type block -->
+                                <div class="form-group">
+                                    <label for="streetType" class="label">{{
+                                        'profileMenu.shippingAddressForm.streetType' | translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.streetType"
+                                        name="streetType" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.streetType' | translate }}*"
+                                        #streetType="ngModel">
+                                    <span class="help-block" *ngIf="streetType.touched && !streetType.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <!-- House number block -->
+                                <div class="form-group">
+                                    <label for="houseNumber" class="label">{{
+                                        'profileMenu.shippingAddressForm.houseNumber' | translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.houseNumber"
+                                        name="houseNumber" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.houseNumber' | translate }}*"
+                                        #houseNumber="ngModel">
+                                    <span class="help-block" *ngIf="houseNumber.touched && !houseNumber.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <!-- Floor block -->
+                                <div class="form-group">
+                                    <label for="floor" class="label">{{ 'profileMenu.shippingAddressForm.floor' |
+                                        translate }}</label>
+                                    <input type="number" class="form-control" [(ngModel)]="shippingAddress.floor"
+                                        name="floor"
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.floor' | translate }}"
+                                        #floor="ngModel">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <!-- Door block -->
+                                <div class="form-group">
+                                    <label for="door" class="label">{{ 'profileMenu.shippingAddressForm.door' |
+                                        translate }}</label>
+                                    <input type="number" class="form-control" [(ngModel)]="shippingAddress.door"
+                                        name="door"
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.door' | translate }}"
+                                        #door="ngModel">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- company address Checkbox -->
+                        <div class="form-group">
+                            <label for="companyAddress" class="checkbox-container">
+                                <label for="companyAddress">{{ 'profileMenu.shippingAddressForm.setAsCompanyAddress'
+                                    | translate }}
+                                </label>
+                                <input type="checkbox" [(ngModel)]="isCompanyAddressChecked" name="companyAddress"
+                                    (change)="toggleCompanyAddress()" id="companyAddress" #admin="ngModel">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div *ngIf="isCompanyAddressChecked" [@collapseFields] class="row">
+                            <div class="col-6">
+                                <!-- Company name block -->
+                                <div class="form-group">
+                                    <label for="companyName" class="label">{{
+                                        'profileMenu.shippingAddressForm.companyName' |
+                                        translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.companyName"
+                                        name="companyName" minlength="1" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.companyName' | translate }}*"
+                                        #companyName="ngModel">
+                                    <span class="help-block" *ngIf="companyName.touched && !companyName.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <!-- Tax number block -->
+                                <div class="form-group">
+                                    <label for="taxNumber" class="label">{{
+                                        'profileMenu.shippingAddressForm.taxNumber' | translate }}</label>
+                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.taxNumber"
+                                        name="taxNumber" minlength="1" required
+                                        placeholder="{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}*"
+                                        #taxNumber="ngModel">
+                                    <span class="help-block" *ngIf="taxNumber.touched && !taxNumber.valid">{{
+                                        'register.fieldRequired' | translate }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Billing address section -->
+                            <!-- billing address same as shipping Checkbox -->
+                            <div class="form-group">
+                                <label for="setToDefaultAddress" class="checkbox-container">
+                                    <label for="setToDefaultAddress">{{
+                                        'profileMenu.shippingAddressForm.billingAddressSameAsShipping' |
+                                        translate }}
+                                    </label>
+                                    <input type="checkbox" [(ngModel)]="shippingAddress.isBillingDifferentFromShipping"
+                                        name="setToDefaultAddress" id="setToDefaultAddress" #admin="ngModel">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <!-- billing address details -->
+                            <div *ngIf="shippingAddress.isBillingDifferentFromShipping" [@collapseFields] class="row">
+                                <div [@collapseFields] class="row">
+                                    <div class="col-8">
+                                        <!-- Billing Country block -->
+                                        <div class="form-group">
+                                            <label for="billingCountry" class="label">{{
+                                                'profileMenu.shippingAddressForm.country'
+                                                |
+                                                translate }}</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.country"
+                                                name="billingCountry" minlength="1" required
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.country' | translate }}*"
+                                                #billingCountry="ngModel">
+                                            <span class="help-block"
+                                                *ngIf="billingCountry.touched && !billingCountry.valid">{{
+                                                'register.fieldRequired' | translate }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- Postal code block -->
+                                        <div class="form-group">
+                                            <label for="billingPostalCode" class="label">{{
+                                                'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.postalCode"
+                                                name="billingPostalCode" minlength="1" required
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"
+                                                #billingPostalCode="ngModel">
+                                            <span class="help-block"
+                                                *ngIf="billingPostalCode.touched && !billingPostalCode.valid">{{
+                                                'register.fieldRequired' | translate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <!-- City block -->
+                                        <div class="form-group">
+                                            <label for="billingCity" class="label">{{
+                                                'profileMenu.shippingAddressForm.city' | translate }}</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.city" name="billingCity"
+                                                required
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.city' | translate }}*"
+                                                #billingCity="ngModel">
+                                            <span class="help-block"
+                                                *ngIf="billingCity.touched && !billingCity.valid">{{
+                                                'register.fieldRequired' | translate }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- Street block -->
+                                        <div class="form-group">
+                                            <label for="billingStreetName" class="label">{{
+                                                'profileMenu.shippingAddressForm.streetName' | translate }}</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.street"
+                                                name="billingStreetName" required
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.streetName' | translate }}*"
+                                                #billingStreetName="ngModel">
+                                            <span class="help-block"
+                                                *ngIf="billingStreetName.touched && !billingStreetName.valid">{{
+                                                'register.fieldRequired' | translate }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- Street type block -->
+                                        <div class="form-group">
+                                            <label for="billingStreetType" class="label">{{
+                                                'profileMenu.shippingAddressForm.streetType' | translate }}</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.streetType"
+                                                name="billingStreetType" required
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.streetType' | translate }}*"
+                                                #billingStreetType="ngModel">
+                                            <span class="help-block"
+                                                *ngIf="billingStreetType.touched && !billingStreetType.valid">{{
+                                                'register.fieldRequired' | translate }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <!-- House number block -->
+                                        <div class="form-group">
+                                            <label for="billingHouseNumber" class="label">{{
+                                                'profileMenu.shippingAddressForm.houseNumber' | translate }}</label>
+                                            <input type="text" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.houseNumber"
+                                                name="billingHouseNumber" required
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.houseNumber' | translate }}*"
+                                                #billingHouseNumber="ngModel">
+                                            <span class="help-block"
+                                                *ngIf="billingHouseNumber.touched && !billingHouseNumber.valid">{{
+                                                'register.fieldRequired' | translate }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- Floor block -->
+                                        <div class="form-group">
+                                            <label for="billingFloor" class="label">{{
+                                                'profileMenu.shippingAddressForm.floor'
+                                                |
+                                                translate }}</label>
+                                            <input type="number" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.floor" name="billingFloor"
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.floor' | translate }}"
+                                                #billingFloor="ngModel">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- Door block -->
+                                        <div class="form-group">
+                                            <label for="billingDoor" class="label">{{
+                                                'profileMenu.shippingAddressForm.door' |
+                                                translate }}</label>
+                                            <input type="number" class="form-control"
+                                                [(ngModel)]="shippingAddress.billingAddress.door" name="billingDoor"
+                                                placeholder="{{ 'profileMenu.shippingAddressForm.door' | translate }}"
+                                                #billingDoor="ngModel">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr><br>
+                        <!-- Address Type Buttons -->
+                        <div class="form-group">
+                            <p for="addressType" class="address-type-label">
+                                {{ 'profileMenu.shippingAddressForm.addressName' | translate }}
+                            </p><br>
+                            <div class="address-type-selection">
+                                <!-- Address type, name is from the AddressTypeTexts ENUM -->
+                                <button type="button" class="btn address-type-button"
+                                    [ngClass]="{'active':  shippingAddress.addressType === addressTypeTexts.HOME}"
+                                    (click)="selectAddressType(addressTypeTexts.HOME)">
+                                    <nb-icon icon="home-outline"></nb-icon> <!-- Home Icon -->
+                                </button>
+                                <button type="button" class="btn address-type-button"
+                                    [ngClass]="{'active':  shippingAddress.addressType === addressTypeTexts.WORK}"
+                                    (click)="selectAddressType(addressTypeTexts.WORK)">
+                                    <nb-icon icon="briefcase-outline"></nb-icon> <!-- Work Icon -->
+                                </button>
+                                <button type="button" class="btn address-type-button"
+                                    [ngClass]="{'active': shippingAddress.addressType === addressTypeTexts.OTHER}"
+                                    (click)="selectAddressType(addressTypeTexts.OTHER)">
+                                    <nb-icon icon="plus-outline"></nb-icon> <!-- Other Icon -->
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Address Name Input (only visible for 'other') -->
+                        <div *ngIf="shippingAddress.addressType === addressTypeTexts.OTHER" [@collapseFields]
+                            class="password-info">
+                            <div class="form-group">
+                                <label for="addressName" class="label">{{
+                                    'profileMenu.shippingAddressForm.addressName'
+                                    | translate }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.addressName"
+                                    name="addressName" required
+                                    placeholder="{{ 'profileMenu.shippingAddressForm.addressName' | translate }}*"
+                                    #addressName="ngModel">
+                                <span class="help-block" *ngIf="addressName.touched && !addressName.valid">{{
+                                    'register.fieldRequired' | translate }}</span>
+                            </div>
+                        </div>
+                        <hr><br>
+                        <!-- set too default address Checkbox -->
+                        <div class="form-group">
+                            <label for="setToDefaultAddress" class="checkbox-container">
+                                <label for="setToDefaultAddress">{{ 'profileMenu.shippingAddressForm.setToDefault' |
+                                    translate }}
+                                </label>
+                                <input type="checkbox" [(ngModel)]="shippingAddress.isSetAsDefaultAddress"
+                                    name="setToDefaultAddress" id="setToDefaultAddress" #admin="ngModel">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <!-- missing addres name error -->
+                        <span *ngIf="missingAddressNameError" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
+                            {{ 'profileMenu.shippingAddressForm.missingAddressNameError' | translate }}
+                        </span>
+                        <!-- name exists error -->
+                        <span *ngIf="errorMessage" class="help-block-login-error">
+                            <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
+                            {{ 'profileMenu.shippingAddressForm.nameAlreadyExists' | translate }} ({{
+                            shippingAddress.addressName | translate}})
+                        </span>
+                        <!-- modify address submit button -->
+                        <div *ngIf="isEditing" class="login-button-container">
+                            <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton
+                                status="success" [disabled]="!form.valid">{{
+                                'profileMenu.shippingAddressForm.modifyAddress' | translate
+                                }}</button>
+                        </div>
+
+                        <!-- create address submit button -->
+                        <div *ngIf="!isEditing" class="login-button-container">
+                            <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton
+                                status="success" [disabled]="!form.valid">{{
+                                'profileMenu.shippingAddressForm.addAddress' | translate
+                                }}</button>
+                        </div>
+                    </form>
+
+                    <!-- delete button -->
+                    <div *ngIf="isEditing" class="login-button-container">
+                        <button class="btn btn-primary basic-btn delete-btn basic-form-btn" type="submit" nbButton
+                            status="success" (click)="deleteAddress()">
+                            {{ 'profileMenu.shippingAddressForm.deleteAddress' | translate }}</button>
+                    </div>
+
+                    <!-- back button -->
+                    <div class="login-button-container">
+                        <button class="btn btn-primary basic-btn back-btn basic-form-btn" type="submit" nbButton
+                            status="success" (click)="back()">
+                            <span class="arrow">
+                                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Filled left arrow -->
+                                    <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                                </svg>
+                            </span>
+                            {{ 'loginPage.back' | translate }}</button>
+                    </div><br>
+                </div>
+            </div>
+
+        </nb-card-body>
+    </nb-card>
+</div>

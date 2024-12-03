@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EditShippingAddressComponent } from '../profile/profile-shipping-address/edit-shipping-address/edit-shipping-address.component';
 import { TranslateService } from '@ngx-translate/core';
+import { HandleShippingAddressComponent } from '../profile/shipping-address/handle-shipping-address/handle-shipping-address.component';
 
 @Component({
   selector: 'app-delete-confirmation-dialog',
@@ -15,7 +15,7 @@ export class DeleteConfirmationDialogComponent {
   // the text to display on dialog
   text: string = "";
 
-  constructor(public dialogRef: MatDialogRef<EditShippingAddressComponent>, @Inject(MAT_DIALOG_DATA) public data, private translate: TranslateService) {
+  constructor(public dialogRef: MatDialogRef<HandleShippingAddressComponent>, @Inject(MAT_DIALOG_DATA) public data, private translate: TranslateService) {
     dialogRef.disableClose = true;
     this.operation = data.text;
   }

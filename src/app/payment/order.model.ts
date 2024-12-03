@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { CartItem } from "../cart/cart.model";
-import { ShippingAddress } from "../profile/profile-shipping-address/shipping-address.model";
+import { ShippingAddress } from "../profile/shipping-address/shipping-address.model";
 
 export interface Order {
     id?: string;

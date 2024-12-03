@@ -132,6 +132,62 @@
     }
 }
 
+.product-empty-list-container {
+    margin-top: 10px;
+    max-width: 60%;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    padding: 16px;
+}
+
+.emptyCardText {
+    margin: 20px;
+    font-size: 20px;
+}
+
+.emptyCard {
+    background-color: #fff6f6;
+    margin-bottom: auto;
+    width: 800px;
+    text-align: center;
+    border-radius: 20px !important;
+
+    .emptyCardImage {
+        animation: bounce 2s ease-in-out infinite;
+    }
+}
+
+/* Bouncing effect for the alert icon */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.emptyCardImage {
+    display: block;
+    margin: auto;
+    width: 100px;
+}
+
 .timeline-item {
     display: flex;
     flex-direction: column;

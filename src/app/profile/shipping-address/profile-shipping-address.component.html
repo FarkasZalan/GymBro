@@ -1,0 +1,69 @@
+<!-- If no shipping addresses are present, display the empty card -->
+<div *ngIf="shippingAddresses.length === 0" class="empty-list-container">
+    <nb-card class="rounded-card emptyCard">
+        <nb-card-body>
+            <div>
+                <img src="../../../assets/images/no-address.png" alt="No Addresses" class="emptyCardImage">
+                <p>{{ 'profileMenu.noAddresses' | translate }}</p>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+
+<!-- Display each shipping address as an nb-card when addresses are available -->
+<div class="list-container">
+    <nb-card *ngFor="let address of shippingAddresses" class="rounded-card addressCard"
+        (click)="editAddress(address.id)">
+        <nb-card-header class="card-header">
+            <strong class="default-label">{{ address.addressName | translate }}</strong>
+            <span *ngIf="address.isSetAsDefaultAddress">{{ 'profileMenu.shippingAddressForm.defaultShippingAddress' |
+                translate }}</span>
+        </nb-card-header>
+        <nb-card-body class="address-details">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
+                    <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }}</p>
+                    <p>{{ address.city }}, {{ address.postalCode }}</p>
+                    <p>{{ address.country }}</p>
+
+                    <!-- Display companyName and taxNumber only if they exist -->
+                    <p *ngIf="address.companyName">
+                        <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong> {{
+                        address.companyName }}
+                    </p>
+                    <p *ngIf="address.taxNumber">
+                        <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong> {{
+                        address.taxNumber }}
+                    </p>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div *ngIf="address.companyName">
+                        <p class="billingAddress"><strong>{{ 'profileMenu.shippingAddressForm.billingAddress' |
+                                translate }}:</strong></p>
+                        <div *ngIf="!address.isBillingDifferentFromShipping">
+                            <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
+                            <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }}</p>
+                            <p>{{ address.city }}, {{ address.postalCode }}</p>
+                            <p>{{ address.country }}</p>
+                        </div>
+                        <div *ngIf="address.isBillingDifferentFromShipping">
+                            <p>{{ address.billingAddress.street }} {{ address.billingAddress.streetType }}, {{
+                                address.houseNumber }}</p>
+                            <p>{{ address.billingAddress.floor ? (address.billingAddress.floor + '/') : '' }}{{
+                                address.billingAddress.door }}</p>
+                            <p>{{ address.billingAddress.city }}, {{ address.billingAddress.postalCode }}</p>
+                            <p>{{ address.billingAddress.country }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>
+
+<!-- Open new address button -->
+<div class="login-button-container">
+    <button class="btn" type="submit" nbButton status="success" (click)="goToAddNewAddress()">{{
+        'profileMenu.addNewShippingAddress' | translate }}</button>
+</div>

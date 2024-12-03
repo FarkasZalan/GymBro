@@ -140,6 +140,8 @@
                         "floor": "Emelet",
                         "fieldIncorrect": "Hibás érték",
                         "door": "Ajtó",
+                        "billingAddressSameAsShipping": "A számlázási cím eltér a szállítási címtől",
+                        "billingAddress": "Számlázási cím",
                         "setToDefault": "Beállítás alapértelmezettként",
                         "setAsCompanyAddress": "Üzleti ügyfél",
                         "companyName": "Cég neve",
@@ -528,7 +530,9 @@
                 "items": "termék",
                 "item": "termék",
                 "addedToCart": "Hozzáadva a kosárhoz",
-                "goToCart": "Irány a kosár"
+                "goToCart": "Irány a kosár",
+                "showMore": "További termékek",
+                "showLess": "Kevesebb termék"
         },
         "checkout": {
                 "title": "Összegzés",
@@ -536,6 +540,8 @@
                 "availableRewards": "Kuponok",
                 "active": "Aktív",
                 "removeReward": "Kupon eltávolítása",
+                "minimum2000HufError": "A minimum rendelési érték 2000 Ft!",
+                "billingAdddressTitle": "Számlázási cím",
                 "shippingAddress": {
                         "title": "Szállítási cím",
                         "noAddress": "Nincs kiválasztott szállítási cím",
@@ -563,7 +569,8 @@
                 "actions": {
                         "placeOrder": "Fizetés leadása",
                         "backToCart": "Vissza a kosárhoz",
-                        "loginPrompt": "A folytatáshoz jelentkezz be"
+                        "loginPrompt": "A folytatáshoz jelentkezz be",
+                        "editCart": "Kosár szerkesztése"
                 },
                 "shipping": {
                         "title": "Szállítási mód",
@@ -600,8 +607,7 @@
                         "noRewardsMessage": "Gyűjts pontokat vásárlásaiddal, és váltsd be kuponokra a kedvezményekért!",
                         "viewLoyaltyProgram": "Hűségprogram megtekintése"
                 },
-                "discount": "Kedvezmény",
-                "minimum2000HufError": "A minimum rendelési érték 2000 Ft!"
+                "discount": "Kedvezmény"
         },
         "loyaltyProgram": {
                 "title": "Gym Bro Hűségprogram",

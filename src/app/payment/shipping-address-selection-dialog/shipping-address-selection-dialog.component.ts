@@ -1,14 +1,13 @@
 import { trigger, transition, style, animate } from "@angular/animations";
 import { ChangeDetectorRef, Component, Inject, OnInit } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { NbDialogRef, NbDialogService } from "@nebular/theme";
+import { NbDialogService } from "@nebular/theme";
 import { TranslateService } from "@ngx-translate/core";
-import { AddressTypeText } from "../../profile/profile-address-type-text";
-import { CreateShippingAddressComponent } from "../../profile/profile-shipping-address/create-shipping-address/create-shipping-address.component";
-import { EditShippingAddressComponent } from "../../profile/profile-shipping-address/edit-shipping-address/edit-shipping-address.component";
-import { ShippingAddress } from "../../profile/profile-shipping-address/shipping-address.model";
+import { AddressTypeText } from "../../profile/shipping-address/profile-address-type-text";
+import { ShippingAddress } from "../../profile/shipping-address/shipping-address.model";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { LoadingService } from "../../loading-spinner/loading.service";
+import { HandleShippingAddressComponent } from "../../profile/shipping-address/handle-shipping-address/handle-shipping-address.component";
 
 @Component({
     selector: 'app-shipping-address-selection-dialog',
@@ -87,7 +86,7 @@ export class ShippingAddressSelectionDialogComponent implements OnInit {
     }
 
     editAddress(addressId: string) {
-        const dialogRef = this.dialog.open(EditShippingAddressComponent, {
+        const dialogRef = this.dialog.open(HandleShippingAddressComponent, {
             data: {
                 addresId: addressId,
                 userId: this.userId
@@ -95,15 +94,19 @@ export class ShippingAddressSelectionDialogComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
+            console.log(result)
             if (result?.success && result?.address) {
                 this.selectAddress(result.address);
+            } else if (!result?.success) {
+                this.dialogRef.close(false);
             }
         });
     }
 
     goToAddNewAddress() {
-        const dialogRef = this.dialog.open(CreateShippingAddressComponent, {
+        const dialogRef = this.dialog.open(HandleShippingAddressComponent, {
             data: {
+                addresId: "",
                 userId: this.userId
             }
         });
@@ -111,6 +114,8 @@ export class ShippingAddressSelectionDialogComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             if (result?.success && result?.address) {
                 this.selectAddress(result.address);
+            } else if (!result?.success) {
+                this.dialogRef.close(false);
             }
         });
     }

@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { CartService } from '../../cart/cart.service';
-import { ShippingAddress } from '../../profile/profile-shipping-address/shipping-address.model';
+import { ShippingAddress } from '../../profile/shipping-address/shipping-address.model';
 import { User } from '../../profile/user.model';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 import { Location } from '@angular/common';
@@ -88,7 +88,14 @@ declare var Stripe;
 })
 export class CheckoutPageComponent implements OnInit {
   @ViewChild('form') guestForm: NgForm;  // Access the form for validation
-  cartItems: any[] = [];
+  @ViewChild('cartItems') cartItemsElement: ElementRef; // Access the cart section element
+
+  // Cart items
+  cartItems: CartItem[] = [];
+  initialCartItemCount: number = 5;
+  showAllCartItems: boolean = false;
+
+  // price
   subtotal: number = 0;
   cashOnDeliveryAmount: number = 0;
   shipping: number = 0; // Fix shipping cost will be 2500 Huf
@@ -98,6 +105,8 @@ export class CheckoutPageComponent implements OnInit {
   shippingAddress: ShippingAddress;
   currentUserId: string = '';
   currentUser: User;
+
+  productViewText = ProductViewText;
 
   // guest form
   displayGuestForm: boolean = false;
@@ -219,7 +228,7 @@ export class CheckoutPageComponent implements OnInit {
     private changeDetector: ChangeDetectorRef,
     public loadingService: LoadingService,
     private functions: AngularFireFunctions,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -234,7 +243,16 @@ export class CheckoutPageComponent implements OnInit {
       streetType: '',
       houseNumber: '',
       isSetAsDefaultAddress: false,
-      deleted: false
+      isBillingDifferentFromShipping: false,
+      billingAddress: {
+        addressName: '',
+        country: '',
+        postalCode: '',
+        city: '',
+        street: '',
+        streetType: '',
+        houseNumber: ''
+      }
     }
     this.loadCartItems();
     this.checkAuthStatus();
@@ -243,6 +261,11 @@ export class CheckoutPageComponent implements OnInit {
     this.order = savedOrder ? JSON.parse(savedOrder) : null;
     this.selectedPaymentMethod = this.order ? this.order.paymentMethod : '';
     this.selectedShippingMethod = this.order ? this.order.shippingMethod : '';
+    if (this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) {
+      this.shipping = 0;
+    } else {
+      this.shipping = this.STANDARD_SHIPPING_COST;
+    }
     this.shippingAddress = this.order ? this.order.shippingAddress : this.shippingAddress;
     // Clear localStorage after retrieving the data
     localStorage.removeItem('savedOrder');
@@ -269,6 +292,32 @@ export class CheckoutPageComponent implements OnInit {
         this.calculateTotals();
       });
     });
+  }
+
+  // Getter to control which cart items are visible
+  get visibleCartItems(): CartItem[] {
+    return this.showAllCartItems
+      ? this.cartItems
+      : this.cartItems.slice(0, this.initialCartItemCount);
+  }
+
+  // Toggle cart items display
+  toggleCartItemsDisplay() {
+    this.showAllCartItems = !this.showAllCartItems;
+
+    if (!this.showAllCartItems) {
+      this.goTopOfTheCartItemSection();
+    }
+  }
+
+  // Scroll to the top of the cart items section element
+  goTopOfTheCartItemSection() {
+    this.cartItemsElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  editCart() {
+    this.location.back();
+    this.router.navigate(['/cart']);
   }
 
   async checkAuthStatus() {
@@ -388,7 +437,10 @@ export class CheckoutPageComponent implements OnInit {
         }
       });
 
-      dialogRef.afterClosed().subscribe((result: ShippingAddress) => {
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result === false) {
+          this.shippingAddress = undefined;
+        }
         if (result) {
           this.shippingAddress = result;
           this.changeDetector.detectChanges();
@@ -418,8 +470,11 @@ export class CheckoutPageComponent implements OnInit {
       companyName: this.guestForm.value.companyName || '',
       taxNumber: this.guestForm.value.taxNumber || '',
       isSetAsDefaultAddress: false,
-      deleted: false
+      isBillingDifferentFromShipping: this.shippingAddress.isBillingDifferentFromShipping,
+      billingAddress: this.shippingAddress.billingAddress
     }
+
+    console.log(this.shippingAddress)
 
     this.displayGuestForm = false;
     this.isEditGuestForm = true;
@@ -437,9 +492,14 @@ export class CheckoutPageComponent implements OnInit {
         }
       });
 
-      dialogRef.afterClosed().subscribe((result: ShippingAddress) => {
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result === false) {
+          this.shippingAddress = undefined;
+        }
         if (result) {
           this.shippingAddress = result;
+
+
           this.changeDetector.detectChanges();
         }
       });
@@ -597,6 +657,7 @@ export class CheckoutPageComponent implements OnInit {
         }
 
         // if everything was succes then open successfull dialog
+        localStorage.removeItem('savedOrder');
         const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
           data: {
             text: SuccessFullDialogText.SUCCESSFULL_PAYMENT,

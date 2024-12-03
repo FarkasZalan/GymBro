@@ -529,3 +529,21 @@
     color: #0b8e92 !important;
     font-weight: bold;
 }
+
+.billing-address-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+
+    h5 {
+        margin-bottom: 0.5rem;
+        color: #0b8e92;
+    }
+
+    p {
+        margin: 0.25rem 0;
+        color: var(--text-basic-color);
+    }
+}

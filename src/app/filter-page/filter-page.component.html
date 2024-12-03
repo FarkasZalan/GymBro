@@ -9,7 +9,7 @@
                     <form (ngSubmit)="filter()" #form="ngForm">
                         <h3 *ngIf="!isBlog">{{ 'filter.basicFiltersText' | translate }}</h3>
                         <!-- Category section -->
-                        <div class="row" *ngIf="!isClothes">
+                        <div class="row" *ngIf="!isClothes && !isBlog">
                             <div class="dropdown-list-container">
                                 <div class="form-group position-relative order-by-container">
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -38,12 +38,16 @@ import { CurrencyPipe, Location } from '@angular/common';
     ]
 })
 export class CartComponent {
+    @ViewChild('cartItems') cartItemsElement: ElementRef; // Access the cart section element
     cartItems$: Observable<CartItem[]>;
     // Calculate total price from all items in cart
     cartTotal$: Observable<number>;
 
     errorMaxStock: boolean = false;
     errorMinStock: boolean = false;
+
+    initialCartItemCount: number = 5;
+    showAllCartItems: boolean = false;
 
     constructor(
         private cartService: CartService,
@@ -68,6 +72,27 @@ export class CartComponent {
         if (this.cartService.isCartEmpty()) {
             this.location.back();
         }
+    }
+
+    // Getter to control which cart items are visible
+    get visibleCartItems$(): Observable<CartItem[]> {
+        return this.cartItems$.pipe(
+            map(items => this.showAllCartItems ? items : items.slice(0, this.initialCartItemCount))
+        );
+    }
+
+    // Toggle cart items display
+    toggleCartItemsDisplay() {
+        this.showAllCartItems = !this.showAllCartItems;
+
+        if (!this.showAllCartItems) {
+            this.goTopOfTheCartItemSection();
+        }
+    }
+
+    // Scroll to the top of the cart items section element
+    goTopOfTheCartItemSection() {
+        this.cartItemsElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     getTotalPrice() {

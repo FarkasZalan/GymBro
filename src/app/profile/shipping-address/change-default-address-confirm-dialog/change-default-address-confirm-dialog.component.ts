@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { CreateShippingAddressComponent } from '../create-shipping-address/create-shipping-address.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { HandleShippingAddressComponent } from '../handle-shipping-address/handle-shipping-address.component';
 
 @Component({
   selector: 'app-change-default-address-confirm-dialog',
@@ -9,7 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class ChangeDefaultAddressConfirmDialogComponent {
 
-  constructor(public dialogRef: MatDialogRef<CreateShippingAddressComponent>) { }
+  constructor(public dialogRef: MatDialogRef<HandleShippingAddressComponent>) { }
 
   // Handle user actions, 
   // if true then can override the old default address 

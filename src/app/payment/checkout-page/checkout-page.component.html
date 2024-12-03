@@ -52,7 +52,8 @@
                     {{ 'checkout.orderSummary.title' | translate }}
                 </h3>
                 <div class="cart-items-section">
-                    <div *ngFor="let item of cartItems" class="cart-item" [@fadeIn] (click)="goToProduct(item)">
+                    <div *ngFor="let item of visibleCartItems" class="cart-item" [@collapseFields] #cartItems
+                        (click)="goToProduct(item)">
                         <div class="item-image">
                             <img *ngIf="item.selectedPrice.productImage" [src]="item.selectedPrice.productImage"
                                 [alt]="item.productName">
@@ -99,6 +100,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Show more/less button -->
+                    <div *ngIf="cartItems.length > initialCartItemCount" class="show-more-container">
+                        <button class="btn btn-primary show-more-button" (click)="toggleCartItemsDisplay()">
+                            {{ (showAllCartItems ? 'cart.showLess' : 'cart.showMore') | translate }}
+                            {{ showAllCartItems ? '' : ' (' + (cartItems.length - initialCartItemCount) +
+                            ')' }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- edit cart button -->
+                <div class="button-container">
+                    <button nbButton status="success" class="proceed-btn btn" (click)="editCart()">
+                        {{ 'checkout.actions.editCart' | translate }}
+                    </button>
                 </div>
             </div>
 
@@ -134,6 +151,61 @@
                 </div>
             </div>
 
+            <!-- Shipping Methods Section -->
+            <div class="checkout-section shipping-methods">
+                <h3>
+                    {{ 'checkout.shipping.title' | translate }}
+                </h3>
+
+                <div class="shipping-options">
+                    <div *ngFor="let method of shippingMethods" class="shipping-option"
+                        [class.selected]="selectedShippingMethod === method.id"
+                        (click)="selectShippingMethod(method.id)">
+                        <div class="shipping-icon">
+                            <nb-icon [icon]="method.icon"></nb-icon>
+                        </div>
+                        <div class="shipping-details">
+                            <div class="shipping-name">{{ method.name | translate }}</div>
+                            <div class="shipping-description">{{ method.description | translate }}</div>
+                            <div class="shipping-info">
+                                <span class="delivery-time">
+                                    <nb-icon icon="clock-outline"></nb-icon>
+                                    {{ 'checkout.shipping.estimatedDays' | translate:{ days: method.estimatedDays } }}
+                                </span>
+                                <span class="shipping-price">
+                                    <nb-icon icon="pricetags-outline"></nb-icon>
+                                    {{ method.price === 0 ? ('checkout.shipping.free' | translate) :
+                                    (method.price | currency:'':'':'1.0-0') + ' ' + ('products.huf' | translate) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods Section -->
+            <div class="checkout-section payment-methods">
+                <h3>
+                    {{ 'checkout.payment.title' | translate }}
+                </h3>
+                <div class="payment-options">
+                    <div *ngFor="let method of paymentMethods" class="payment-option"
+                        [class.selected]="selectedPaymentMethod === method.id" (click)="selectPaymentMethod(method.id)">
+                        <div class="payment-icon">
+                            <nb-icon [icon]="method.icon"></nb-icon>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-name">{{ method.name | translate}}</div>
+                            <div class="payment-description">{{ method.description | translate}}</div>
+                            <div class="payment-fee" *ngIf="method.additionalFee > 0">
+                                <nb-icon icon="alert-circle-outline"></nb-icon>
+                                {{ 'checkout.payment.additionalFee' | translate:{ fee: method.additionalFee } }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Shipping Address Section -->
             <div class="shipping-address" *ngIf="shippingAddress && !displayGuestForm" @fadeInUp>
                 <h3>
@@ -161,16 +233,43 @@
                                 <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
                                 {{ shippingAddress.taxNumber }}
                             </p>
+
+                            <!-- Billing Address Section -->
+                            <!-- billing same as shipping -->
+                            <div *ngIf="!shippingAddress.isBillingDifferentFromShipping && shippingAddress.companyName"
+                                class="billing-address-section">
+                                <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                                <p>{{ shippingAddress.street }} {{
+                                    shippingAddress.streetType }}, {{
+                                    shippingAddress.houseNumber }}</p>
+                                <p>{{ shippingAddress.floor ? (shippingAddress.floor +
+                                    '/') : '' }}{{ shippingAddress.door }}</p>
+                                <p>{{ shippingAddress.city }}, {{
+                                    shippingAddress.postalCode }}</p>
+                                <p>{{ shippingAddress.country }}</p>
+                            </div>
+
+                            <!-- billing different from shipping -->
+                            <div *ngIf="shippingAddress.isBillingDifferentFromShipping && shippingAddress.companyName"
+                                class="billing-address-section">
+                                <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                                <p>{{ shippingAddress.billingAddress.street }} {{
+                                    shippingAddress.billingAddress.streetType }}, {{
+                                    shippingAddress.billingAddress.houseNumber }}</p>
+                                <p>{{ shippingAddress.billingAddress.floor ? (shippingAddress.billingAddress.floor +
+                                    '/') : '' }}{{ shippingAddress.billingAddress.door }}</p>
+                                <p>{{ shippingAddress.billingAddress.city }}, {{
+                                    shippingAddress.billingAddress.postalCode }}</p>
+                                <p>{{ shippingAddress.billingAddress.country }}</p>
+                            </div>
                         </nb-card-body>
                         <nb-card-footer>
-                            <!-- for logged in users -->
                             <button *ngIf="userLoggedIn" class="change-address-btn"
                                 (click)="editAddress(shippingAddress.id)">
                                 <nb-icon icon="edit-2-outline"></nb-icon>
                                 {{ 'checkout.shippingAddress.changeAddress' | translate }}
                             </button>
 
-                            <!-- for guest users -->
                             <button *ngIf="!userLoggedIn" class="change-address-btn" (click)="editGuestForm()">
                                 <nb-icon icon="edit-2-outline"></nb-icon>
                                 {{ 'checkout.shippingAddress.changeAddress' | translate }}
@@ -293,7 +392,7 @@
                             <div class="form-group">
                                 <label for="streetName" class="label">{{
                                     'profileMenu.shippingAddressForm.streetName' | translate }}</label>
-                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.streetName"
+                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.street"
                                     name="streetName" required
                                     placeholder="{{ 'profileMenu.shippingAddressForm.streetName' | translate }}*"
                                     #streetName="ngModel">
@@ -391,6 +490,145 @@
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
+
+                        <!-- Billing address section -->
+                        <!-- billing address same as shipping Checkbox -->
+                        <div class="form-group">
+                            <label for="setToDefaultAddress" class="checkbox-container">
+                                <label for="setToDefaultAddress">{{
+                                    'profileMenu.shippingAddressForm.billingAddressSameAsShipping' |
+                                    translate }}
+                                </label>
+                                <input type="checkbox" [(ngModel)]="shippingAddress.isBillingDifferentFromShipping"
+                                    name="setToDefaultAddress" id="setToDefaultAddress" #admin="ngModel">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <!-- billing address details -->
+                        <div *ngIf="shippingAddress.isBillingDifferentFromShipping" [@collapseFields] class="row">
+                            <div [@collapseFields] class="row">
+                                <div class="col-8">
+                                    <!-- Billing Country block -->
+                                    <div class="form-group">
+                                        <label for="billingCountry" class="label">{{
+                                            'profileMenu.shippingAddressForm.country'
+                                            |
+                                            translate }}</label>
+                                        <input type="text" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.country" name="billingCountry"
+                                            minlength="1" required
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.country' | translate }}*"
+                                            #billingCountry="ngModel">
+                                        <span class="help-block"
+                                            *ngIf="billingCountry.touched && !billingCountry.valid">{{
+                                            'register.fieldRequired' | translate }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Postal code block -->
+                                    <div class="form-group">
+                                        <label for="billingPostalCode" class="label">{{
+                                            'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
+                                        <input type="text" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.postalCode"
+                                            name="billingPostalCode" minlength="1" required
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"
+                                            #billingPostalCode="ngModel">
+                                        <span class="help-block"
+                                            *ngIf="billingPostalCode.touched && !billingPostalCode.valid">{{
+                                            'register.fieldRequired' | translate }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <!-- City block -->
+                                    <div class="form-group">
+                                        <label for="billingCity" class="label">{{
+                                            'profileMenu.shippingAddressForm.city' | translate }}</label>
+                                        <input type="text" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.city" name="billingCity"
+                                            required
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.city' | translate }}*"
+                                            #billingCity="ngModel">
+                                        <span class="help-block" *ngIf="billingCity.touched && !billingCity.valid">{{
+                                            'register.fieldRequired' | translate }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Street block -->
+                                    <div class="form-group">
+                                        <label for="billingStreetName" class="label">{{
+                                            'profileMenu.shippingAddressForm.streetName' | translate }}</label>
+                                        <input type="text" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.street" name="billingStreetName"
+                                            required
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.streetName' | translate }}*"
+                                            #billingStreetName="ngModel">
+                                        <span class="help-block"
+                                            *ngIf="billingStreetName.touched && !billingStreetName.valid">{{
+                                            'register.fieldRequired' | translate }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Street type block -->
+                                    <div class="form-group">
+                                        <label for="billingStreetType" class="label">{{
+                                            'profileMenu.shippingAddressForm.streetType' | translate }}</label>
+                                        <input type="text" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.streetType"
+                                            name="billingStreetType" required
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.streetType' | translate }}*"
+                                            #billingStreetType="ngModel">
+                                        <span class="help-block"
+                                            *ngIf="billingStreetType.touched && !billingStreetType.valid">{{
+                                            'register.fieldRequired' | translate }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <!-- House number block -->
+                                    <div class="form-group">
+                                        <label for="billingHouseNumber" class="label">{{
+                                            'profileMenu.shippingAddressForm.houseNumber' | translate }}</label>
+                                        <input type="text" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.houseNumber"
+                                            name="billingHouseNumber" required
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.houseNumber' | translate }}*"
+                                            #billingHouseNumber="ngModel">
+                                        <span class="help-block"
+                                            *ngIf="billingHouseNumber.touched && !billingHouseNumber.valid">{{
+                                            'register.fieldRequired' | translate }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Floor block -->
+                                    <div class="form-group">
+                                        <label for="billingFloor" class="label">{{
+                                            'profileMenu.shippingAddressForm.floor'
+                                            |
+                                            translate }}</label>
+                                        <input type="number" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.floor" name="billingFloor"
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.floor' | translate }}"
+                                            #billingFloor="ngModel">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Door block -->
+                                    <div class="form-group">
+                                        <label for="billingDoor" class="label">{{
+                                            'profileMenu.shippingAddressForm.door' |
+                                            translate }}</label>
+                                        <input type="number" class="form-control"
+                                            [(ngModel)]="shippingAddress.billingAddress.door" name="billingDoor"
+                                            placeholder="{{ 'profileMenu.shippingAddressForm.door' | translate }}"
+                                            #billingDoor="ngModel">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div><br>
 
                     <!-- new address submit button -->
@@ -402,60 +640,6 @@
                             }}</button>
                     </div>
                 </form>
-            </div>
-
-            <!-- Shipping Methods Section -->
-            <div class="checkout-section shipping-methods">
-                <h3>
-                    {{ 'checkout.shipping.title' | translate }}
-                </h3>
-                <div class="shipping-options">
-                    <div *ngFor="let method of shippingMethods" class="shipping-option"
-                        [class.selected]="selectedShippingMethod === method.id"
-                        (click)="selectShippingMethod(method.id)">
-                        <div class="shipping-icon">
-                            <nb-icon [icon]="method.icon"></nb-icon>
-                        </div>
-                        <div class="shipping-details">
-                            <div class="shipping-name">{{ method.name | translate }}</div>
-                            <div class="shipping-description">{{ method.description | translate }}</div>
-                            <div class="shipping-info">
-                                <span class="delivery-time">
-                                    <nb-icon icon="clock-outline"></nb-icon>
-                                    {{ 'checkout.shipping.estimatedDays' | translate:{ days: method.estimatedDays } }}
-                                </span>
-                                <span class="shipping-price">
-                                    <nb-icon icon="pricetags-outline"></nb-icon>
-                                    {{ method.price === 0 ? ('checkout.shipping.free' | translate) :
-                                    (method.price | currency:'':'':'1.0-0') + ' ' + ('products.huf' | translate) }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payment Methods Section -->
-            <div class="checkout-section payment-methods">
-                <h3>
-                    {{ 'checkout.payment.title' | translate }}
-                </h3>
-                <div class="payment-options">
-                    <div *ngFor="let method of paymentMethods" class="payment-option"
-                        [class.selected]="selectedPaymentMethod === method.id" (click)="selectPaymentMethod(method.id)">
-                        <div class="payment-icon">
-                            <nb-icon [icon]="method.icon"></nb-icon>
-                        </div>
-                        <div class="payment-details">
-                            <div class="payment-name">{{ method.name | translate}}</div>
-                            <div class="payment-description">{{ method.description | translate}}</div>
-                            <div class="payment-fee" *ngIf="method.additionalFee > 0">
-                                <nb-icon icon="alert-circle-outline"></nb-icon>
-                                {{ 'checkout.payment.additionalFee' | translate:{ fee: method.additionalFee } }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Coupon Section -->

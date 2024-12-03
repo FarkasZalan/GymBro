@@ -89,6 +89,37 @@
                             <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
                             {{ order.shippingAddress.taxNumber }}
                         </p>
+
+                        <!-- Billing Address Section -->
+                        <!-- billing same as shipping -->
+                        <div *ngIf="!order.shippingAddress.isBillingDifferentFromShipping && order.shippingAddress.companyName"
+                            class="billing-address-section">
+                            <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                            <p>{{ order.shippingAddress.street }} {{
+                                order.shippingAddress.streetType }}, {{
+                                order.shippingAddress.houseNumber }}</p>
+                            <p>{{ order.shippingAddress.floor ? (order.shippingAddress.floor +
+                                '/') : '' }}{{ order.shippingAddress.door }}</p>
+                            <p>{{ order.shippingAddress.city }}, {{
+                                order.shippingAddress.postalCode }}</p>
+                            <p>{{ order.shippingAddress.country }}</p>
+                        </div>
+
+                        <!-- billing different from shipping -->
+                        <div class="billing-address-section"
+                            *ngIf="order.shippingAddress.isBillingDifferentFromShipping && order.shippingAddress.companyName">
+                            <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                            <p>{{ order.shippingAddress.billingAddress.street }} {{
+                                order.shippingAddress.billingAddress.streetType }},
+                                {{ order.shippingAddress.billingAddress.houseNumber }}</p>
+                            <p>{{ order.shippingAddress.billingAddress.floor ?
+                                (order.shippingAddress.billingAddress.floor + '/') : ''
+                                }}{{ order.shippingAddress.billingAddress.door }}</p>
+                            <p>{{ order.shippingAddress.billingAddress.city }}, {{
+                                order.shippingAddress.billingAddress.postalCode }}
+                            </p>
+                            <p>{{ order.shippingAddress.billingAddress.country }}</p>
+                        </div>
                     </nb-card-body>
                 </nb-card>
             </div>

@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ShippingAddress } from './shipping-address.model';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateShippingAddressComponent } from './create-shipping-address/create-shipping-address.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../user.model';
 import { TranslateService } from '@ngx-translate/core';
-import { EditShippingAddressComponent } from './edit-shipping-address/edit-shipping-address.component';
-import { AddressTypeText } from '../profile-address-type-text';
+import { ShippingAddress } from './shipping-address.model';
+import { HandleShippingAddressComponent } from './handle-shipping-address/handle-shipping-address.component';
 
 @Component({
   selector: 'app-profile-shipping-address',
@@ -49,12 +47,17 @@ export class ProfileShippingAddressComponent implements OnInit {
 
   // Add a new address to the list
   goToAddNewAddress() {
-    this.dialog.open(CreateShippingAddressComponent);
+    this.dialog.open(HandleShippingAddressComponent, {
+      data: {
+        addresId: "", // pass the clicked address id and the current user id to the edit component
+        userId: this.userId
+      }
+    });
   }
 
   // Go to Edit Address
   editAddress(addresId: string) {
-    this.dialog.open(EditShippingAddressComponent, {
+    this.dialog.open(HandleShippingAddressComponent, {
       data: {
         addresId: addresId, // pass the clicked address id and the current user id to the edit component
         userId: this.userId
@@ -71,25 +74,8 @@ export class ProfileShippingAddressComponent implements OnInit {
       .subscribe((addresses: ShippingAddress[]) => {
         this.shippingAddresses = addresses;
 
-        // Subscribe to language changes and reapply translations
-        this.translate.stream([
-          'profileMenu.shippingAddressForm.home',
-          'profileMenu.shippingAddressForm.work'
-        ]).subscribe(translations => {
-          this.shippingAddresses = this.shippingAddresses.map((address: ShippingAddress) => {
-            // Check for "home", "otthon", "work", or "munkahely" and translate accordingly
-            if (address.addressType === AddressTypeText.HOME) {
-              address.addressName = translations['profileMenu.shippingAddressForm.home'];
-            }
-            if (address.addressType === AddressTypeText.WORK) {
-              address.addressName = translations['profileMenu.shippingAddressForm.work'];
-            }
-            return address;
-          });
-
-          // Sort the addresses after applying the translations
-          this.shippingAddresses = this.sortAddresses(this.shippingAddresses);
-        });
+        // Sort the addresses after applying the translations
+        this.shippingAddresses = this.sortAddresses(this.shippingAddresses);
       });
   }
 

@@ -17,14 +17,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProfileListComponent } from './profile-list/profile-list.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ChangeProfileComponent } from './profile-list/change-profile/change-profile.component';
-import { ProfileShippingAddressComponent } from './profile-shipping-address/profile-shipping-address.component';
+import { ProfileShippingAddressComponent } from './shipping-address/profile-shipping-address.component';
 import { ProfileComponent } from './/profile.component';
 import { ProfileOrdersComponent } from './profile-orders/profile-orders.component';
-import { CreateShippingAddressComponent } from './profile-shipping-address/create-shipping-address/create-shipping-address.component';
-import { ChangeDefaultAddressConfirmDialogComponent } from './profile-shipping-address/change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
-import { EditShippingAddressComponent } from './profile-shipping-address/edit-shipping-address/edit-shipping-address.component';
+import { ChangeDefaultAddressConfirmDialogComponent } from './shipping-address/change-default-address-confirm-dialog/change-default-address-confirm-dialog.component';
 import { LoyaltyProgramComponent } from '../loyalty-program/loyalty-program.component';
 import { SharedModule } from '../loading-spinner/shared.module';
+import { HandleShippingAddressComponent } from './shipping-address/handle-shipping-address/handle-shipping-address.component';
+
 
 @NgModule({
     imports: [
@@ -50,10 +50,9 @@ import { SharedModule } from '../loading-spinner/shared.module';
         ProfileShippingAddressComponent,
         ProfileComponent,
         ProfileOrdersComponent,
-        CreateShippingAddressComponent,
         ChangeDefaultAddressConfirmDialogComponent,
-        EditShippingAddressComponent,
-        LoyaltyProgramComponent
+        LoyaltyProgramComponent,
+        HandleShippingAddressComponent
     ],
     exports: [
         ProfileListComponent // To the admin profile module

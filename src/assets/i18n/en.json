@@ -144,6 +144,8 @@
          "setAsCompanyAddress": "Business customer",
          "companyName": "Company name",
          "taxNumber": "Tax number",
+         "billingAddressSameAsShipping": "The billing address is different from the shipping address",
+         "billingAddress": "Billing address",
          "addAddress": "Add address",
          "nameAlreadyExists": "Already have an address with this name",
          "changeDefaultAddressTitle": "Do you want to change this to your default address?",
@@ -524,7 +526,9 @@
       "items": "items",
       "item": "item",
       "addedToCart": "Added to Cart",
-      "goToCart": "Go to Cart"
+      "goToCart": "Go to Cart",
+      "showMore": "More products",
+      "showLess": "Less products"
    },
    "checkout": {
       "title": "Checkout",
@@ -532,6 +536,8 @@
       "availableRewards": "Coupons",
       "active": "Active",
       "removeReward": "Remove Coupon",
+      "minimum2000HufError": "The minimum order value is 2000 HUF!",
+      "billingAdddressTitle": "Billing address",
       "shippingAddress": {
          "title": "Shipping Address",
          "noAddress": "No shipping address selected",
@@ -560,7 +566,8 @@
          "placeOrder": "Place Order",
          "backToCart": "Back to Cart",
          "loginPrompt": "Please login to continue checkout",
-         "back": "Back"
+         "back": "Back",
+         "editCart": "Edit Cart"
       },
       "shipping": {
          "title": "Shipping Method",
@@ -597,8 +604,7 @@
          "noRewardsMessage": "Earn points with your purchases to unlock coupons and discounts!",
          "viewLoyaltyProgram": "View Loyalty Program"
       },
-      "discount": "Discount",
-      "minimum2000HufError": "The minimum order value is 2000 HUF!"
+      "discount": "Discount"
    },
    "loyaltyProgram": {
       "title": "Gym Bro Rewards",

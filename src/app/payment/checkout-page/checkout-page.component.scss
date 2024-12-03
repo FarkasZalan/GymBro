@@ -608,6 +608,10 @@
     }
 }
 
+.show-more-container {
+    text-align: center !important;
+}
+
 .no-address {
     background: var(--card-background-color);
     border-radius: 1rem;
@@ -1231,6 +1235,11 @@
     }
 }
 
+.billing-address {
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
 .shipping-address-form {
     background: var(--card-background-color);
     border-radius: 1rem;
@@ -1596,5 +1605,23 @@
             margin-top: 1rem !important;
             font-size: 1.1rem !important;
         }
+    }
+}
+
+.billing-address-section {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+
+    h5 {
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+        color: #0b8e92;
+    }
+
+    p {
+        margin: 0.25rem 0;
     }
 }

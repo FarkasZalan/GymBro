@@ -737,6 +737,33 @@ input[type="number"] {
     width: 800px;
     text-align: center;
     border-radius: 20px !important;
+
+    .emptyCardImage {
+        animation: bounce 2s ease-in-out infinite;
+    }
+}
+
+/* Bouncing effect for the alert icon */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .emptyCardImage {
