@@ -6,6 +6,7 @@ import { User } from './user.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthService } from '../auth/auth.service';
 import { LoadingService } from '../loading-spinner/loading.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -32,8 +33,8 @@ import { LoadingService } from '../loading-spinner/loading.service';
   ]
 })
 export class ProfileComponent implements OnInit {
-  isCollapsedProfileDetails = true;
-  isCollapsedOrders = false;
+  isCollapsedProfileDetails = false;
+  isCollapsedOrders = true;
   isCollapsedShippingAddress = true;
   isCollapsedPayemenetMethods = true;
   isCollapsedLoyaltyProgram = true;
@@ -46,11 +47,21 @@ export class ProfileComponent implements OnInit {
     private userNotificationService: UserNotificationService,
     public loadingService: LoadingService,
     private auth: AngularFireAuth,
+    private route: ActivatedRoute,
     private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.loadingService.withLoading(async () => {
+      this.route.queryParams.subscribe(params => {
+        if (params['openOrders'] === 'true') {
+          this.isCollapsedOrders = false;
+          this.isCollapsedProfileDetails = true;
+        } else if (params['openOrders'] === 'false') {
+          this.isCollapsedOrders = true;
+          this.isCollapsedProfileDetails = false;
+        }
+      });
       this.auth.authState.subscribe((userAuth) => {
         if (userAuth) {
           this.authService.getCurrentUser(userAuth.uid).subscribe((currentUser: User) => {

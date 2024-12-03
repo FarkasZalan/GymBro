@@ -353,4 +353,14 @@ export class HeaderComponent implements OnInit {
   navigateToAdminProfileToReviews() {
     this.router.navigate(['/admin-profile'], { queryParams: { openOrders: 'false' } });
   }
+
+  // Navigation method for user notifications
+  navigateToBasicUserToOrders() {
+    this.router.navigate(['/profile'], { queryParams: { openOrders: 'true' } });
+  }
+
+  // Method to hide the notification panel when it loses focus
+  onPanelBlur() {
+    this.showNotificationPanel = false;
+  }
 }

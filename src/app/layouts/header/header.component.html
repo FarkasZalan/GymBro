@@ -175,14 +175,16 @@
                     </div>
 
                     <!-- User Notification Panel -->
-                    <div class="notification-panel" *ngIf="showNotificationPanel && !user?.isAdmin" [@slideInOut]>
+                    <div class="notification-panel" *ngIf="showNotificationPanel && !user?.isAdmin" [@slideInOut]
+                        (focusout)="onPanelBlur()" tabindex="0">
                         <div class="notification-header">
                             <h3>{{ 'adminMenu.notifications.notifications' | translate }}</h3>
                         </div>
 
                         <div class="notification-content">
                             <!-- New Orders Section -->
-                            <div class="notification-item" *ngIf="(userOrdersCount$ | async) > 0" routerLink="/profile">
+                            <div class="notification-item" *ngIf="(userOrdersCount$ | async) > 0"
+                                (click)="navigateToBasicUserToOrders()">
                                 <i class="material-icons">shopping_basket</i>
                                 <div class="notification-details">
                                     <span class="notification-title">{{ 'adminMenu.notifications.newOrders' | translate

@@ -168,13 +168,13 @@
                             <!-- Billing address section -->
                             <!-- billing address same as shipping Checkbox -->
                             <div class="form-group">
-                                <label for="setToDefaultAddress" class="checkbox-container">
-                                    <label for="setToDefaultAddress">{{
+                                <label for="setToBillingAddress" class="checkbox-container">
+                                    <label for="setToBillingAddress">{{
                                         'profileMenu.shippingAddressForm.billingAddressSameAsShipping' |
                                         translate }}
                                     </label>
                                     <input type="checkbox" [(ngModel)]="shippingAddress.isBillingDifferentFromShipping"
-                                        name="setToDefaultAddress" id="setToDefaultAddress" #admin="ngModel">
+                                        name="setToBillingAddress" id="setToBillingAddress" #admin="ngModel">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>

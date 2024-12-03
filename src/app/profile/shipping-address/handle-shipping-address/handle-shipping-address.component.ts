@@ -185,36 +185,39 @@ export class HandleShippingAddressComponent {
       this.missingAddressNameError = true;
       return;
     } else {
-      let errorCheck: boolean = false;
+      await this.loadingService.withLoading(async () => {
+        let errorCheck: boolean = false;
 
-      // check what is the shipping address type, name because of the duplication check
-      if (this.selectedAddressType === AddressTypeText.HOME || this.shippingAddress.addressName === "Home" || this.shippingAddress.addressName === "Otthon") {
-        this.shippingAddress.addressType = AddressTypeText.HOME;
-        this.shippingAddress.addressName = AddressTypeText.HOME;
-        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-          "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.HOME, undefined, this.shippingAddressId
-        );
-      }
-      else if (this.selectedAddressType === AddressTypeText.WORK || this.shippingAddress.addressName === "Work" || this.shippingAddress.addressName === "Munkahely") {
-        this.shippingAddress.addressType = AddressTypeText.WORK;
-        this.shippingAddress.addressName = AddressTypeText.WORK;
-        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-          "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.WORK, undefined, this.shippingAddressId
-        );
-      }
-      else {
-        this.shippingAddress.addressType = AddressTypeText.OTHER;
-        errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
-          "users", this.userId, "shippingAddresses", "addressName", this.shippingAddress.addressName, undefined, this.shippingAddressId
-        );
-      }
+        // check what is the shipping address type, name because of the duplication check
+        if (this.selectedAddressType === AddressTypeText.HOME || this.shippingAddress.addressName === "Home" || this.shippingAddress.addressName === "Otthon") {
+          this.shippingAddress.addressType = AddressTypeText.HOME;
+          this.shippingAddress.addressName = AddressTypeText.HOME;
+          errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+            "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.HOME, undefined, this.shippingAddressId
+          );
+        }
+        else if (this.selectedAddressType === AddressTypeText.WORK || this.shippingAddress.addressName === "Work" || this.shippingAddress.addressName === "Munkahely") {
+          this.shippingAddress.addressType = AddressTypeText.WORK;
+          this.shippingAddress.addressName = AddressTypeText.WORK;
+          errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+            "users", this.userId, "shippingAddresses", "addressType", AddressTypeText.WORK, undefined, this.shippingAddressId
+          );
+        }
+        else {
+          this.shippingAddress.addressType = AddressTypeText.OTHER;
+          errorCheck = await this.documentumHandler.checkForDuplicationInnerCollection(
+            "users", this.userId, "shippingAddresses", "addressName", this.shippingAddress.addressName, undefined, this.shippingAddressId
+          );
+        }
 
-      if (errorCheck) {
-        this.errorMessage = true;
-        return; // Exit early if there's an error
-      } else {
-        this.errorMessage = false;
-      }
+        if (errorCheck) {
+          this.errorMessage = true;
+          return; // Exit early if there's an error
+        } else {
+          this.errorMessage = false;
+        }
+
+      });
 
       // check if a default address already has been added before
       let defaultCheck = false;
@@ -259,53 +262,53 @@ export class HandleShippingAddressComponent {
       }
 
       // Add the new address with isSetAsDefaultAddress set to true
-      try {
+      await this.loadingService.withLoading(async () => {
+        try {
+          if (this.isEditing) {
+            await this.db.collection("users").doc(this.userId).collection("shippingAddresses").doc(this.shippingAddressId).update(this.shippingAddress);
+          } else {
+            const documentRef = await this.db.collection("users").doc(this.data.userId).collection("shippingAddresses").add(this.shippingAddress);
+            await documentRef.update({ id: documentRef.id });
+          }
+          this.errorMessage = false;
+          this.missingAddressNameError = false;
 
-        if (this.isEditing) {
-          await this.db.collection("users").doc(this.userId).collection("shippingAddresses").doc(this.shippingAddressId).update(this.shippingAddress);
-        } else {
-          const documentRef = await this.db.collection("users").doc(this.data.userId).collection("shippingAddresses").add(this.shippingAddress);
-          await documentRef.update({ id: documentRef.id });
+          // Close dialog with success and the updated address
+          // This is used to update the address in the checkout page
+          this.dialogRef.close({
+            success: true,
+            address: {
+              id: this.shippingAddressId,
+              addressName: this.shippingAddress.addressName,
+              addressType: this.selectedAddressType,
+              country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.shippingAddressForm.value.country),
+              postalCode: this.shippingAddressForm.value.postalCode,
+              city: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.shippingAddressForm.value.city),
+              street: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.shippingAddressForm.value.streetName),
+              streetType: this.shippingAddressForm.value.streetType,
+              houseNumber: this.shippingAddressForm.value.houseNumber,
+              floor: this.shippingAddressForm.value.floor,
+              door: this.shippingAddressForm.value.door,
+              isSetAsDefaultAddress: this.isSetAsDefaultAddress,
+              taxNumber: this.taxNumber,
+              companyName: this.companyName,
+              isBillingDifferentFromShipping: this.shippingAddress.isBillingDifferentFromShipping,
+              billingAddress: this.shippingAddress.billingAddress
+            }
+          });
+
+          // Show success dialog
+          this.dialog.open(SuccessfullDialogComponent, {
+            data: {
+              text: SuccessFullDialogText.MODIFIED_TEXT,
+              needToGoPrevoiusPage: false
+            }
+          });
+        } catch (error) {
+          console.log(error);
+          this.errorMessage = true;
         }
-        this.errorMessage = false;
-        this.missingAddressNameError = false;
-
-        // Close dialog with success and the updated address
-        // This is used to update the address in the checkout page
-        this.dialogRef.close({
-          success: true,
-          address: {
-            id: this.shippingAddressId,
-            addressName: this.shippingAddress.addressName,
-            addressType: this.selectedAddressType,
-            country: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.shippingAddressForm.value.country),
-            postalCode: this.shippingAddressForm.value.postalCode,
-            city: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.shippingAddressForm.value.city),
-            street: this.documentumHandler.makeUpperCaseEveryWordFirstLetter(this.shippingAddressForm.value.streetName),
-            streetType: this.shippingAddressForm.value.streetType,
-            houseNumber: this.shippingAddressForm.value.houseNumber,
-            floor: this.shippingAddressForm.value.floor,
-            door: this.shippingAddressForm.value.door,
-            isSetAsDefaultAddress: this.isSetAsDefaultAddress,
-            taxNumber: this.taxNumber,
-            companyName: this.companyName,
-            isBillingDifferentFromShipping: this.shippingAddress.isBillingDifferentFromShipping,
-            billingAddress: this.shippingAddress.billingAddress
-          }
-        });
-
-        // Show success dialog
-        this.dialog.open(SuccessfullDialogComponent, {
-          data: {
-            text: SuccessFullDialogText.MODIFIED_TEXT,
-            needToGoPrevoiusPage: false
-          }
-        });
-      } catch (error) {
-        console.log(error);
-        this.errorMessage = true;
-      }
-
+      });
     }
 
   }

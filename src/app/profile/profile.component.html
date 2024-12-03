@@ -1,6 +1,25 @@
 <!-- Loading spinner -->
 <app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
 
+<!-- profile details -->
+<nb-card class="container-collapse-component">
+    <nb-card-body>
+        <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
+            <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
+                {{ 'profileMenu.prodilDetails' | translate }}
+            </h2>
+            <button class="toggle-button-collapse-component back-btn">
+                <span class="arrow" *ngIf="isCollapsedProfileDetails">▼</span>
+                <span class="arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
+            </button>
+        </div>
+
+        <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
+            <app-profile-list></app-profile-list>
+        </div>
+    </nb-card-body>
+</nb-card>
+
 <!-- orders -->
 <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
     [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
@@ -22,25 +41,6 @@
 
         <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
             <app-profile-orders></app-profile-orders>
-        </div>
-    </nb-card-body>
-</nb-card>
-
-<!-- profile details -->
-<nb-card class="container-collapse-component">
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
-                {{ 'profileMenu.prodilDetails' | translate }}
-            </h2>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="arrow" *ngIf="isCollapsedProfileDetails">▼</span>
-                <span class="arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
-            </button>
-        </div>
-
-        <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
-            <app-profile-list></app-profile-list>
         </div>
     </nb-card-body>
 </nb-card>

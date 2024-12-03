@@ -557,13 +557,15 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   async proceedToPayment() {
-    await this.loadingService.withLoading(async () => {
-      if (this.total < 2000) {
-        this.minimum200HufError = true;
-        return;
-      } else {
-        this.minimum200HufError = false;
+    // Check if the total is at least 2000
+    if (this.total < 2000) {
+      this.minimum200HufError = true;
+      return;
+    } else {
+      this.minimum200HufError = false;
 
+      // Start loading
+      await this.loadingService.withLoading(async () => {
         // Prepare order data
         this.order = {
           productList: this.cartItems,
@@ -589,89 +591,94 @@ export class CheckoutPageComponent implements OnInit {
           isModified: false
         };
 
-        // Save the order and payment method to localStorage
+        // Save the order ovject to localStorage to be able to retrieve it later if cancelled the stripe payment
         localStorage.setItem('savedOrder', JSON.stringify(this.order));
 
         // Check the payment method
         if (this.selectedPaymentMethod === ProductViewText.CHECKOUT_PAY_WITH_STRIPE) {
           const stripe = Stripe(environment.stripe.publishableKey);
 
-          await this.loadingService.withLoading(async () => {
-            this.functions.httpsCallable('stripeCheckout')({
-              cartItems: this.cartItems,
-              shippingCost: this.shipping,
-              activeReward: this.activeReward
-            }).subscribe((result: any) => {
-              if (result.error) {
+          /*
+          * Start loading and wait for the Stripe checkout process
+          * pass the cartItems, shippingCost and activeReward to the Stripe checkout function to display the Stripe checkout page
+          */
+          const result = await this.functions.httpsCallable('stripeCheckout')({
+            cartItems: this.cartItems,
+            shippingCost: this.shipping,
+            activeReward: this.activeReward
+          }).toPromise();
+
+          if (result.error) {
+            this.errorMessage = true;
+            console.error("Stripe error:", result.error.message);
+          } else {
+            // if there was no error then redirect to Stripe checkout page
+            await stripe.redirectToCheckout({
+              sessionId: result.id
+            }).then((redirectResult) => {
+              if (redirectResult.error) {
                 this.errorMessage = true;
-                console.error("Stripe error:", result.error.message);
-              } else {
-                stripe.redirectToCheckout({
-                  sessionId: result.id
-                }).then((redirectResult) => {
-                  if (redirectResult.error) {
-                    this.errorMessage = true;
-                    console.error("Stripe redirection error:", redirectResult.error.message);
-                  }
-                });
+                console.error("Stripe redirection error:", redirectResult.error.message);
               }
             });
-          });
+          }
         } else {
           // Handle non-Stripe payment methods
-          this.paymentSuccess = true
-          this.addOrderToFirebase();
+          this.paymentSuccess = true;
+          await this.addOrderToFirebase(); // Ensure this is awaited
         }
-      }
-    });
+      });
+    }
   }
 
   async addOrderToFirebase() {
     if (this.paymentSuccess) {
-      this.order.orderDate = Timestamp.now();
-      // Calculate loyalty points
-      let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
+      await this.loadingService.withLoading(async () => {
+        this.order.orderDate = Timestamp.now();
+        // Calculate loyalty points
+        let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
 
-      if (this.activeReward) {
-        if (this.activeReward.id === RewardText.Discount10Id) {
-          loyaltyPoints = loyaltyPoints - 300;
-        } else if (this.activeReward.id === RewardText.Discount20Id) {
-          loyaltyPoints = loyaltyPoints - 600;
-        } else if (this.activeReward.id === RewardText.Discount30Id) {
-          loyaltyPoints = loyaltyPoints - 700;
-        } else if (this.activeReward.id === RewardText.FreeShippingId) {
-          loyaltyPoints = loyaltyPoints - 850;
-        } else if (this.activeReward.id === RewardText.FiveThousandHufDiscountId) {
-          loyaltyPoints = loyaltyPoints - 1500;
-        }
-      }
-
-      // Add the new order
-      try {
-        const documentumRef = await this.db.collection("orders").add(this.order);
-        // id the document created then save the document id in the field
-        await documentumRef.update({ id: documentumRef.id });
-
-        if (this.userLoggedIn) {
-          await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
-        }
-
-        // if everything was succes then open successfull dialog
-        localStorage.removeItem('savedOrder');
-        const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
-          data: {
-            text: SuccessFullDialogText.SUCCESSFULL_PAYMENT,
-            needToGoPrevoiusPage: false
+        if (this.activeReward) {
+          if (this.activeReward.id === RewardText.Discount10Id) {
+            loyaltyPoints = loyaltyPoints - 300;
+          } else if (this.activeReward.id === RewardText.Discount20Id) {
+            loyaltyPoints = loyaltyPoints - 600;
+          } else if (this.activeReward.id === RewardText.Discount30Id) {
+            loyaltyPoints = loyaltyPoints - 700;
+          } else if (this.activeReward.id === RewardText.FreeShippingId) {
+            loyaltyPoints = loyaltyPoints - 850;
+          } else if (this.activeReward.id === RewardText.FiveThousandHufDiscountId) {
+            loyaltyPoints = loyaltyPoints - 1500;
           }
-        });
+        }
 
-        dialogRef.afterClosed().subscribe(() => {
-          this.cartService.clearCart();
-          this.router.navigate(['/receipt', documentumRef.id], { queryParams: { fromCheckout: 'true' } });
-        });
-      } catch (error) {
-        this.errorMessage = true;
-      }
+        // Add the new order
+        try {
+          const documentumRef = await this.db.collection("orders").add(this.order);
+          // id the document created then save the document id in the field
+          await documentumRef.update({ id: documentumRef.id });
+
+          if (this.userLoggedIn) {
+            await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
+          }
+
+          // if everything was succes then open successfull dialog
+          localStorage.removeItem('savedOrder');
+          const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
+            data: {
+              text: SuccessFullDialogText.SUCCESSFULL_PAYMENT,
+              needToGoPrevoiusPage: false
+            }
+          });
+
+          dialogRef.afterClosed().subscribe(() => {
+            this.cartService.clearCart();
+            this.router.navigate(['/receipt', documentumRef.id], { queryParams: { fromCheckout: 'true' } });
+          });
+        } catch (error) {
+          this.errorMessage = true;
+        }
+      });
     }
   }
 

@@ -53,6 +53,11 @@ export const stripeCheckout = onCall(
         }
       }
 
+      /*
+      * it's an object that contains the details of the payment intent (cart items, shipping cost, payment method, etc.)
+      * and this object will be returned to the stripe checkout page
+      * it's necessary to start the checkout session
+      */
       const paymentIntent = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: cartItems.map((item: any) => ({
