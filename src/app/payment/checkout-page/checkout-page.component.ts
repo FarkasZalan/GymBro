@@ -749,8 +749,8 @@ export class CheckoutPageComponent implements OnInit {
         </tr>
       ` : ''}
 
-${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) ? `
-<tr>
+      ${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) ? `
+      <tr>
           <td style="padding: 10px;">
             <h3 style="color: #0b8e92;">${shippingAddressText}</h3>
               <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
@@ -758,7 +758,7 @@ ${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_
               <p>${this.order.shippingAddress.country}</p>
            </td>
         </tr>
-` : ``}
+      ` : ``}
 
         <tr>
             <td style="padding: 20px;">

@@ -10,6 +10,7 @@ import { DeleteConfirmationDialogComponent } from '../../../delete-confirmation-
 import { LoadingService } from '../../../loading-spinner/loading.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { TranslateService } from '@ngx-translate/core';
+import { ProductViewText } from '../../product-management/product-view-texts';
 
 @Component({
   selector: 'app-order-list',
@@ -50,6 +51,9 @@ export class OrderListComponent implements OnInit {
   totalText = this.translate.instant('receipt.total');
   priceUnit = this.translate.instant('products.huf');
   orderStatusTitle = this.translate.instant('orders.orderStatus');
+  companyNameText = this.translate.instant('profileMenu.shippingAddressForm.companyName');
+  taxNumber = this.translate.instant('profileMenu.shippingAddressForm.taxNumber');
+  billingAddressText = this.translate.instant('profileMenu.shippingAddressForm.billingAddress');
   orderStatusText = "";
 
   constructor(
@@ -123,7 +127,7 @@ export class OrderListComponent implements OnInit {
         // send the confirmation email to order status changed
         return await this.sendEmail({
           userEmail: order.email,
-          subject: this.statusChangedText,
+          subject: this.orderDeletedText,
           template: this.emailTemplate(order, false)
         });
       });
@@ -142,6 +146,7 @@ export class OrderListComponent implements OnInit {
     await sendEmailFunction(emailData).toPromise();
   }
 
+  // html template of the email
   emailTemplate(order: Order, modifiedStatus: boolean) {
     return `
         <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
@@ -161,14 +166,48 @@ export class OrderListComponent implements OnInit {
                 <p><strong>${this.phoneText}:</strong> ${order.phone}</p>
             </td>
         </tr>
+              ${order.shippingAddress.companyName !== '' ? `
         <tr>
-            <td style="padding: 10px;">
-                <h3 style="color: #0b8e92;">${this.shippingAddressText}</h3>
-                <p>${order.shippingAddress.street} ${order.shippingAddress.streetType}, ${order.shippingAddress.houseNumber}</p>
-                <p>${order.shippingAddress.city}, ${order.shippingAddress.postalCode}</p>
-                <p>${order.shippingAddress.country}</p>
-            </td>
+          <td style="padding: 10px;">
+            <h3 style="color: #0b8e92;">${this.billingAddressText}</h3>
+               ${order.shippingAddress.isBillingDifferentFromShipping ? `
+              <p>${order.shippingAddress.billingAddress.street} ${order.shippingAddress.billingAddress.streetType}, ${order.shippingAddress.billingAddress.houseNumber}</p>
+              <p>${order.shippingAddress.billingAddress.city}, ${order.shippingAddress.billingAddress.postalCode}</p>
+              <p>${order.shippingAddress.billingAddress.country}</p>
+              <p><strong>${this.companyNameText}:</strong> ${order.shippingAddress.companyName}</p>
+              <p><strong>${this.taxNumber}:</strong> ${order.shippingAddress.taxNumber}</p>
+          ` : `
+              <p>${order.shippingAddress.street} ${order.shippingAddress.streetType}, ${order.shippingAddress.houseNumber}</p>
+              <p>${order.shippingAddress.city}, ${order.shippingAddress.postalCode}</p>
+              <p>${order.shippingAddress.country}</p>
+              <p><strong>${this.companyNameText}:</strong> ${order.shippingAddress.companyName}</p>
+              <p><strong>${this.taxNumber}:</strong> ${order.shippingAddress.taxNumber}</p>
+            `}
+           </td>
         </tr>
+      ` : ''}
+
+      ${order.shippingAddress.companyName === '' && order.shippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? `
+      <tr>
+          <td style="padding: 10px;">
+            <h3 style="color: #0b8e92;">${this.billingAddressText}</h3>
+              <p>${order.shippingAddress.street} ${order.shippingAddress.streetType}, ${order.shippingAddress.houseNumber}</p>
+              <p>${order.shippingAddress.city}, ${order.shippingAddress.postalCode}</p>
+              <p>${order.shippingAddress.country}</p>
+           </td>
+        </tr>
+      ` : ''}
+
+      ${(order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) ? `
+      <tr>
+          <td style="padding: 10px;">
+            <h3 style="color: #0b8e92;">${this.shippingAddressText}</h3>
+              <p>${order.shippingAddress.street} ${order.shippingAddress.streetType}, ${order.shippingAddress.houseNumber}</p>
+              <p>${order.shippingAddress.city}, ${order.shippingAddress.postalCode}</p>
+              <p>${order.shippingAddress.country}</p>
+           </td>
+        </tr>
+      ` : ``}
         <tr>
             <td style="padding: 20px;">
                 <h3 style="color: #0b8e92;">${this.orderItemsText}</h3>
