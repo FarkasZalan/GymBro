@@ -253,12 +253,12 @@ export class HandleShippingAddressComponent {
       }
 
       // Prepare additional fields
-      if (this.shippingAddressForm.value.taxNumber !== undefined && this.shippingAddressForm.value.taxNumber !== null) {
-        this.taxNumber = this.shippingAddressForm.value.taxNumber;
+      if (this.shippingAddress.taxNumber === undefined) {
+        this.shippingAddress.taxNumber = '';
       }
 
-      if (this.shippingAddressForm.value.companyName !== undefined && this.shippingAddressForm.value.companyName !== null) {
-        this.companyName = this.shippingAddressForm.value.companyName;
+      if (this.shippingAddress.companyName === undefined) {
+        this.shippingAddress.companyName = '';
       }
 
       // Add the new address with isSetAsDefaultAddress set to true
@@ -290,8 +290,8 @@ export class HandleShippingAddressComponent {
               floor: this.shippingAddressForm.value.floor,
               door: this.shippingAddressForm.value.door,
               isSetAsDefaultAddress: this.isSetAsDefaultAddress,
-              taxNumber: this.taxNumber,
-              companyName: this.companyName,
+              taxNumber: this.shippingAddress.taxNumber,
+              companyName: this.shippingAddress.companyName,
               isBillingDifferentFromShipping: this.shippingAddress.isBillingDifferentFromShipping,
               billingAddress: this.shippingAddress.billingAddress
             }

@@ -17,7 +17,7 @@ import { RewardText } from '../../loyalty-program/reward-text';
 import { Reward } from '../../loyalty-program/reward.model';
 import { Order } from '../order.model';
 import { OrderStatus } from '../order-status';
-import { Timestamp } from 'firebase/firestore';
+import { or, Timestamp } from 'firebase/firestore';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { LoadingService } from '../../loading-spinner/loading.service';
@@ -678,6 +678,9 @@ export class CheckoutPageComponent implements OnInit {
             const emailText = this.translate.instant('receipt.email');
             const phoneText = this.translate.instant('receipt.phone');
             const shippingAddressText = this.translate.instant('receipt.shippingAddress');
+            const companyNameText = this.translate.instant('profileMenu.shippingAddressForm.companyName');
+            const taxNumber = this.translate.instant('profileMenu.shippingAddressForm.taxNumber');
+            const billingAddressText = this.translate.instant('profileMenu.shippingAddressForm.billingAddress');
             const orderItemsText = this.translate.instant('receipt.orderItems');
             const paymentSummaryText = this.translate.instant('receipt.paymentSummary');
             const subtotalText = this.translate.instant('receipt.subtotal');
@@ -713,14 +716,50 @@ export class CheckoutPageComponent implements OnInit {
                 <p><strong>${phoneText}:</strong> ${this.order.phone}</p>
             </td>
         </tr>
+
+      ${this.order.shippingAddress.companyName !== '' ? `
         <tr>
-            <td style="padding: 10px;">
-                <h3 style="color: #0b8e92;">${shippingAddressText}</h3>
-                <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
-                <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
-                <p>${this.order.shippingAddress.country}</p>
-            </td>
+          <td style="padding: 10px;">
+            <h3 style="color: #0b8e92;">${billingAddressText}</h3>
+               ${this.order.shippingAddress.isBillingDifferentFromShipping ? `
+              <p>${this.order.shippingAddress.billingAddress.street} ${this.order.shippingAddress.billingAddress.streetType}, ${this.order.shippingAddress.billingAddress.houseNumber}</p>
+              <p>${this.order.shippingAddress.billingAddress.city}, ${this.order.shippingAddress.billingAddress.postalCode}</p>
+              <p>${this.order.shippingAddress.billingAddress.country}</p>
+              <p><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
+              <p><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
+          ` : `
+              <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+              <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+              <p>${this.order.shippingAddress.country}</p>
+              <p><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
+              <p><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
+            `}
+           </td>
         </tr>
+      ` : ''}
+
+      ${this.order.shippingAddress.companyName === '' && this.order.shippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? `
+      <tr>
+          <td style="padding: 10px;">
+            <h3 style="color: #0b8e92;">${billingAddressText}</h3>
+              <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+              <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+              <p>${this.order.shippingAddress.country}</p>
+           </td>
+        </tr>
+      ` : ''}
+
+${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) ? `
+<tr>
+          <td style="padding: 10px;">
+            <h3 style="color: #0b8e92;">${shippingAddressText}</h3>
+              <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+              <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+              <p>${this.order.shippingAddress.country}</p>
+           </td>
+        </tr>
+` : ``}
+
         <tr>
             <td style="padding: 20px;">
                 <h3 style="color: #0b8e92;">${orderItemsText}</h3>
