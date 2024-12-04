@@ -10,6 +10,7 @@ const stripe = new Stripe(environment.stripe.secretKey);
 // The Firebase Admin SDK to access the Firebase Realtime Database
 admin.initializeApp();
 
+// Stripe Checkout function
 export const stripeCheckout = onCall(
   { region: 'europe-central2' },
   async (request) => {
@@ -103,12 +104,13 @@ export const stripeCheckout = onCall(
 );
 
 
-
+// Send email function
 export const sendEmail = onCall(
   { region: 'europe-central2' },
   async (request) => {
     const { userEmail, subject, template } = request.data;
     try {
+      // Set up mail options including sender, recipient, subject, and HTML template
       const mailOptions = {
         from: 'Gym Bro <noreply.gymbro@gmail.com>',
         to: userEmail,
@@ -116,19 +118,20 @@ export const sendEmail = onCall(
         html: template
       };
 
+      // Create a transporter object using SMTP transport
       const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
-        secure: true,
+        secure: true, // Use SSL
         auth: {
           user: 'noreply.gymbro@gmail.com',
           pass: 'raiv blbw euqz sldz'
         }
       });
-      // returning result
+
+      // Send the email and return the result
       return transporter.sendMail(mailOptions, (error, data) => {
         if (error) {
-          console.log(error)
           return { success: false }
         }
         return { success: true }
