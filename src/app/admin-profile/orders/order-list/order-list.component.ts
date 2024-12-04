@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteConfirmationText } from '../../../delete-confirmation-dialog/delete-text';
 import { DeleteConfirmationDialogComponent } from '../../../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { LoadingService } from '../../../loading-spinner/loading.service';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-list',
@@ -28,11 +30,35 @@ export class OrderListComponent implements OnInit {
   initialOrderCount: number = 5;
   showAllOrders: boolean = false;
 
+  // Get translations using translate.instant
+  statusChangedText = this.translate.instant('receipt.orderStatusChanged');
+  orderDeletedText = this.translate.instant('receipt.orderDeleted');
+  orderIdText = this.translate.instant('receipt.orderId');
+  dateText = this.translate.instant('receipt.date');
+  customerDetailsText = this.translate.instant('receipt.customerDetails');
+  nameText = this.translate.instant('receipt.name');
+  quantity = this.translate.instant('products.quantity');
+  emailText = this.translate.instant('receipt.email');
+  phoneText = this.translate.instant('receipt.phone');
+  shippingAddressText = this.translate.instant('receipt.shippingAddress');
+  orderItemsText = this.translate.instant('receipt.orderItems');
+  paymentSummaryText = this.translate.instant('receipt.paymentSummary');
+  subtotalText = this.translate.instant('receipt.subtotal');
+  shippingText = this.translate.instant('receipt.shipping');
+  discountText = this.translate.instant('checkout.discount');
+  cashOnDeliveryText = this.translate.instant('checkout.orderSummary.paymentFee');
+  totalText = this.translate.instant('receipt.total');
+  priceUnit = this.translate.instant('products.huf');
+  orderStatusTitle = this.translate.instant('orders.orderStatus');
+  orderStatusText = "";
+
   constructor(
     private adminService: AdminService,
     private router: Router,
     private dialog: MatDialog,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    private functions: AngularFireFunctions,
+    private translate: TranslateService
   ) { }
 
   async ngOnInit() {
@@ -69,6 +95,16 @@ export class OrderListComponent implements OnInit {
 
   async updateOrderStatus(order: Order, newStatus: OrderStatus) {
     await this.adminService.updateOrderStatus(order.id, newStatus);
+
+    if (newStatus !== order.orderStatus) {
+      this.orderStatusText = this.translate.instant(`${order.orderStatus}`);
+      // send the confirmation email to order status changed
+      return await this.sendEmail({
+        userEmail: order.email,
+        subject: this.statusChangedText,
+        template: this.emailTemplate(order, true)
+      });
+    }
   }
 
   async cancelOrder(order: Order) {
@@ -82,8 +118,94 @@ export class OrderListComponent implements OnInit {
     if (result) {
       await this.loadingService.withLoading(async () => {
         await this.updateOrderStatus(order, OrderStatus.CANCELLED);
+
+        this.orderStatusText = this.translate.instant(`${order.orderStatus}`);
+        // send the confirmation email to order status changed
+        return await this.sendEmail({
+          userEmail: order.email,
+          subject: this.statusChangedText,
+          template: this.emailTemplate(order, false)
+        });
       });
     }
+  }
+
+  // Function to call the sendEmail cloud function
+  async sendEmail(
+    emailData: {
+      userEmail: string;
+      subject: string;
+      template: string;
+    }
+  ) {
+    const sendEmailFunction = this.functions.httpsCallable('sendEmail');
+    await sendEmailFunction(emailData).toPromise();
+  }
+
+  emailTemplate(order: Order, modifiedStatus: boolean) {
+    return `
+        <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
+        <tr>
+            <td style="padding: 20px; text-align: center;">
+                <h2 style="color: #0b8e92;">${modifiedStatus ? this.statusChangedText : this.orderDeletedText}</h2>
+                <h3>${this.orderIdText}: #${order.id}</h3>
+                <p><strong>${this.dateText}:</strong> ${order.orderDate.toDate().toLocaleDateString()}</p>
+                ${modifiedStatus ? `<p style="color: #0b8e92; font-size: 1.3em;"><strong>${this.orderStatusTitle}</strong> ${this.orderStatusText}</p>` : ""}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">
+                <h3 style="color: #0b8e92;">${this.customerDetailsText}</h3>
+                <p><strong>${this.nameText}:</strong> ${order.firstName} ${order.lastName}</p>
+                <p><strong>${this.emailText}:</strong> ${order.email}</p>
+                <p><strong>${this.phoneText}:</strong> ${order.phone}</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">
+                <h3 style="color: #0b8e92;">${this.shippingAddressText}</h3>
+                <p>${order.shippingAddress.street} ${order.shippingAddress.streetType}, ${order.shippingAddress.houseNumber}</p>
+                <p>${order.shippingAddress.city}, ${order.shippingAddress.postalCode}</p>
+                <p>${order.shippingAddress.country}</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px;">
+                <h3 style="color: #0b8e92;">${this.orderItemsText}</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tbody>
+                        ${order.productList.map(item => `
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px; width: 80px;">
+                                    <img src="${item.selectedPrice.productImage}" 
+                                         alt="${item.productName}" 
+                                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+                                </td>
+                                <td style="padding: 10px;">
+                                    <strong>${item.productName}</strong>
+                                    <br><span>${this.quantity}: ${item.quantity}</span>
+                                </td>
+                                <td style="padding: 10px; text-align: right;">
+                                    ${item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice} ${this.priceUnit}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px;">
+                <h3 style="color: #0b8e92;">${this.paymentSummaryText}</h3>
+                <p><strong>${this.subtotalText}:</strong> ${order.subtotal} ${this.priceUnit}</p>
+                 ${order.shippingCost > 0 ? `<p><strong>${this.shippingText}:</strong> ${order.shippingCost} ${this.priceUnit}</p>` : ''}
+                 ${order.cashOnDeliveryAmount > 0 ? `<p><strong>${this.cashOnDeliveryText}:</strong> ${order.cashOnDeliveryAmount} ${this.priceUnit}</p>` : ''}
+                 ${order.discountAmount > 0 ? `<p><strong>${this.discountText}:</strong> -${Math.floor(order.discountAmount)} ${this.priceUnit}</p>` : ''}
+                <p><strong>${this.totalText}:</strong> ${order.totalPrice} ${this.priceUnit}</p>
+            </td>
+        </tr>
+    </table>
+  `
   }
 
   getProgressClass(order: Order): string {

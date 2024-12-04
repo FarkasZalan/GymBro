@@ -697,7 +697,9 @@
       "loyaltyPointsEarned": "You earned {{points}} loyalty points with this order!",
       "thankYou": "Thank you for your purchase!",
       "paidVia": "Paid via",
-      "printReceipt": "Print Receipt"
+      "printReceipt": "Print Receipt",
+      "orderStatusChanged": "Order status changed",
+      "orderDeleted": "Order deleted"
    },
    "orders": {
       "noOrdersYet": "You don't have any orders yet",

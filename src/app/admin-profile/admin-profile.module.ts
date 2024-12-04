@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -39,6 +39,7 @@ import { HandleOrganicFoodComponent } from './product-management/product-actions
 import { HandleReviewsComponent } from './product-management/product-actions/handle-reviews/handle-reviews.component';
 import { OrdersComponent } from './orders/orders.component';
 import { SharedModule } from '../loading-spinner/shared.module';
+import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functions';
 
 @NgModule({
     imports: [
@@ -61,7 +62,10 @@ import { SharedModule } from '../loading-spinner/shared.module';
         MatInputModule,
         MatButtonModule,
         NgxEditorModule,
-        SharedModule
+        SharedModule,
+
+        // Firebase functions
+        AngularFireFunctionsModule
     ],
     declarations: [
         // Declaring components that belong to the Profile module
@@ -86,8 +90,13 @@ import { SharedModule } from '../loading-spinner/shared.module';
         UserBlogListComponent,
         FilterPageComponent,
         HandleReviewsComponent,
-        OrdersComponent,
+        OrdersComponent
     ],
+    providers: [
+        CurrencyPipe,
+        // Firebase functions region
+        { provide: REGION, useValue: 'europe-central2' }
+    ]
 })
 export class AdminProfileModule {
 }

@@ -45,6 +45,8 @@ import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functio
         MatButtonModule,
         NgxEditorModule,
         SharedModule,
+
+        // Firebase functions
         AngularFireFunctionsModule,
     ],
     declarations: [

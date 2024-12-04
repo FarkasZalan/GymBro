@@ -698,7 +698,9 @@
                 "loyaltyPointsEarned": "Ezzel a rendeléssel {{points}} hűségpontot szereztél!",
                 "thankYou": "Köszönjük a vásárlást!",
                 "paidVia": "Fizetési mód",
-                "printReceipt": "Nyugta nyomtatása"
+                "printReceipt": "Nyugta nyomtatása",
+                "orderStatusChanged": "A rendelés státusza megváltozott",
+                "orderDeleted": "A rendelés visszamondásra került"
         },
         "orders": {
                 "noOrdersYet": "Még nincsenek rendeléseid",
