@@ -130,10 +130,7 @@
             <div class="items-list">
                 <nb-card class="cart-item" *ngFor="let item of order.productList" (click)="navigateToProduct(item)">
                     <div class="item-image">
-                        <img *ngIf="item.selectedPrice.productImage" [src]="item.selectedPrice.productImage"
-                            [alt]="item.productName">
-                        <img *ngIf="!item.selectedPrice.productImage" src="../../../assets/images/gym-bro-logo.png"
-                            alt="Product Image">
+                        <img [src]="item.selectedPrice.productImage" [alt]="item.productName">
                     </div>
 
                     <div class="item-details">

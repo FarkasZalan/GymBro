@@ -23,6 +23,7 @@ import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialo
 import { LoadingService } from '../../loading-spinner/loading.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { environment } from '../../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 // Declare the Stripe global variable, which is part of the Stripe.js library,
 // ensuring TypeScript recognizes it as an external object and avoids errors
@@ -229,6 +230,7 @@ export class CheckoutPageComponent implements OnInit {
     public loadingService: LoadingService,
     private functions: AngularFireFunctions,
     private route: ActivatedRoute,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -657,13 +659,111 @@ export class CheckoutPageComponent implements OnInit {
           const documentumRef = await this.db.collection("orders").add(this.order);
           // id the document created then save the document id in the field
           await documentumRef.update({ id: documentumRef.id });
+          this.order.id = documentumRef.id;
 
           if (this.userLoggedIn) {
             await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
           }
 
-          // if everything was succes then open successfull dialog
+          // Send confirmation email with loading spinner
+          await this.loadingService.withLoading(async () => {
+
+            // Get translations using translate.instant
+            const orderConfirmation = this.translate.instant('receipt.title');
+            const orderIdText = this.translate.instant('receipt.orderId');
+            const dateText = this.translate.instant('receipt.date');
+            const customerDetailsText = this.translate.instant('receipt.customerDetails');
+            const nameText = this.translate.instant('receipt.name');
+            const quantity = this.translate.instant('products.quantity');
+            const emailText = this.translate.instant('receipt.email');
+            const phoneText = this.translate.instant('receipt.phone');
+            const shippingAddressText = this.translate.instant('receipt.shippingAddress');
+            const orderItemsText = this.translate.instant('receipt.orderItems');
+            const paymentSummaryText = this.translate.instant('receipt.paymentSummary');
+            const subtotalText = this.translate.instant('receipt.subtotal');
+            const shippingText = this.translate.instant('receipt.shipping');
+            const discountText = this.translate.instant('checkout.discount');
+            const cashOnDeliveryText = this.translate.instant('checkout.orderSummary.paymentFee');
+            const totalText = this.translate.instant('receipt.total');
+            const thankYouText = this.translate.instant('receipt.thankYou');
+            const priceUnit = this.translate.instant('products.huf');
+            const orderStatusTitle = this.translate.instant('orders.orderStatus');
+            const orderStatusText = this.translate.instant(`${this.order.orderStatus}`);
+
+            // send the confirmation email
+            return await this.sendEmail({
+              userEmail: this.currentUser?.email || this.guestEmail,
+              subject: orderConfirmation,
+              template: `
+        <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
+        <tr>
+            <td style="padding: 20px; text-align: center;">
+                <h2 style="color: #0b8e92;">${orderConfirmation}</h2>
+                <h3>${orderIdText}: #${this.order.id}</h3>
+                <p><strong>${dateText}:</strong> ${this.order.orderDate.toDate().toLocaleDateString()}</p>
+                <p style="color: #0b8e92; font-size: 1.3em;"><strong>${orderStatusTitle}</strong> ${orderStatusText}</p>
+                <p style="text-align: center; margin-top: 30px; font-size: 1.5em;">${thankYouText}</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">
+                <h3 style="color: #0b8e92;">${customerDetailsText}</h3>
+                <p><strong>${nameText}:</strong> ${this.order.firstName} ${this.order.lastName}</p>
+                <p><strong>${emailText}:</strong> ${this.order.email}</p>
+                <p><strong>${phoneText}:</strong> ${this.order.phone}</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">
+                <h3 style="color: #0b8e92;">${shippingAddressText}</h3>
+                <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+                <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+                <p>${this.order.shippingAddress.country}</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px;">
+                <h3 style="color: #0b8e92;">${orderItemsText}</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tbody>
+                        ${this.order.productList.map(item => `
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px; width: 80px;">
+                                    <img src="${item.selectedPrice.productImage}" 
+                                         alt="${item.productName}" 
+                                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+                                </td>
+                                <td style="padding: 10px;">
+                                    <strong>${item.productName}</strong>
+                                    <br><span>${quantity}: ${item.quantity}</span>
+                                </td>
+                                <td style="padding: 10px; text-align: right;">
+                                    ${item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice} ${priceUnit}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px;">
+                <h3 style="color: #0b8e92;">${paymentSummaryText}</h3>
+                <p><strong>${subtotalText}:</strong> ${this.order.subtotal} ${priceUnit}</p>
+                 ${this.order.shippingCost > 0 ? `<p><strong>${shippingText}:</strong> ${this.order.shippingCost} ${priceUnit}</p>` : ''}
+                 ${this.order.cashOnDeliveryAmount > 0 ? `<p><strong>${cashOnDeliveryText}:</strong> ${this.order.cashOnDeliveryAmount} ${priceUnit}</p>` : ''}
+                 ${this.order.discountAmount > 0 ? `<p><strong>${discountText}:</strong> -${Math.floor(this.order.discountAmount)} ${priceUnit}</p>` : ''}
+                <p><strong>${totalText}:</strong> ${this.order.totalPrice} ${priceUnit}</p>
+            </td>
+        </tr>
+    </table>
+  `
+            });
+          });
+
+          // if everything was successful then open successful dialog
           localStorage.removeItem('savedOrder');
+
           const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
             data: {
               text: SuccessFullDialogText.SUCCESSFULL_PAYMENT,
@@ -680,6 +780,18 @@ export class CheckoutPageComponent implements OnInit {
         }
       });
     }
+  }
+
+  // Function to call the sendEmail cloud function
+  async sendEmail(
+    emailData: {
+      userEmail: string;
+      subject: string;
+      template: string;
+    }
+  ) {
+    const sendEmailFunction = this.functions.httpsCallable('sendEmail');
+    await sendEmailFunction(emailData).toPromise();
   }
 
   back() {

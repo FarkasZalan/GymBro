@@ -708,7 +708,8 @@
       "showLess": "Show Less",
       "cancelOrderText": "Are you sure you want to cancel this order?",
       "cancelOrder": "Cancel Order",
-      "modified": "Modified"
+      "modified": "Modified",
+      "orderStatus": "Order Status:"
    },
    "orderStatus": {
       "PROCESSING": "Processing",

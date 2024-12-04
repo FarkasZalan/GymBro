@@ -3,9 +3,11 @@ import Stripe from "stripe";
 import { onCall } from 'firebase-functions/v2/https';
 import { environment } from "./envinronment";
 import { publicEnvironment } from "./envinronment-public";
+import * as nodemailer from 'nodemailer';
 
 const stripe = new Stripe(environment.stripe.secretKey);
 
+// The Firebase Admin SDK to access the Firebase Realtime Database
 admin.initializeApp();
 
 export const stripeCheckout = onCall(
@@ -100,3 +102,39 @@ export const stripeCheckout = onCall(
   }
 );
 
+
+
+export const sendEmail = onCall(
+  { region: 'europe-central2' },
+  async (request) => {
+    const { userEmail, subject, template } = request.data;
+    try {
+      const mailOptions = {
+        from: 'Gym Bro <noreply.gymbro@gmail.com>',
+        to: userEmail,
+        subject: subject,
+        html: template
+      };
+
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: 'noreply.gymbro@gmail.com',
+          pass: 'raiv blbw euqz sldz'
+        }
+      });
+      // returning result
+      return transporter.sendMail(mailOptions, (error, data) => {
+        if (error) {
+          console.log(error)
+          return { success: false }
+        }
+        return { success: true }
+      });
+    } catch (error) {
+      return { success: false }
+    }
+  }
+);
