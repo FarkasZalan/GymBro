@@ -18,6 +18,7 @@ import { RegisterComponent } from './register/register.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { TermsComponent } from './register/terms/terms.component';
 import { SharedModule } from '../loading-spinner/shared.module';
+import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functions';
 
 @NgModule({
     imports: [
@@ -31,7 +32,10 @@ import { SharedModule } from '../loading-spinner/shared.module';
         AuthRoutingModule,
         NbAuthModule,
         TranslateModule,
-        SharedModule
+        SharedModule,
+
+        // Firebase functions
+        AngularFireFunctionsModule
     ],
     declarations: [
         LoginComponent,
@@ -40,6 +44,10 @@ import { SharedModule } from '../loading-spinner/shared.module';
         SuccessfullDialogComponent,
         RegisterComponent,
         TermsComponent,
+    ],
+    providers: [
+        // Firebase functions region
+        { provide: REGION, useValue: 'europe-central2' }
     ],
 })
 export class AuthModule {

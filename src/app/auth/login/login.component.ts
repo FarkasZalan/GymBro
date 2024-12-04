@@ -9,6 +9,8 @@ import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LoadingService } from '../../loading-spinner/loading.service';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -30,13 +32,16 @@ export class LoginComponent {
   password = "";
   errorMessage: boolean = false;
   notVerrifiedError: boolean = false;
+  verificationLinkSentText = this.translate.instant('auth.verificationLinkSent');
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
     private location: Location,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    private translate: TranslateService,
+    private functions: AngularFireFunctions
   ) { }
 
   // Method to handle user login
@@ -70,17 +75,40 @@ export class LoginComponent {
   async reSendVerificationLink() {
     await this.loadingService.withLoading(async () => {
       await this.authService.login(this.email, this.password);
-      await this.authService.sendEmailVerification();
+      //await this.authService.sendEmailVerification();
       this.authService.logOut();
 
       // Open dialog to notify user about email verification
-      this.dialog.open(SuccessfullDialogComponent, {
+      const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
         data: {
           text: SuccessFullDialogText.RE_SEND_VERIFY_EMAIL,
           needToGoPrevoiusPage: false
         }
       });
+
+      dialogRef.afterClosed().subscribe(async result => {
+        // send the confirmation email to order status changed
+        return await this.sendEmail({
+          userEmail: this.email,
+          subject: this.verificationLinkSentText,
+          template: `
+              // TODO
+              `
+        });
+      });
     });
+  }
+
+  // Function to call the sendEmail cloud function
+  async sendEmail(
+    emailData: {
+      userEmail: string;
+      subject: string;
+      template: string;
+    }
+  ) {
+    const sendEmailFunction = this.functions.httpsCallable('sendEmail');
+    await sendEmailFunction(emailData).toPromise();
   }
 
   goToItems() {

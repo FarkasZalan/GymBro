@@ -21,26 +21,17 @@
         </nb-card-header>
         <nb-card-body class="address-details">
             <div class="row">
-                <div class="col-12 col-md-6">
+                <!-- Shipping address section -->
+                <div *ngIf="!address.companyName" class="col-12 col-md-6">
                     <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
                     <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }}</p>
                     <p>{{ address.city }}, {{ address.postalCode }}</p>
                     <p>{{ address.country }}</p>
-
-                    <!-- Display companyName and taxNumber only if they exist -->
-                    <p *ngIf="address.companyName">
-                        <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong> {{
-                        address.companyName }}
-                    </p>
-                    <p *ngIf="address.taxNumber">
-                        <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong> {{
-                        address.taxNumber }}
-                    </p>
                 </div>
+
+                <!-- Billing address section -->
                 <div class="col-12 col-md-6">
                     <div *ngIf="address.companyName">
-                        <p class="billingAddress"><strong>{{ 'profileMenu.shippingAddressForm.billingAddress' |
-                                translate }}:</strong></p>
                         <div *ngIf="!address.isBillingDifferentFromShipping">
                             <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
                             <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }}</p>
@@ -55,7 +46,27 @@
                             <p>{{ address.billingAddress.city }}, {{ address.billingAddress.postalCode }}</p>
                             <p>{{ address.billingAddress.country }}</p>
                         </div>
+
+                        <!-- Display companyName and taxNumber -->
+                        <p *ngIf="address.companyName">
+                            <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong> {{
+                            address.companyName }}
+                        </p>
+                        <p *ngIf="address.taxNumber">
+                            <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong> {{
+                            address.taxNumber }}
+                        </p>
                     </div>
+                </div>
+
+                <!-- shipping address if billing address exists -->
+                <div *ngIf="address.companyName" class="col-12 col-md-6">
+                    <p class="billingAddress"><strong>{{ 'checkout.shippingAddress.title' |
+                            translate }}:</strong></p>
+                    <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
+                    <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }}</p>
+                    <p>{{ address.city }}, {{ address.postalCode }}</p>
+                    <p>{{ address.country }}</p>
                 </div>
             </div>
         </nb-card-body>

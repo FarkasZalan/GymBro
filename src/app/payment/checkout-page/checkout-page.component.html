@@ -209,7 +209,10 @@
             <!-- Shipping Address Section -->
             <div class="shipping-address" *ngIf="shippingAddress && !displayGuestForm" @fadeInUp>
                 <h3>
-                    {{ 'checkout.shippingAddress.title' | translate }}
+                    {{ shippingAddress.companyName || selectedShippingMethod ===
+                    productViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE
+                    ? ('profileMenu.shippingAddressForm.billingAddress' | translate)
+                    : ('checkout.shippingAddress.title' | translate) }}
                 </h3>
                 <div class="address-container">
                     <nb-card class="rounded-card addressCard">
@@ -218,28 +221,9 @@
                             <strong>{{ shippingAddress.addressName | translate }}</strong>
                         </nb-card-header>
                         <nb-card-body class="address-details">
-                            <p>{{ shippingAddress.street }} {{ shippingAddress.streetType }}, {{
-                                shippingAddress.houseNumber }}</p>
-                            <p>{{ shippingAddress.floor ? (shippingAddress.floor + '/') : '' }}{{ shippingAddress.door
-                                }}</p>
-                            <p>{{ shippingAddress.city }}, {{ shippingAddress.postalCode }}</p>
-                            <p>{{ shippingAddress.country }}</p>
-
-                            <!-- Company details if they exist -->
-                            <p *ngIf="shippingAddress.companyName">
-                                <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong>
-                                {{ shippingAddress.companyName }}
-                            </p>
-                            <p *ngIf="shippingAddress.taxNumber">
-                                <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
-                                {{ shippingAddress.taxNumber }}
-                            </p>
-
                             <!-- Billing Address Section -->
                             <!-- billing same as shipping -->
-                            <div *ngIf="!shippingAddress.isBillingDifferentFromShipping && shippingAddress.companyName"
-                                class="billing-address-section">
-                                <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                            <div *ngIf="shippingAddress.companyName &&!shippingAddress.isBillingDifferentFromShipping">
                                 <p>{{ shippingAddress.street }} {{
                                     shippingAddress.streetType }}, {{
                                     shippingAddress.houseNumber }}</p>
@@ -251,9 +235,7 @@
                             </div>
 
                             <!-- billing different from shipping -->
-                            <div *ngIf="shippingAddress.isBillingDifferentFromShipping && shippingAddress.companyName"
-                                class="billing-address-section">
-                                <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                            <div *ngIf="shippingAddress.companyName && shippingAddress.isBillingDifferentFromShipping">
                                 <p>{{ shippingAddress.billingAddress.street }} {{
                                     shippingAddress.billingAddress.streetType }}, {{
                                     shippingAddress.billingAddress.houseNumber }}</p>
@@ -262,6 +244,43 @@
                                 <p>{{ shippingAddress.billingAddress.city }}, {{
                                     shippingAddress.billingAddress.postalCode }}</p>
                                 <p>{{ shippingAddress.billingAddress.country }}</p>
+                            </div>
+
+                            <!-- Company details if they exist -->
+                            <p *ngIf="shippingAddress.companyName">
+                                <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong>
+                                {{ shippingAddress.companyName }}
+                            </p>
+                            <p *ngIf="shippingAddress.taxNumber">
+                                <strong>{{ 'profileMenu.shippingAddressForm.taxNumber' | translate }}:</strong>
+                                {{ shippingAddress.taxNumber }}
+                            </p>
+
+                            <!-- Shipping address section -->
+                            <!-- shipping address if don't have billing address -->
+                            <div *ngIf="!shippingAddress.companyName">
+                                <p>{{ shippingAddress.street }} {{ shippingAddress.streetType }}, {{
+                                    shippingAddress.houseNumber }}</p>
+                                <p>{{ shippingAddress.floor ? (shippingAddress.floor + '/') : '' }}{{
+                                    shippingAddress.door
+                                    }}</p>
+                                <p>{{ shippingAddress.city }}, {{ shippingAddress.postalCode }}</p>
+                                <p>{{ shippingAddress.country }}</p>
+                            </div>
+
+                            <!--shipping address if have billing address -->
+                            <div
+                                *ngIf="shippingAddress.companyName && selectedShippingMethod !== productViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE">
+                                <div class="billing-address-section">
+                                    <h5>{{ 'checkout.shippingAddress.title' | translate }}</h5>
+                                    <p>{{ shippingAddress.street }} {{ shippingAddress.streetType }}, {{
+                                        shippingAddress.houseNumber }}</p>
+                                    <p>{{ shippingAddress.floor ? (shippingAddress.floor + '/') : '' }}{{
+                                        shippingAddress.door
+                                        }}</p>
+                                    <p>{{ shippingAddress.city }}, {{ shippingAddress.postalCode }}</p>
+                                    <p>{{ shippingAddress.country }}</p>
+                                </div>
                             </div>
                         </nb-card-body>
                         <nb-card-footer>

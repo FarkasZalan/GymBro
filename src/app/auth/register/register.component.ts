@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 import { TermsComponent } from './terms/terms.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LoadingService } from '../../loading-spinner/loading.service';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
@@ -32,6 +34,8 @@ export class RegisterComponent {
   passwordAgain: string = "";
   termsAccepted: boolean = false;
 
+  verificationLinkSentText = this.translate.instant('auth.verificationLinkSent');
+
   // error handleing
   public errorMessage = false;
   errorMessagePassword: boolean = false;
@@ -42,7 +46,9 @@ export class RegisterComponent {
     private router: Router,
     private dialog: MatDialog,
     private documentHandler: DocumentHandlerService,
-    private location: Location
+    private location: Location,
+    private translate: TranslateService,
+    private functions: AngularFireFunctions
   ) { }
 
   // Method to handle user registration
@@ -89,11 +95,22 @@ export class RegisterComponent {
           this.errorMessage = false;
           this.errorMessagePassword = false;
 
-          this.dialog.open(SuccessfullDialogComponent, {
+          const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
             data: {
               text: SuccessFullDialogText.VERRIFY_EMAIL_SENT,
               needToGoPrevoiusPage: true
             }
+          });
+
+          dialogRef.afterClosed().subscribe(async result => {
+            // send the confirmation email to order status changed
+            return await this.sendEmail({
+              userEmail: this.newUser.email,
+              subject: this.verificationLinkSentText,
+              template: `
+                  // TODO
+                  `
+            });
           });
         } else {
           this.errorMessagePassword = false;
@@ -115,5 +132,17 @@ export class RegisterComponent {
     dialogRef.afterClosed().subscribe((termsAccepted: boolean) => {
       this.termsAccepted = termsAccepted;
     });
+  }
+
+  // Function to call the sendEmail cloud function
+  async sendEmail(
+    emailData: {
+      userEmail: string;
+      subject: string;
+      template: string;
+    }
+  ) {
+    const sendEmailFunction = this.functions.httpsCallable('sendEmail');
+    await sendEmailFunction(emailData).toPromise();
   }
 }

@@ -80,7 +80,6 @@ export class AuthService {
                     deleted: false,
                 }
                 await this.db.collection('users').doc(userAuth.user.uid).set(newUser);
-                await this.sendEmailVerification();
             }
             return userAuth;
         } catch (error) {

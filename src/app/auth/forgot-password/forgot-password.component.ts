@@ -46,6 +46,7 @@ export class ForgotPasswordComponent {
 
       // send the password recovery email to the given email
       const success = await this.authService.forgotPassword(this.emailToForgotPassword);
+      // TODO
 
       if (success) {
         this.errorMessage = false;

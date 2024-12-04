@@ -30,10 +30,32 @@
                 </span>
             </nb-card-header>
             <nb-card-body class="address-details">
-                <p>{{ address.street }} {{ address.streetType }}, {{ address.houseNumber }}</p>
-                <p>{{ address.floor ? (address.floor + '/') : '' }}{{ address.door }}</p>
-                <p>{{ address.city }}, {{ address.postalCode }}</p>
-                <p>{{ address.country }}</p>
+                <!-- Billing Address Section -->
+                <!-- billing same as shipping -->
+                <div *ngIf="address.companyName &&!address.isBillingDifferentFromShipping">
+                    <p>{{ address.street }} {{
+                        address.streetType }}, {{
+                        address.houseNumber }}</p>
+                    <p>{{ address.floor ? (address.floor +
+                        '/') : '' }}{{ address.door }}</p>
+                    <p>{{ address.city }}, {{
+                        address.postalCode }}</p>
+                    <p>{{ address.country }}</p>
+                </div>
+
+                <!-- billing different from shipping -->
+                <div *ngIf="address.companyName && address.isBillingDifferentFromShipping">
+                    <p>{{ address.billingAddress.street }} {{
+                        address.billingAddress.streetType }}, {{
+                        address.billingAddress.houseNumber }}</p>
+                    <p>{{ address.billingAddress.floor ? (address.billingAddress.floor +
+                        '/') : '' }}{{ address.billingAddress.door }}</p>
+                    <p>{{ address.billingAddress.city }}, {{
+                        address.billingAddress.postalCode }}</p>
+                    <p>{{ address.billingAddress.country }}</p>
+                </div>
+
+                <!-- Company details if they exist -->
                 <p *ngIf="address.companyName">
                     <strong>{{ 'profileMenu.shippingAddressForm.companyName' | translate }}:</strong>
                     {{ address.companyName }}
@@ -43,29 +65,30 @@
                     {{ address.taxNumber }}
                 </p>
 
-                <!-- Billing Address Section -->
-                <!-- billing same as shipping -->
-                <div *ngIf="!address.isBillingDifferentFromShipping && address.companyName" class="
-                billing-address-section">
-                    <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
+                <!-- Shipping address section -->
+                <!-- shipping address if don't have billing address -->
+                <div *ngIf="!address.companyName">
                     <p>{{ address.street }} {{ address.streetType }}, {{
                         address.houseNumber }}</p>
                     <p>{{ address.floor ? (address.floor + '/') : '' }}{{
-                        address.door }}</p>
+                        address.door
+                        }}</p>
                     <p>{{ address.city }}, {{ address.postalCode }}</p>
                     <p>{{ address.country }}</p>
                 </div>
 
-                <!-- billing different from shipping -->
-                <div *ngIf="address.isBillingDifferentFromShipping && address.companyName" class="
-                    billing-address-section">
-                    <h5>{{ 'profileMenu.shippingAddressForm.billingAddress' | translate }}</h5>
-                    <p>{{ address.billingAddress.street }} {{ address.billingAddress.streetType }}, {{
-                        address.billingAddress.houseNumber }}</p>
-                    <p>{{ address.billingAddress.floor ? (address.billingAddress.floor + '/') : '' }}{{
-                        address.billingAddress.door }}</p>
-                    <p>{{ address.billingAddress.city }}, {{ address.billingAddress.postalCode }}</p>
-                    <p>{{ address.billingAddress.country }}</p>
+                <!--shipping address if have billing address -->
+                <div *ngIf="address.companyName">
+                    <div class="billing-address-section">
+                        <h5>{{ 'checkout.shippingAddress.title' | translate }}</h5>
+                        <p>{{ address.street }} {{ address.streetType }}, {{
+                            address.houseNumber }}</p>
+                        <p>{{ address.floor ? (address.floor + '/') : '' }}{{
+                            address.door
+                            }}</p>
+                        <p>{{ address.city }}, {{ address.postalCode }}</p>
+                        <p>{{ address.country }}</p>
+                    </div>
                 </div>
             </nb-card-body>
             <nb-card-footer>
