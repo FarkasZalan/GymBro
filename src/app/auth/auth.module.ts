@@ -11,7 +11,6 @@ import {
 } from '@nebular/theme';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './login/login.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LogOutComponent } from './log-out/log-out.component';
 import { SuccessfullDialogComponent } from '../successfull-dialog/successfull-dialog.component';
 import { RegisterComponent } from './register/register.component';
@@ -19,6 +18,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TermsComponent } from './register/terms/terms.component';
 import { SharedModule } from '../loading-spinner/shared.module';
 import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functions';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { VerifiedComponent } from './verified/verified.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
     imports: [
@@ -39,11 +41,13 @@ import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functio
     ],
     declarations: [
         LoginComponent,
-        ForgotPasswordComponent,
         LogOutComponent,
+        ForgotPasswordComponent,
         SuccessfullDialogComponent,
         RegisterComponent,
         TermsComponent,
+        VerifiedComponent,
+        ChangePasswordComponent,
     ],
     providers: [
         // Firebase functions region

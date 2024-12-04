@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ForgotPasswordComponent } from '../auth/forgot-password/forgot-password.component';
 import { ProductViewText } from '../admin-profile/product-management/product-view-texts';
 import { Filter } from './filter.model';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ForgotPasswordComponent } from '../auth/forgot-password/forgot-password.component';
 
 @Component({
   selector: 'app-filter-page',

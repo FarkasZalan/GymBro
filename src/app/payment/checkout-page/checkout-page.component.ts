@@ -24,6 +24,7 @@ import { LoadingService } from '../../loading-spinner/loading.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { environment } from '../../../environments/environment';
 import { TranslateService } from '@ngx-translate/core';
+import { DefaultImageUrl } from '../../admin-profile/default-image-url';
 
 // Declare the Stripe global variable, which is part of the Stripe.js library,
 // ensuring TypeScript recognizes it as an external object and avoids errors
@@ -695,25 +696,25 @@ export class CheckoutPageComponent implements OnInit {
 
             // send the confirmation email
             return await this.sendEmail({
-              userEmail: this.currentUser?.email || this.guestEmail,
+              userEmail: this.order.email,
               subject: orderConfirmation,
               template: `
         <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
         <tr>
             <td style="padding: 20px; text-align: center;">
                 <h2 style="color: #0b8e92;">${orderConfirmation}</h2>
-                <h3>${orderIdText}: #${this.order.id}</h3>
-                <p><strong>${dateText}:</strong> ${this.order.orderDate.toDate().toLocaleDateString()}</p>
+                <h3 style="color: #000000;">${orderIdText}: #${this.order.id}</h3>
+                <p style="color: #000000;"><strong>${dateText}:</strong> ${this.order.orderDate.toDate().toLocaleDateString()}</p>
                 <p style="color: #0b8e92; font-size: 1.3em;"><strong>${orderStatusTitle}</strong> ${orderStatusText}</p>
-                <p style="text-align: center; margin-top: 30px; font-size: 1.5em;">${thankYouText}</p>
+                <p style="text-align: center; margin-top: 30px; font-size: 1.5em; color: #000000;">${thankYouText}</p>
             </td>
         </tr>
         <tr>
             <td style="padding: 10px;">
                 <h3 style="color: #0b8e92;">${customerDetailsText}</h3>
-                <p><strong>${nameText}:</strong> ${this.order.firstName} ${this.order.lastName}</p>
-                <p><strong>${emailText}:</strong> ${this.order.email}</p>
-                <p><strong>${phoneText}:</strong> ${this.order.phone}</p>
+                <p style="color: #000000;"><strong>${nameText}:</strong> ${this.order.firstName} ${this.order.lastName}</p>
+                <p style="color: #000000;"><strong>${emailText}:</strong> ${this.order.email}</p>
+                <p style="color: #000000;"><strong>${phoneText}:</strong> ${this.order.phone}</p>
             </td>
         </tr>
 
@@ -722,17 +723,17 @@ export class CheckoutPageComponent implements OnInit {
           <td style="padding: 10px;">
             <h3 style="color: #0b8e92;">${billingAddressText}</h3>
                ${this.order.shippingAddress.isBillingDifferentFromShipping ? `
-              <p>${this.order.shippingAddress.billingAddress.street} ${this.order.shippingAddress.billingAddress.streetType}, ${this.order.shippingAddress.billingAddress.houseNumber}</p>
-              <p>${this.order.shippingAddress.billingAddress.city}, ${this.order.shippingAddress.billingAddress.postalCode}</p>
-              <p>${this.order.shippingAddress.billingAddress.country}</p>
-              <p><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
-              <p><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.billingAddress.street} ${this.order.shippingAddress.billingAddress.streetType}, ${this.order.shippingAddress.billingAddress.houseNumber}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.billingAddress.city}, ${this.order.shippingAddress.billingAddress.postalCode}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.billingAddress.country}</p>
+              <p style="color: #000000;"><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
+              <p style="color: #000000;"><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
           ` : `
-              <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
-              <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
-              <p>${this.order.shippingAddress.country}</p>
-              <p><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
-              <p><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.country}</p>
+              <p style="color: #000000;"><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
+              <p style="color: #000000;"><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
             `}
            </td>
         </tr>
@@ -742,9 +743,9 @@ export class CheckoutPageComponent implements OnInit {
       <tr>
           <td style="padding: 10px;">
             <h3 style="color: #0b8e92;">${billingAddressText}</h3>
-              <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
-              <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
-              <p>${this.order.shippingAddress.country}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.country}</p>
            </td>
         </tr>
       ` : ''}
@@ -753,9 +754,9 @@ export class CheckoutPageComponent implements OnInit {
       <tr>
           <td style="padding: 10px;">
             <h3 style="color: #0b8e92;">${shippingAddressText}</h3>
-              <p>${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
-              <p>${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
-              <p>${this.order.shippingAddress.country}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+              <p style="color: #000000;">${this.order.shippingAddress.country}</p>
            </td>
         </tr>
       ` : ``}
@@ -772,11 +773,11 @@ export class CheckoutPageComponent implements OnInit {
                                          alt="${item.productName}" 
                                          style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
                                 </td>
-                                <td style="padding: 10px;">
+                                <td style="padding: 10px; color: #000000;">
                                     <strong>${item.productName}</strong>
                                     <br><span>${quantity}: ${item.quantity}</span>
                                 </td>
-                                <td style="padding: 10px; text-align: right;">
+                                <td style="padding: 10px; text-align: right; color: #000000;">
                                     ${item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice} ${priceUnit}
                                 </td>
                             </tr>
@@ -788,11 +789,17 @@ export class CheckoutPageComponent implements OnInit {
         <tr>
             <td style="padding: 20px;">
                 <h3 style="color: #0b8e92;">${paymentSummaryText}</h3>
-                <p><strong>${subtotalText}:</strong> ${this.order.subtotal} ${priceUnit}</p>
-                 ${this.order.shippingCost > 0 ? `<p><strong>${shippingText}:</strong> ${this.order.shippingCost} ${priceUnit}</p>` : ''}
-                 ${this.order.cashOnDeliveryAmount > 0 ? `<p><strong>${cashOnDeliveryText}:</strong> ${this.order.cashOnDeliveryAmount} ${priceUnit}</p>` : ''}
-                 ${this.order.discountAmount > 0 ? `<p><strong>${discountText}:</strong> -${Math.floor(this.order.discountAmount)} ${priceUnit}</p>` : ''}
-                <p><strong>${totalText}:</strong> ${this.order.totalPrice} ${priceUnit}</p>
+                <p style="color: #000000;"><strong>${subtotalText}:</strong> ${this.order.subtotal} ${priceUnit}</p>
+                 ${this.order.shippingCost > 0 ? `<p style="color: #000000;"><strong>${shippingText}:</strong> ${this.order.shippingCost} ${priceUnit}</p>` : ''}
+                 ${this.order.cashOnDeliveryAmount > 0 ? `<p style="color: #000000;"><strong>${cashOnDeliveryText}:</strong> ${this.order.cashOnDeliveryAmount} ${priceUnit}</p>` : ''}
+                 ${this.order.discountAmount > 0 ? `<p style="color: #000000;"><strong>${discountText}:</strong> -${Math.floor(this.order.discountAmount)} ${priceUnit}</p>` : ''}
+                <p style="color: #000000;"><strong>${totalText}:</strong> ${this.order.totalPrice} ${priceUnit}</p>
+            </td>
+        </tr>
+        <tr style="align-items: center; display: grid; justify-content: center; text-align: center;">
+            <td>
+                <img src="${DefaultImageUrl.logo}"
+                style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
             </td>
         </tr>
     </table>

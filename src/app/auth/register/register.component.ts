@@ -13,6 +13,8 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { LoadingService } from '../../loading-spinner/loading.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { TranslateService } from '@ngx-translate/core';
+import { EmailLink } from '../email-url';
+import { DefaultImageUrl } from '../../admin-profile/default-image-url';
 
 @Component({
   selector: 'app-register',
@@ -34,7 +36,13 @@ export class RegisterComponent {
   passwordAgain: string = "";
   termsAccepted: boolean = false;
 
-  verificationLinkSentText = this.translate.instant('auth.verificationLinkSent');
+  verificationLinkSentText = this.translate.instant('register.welcomeText');
+  welcome = this.translate.instant('register.welcome');
+  emailVerificationFromRegisterText = this.translate.instant('register.emailVerificationFromRegisterText');
+  verifyEmailButtonText = this.translate.instant('register.verifyEmailButtonText');
+  ignoreEmailVerification = this.translate.instant('register.ignoreEmailVerification');
+  thankYouText = this.translate.instant('register.thankYouText');
+  dear = this.translate.instant('register.dear');
 
   // error handleing
   public errorMessage = false;
@@ -108,8 +116,23 @@ export class RegisterComponent {
               userEmail: this.newUser.email,
               subject: this.verificationLinkSentText,
               template: `
-                  // TODO
-                  `
+                <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
+                  <tr>
+                    <td style="padding: 20px; text-align: center;">
+                      <h2 style="color: #0b8e92;">${this.welcome}</h2>
+                      <p style="color: #000000;">${this.dear} ${this.newUser.firstName} ${this.newUser.lastName},</p>
+                      <p style="color: #000000; margin-bottom: 30px;">${this.emailVerificationFromRegisterText}</p>
+                      <p>
+                        <a href="${EmailLink.EMAIL_VERIFICATION}/${encodeURIComponent(this.newUser.email)}"style="background-color: #0b8e92; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${this.verifyEmailButtonText}</a>
+                      </p>
+                      <p style="color: #000000; margin-top: 50px;">${this.ignoreEmailVerification}</p>
+                      <p style="color: #000000;">${this.thankYouText}</p>
+                      <img src="${DefaultImageUrl.logo}"
+                       style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
+                    </td>
+                  </tr>
+                </table>
+              `
             });
           });
         } else {

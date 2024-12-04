@@ -36,15 +36,15 @@ export class SuccessfullDialogComponent implements OnInit {
   translateText() {
     if (this.operation === SuccessFullDialogText.PASSWORD_EMAIL_SENT) {
       this.text = this.translate.instant("succesfullDialog.passwordEmailSent");
-      this.buttonText = this.translate.instant("succesfullDialog.backToLogin");
+      this.buttonText = this.translate.instant("succesfullDialog.ok");
     }
     if (this.operation === SuccessFullDialogText.VERRIFY_EMAIL_SENT) {
       this.text = this.translate.instant("succesfullDialog.verrifyEmail");
-      this.buttonText = this.translate.instant("succesfullDialog.backToLogin");
+      this.buttonText = this.translate.instant("succesfullDialog.ok");
     }
     if (this.operation === SuccessFullDialogText.RE_SEND_VERIFY_EMAIL) {
       this.text = this.translate.instant("succesfullDialog.reSendVerifyEmail");
-      this.buttonText = this.translate.instant("succesfullDialog.backToLogin");
+      this.buttonText = this.translate.instant("succesfullDialog.ok");
     }
     if (this.operation === SuccessFullDialogText.MODIFIED_TEXT) {
       this.text = this.translate.instant("succesfullDialog.modificationSuccessfull");

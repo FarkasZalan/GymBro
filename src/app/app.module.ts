@@ -10,7 +10,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from '../environments/environment';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
+import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functions';
 import { AuthGuard } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
@@ -96,6 +96,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       provide: NGX_EDITOR_CONFIG_TOKEN,
       deps: [TranslateService],
     },
+
+    // Firebase functions region
+    { provide: REGION, useValue: 'europe-central2' }
   ],
   bootstrap: [AppComponent]
 })

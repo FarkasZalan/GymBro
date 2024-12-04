@@ -102,16 +102,6 @@ export class AuthService {
         return this.db.collection('users').doc(userId).valueChanges();
     }
 
-    // Send a password reset email to the user
-    async forgotPassword(email: string) {
-        try {
-            await this.auth.sendPasswordResetEmail(email);
-            return true;
-        } catch {
-            return false;
-        }
-    }
-
     // Logout method
     async logOut() {
         try {
