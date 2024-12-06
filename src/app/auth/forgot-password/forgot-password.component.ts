@@ -8,8 +8,11 @@ import { LoadingService } from "../../loading-spinner/loading.service";
 import { SuccessfullDialogComponent } from "../../successfull-dialog/successfull-dialog.component";
 import { SuccessFullDialogText } from "../../successfull-dialog/sucessfull-dialog-text";
 import { AuthService } from "../auth.service";
-import { EmailLink } from "../email-url";
 import { DefaultImageUrl } from "../../admin-profile/default-image-url";
+import { Timestamp } from "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
+import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { Verification } from "../verification.model";
 
 
 @Component({
@@ -41,6 +44,8 @@ export class ForgotPasswordComponent {
   emailToForgotPassword: string;
   emailSent = false;
 
+  verificationObject: Verification;
+
   constructor(
     private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data,
@@ -48,6 +53,7 @@ export class ForgotPasswordComponent {
     public dialogRef: MatDialogRef<ForgotPasswordComponent>,
     public loadingService: LoadingService,
     private functions: AngularFireFunctions,
+    private db: AngularFirestore,
     private translate: TranslateService
   ) {
     this.emailToForgotPassword = data.email; // Initialize email from injected data
@@ -67,6 +73,10 @@ export class ForgotPasswordComponent {
       });
 
       dialogRef.afterClosed().subscribe(async result => {
+        // verification url
+        const generatedToken = uuidv4();
+        this.saveToken(generatedToken);
+        const changePasswordUrl = `${window.location.origin}/auth/change-password/${generatedToken}`;
         // send the confirmation email to order status changed
         return await this.sendEmail({
           userEmail: this.emailToForgotPassword,
@@ -78,7 +88,7 @@ export class ForgotPasswordComponent {
                     <h2 style="color: #0b8e92;">${this.passwordResetRequestText}</h2>
                     <p style="color: #000000; margin-bottom: 30px;"">${this.passwordResetEmailText}</p>
                     <p>
-                      <a href="${EmailLink.CHANGE_PASSWORD}/${encodeURIComponent(this.emailToForgotPassword)}" style="background-color: #0b8e92; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${this.resetPasswordButtonText}</a>
+                      <a href="${changePasswordUrl}" style="background-color: #0b8e92; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${this.resetPasswordButtonText}</a>
                     </p>
                     <p style="color: #000000;  margin-top: 50px;">${this.ignoreEMailForgotPassword}</p>
                       <p style="color: #000000;">${this.thankYouText}</p>
@@ -91,6 +101,19 @@ export class ForgotPasswordComponent {
         });
       });
     });
+  }
+
+  // Save the token to Firestore
+  async saveToken(token?: string) {
+
+    this.verificationObject = {
+      email: this.emailToForgotPassword,
+      token: token,
+      expiresAt: Timestamp.now().toMillis() + 5 * 60 * 1000 // 5 minutes from now
+    };
+
+    // Add the email verification token to Firestore
+    await this.db.collection('emailTokens').doc(token).set(this.verificationObject);
   }
 
   // Function to call the sendEmail cloud function

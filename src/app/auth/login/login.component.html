@@ -24,13 +24,18 @@
                         <!-- password block -->
                         <div class="form-group">
                             <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
-                            <input type="password" class="form-control" ngModel name="password" fullWidth
-                                placeholder="{{ 'loginPage.password' | translate }}" minlength="6" required
-                                #password="ngModel">
-                            <!-- password error block -->
-                            <span class="help-block" *ngIf="!password.valid && password.touched" [@zoomIn]>{{
-                                'loginPage.invalidPassword' | translate }}
-                            </span>
+                            <div class="input-container">
+                                <input [type]="showPassword ? 'text' : 'password'" class="form-control" ngModel
+                                    name="password" fullWidth placeholder="{{ 'loginPage.password' | translate }}"
+                                    minlength="6" required #password="ngModel">
+                                <i class="eye-icon" (click)="togglePassword()">
+                                    <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </i>
+                                <!-- password error block -->
+                                <span class="help-block" *ngIf="!password.valid && password.touched" [@zoomIn]>{{
+                                    'loginPage.invalidPassword' | translate }}
+                                </span>
+                            </div>
                         </div>
                         <!-- login error -->
                         <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>

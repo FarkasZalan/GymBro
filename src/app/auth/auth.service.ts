@@ -113,16 +113,6 @@ export class AuthService {
             );
     }
 
-    // Method to send verification email
-    async sendEmailVerification() {
-        const user = await this.auth.currentUser;
-        if (user) {
-            await user.sendEmailVerification();
-        } else {
-            throw new Error("No user logged in");
-        }
-    }
-
     // Fetch the current user's data from Firestore using their user ID
     getCurrentUser(userId: string) {
         return this.db.collection('users').doc(userId).valueChanges();

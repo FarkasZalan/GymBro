@@ -35,6 +35,7 @@ export class LoginComponent {
 
   email = "";
   password = "";
+  showPassword: boolean = false; // For password visibility
   errorMessage: boolean = false;
   notVerrifiedError: boolean = false;
 
@@ -157,6 +158,10 @@ export class LoginComponent {
   goToItems() {
     this.location.back();
     this.router.navigate(['/']);
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   forgotPassword() {

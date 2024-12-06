@@ -61,12 +61,14 @@
                         <div class="password-info">
                             <div class="form-group">
                                 <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
-                                <input type="password" class="form-control" ngModel name="password" minlength="6"
-                                    required placeholder="{{ 'loginPage.password' | translate }}*"
-                                    #passwordFirst="ngModel">
-                                <span class="help-block" *ngIf="passwordFirst.touched && !passwordFirst.valid"
-                                    [@zoomIn]>{{
-                                    'loginPage.invalidPassword' | translate }}</span>
+                                <div class="input-container">
+                                    <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                                        id="password" name="password" minlength="6" [(ngModel)]="password"
+                                        [type]="showPassword ? 'text' : 'password'" required>
+                                    <i class="eye-icon" (click)="togglePassword()">
+                                        <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                    </i>
+                                </div>
                             </div>
                         </div>
                         <!-- Password again Section -->
@@ -74,9 +76,14 @@
                             <div class="form-group">
                                 <label for="passwordAgain" class="label">{{ 'register.passwordAgain' | translate
                                     }}</label>
-                                <input type="password" class="form-control" ngModel name="passwordAgain" minlength="6"
-                                    required placeholder="{{ 'register.passwordAgain' | translate }}*"
-                                    #passwordAgain="ngModel">
+                                <div class="input-container">
+                                    <input type="password" id="passwordAgain" name="passwordAgain"
+                                        [(ngModel)]="passwordAgain" class="form-control" minlength="6"
+                                        [type]="showConfirmPassword ? 'text' : 'password'" required>
+                                    <i class="eye-icon" (click)="toggleConfirmPassword()">
+                                        <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                    </i>
+                                </div>
                             </div>
                         </div><br>
                         <!-- Terms Checkbox -->

@@ -13,7 +13,6 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { LoadingService } from '../../loading-spinner/loading.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { TranslateService } from '@ngx-translate/core';
-import { EmailLink } from '../email-url';
 import { DefaultImageUrl } from '../../admin-profile/default-image-url';
 import { v4 as uuidv4 } from 'uuid';
 import { Timestamp } from 'firebase/firestore';
@@ -38,6 +37,8 @@ export class RegisterComponent {
   newUser: User;
   password: string = "";
   passwordAgain: string = "";
+  showPassword: boolean = false; // For password visibility
+  showConfirmPassword: boolean = false; // For confirm password visibility
   termsAccepted: boolean = false;
 
   verificationObject: Verification;
@@ -191,5 +192,13 @@ export class RegisterComponent {
   ) {
     const sendEmailFunction = this.functions.httpsCallable('sendEmail');
     await sendEmailFunction(emailData).toPromise();
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }

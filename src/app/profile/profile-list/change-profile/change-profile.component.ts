@@ -32,6 +32,9 @@ export class ChangeProfileComponent {
   // for error handleing
   errorMessage: boolean = false;
 
+  showPassword: boolean = false; // For password visibility
+  showConfirmPassword: boolean = false; // For confirm password visibility
+
   constructor(
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data,
@@ -71,7 +74,7 @@ export class ChangeProfileComponent {
         return;
       }
 
-      // Update password in the backend if valid
+      // Update password if valid
       if (this.password !== "" && this.password !== null && this.password === this.passwordAgain) {
         await this.userService.updatePassword(this.password);
       }
@@ -115,5 +118,13 @@ export class ChangeProfileComponent {
 
   goToBack() {
     this.dialog.closeAll();
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }

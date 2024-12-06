@@ -129,6 +129,7 @@
         },
         "profilePage": {
                 "profile": "Profil",
+                "paswordChangeTitle": "Új jelszó megadása",
                 "dataChange": "Profil módosítása",
                 "modify": "Módosítás",
                 "newPassword": "Új Jelszó",
@@ -782,6 +783,7 @@
                 "success": "Az e-mail címed sikeresen megerősítve!",
                 "confirmationMessage": "Most már be tudsz jelentkezni a fiókodba.",
                 "loginButton": "Tovább a bejelentkezéshez",
-                "expiredMessage": "A hitelesítési link lejárt!"
+                "expiredMessage": "A hitelesítési link lejárt!",
+                "expiredPasswordMessage": "A jelszóváltoztatási link lejárt!"
         }
 }

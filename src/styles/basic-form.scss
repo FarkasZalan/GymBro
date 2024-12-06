@@ -233,6 +233,32 @@ ul.custom-list li::before {
     transform: translateY(-50%);
 }
 
+.input-container {
+    position: relative;
+}
+
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #0b8e92;
+    font-size: 18px;
+
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        cursor: pointer;
+        color: rgba(12, 122, 126, 0.747);
+    }
+
+    &:active {
+        cursor: pointer;
+        color: darken(#0b8e92, 15%);
+    }
+}
+
 .col {
     margin-bottom: 1%;
 }

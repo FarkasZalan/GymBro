@@ -129,6 +129,7 @@
    },
    "profilePage": {
       "profile": "Profile",
+      "paswordChangeTitle": "Set new password",
       "dataChange": "Change Profile Data",
       "modify": "Modify",
       "newPassword": "New password",
@@ -781,6 +782,7 @@
       "success": "Your email has been successfully verified!",
       "confirmationMessage": "You can now log in to your account.",
       "loginButton": "Go to Login",
-      "expiredMessage": "The verification link has expired!"
+      "expiredMessage": "The verification link has expired!",
+      "expiredPasswordMessage": "The password reset link has expired!"
    }
 }

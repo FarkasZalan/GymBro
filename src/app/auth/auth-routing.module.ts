@@ -29,7 +29,7 @@ export const routes: Routes = [
                 component: VerifiedComponent
             },
             {
-                path: 'change-password/:email',
+                path: 'change-password/:token',
                 component: ChangePasswordComponent
             }
         ]

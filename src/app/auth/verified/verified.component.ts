@@ -7,11 +7,20 @@ import { Verification } from '../verification.model';
 import { Timestamp } from 'firebase/firestore';
 import { User } from '../../profile/user.model';
 import { firstValueFrom } from 'rxjs';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-verified',
   templateUrl: './verified.component.html',
-  styleUrl: './verified.component.scss'
+  styleUrl: './verified.component.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
 export class VerifiedComponent {
   token: string = '';
@@ -20,13 +29,6 @@ export class VerifiedComponent {
   verificationObject: Verification;
 
   verrifiedUser: User;
-
-  verificationLinkSentText = this.translate.instant('register.verificationLinkSent');
-  emailVerification = this.translate.instant('register.emailVerification');
-  emailVerificationFromLoginText = this.translate.instant('register.emailVerificationFromLoginText');
-  verifyEmailButtonText = this.translate.instant('register.verifyEmailButtonText');
-  ignoreEmailVerification = this.translate.instant('register.ignoreEmailVerification');
-  thankYouText = this.translate.instant('register.thankYouText');
 
   constructor(
     private router: Router,
