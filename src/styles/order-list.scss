@@ -38,6 +38,15 @@
     }
 }
 
+.button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.order-list-btn {
+    min-width: 320px !important
+}
+
 .order-header {
     display: flex;
     justify-content: space-between;

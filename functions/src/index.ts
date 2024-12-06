@@ -148,6 +148,7 @@ export const changePassword = onCall(
   async (request) => {
     const { userId, newPassword } = request.data;
     try {
+      // Update the user's password by id
       await admin.auth().updateUser(userId, {
         password: newPassword
       });

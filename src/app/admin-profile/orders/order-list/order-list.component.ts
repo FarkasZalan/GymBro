@@ -12,6 +12,7 @@ import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { TranslateService } from '@ngx-translate/core';
 import { ProductViewText } from '../../product-management/product-view-texts';
 import { DefaultImageUrl } from '../../default-image-url';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-order-list',
@@ -69,7 +70,8 @@ export class OrderListComponent implements OnInit {
     private dialog: MatDialog,
     public loadingService: LoadingService,
     private functions: AngularFireFunctions,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private location: Location
   ) { }
 
   async ngOnInit() {
@@ -327,5 +329,10 @@ export class OrderListComponent implements OnInit {
     if (this.showAllOrders) return 0;
     const hiddenOrders = this.orders.slice(this.initialOrderCount);
     return hiddenOrders.filter(order => !order.isAdminChecked).length;
+  }
+
+  back() {
+    this.location.back();
+    this.router.navigate(['admin-profile']);
   }
 }
