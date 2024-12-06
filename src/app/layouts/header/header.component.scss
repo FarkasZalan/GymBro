@@ -179,23 +179,6 @@
     display: flex;
     align-items: center;
     width: auto;
-
-    @media (max-width: 768px) {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #0b8e92;
-        z-index: 1000;
-        padding: 0 1rem;
-
-        &.expanded {
-            .search-input {
-                width: 100%;
-            }
-        }
-    }
 }
 
 .search-input {
@@ -211,7 +194,9 @@
 }
 
 .close-icon {
-    font-size: 37px;
+    position: absolute;
+    right: 15px;
+    font-size: 30px;
     background-color: white !important;
     color: red;
     cursor: pointer;
@@ -766,25 +751,67 @@
     }
 }
 
-// Add this to hide elements on mobile
+// hide elements on mobile
 @media (max-width: 768px) {
+    .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        padding: 10px;
+        width: 100%;
+    }
 
 
+
+    /* Expanded search bar styles */
     .search-container.expanded {
         width: 100%;
         position: absolute;
+        /* Position it to take full width */
         left: 0;
-        right: 0;
-        z-index: 1000;
-        padding: 10px 16px;
-        background-color: inherit;
-        /* Maintains header background color */
+        z-index: 10;
+        /* Optional: set a background color */
+        padding: 10px;
     }
 
-    .search-container.expanded .search-input {
-        margin: 0;
-        width: calc(100% - 40px);
-        /* Accounts for the close icon */
+    /* Search input styling */
+    .search-input {
+        flex-grow: 1;
+        width: 100%;
+        /* Occupy full width */
+        padding: 10px;
+        border-radius: 25px;
+        border: 1px solid green;
+        outline: none;
+    }
+
+    /* Close button styling */
+    .close-icon {
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 24px;
+        color: red;
+    }
+
+    /* Hide other elements when search is expanded */
+    .logo-container,
+    .mobile-hideable,
+    .header-container-right {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+
+    .logo-container.hidden-mobile,
+    .mobile-hideable.hidden-mobile,
+    .header-container-right.hidden-mobile {
+        opacity: 0;
+        /* Hide them */
+        pointer-events: none;
+        /* Prevent interaction */
     }
 }
 

@@ -140,7 +140,7 @@
         "profileMenu": {
                 "prodilDetails": "Profil adatok",
                 "orders": "Rendelések",
-                "addresses": "Címek",
+                "addresses": "Szállítás/Számlázás",
                 "loyaltyProgram": "Hűségprogram",
                 "addNewShippingAddress": "Cím hozzáadása",
                 "noAddresses": "Nincs egyetlen mentett cím sem!",
@@ -744,7 +744,7 @@
         },
         "home": {
                 "hero": {
-                        "mainText": "VALÓSÍTSD MEG ÁLMAID TESTÉT",
+                        "mainText": "ÉRD EL ÁLOMFORMÁDAT",
                         "subText": "A LEGJOBB MINŐSÉGŰ TERMÉKEKKEL",
                         "description": "Fedezd fel prémium táplálékkiegészítőinket, sportruházatunkat és olvasd el szakértői blogbejegyzéseinket az optimális eredményekért!",
                         "shopNow": "Vásárlás",

@@ -140,7 +140,7 @@
    "profileMenu": {
       "prodilDetails": "Account details",
       "orders": "Order history",
-      "addresses": "Addresses",
+      "addresses": "Shipping/Billing",
       "loyaltyProgram": "Loyalty program",
       "addNewShippingAddress": "Add new address",
       "noAddresses": "There is not a single saved address!",

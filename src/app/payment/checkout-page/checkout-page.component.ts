@@ -900,7 +900,7 @@ ${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_
      ${this.order.shippingCost > 0 ? `<p style="color: #000000;"><strong>${shippingText}:</strong> ${this.order.shippingCost} ${priceUnit}</p>` : ''}
      ${this.order.cashOnDeliveryAmount > 0 ? `<p style="color: #000000;"><strong>${cashOnDeliveryText}:</strong> ${this.order.cashOnDeliveryAmount} ${priceUnit}</p>` : ''}
      ${this.order.discountAmount > 0 ? `<p style="color: #0b8e92;"><strong>${discountText}:</strong> -${Math.floor(this.order.discountAmount)} ${priceUnit}</p>` : ''}
-    <p style="color: #000000;"><strong>${totalText}:</strong> ${this.order.totalPrice} ${priceUnit}</p>
+    <p style="color: #000000;"><strong>${totalText}:</strong> ${Math.floor(this.order.totalPrice)} ${priceUnit}</p>
 </td>
 </tr>
 <tr style="align-items: center; display: grid; justify-content: center; text-align: center;">

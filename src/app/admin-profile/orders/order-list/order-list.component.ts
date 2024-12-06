@@ -275,7 +275,7 @@ export class OrderListComponent implements OnInit {
                  ${order.shippingCost > 0 ? `<p  style="color: #000000;"><strong>${this.shippingText}:</strong> ${order.shippingCost} ${this.priceUnit}</p>` : ''}
                  ${order.cashOnDeliveryAmount > 0 ? `<p  style="color: #000000;"><strong>${this.cashOnDeliveryText}:</strong> ${order.cashOnDeliveryAmount} ${this.priceUnit}</p>` : ''}
                  ${order.discountAmount > 0 ? `<p style="color: #0b8e92;"><strong>${this.discountText}:</strong> -${Math.floor(order.discountAmount)} ${this.priceUnit}</p>` : ''}
-                <p style="color: #000000;"><strong>${this.totalText}:</strong> ${order.totalPrice} ${this.priceUnit}</p>
+                <p style="color: #000000;"><strong>${this.totalText}:</strong> ${Math.floor(order.totalPrice)} ${this.priceUnit}</p>
             </td>
         </tr>
                 <tr style="align-items: center; display: grid; justify-content: center; text-align: center;">
