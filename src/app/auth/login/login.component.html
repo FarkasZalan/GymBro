@@ -43,6 +43,8 @@
                             <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
                             {{ 'loginPage.notverrifiedError' | translate }}
                         </span>
+
+                        <!-- resend link -->
                         <div *ngIf="notVerrifiedError" class="form-group not-verrified-text" [@zoomIn]>
                             <span (click)="reSendVerificationLink()" class="forgot-password-text">{{
                                 'loginPage.reSendLink' | translate }}</span>

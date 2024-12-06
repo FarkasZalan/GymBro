@@ -1,1 +1,43 @@
-<p>verified works!</p>
+<!-- Verification message -->
+<div class="container">
+    <nb-card class="verified-card">
+        <nb-card-body class="login-col">
+            <!-- Verified title -->
+            <h1 id="title" class="title">{{ 'verificationPage.title' | translate }}</h1>
+
+            <div class="success-content text-center">
+                <div *ngIf="emailHasBeenVerified" class="success-section">
+                    <!-- Success Animation -->
+                    <div class="success-checkmark">
+                        <div class="check-icon">
+                            <span class="icon-line line-tip"></span>
+                            <span class="icon-line line-long"></span>
+                            <div class="icon-circle"></div>
+                            <div class="icon-fix"></div>
+                        </div>
+                    </div>
+
+                    <h2 style="color: #0b8e92;">{{ 'verificationPage.success' | translate }}</h2>
+                    <p>{{ 'verificationPage.confirmationMessage' | translate }}</p>
+                </div>
+
+                <div *ngIf="!emailHasBeenVerified" class="expired-section">
+                    <!-- Email Expired Message -->
+                    <div class="expired-message text-center">
+                        <i class="fas fa-exclamation-triangle" style="color: red; font-size: 40px;"></i>
+                        <!-- Warning icon -->
+                        <h2 class="expired-animation" style="color: red;">{{ 'verificationPage.expiredMessage' |
+                            translate }}</h2>
+                    </div>
+                </div>
+
+                <div class="login-button-container">
+                    <button class="btn btn-primary basic-btn back-to-login-btn" (click)="goToLogin()">
+                        {{ emailHasBeenVerified ? ('verificationPage.loginButton' | translate) :
+                        ('succesfullDialog.backToLogin' | translate) }}
+                    </button>
+                </div>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

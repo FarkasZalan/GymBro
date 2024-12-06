@@ -90,7 +90,7 @@ export class ChangeProfileComponent {
         is30PercentDiscountActive: this.is30PercentDiscountActive,
         is5000HufDiscountActive: this.is5000HufDiscountActive,
         isFreeShippingActive: this.isFreeShippingActive,
-        deleted: false
+        emailVerified: false
       }
 
       // Update user details and handle response

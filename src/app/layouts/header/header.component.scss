@@ -768,9 +768,7 @@
 
 // Add this to hide elements on mobile
 @media (max-width: 768px) {
-    .hidden-mobile {
-        display: none !important;
-    }
+
 
     .search-container.expanded {
         width: 100%;

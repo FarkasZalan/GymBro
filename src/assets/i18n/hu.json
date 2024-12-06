@@ -138,7 +138,7 @@
         "profileMenu": {
                 "prodilDetails": "Profil adatok",
                 "orders": "Rendelések",
-                "shippingAddresses": "Szállítási címek",
+                "addresses": "Címek",
                 "loyaltyProgram": "Hűségprogram",
                 "addNewShippingAddress": "Cím hozzáadása",
                 "noAddresses": "Nincs egyetlen mentett cím sem!",
@@ -776,5 +776,12 @@
                 "sale": "Akciós",
                 "viewAllDiscountedProducts": "Összes Akciós Termék",
                 "viewAllBlogs": "Összes Blog Bejegyzés"
+        },
+        "verificationPage": {
+                "title": "E-mail megerősítés",
+                "success": "Az e-mail címed sikeresen megerősítve!",
+                "confirmationMessage": "Most már be tudsz jelentkezni a fiókodba.",
+                "loginButton": "Tovább a bejelentkezéshez",
+                "expiredMessage": "A hitelesítési link lejárt!"
         }
 }

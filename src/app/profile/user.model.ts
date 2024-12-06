@@ -11,5 +11,5 @@ export interface User {
     is30PercentDiscountActive: boolean;
     isFreeShippingActive: boolean;
     is5000HufDiscountActive: boolean;
-    deleted: boolean;
+    emailVerified: boolean;
 }

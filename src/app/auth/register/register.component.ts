@@ -15,6 +15,10 @@ import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { TranslateService } from '@ngx-translate/core';
 import { EmailLink } from '../email-url';
 import { DefaultImageUrl } from '../../admin-profile/default-image-url';
+import { v4 as uuidv4 } from 'uuid';
+import { Timestamp } from 'firebase/firestore';
+import { Verification } from '../verification.model';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-register',
@@ -36,6 +40,8 @@ export class RegisterComponent {
   passwordAgain: string = "";
   termsAccepted: boolean = false;
 
+  verificationObject: Verification;
+
   verificationLinkSentText = this.translate.instant('register.welcomeText');
   welcome = this.translate.instant('register.welcome');
   emailVerificationFromRegisterText = this.translate.instant('register.emailVerificationFromRegisterText');
@@ -56,7 +62,8 @@ export class RegisterComponent {
     private documentHandler: DocumentHandlerService,
     private location: Location,
     private translate: TranslateService,
-    private functions: AngularFireFunctions
+    private functions: AngularFireFunctions,
+    private db: AngularFirestore
   ) { }
 
   // Method to handle user registration
@@ -85,7 +92,7 @@ export class RegisterComponent {
           is30PercentDiscountActive: false,
           isFreeShippingActive: false,
           is5000HufDiscountActive: false,
-          deleted: false
+          emailVerified: false
         }
         this.password = this.createUserForm.value.password;
 
@@ -111,6 +118,10 @@ export class RegisterComponent {
           });
 
           dialogRef.afterClosed().subscribe(async result => {
+            // verification url
+            const generatedToken = uuidv4();
+            this.saveToken(generatedToken);
+            const verificationUrl = `${window.location.origin}/auth/verify/${generatedToken}`;
             // send the confirmation email to order status changed
             return await this.sendEmail({
               userEmail: this.newUser.email,
@@ -123,7 +134,7 @@ export class RegisterComponent {
                       <p style="color: #000000;">${this.dear} ${this.newUser.firstName} ${this.newUser.lastName},</p>
                       <p style="color: #000000; margin-bottom: 30px;">${this.emailVerificationFromRegisterText}</p>
                       <p>
-                        <a href="${EmailLink.EMAIL_VERIFICATION}/${encodeURIComponent(this.newUser.email)}"style="background-color: #0b8e92; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${this.verifyEmailButtonText}</a>
+                        <a href="${verificationUrl}"style="background-color: #0b8e92; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${this.verifyEmailButtonText}</a>
                       </p>
                       <p style="color: #000000; margin-top: 50px;">${this.ignoreEmailVerification}</p>
                       <p style="color: #000000;">${this.thankYouText}</p>
@@ -141,6 +152,19 @@ export class RegisterComponent {
         }
       }
     });
+  }
+
+  // Save the token to Firestore
+  async saveToken(token?: string) {
+
+    this.verificationObject = {
+      email: this.newUser.email,
+      token: token,
+      expiresAt: Timestamp.now().toMillis() + 5 * 60 * 1000 // 5 minutes from now
+    };
+
+    // Add the email verification token to Firestore
+    await this.db.collection('emailTokens').doc(token).set(this.verificationObject);
   }
 
   // Navigate to login page

@@ -11,8 +11,11 @@ import { LoadingService } from '../../loading-spinner/loading.service';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { TranslateService } from '@ngx-translate/core';
 import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
-import { EmailLink } from '../email-url';
 import { DefaultImageUrl } from '../../admin-profile/default-image-url';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { v4 as uuidv4 } from 'uuid';
+import { Timestamp } from 'firebase/firestore';
+import { Verification } from '../verification.model';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +37,7 @@ export class LoginComponent {
   password = "";
   errorMessage: boolean = false;
   notVerrifiedError: boolean = false;
+
   verificationLinkSentText = this.translate.instant('register.verificationLinkSent');
   emailVerification = this.translate.instant('register.emailVerification');
   emailVerificationFromLoginText = this.translate.instant('register.emailVerificationFromLoginText');
@@ -41,8 +45,11 @@ export class LoginComponent {
   ignoreEmailVerification = this.translate.instant('register.ignoreEmailVerification');
   thankYouText = this.translate.instant('register.thankYouText');
 
+  verificationObject: Verification;
+
   constructor(
     private authService: AuthService,
+    private db: AngularFirestore,
     private router: Router,
     private dialog: MatDialog,
     private location: Location,
@@ -83,6 +90,7 @@ export class LoginComponent {
     await this.loadingService.withLoading(async () => {
       this.authService.logOut();
 
+
       // Open dialog to notify user about email verification
       const dialogRef = this.dialog.open(SuccessfullDialogComponent, {
         data: {
@@ -92,6 +100,10 @@ export class LoginComponent {
       });
 
       dialogRef.afterClosed().subscribe(async result => {
+        // verification url
+        const generatedToken = uuidv4();
+        this.saveToken(generatedToken);
+        const verificationUrl = `${window.location.origin}/auth/verify/${generatedToken}`;
         // send the confirmation email to order status changed
         return await this.sendEmail({
           userEmail: this.email,
@@ -103,7 +115,7 @@ export class LoginComponent {
                   <h2 style="color: #0b8e92;">${this.emailVerification}</h2>
                   <p style="color: #000000; margin-bottom: 30px;">${this.emailVerificationFromLoginText}</p>
                    <p>
-                        <a href="${EmailLink.EMAIL_VERIFICATION}/${encodeURIComponent(this.email)}" style="background-color: #0b8e92; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${this.verifyEmailButtonText}</a>
+                        <a href="${verificationUrl}" style="background-color: #0b8e92; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">${this.verifyEmailButtonText}</a>
                       </p>
                   <p style="color: #000000; margin-top: 50px;">${this.ignoreEmailVerification}</p>
                   <p style="color: #000000;">${this.thankYouText}</p>
@@ -116,6 +128,18 @@ export class LoginComponent {
         });
       });
     });
+  }
+
+  async saveToken(token?: string) {
+
+    this.verificationObject = {
+      email: this.email,
+      token: token,
+      expiresAt: Timestamp.now().toMillis() + 5 * 60 * 1000 // 5 minutes from now
+    };
+
+    // Add the email verification token to Firestore
+    await this.db.collection('emailTokens').doc(token).set(this.verificationObject);
   }
 
   // Function to call the sendEmail cloud function

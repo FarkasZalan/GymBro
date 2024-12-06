@@ -138,7 +138,7 @@
    "profileMenu": {
       "prodilDetails": "Account details",
       "orders": "Order history",
-      "shippingAddresses": "Shipping addresses",
+      "addresses": "Addresses",
       "loyaltyProgram": "Loyalty program",
       "addNewShippingAddress": "Add new address",
       "noAddresses": "There is not a single saved address!",
@@ -775,5 +775,12 @@
       "sale": "Sale",
       "viewAllDiscountedProducts": "View All Discounted Products",
       "viewAllBlogs": "View All Blog Posts"
+   },
+   "verificationPage": {
+      "title": "Email Verification",
+      "success": "Your email has been successfully verified!",
+      "confirmationMessage": "You can now log in to your account.",
+      "loginButton": "Go to Login",
+      "expiredMessage": "The verification link has expired!"
    }
 }

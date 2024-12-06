@@ -1,10 +1,9 @@
 import { Injectable } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { Router } from "@angular/router";
 import { User } from "../profile/user.model";
-import { AdminEmail } from "../admin-profile/admin-email";
 import { CartService } from '../cart/cart.service';
+import { map } from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -36,23 +35,34 @@ export class AuthService {
     }
 
     // Log in a user with email and password
-    async login(emailInput: string, password: string): Promise<boolean> {
-        return new Promise<boolean>(async (resolve) => {
-            try {
-                await this.auth.signInWithEmailAndPassword(emailInput, password).then((loggingResponse) => {
-                    if (emailInput === AdminEmail.email) {
-                        resolve(true);
-                    }
-                    if (loggingResponse.user.emailVerified) {
-                        resolve(true);
-                    } else {
-                        resolve(null);
-                    }
-                });
-            } catch {
-                resolve(false);
-            }
+    async login(emailInput: string, password: string): Promise<boolean | null> {
+        return new Promise<boolean | null>((resolve) => {
+            this.auth
+                .signInWithEmailAndPassword(emailInput, password)
+                .then((loggingResponse) => {
+                    // Fetch Firestore document for email verification
+                    const userDocRef = this.db
+                        .collection('users')
+                        .doc(loggingResponse.user.uid);
 
+                    // Subscribe to the Firestore document to check if emailVerified is true
+                    userDocRef.get().subscribe((userDocSnapshot) => {
+                        // Check if document exists
+                        if (userDocSnapshot.exists) {
+                            const userData = userDocSnapshot.data() as User;
+                            if (userData && userData.emailVerified) {
+                                resolve(true);  // Email verified in Firestore
+                            } else {
+                                resolve(null);  // Email not verified
+                            }
+                        } else {
+                            resolve(false);  // User document not found in Firestore
+                        }
+                    });
+                })
+                .catch((error) => {
+                    resolve(false);  // If login fails
+                });
         });
     }
 
@@ -77,7 +87,7 @@ export class AuthService {
                     is30PercentDiscountActive: false,
                     isFreeShippingActive: false,
                     is5000HufDiscountActive: false,
-                    deleted: false,
+                    emailVerified: false,
                 }
                 await this.db.collection('users').doc(userAuth.user.uid).set(newUser);
             }
@@ -85,6 +95,22 @@ export class AuthService {
         } catch (error) {
             return false;
         }
+    }
+
+    getUserToken(userToken: string) {
+        return this.db.collection('emailTokens').doc(userToken).valueChanges();
+    }
+
+    getUserByEmail(userEmail: string) {
+        return this.db.collection('users', ref => ref.where('email', '==', userEmail))
+            .snapshotChanges()
+            .pipe(
+                map(userQuery => userQuery.map(userRef => {
+                    const data = userRef.payload.doc.data() as User;
+                    const id = userRef.payload.doc.id;
+                    return { id, ...data };
+                }))
+            );
     }
 
     // Method to send verification email
