@@ -141,3 +141,19 @@ export const sendEmail = onCall(
     }
   }
 );
+
+// Forgot password function
+export const changePassword = onCall(
+  { region: 'europe-central2' },
+  async (request) => {
+    const { userId, newPassword } = request.data;
+    try {
+      await admin.auth().updateUser(userId, {
+        password: newPassword
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+);

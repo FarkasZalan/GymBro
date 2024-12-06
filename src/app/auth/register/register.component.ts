@@ -88,11 +88,6 @@ export class RegisterComponent {
           phone: this.createUserForm.value.phone,
           isAdmin: false,
           loyaltyPoints: 0,
-          is10PercentDiscountActive: false,
-          is20PercentDiscountActive: false,
-          is30PercentDiscountActive: false,
-          isFreeShippingActive: false,
-          is5000HufDiscountActive: false,
           emailVerified: false
         }
         this.password = this.createUserForm.value.password;
@@ -194,11 +189,12 @@ export class RegisterComponent {
     await sendEmailFunction(emailData).toPromise();
   }
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
+  // Method to toggle password visibility
+  togglePassword(isHolding: boolean) {
+    this.showPassword = isHolding;
   }
 
-  toggleConfirmPassword() {
-    this.showConfirmPassword = !this.showConfirmPassword;
+  toggleConfirmPassword(isHolding: boolean) {
+    this.showConfirmPassword = isHolding;
   }
 }

@@ -57,33 +57,35 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Password -->
-                        <div class="password-info">
-                            <div class="form-group">
-                                <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
-                                <div class="input-container">
-                                    <input [type]="showPassword ? 'text' : 'password'" class="form-control"
-                                        id="password" name="password" minlength="6" [(ngModel)]="password"
-                                        [type]="showPassword ? 'text' : 'password'" required>
-                                    <i class="eye-icon" (click)="togglePassword()">
-                                        <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-                                    </i>
-                                </div>
+                        <!-- Password block -->
+                        <div class="form-group">
+                            <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
+                            <div class="input-container">
+                                <input [type]="showPassword ? 'text' : 'password'" class="form-control" ngModel
+                                    name="password" fullWidth placeholder="{{ 'loginPage.password' | translate }}"
+                                    minlength="6" required #password="ngModel" />
+                                <i class="eye-icon" (mousedown)="togglePassword(true)" (mouseup)="togglePassword(false)"
+                                    (mouseleave)="togglePassword(false)">
+                                    <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </i>
                             </div>
+                            <!-- Password error block -->
+                            <span class="help-block" *ngIf="!password.valid && password.touched" [@zoomIn]>
+                                {{ 'loginPage.invalidPassword' | translate }}
+                            </span>
                         </div>
                         <!-- Password again Section -->
-                        <div class="password-info">
-                            <div class="form-group">
-                                <label for="passwordAgain" class="label">{{ 'register.passwordAgain' | translate
-                                    }}</label>
-                                <div class="input-container">
-                                    <input type="password" id="passwordAgain" name="passwordAgain"
-                                        [(ngModel)]="passwordAgain" class="form-control" minlength="6"
-                                        [type]="showConfirmPassword ? 'text' : 'password'" required>
-                                    <i class="eye-icon" (click)="toggleConfirmPassword()">
-                                        <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-                                    </i>
-                                </div>
+                        <div class="form-group">
+                            <label for="passwordAgain" class="label">{{ 'register.passwordAgain' | translate }}</label>
+                            <div class="input-container">
+                                <input [type]="showConfirmPassword ? 'text' : 'password'" id="passwordAgain"
+                                    name="passwordAgain" [(ngModel)]="passwordAgain" class="form-control" minlength="6"
+                                    placeholder="{{ 'register.passwordAgain' | translate }}" required>
+                                <i class="eye-icon" (mousedown)="toggleConfirmPassword(true)"
+                                    (mouseup)="toggleConfirmPassword(false)"
+                                    (mouseleave)="toggleConfirmPassword(false)">
+                                    <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </i>
                             </div>
                         </div><br>
                         <!-- Terms Checkbox -->

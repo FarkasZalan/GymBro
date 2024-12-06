@@ -55,10 +55,9 @@ export class VerifiedComponent {
         const isExpired = verification.expiresAt <= Timestamp.now().toMillis();
 
         // Step 2: Fetch the user by email
-        const users = await firstValueFrom(this.authService.getUserByEmail(verification.email));
-
-        if (users && users.length > 0) {
-          this.verrifiedUser = users[0];
+        const user = await this.authService.getUserByEmail(verification.email);
+        if (user) {
+          this.verrifiedUser = user;
 
           // Step 3: Update the user's emailVerified status
           await this.db.collection('users').doc(this.verrifiedUser.id).update({ emailVerified: true });

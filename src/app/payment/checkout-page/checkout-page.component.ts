@@ -234,9 +234,9 @@ export class CheckoutPageComponent implements OnInit {
     private translate: TranslateService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.shippingAddress = {
-      id: '',
+      id: 'Guest',
       addressName: '',
       addressType: '',
       country: '',
@@ -261,6 +261,8 @@ export class CheckoutPageComponent implements OnInit {
     this.checkAuthStatus();
     this.stripeStatus = this.getStripeStatus();
     const savedOrder = localStorage.getItem('savedOrder');
+    const savedReward = localStorage.getItem('activeReward');
+    this.activeReward = savedReward ? JSON.parse(savedReward) : null;
     this.order = savedOrder ? JSON.parse(savedOrder) : null;
     this.selectedPaymentMethod = this.order ? this.order.paymentMethod : '';
     this.selectedShippingMethod = this.order ? this.order.shippingMethod : '';
@@ -271,6 +273,7 @@ export class CheckoutPageComponent implements OnInit {
     }
     this.shippingAddress = this.order ? this.order.shippingAddress : this.shippingAddress;
     // Clear localStorage after retrieving the data
+    localStorage.removeItem('activeReward');
     localStorage.removeItem('savedOrder');
     if (this.stripeStatus === 'success') {
       this.paymentSuccess = true;
@@ -596,6 +599,9 @@ export class CheckoutPageComponent implements OnInit {
 
         // Save the order ovject to localStorage to be able to retrieve it later if cancelled the stripe payment
         localStorage.setItem('savedOrder', JSON.stringify(this.order));
+        if (this.activeReward) {
+          localStorage.setItem('activeReward', JSON.stringify(this.activeReward));
+        }
 
         // Check the payment method
         if (this.selectedPaymentMethod === ProductViewText.CHECKOUT_PAY_WITH_STRIPE) {
@@ -638,21 +644,14 @@ export class CheckoutPageComponent implements OnInit {
     if (this.paymentSuccess) {
       await this.loadingService.withLoading(async () => {
         this.order.orderDate = Timestamp.now();
-        // Calculate loyalty points
-        let loyaltyPoints = this.userLoggedIn ? this.calculateLoyaltyPoints() : 0;
+
+        // Calculate loyalty points if the user is not guest
+        const calculatLoyaltyPointsFromOrder = Math.floor((this.order.subtotal - this.order.discountAmount) / 100);
+        let loyaltyPoints = this.shippingAddress.id !== 'Guest' ? calculatLoyaltyPointsFromOrder : 0;
+        console.log(calculatLoyaltyPointsFromOrder, this.shippingAddress.id, this.activeReward)
 
         if (this.activeReward) {
-          if (this.activeReward.id === RewardText.Discount10Id) {
-            loyaltyPoints = loyaltyPoints - 300;
-          } else if (this.activeReward.id === RewardText.Discount20Id) {
-            loyaltyPoints = loyaltyPoints - 600;
-          } else if (this.activeReward.id === RewardText.Discount30Id) {
-            loyaltyPoints = loyaltyPoints - 700;
-          } else if (this.activeReward.id === RewardText.FreeShippingId) {
-            loyaltyPoints = loyaltyPoints - 850;
-          } else if (this.activeReward.id === RewardText.FiveThousandHufDiscountId) {
-            loyaltyPoints = loyaltyPoints - 1500;
-          }
+          loyaltyPoints -= this.activeReward.pointsRequired;
         }
 
         // Add the new order
@@ -662,12 +661,15 @@ export class CheckoutPageComponent implements OnInit {
           await documentumRef.update({ id: documentumRef.id });
           this.order.id = documentumRef.id;
 
-          if (this.userLoggedIn) {
+          if (this.shippingAddress.id !== 'Guest') {
             await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
           }
 
           // Send confirmation email with loading spinner
           await this.loadingService.withLoading(async () => {
+            // Clear localStorage after save the data
+            localStorage.removeItem('activeReward');
+            localStorage.removeItem('savedOrder');
 
             // Get translations using translate.instant
             const orderConfirmation = this.translate.instant('receipt.title');

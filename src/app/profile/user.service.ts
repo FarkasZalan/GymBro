@@ -13,15 +13,7 @@ export class UserService {
     // Method to update user information in Firestore
     updateUser(user: User) {
         return new Promise<boolean>((resolve, reject) => {
-            this.db.collection("users").doc(user.id).set({
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                phone: user.phone,
-                isAdmin: user.isAdmin,
-                deleted: false
-            }).then(() => {
+            this.db.collection("users").doc(user.id).update(user).then(() => {
                 // Resolve the promise to indicate successful update
                 resolve(true);
             }).catch(() => {

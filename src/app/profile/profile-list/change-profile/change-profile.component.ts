@@ -7,6 +7,7 @@ import { User } from '../../user.model';
 import { DocumentHandlerService } from '../../../document.handler.service';
 import { UserService } from '../../user.service';
 import { LoadingService } from '../../../loading-spinner/loading.service';
+import { ShippingAddress } from '../../shipping-address/shipping-address.model';
 
 @Component({
   selector: 'app-change-profile',
@@ -23,11 +24,6 @@ export class ChangeProfileComponent {
 
   // save the user loyalty points data
   loyaltyPoints: number;
-  is10PercentDiscountActive: boolean;
-  is20PercentDiscountActive: boolean;
-  is30PercentDiscountActive: boolean;
-  isFreeShippingActive: boolean;
-  is5000HufDiscountActive: boolean;
 
   // for error handleing
   errorMessage: boolean = false;
@@ -53,11 +49,6 @@ export class ChangeProfileComponent {
       this.documentumHandler.getDocumentByID("users", this.modifyUserId).subscribe((user: User) => {
         this.modifyUser = user;
         this.loyaltyPoints = this.modifyUser.loyaltyPoints;
-        this.is10PercentDiscountActive = this.modifyUser.is10PercentDiscountActive;
-        this.is20PercentDiscountActive = this.modifyUser.is20PercentDiscountActive;
-        this.is30PercentDiscountActive = this.modifyUser.is30PercentDiscountActive;
-        this.is5000HufDiscountActive = this.modifyUser.is5000HufDiscountActive;
-        this.isFreeShippingActive = this.modifyUser.isFreeShippingActive;
         this.userIsAdmin = this.modifyUser.isAdmin;
       });
     });
@@ -88,12 +79,7 @@ export class ChangeProfileComponent {
         phone: this.modifyUserForm.value.phone,
         isAdmin: this.userIsAdmin,
         loyaltyPoints: this.loyaltyPoints,
-        is10PercentDiscountActive: this.is10PercentDiscountActive,
-        is20PercentDiscountActive: this.is20PercentDiscountActive,
-        is30PercentDiscountActive: this.is30PercentDiscountActive,
-        is5000HufDiscountActive: this.is5000HufDiscountActive,
-        isFreeShippingActive: this.isFreeShippingActive,
-        emailVerified: false
+        emailVerified: true
       }
 
       // Update user details and handle response
@@ -120,11 +106,11 @@ export class ChangeProfileComponent {
     this.dialog.closeAll();
   }
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
+  togglePassword(isHolding: boolean) {
+    this.showPassword = isHolding;
   }
 
-  toggleConfirmPassword() {
-    this.showConfirmPassword = !this.showConfirmPassword;
+  toggleConfirmPassword(isHolding: boolean) {
+    this.showConfirmPassword = isHolding;
   }
 }

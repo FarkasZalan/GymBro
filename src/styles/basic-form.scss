@@ -156,6 +156,8 @@ input.ng-valid {
     /* Margin around the error block */
     font-size: 16px !important;
     /* Adjust font size as needed */
+
+    // animation: fadeIn 0.3s ease;
 }
 
 .help-block-login-error .icon {
@@ -235,10 +237,14 @@ ul.custom-list li::before {
 
 .input-container {
     position: relative;
+    display: flex;
+    align-items: center;
+    /* Vertically centers the elements */
 }
 
 .eye-icon {
     position: absolute;
+    /* Remain positioned relative to the input-container */
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
@@ -249,12 +255,10 @@ ul.custom-list li::before {
     transition: background-color 0.3s ease, transform 0.3s ease !important;
 
     &:hover {
-        cursor: pointer;
         color: rgba(12, 122, 126, 0.747);
     }
 
     &:active {
-        cursor: pointer;
         color: darken(#0b8e92, 15%);
     }
 }

@@ -160,8 +160,9 @@ export class LoginComponent {
     this.router.navigate(['/']);
   }
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
+  // Method to toggle password visibility
+  togglePassword(isHolding: boolean) {
+    this.showPassword = isHolding;
   }
 
   forgotPassword() {

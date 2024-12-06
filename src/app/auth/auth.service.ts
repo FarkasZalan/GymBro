@@ -82,11 +82,6 @@ export class AuthService {
                     phone: phone,
                     isAdmin: false,
                     loyaltyPoints: 0,
-                    is10PercentDiscountActive: false,
-                    is20PercentDiscountActive: false,
-                    is30PercentDiscountActive: false,
-                    isFreeShippingActive: false,
-                    is5000HufDiscountActive: false,
                     emailVerified: false,
                 }
                 await this.db.collection('users').doc(userAuth.user.uid).set(newUser);
@@ -101,16 +96,12 @@ export class AuthService {
         return this.db.collection('emailTokens').doc(userToken).valueChanges();
     }
 
-    getUserByEmail(userEmail: string) {
-        return this.db.collection('users', ref => ref.where('email', '==', userEmail))
-            .snapshotChanges()
-            .pipe(
-                map(userQuery => userQuery.map(userRef => {
-                    const data = userRef.payload.doc.data() as User;
-                    const id = userRef.payload.doc.id;
-                    return { id, ...data };
-                }))
-            );
+    async getUserByEmail(email: string): Promise<User | null> {
+        const userDoc = await this.db.collection<User>('users', ref => ref.where('email', '==', email)).get().toPromise();
+        if (!userDoc.empty) {
+            return userDoc.docs[0].data() as User; // Return the first user found
+        }
+        return null; // Return null if no user found
     }
 
     // Fetch the current user's data from Firestore using their user ID

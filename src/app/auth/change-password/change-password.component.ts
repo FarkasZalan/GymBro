@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../auth.service';
-import { UserService } from '../../profile/user.service';
 import { SuccessFullDialogText } from '../../successfull-dialog/sucessfull-dialog-text';
 import { SuccessfullDialogComponent } from '../../successfull-dialog/successfull-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { firstValueFrom } from 'rxjs';
+import { async, firstValueFrom } from 'rxjs';
 import { Verification } from '../verification.model';
 import { Timestamp } from 'firebase/firestore';
 import { User } from '../../profile/user.model';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Location } from '@angular/common';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { LoadingService } from '../../loading-spinner/loading.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-change-password',
@@ -28,25 +28,28 @@ import { Location } from '@angular/common';
   ]
 })
 export class ChangePasswordComponent implements OnInit {
+  @ViewChild('form') changePasswordForm: NgForm;
   token: string = '';
   tokenExists: boolean = true;
   verrifiedUser: User;
 
+  userId: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
+  email: string = '';
 
   errorMessagePassword: boolean = false;
   showNewPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
   constructor(
+    public loadingService: LoadingService,
     private router: Router,
     private db: AngularFirestore,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private userService: UserService,
     private dialog: MatDialog,
-    private location: Location
+    private functions: AngularFireFunctions
   ) { }
 
   ngOnInit(): void {
@@ -62,6 +65,7 @@ export class ChangePasswordComponent implements OnInit {
       const verification = await firstValueFrom(this.authService.getUserToken(token)) as Verification;
 
       if (verification) {
+        this.email = verification.email;
         // Check if the token is expired
         const isExpired = verification.expiresAt <= Timestamp.now().toMillis();
 
@@ -79,14 +83,36 @@ export class ChangePasswordComponent implements OnInit {
     }
   }
 
-  async onChangePassword(form: any) {
+  async onChangePassword() {
+    this.newPassword = this.changePasswordForm.value.newPassword;
+    this.confirmPassword = this.changePasswordForm.value.confirmPassword;
     if (this.newPassword !== this.confirmPassword) {
-      this.errorMessagePassword = true
+      this.errorMessagePassword = true;
       return;
     }
 
     try {
-      await this.userService.updatePassword(this.newPassword);
+      // Fetch user by email to get userId
+      const user = await this.authService.getUserByEmail(this.email);
+      if (user) {
+        this.userId = user.id; // Assuming 'id' is the field for user ID
+      } else {
+        this.errorMessagePassword = true; // Handle case where user is not found
+        return;
+      }
+
+      // Start loading
+      await this.loadingService.withLoading(async () => {
+        const result = await this.functions.httpsCallable('changePassword')({
+          userId: this.userId,
+          newPassword: this.newPassword
+        }).toPromise();
+
+        if (!result) {
+          this.errorMessagePassword = true;
+          return;
+        }
+      });
 
       // Open success dialog with a message
       this.dialog.open(SuccessfullDialogComponent, {
@@ -95,17 +121,20 @@ export class ChangePasswordComponent implements OnInit {
           needToGoPrevoiusPage: false
         }
       });
+
+      // Optionally navigate to login or another page
+      this.goToLogin();
     } catch (error) {
-      this.errorMessagePassword = true
+      this.errorMessagePassword = true;
     }
   }
 
-  toggleNewPassword() {
-    this.showNewPassword = !this.showNewPassword;
+  toggleNewPassword(isHolding: boolean) {
+    this.showNewPassword = isHolding;
   }
 
-  toggleConfirmPassword() {
-    this.showConfirmPassword = !this.showConfirmPassword;
+  toggleConfirmPassword(isHolding: boolean) {
+    this.showConfirmPassword = isHolding;
   }
 
   goToLogin() {

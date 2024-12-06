@@ -31,7 +31,7 @@
                                         required placeholder="{{ 'register.lastName' | translate }}*"
                                         #lastName="ngModel" [(ngModel)]="modifyUser.lastName">
                                     <span class="help-block" *ngIf="lastName.touched && !lastName.valid">{{
-                                        'register.fieldRequired' | translate }}</span>
+                                        'register.invalidPassword' | translate }}</span>
                                 </div>
                             </div>
                         </div>
@@ -48,35 +48,36 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Password -->
-                        <div class="password-info">
-                            <div class="form-group">
-                                <label for="password" class="label">{{ 'profilePage.newPassword' | translate }}</label>
-                                <div class="input-container">
-                                    <input [type]="showPassword ? 'text' : 'password'" class="form-control"
-                                        name="password" minlength="6" ngModel
-                                        placeholder="{{ 'profilePage.newPassword' | translate }}"
-                                        #passwordFirst="ngModel">
-                                    <i class="eye-icon" (click)="toggleConfirmPassword()">
-                                        <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-                                    </i>
-                                </div>
+                        <!-- Password block -->
+                        <div class="form-group">
+                            <label for="password" class="label">{{ 'profilePage.newPassword' | translate }}</label>
+                            <div class="input-container">
+                                <input [type]="showPassword ? 'text' : 'password'" class="form-control" ngModel
+                                    name="password" placeholder="{{ 'loginPage.password' | translate }}" minlength="6"
+                                    #password="ngModel" #passwordFirst="ngModel" />
+                                <i class="eye-icon" (mousedown)="togglePassword(true)" (mouseup)="togglePassword(false)"
+                                    (mouseleave)="togglePassword(false)">
+                                    <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </i>
                             </div>
+                            <!-- Password error block -->
+                            <span class="help-block" *ngIf="!password.valid && password.touched" [@zoomIn]>
+                                {{ 'loginPage.invalidPassword' | translate }}
+                            </span>
                         </div>
                         <!-- Password again Section -->
-                        <div class="password-info">
-                            <div class="form-group">
-                                <label for="passwordAgain" class="label">{{ 'profilePage.newPasswordAgain' | translate
-                                    }}</label>
-                                <div class="input-container">
-                                    <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control"
-                                        ngModel name="passwordAgain" minlength="6"
-                                        placeholder="{{ 'profilePage.newPasswordAgain' | translate }}*"
-                                        #passwordAgain="ngModel">
-                                    <i class="eye-icon" (click)="toggleConfirmPassword()">
-                                        <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
-                                    </i>
-                                </div>
+                        <div class="form-group">
+                            <label for="passwordAgain" class="label">{{ 'profilePage.newPasswordAgain' | translate
+                                }}</label>
+                            <div class="input-container">
+                                <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" ngModel
+                                    name="passwordAgain" placeholder="{{ 'profilePage.newPasswordAgain' | translate }}"
+                                    minlength="6" required #passwordAgain="ngModel" />
+                                <i class="eye-icon" (mousedown)="toggleConfirmPassword(true)"
+                                    (mouseup)="toggleConfirmPassword(false)"
+                                    (mouseleave)="toggleConfirmPassword(false)">
+                                    <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </i>
                             </div>
                         </div>
                         <!-- modify error -->

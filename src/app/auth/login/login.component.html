@@ -21,21 +21,22 @@
                             <span class="help-block" *ngIf="emailInput.touched && !emailInput.valid" [@zoomIn]>{{
                                 'loginPage.invalidEmail' | translate }}</span>
                         </div>
-                        <!-- password block -->
+                        <!-- Password block -->
                         <div class="form-group">
                             <label for="password" class="label">{{ 'loginPage.password' | translate }}</label>
                             <div class="input-container">
                                 <input [type]="showPassword ? 'text' : 'password'" class="form-control" ngModel
                                     name="password" fullWidth placeholder="{{ 'loginPage.password' | translate }}"
-                                    minlength="6" required #password="ngModel">
-                                <i class="eye-icon" (click)="togglePassword()">
+                                    minlength="6" required #password="ngModel" />
+                                <i class="eye-icon" (mousedown)="togglePassword(true)" (mouseup)="togglePassword(false)"
+                                    (mouseleave)="togglePassword(false)">
                                     <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                                 </i>
-                                <!-- password error block -->
-                                <span class="help-block" *ngIf="!password.valid && password.touched" [@zoomIn]>{{
-                                    'loginPage.invalidPassword' | translate }}
-                                </span>
                             </div>
+                            <!-- Password error block -->
+                            <span class="help-block" *ngIf="!password.valid && password.touched" [@zoomIn]>
+                                {{ 'loginPage.invalidPassword' | translate }}
+                            </span>
                         </div>
                         <!-- login error -->
                         <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
