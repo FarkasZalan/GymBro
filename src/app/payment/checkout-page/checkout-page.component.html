@@ -46,7 +46,7 @@
         </nb-card-header>
 
         <nb-card-body>
-            <!-- Order Summary Section -->
+            <!-- Items Section -->
             <div class="checkout-section order-summary">
                 <h3>
                     {{ 'checkout.orderSummary.title' | translate }}
@@ -64,19 +64,23 @@
                         <div class="item-details">
                             <h4>{{item.productName}}</h4>
                             <div class="item-attributes">
+                                <!-- size -->
                                 <span *ngIf="item.selectedPrice.productSize" class="attribute">
                                     <nb-icon icon="cube-outline"></nb-icon>
                                     {{item.selectedPrice.productSize | translate}} {{item.selectedPrice.productUnit |
                                     translate}}
                                 </span>
+                                <!-- color -->
                                 <span *ngIf="item.selectedPrice.productColor" class="attribute">
                                     <nb-icon icon="color-palette-outline"></nb-icon>
                                     {{item.selectedPrice.productColor | translate}}
                                 </span>
+                                <!-- flavor -->
                                 <span *ngIf="item.selectedPrice.productFlavor" class="attribute">
                                     <nb-icon icon="star-outline"></nb-icon>
                                     {{item.selectedPrice.productFlavor | translate}}
                                 </span>
+                                <!-- quantity -->
                                 <span class="attribute">
                                     <nb-icon icon="shopping-cart-outline"></nb-icon>
                                     x{{item.quantity}}

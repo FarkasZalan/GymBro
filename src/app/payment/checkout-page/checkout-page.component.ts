@@ -25,6 +25,8 @@ import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { environment } from '../../../environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultImageUrl } from '../../admin-profile/default-image-url';
+import { Product } from '../../admin-profile/product-management/product-models/product.model';
+import { ProductPrice } from '../../admin-profile/product-management/product-models/product-price.model';
 
 // Declare the Stripe global variable, which is part of the Stripe.js library,
 // ensuring TypeScript recognizes it as an external object and avoids errors
@@ -640,30 +642,76 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
+  // Handle products stock after successful payment
+  async handleProductsStock() {
+    // Iterate through each cart item and update the stock
+    for (const cartItem of this.cartItems) {
+      const productRef = this.db.collection('products').doc(cartItem.category).collection('allProduct').doc(cartItem.productId);
+
+      // Fetch the current product data
+      const productSnapshot = await productRef.get().toPromise();
+      const productData = productSnapshot.data();
+
+      if (productData) {
+        // Check if the current `price` matches the cart item selected price and update the stock
+        const updatedPrices = productData.prices.map((price: ProductPrice) => {
+          if (price.discountedPrice === cartItem.selectedPrice.discountedPrice &&
+            price.productColor === cartItem.selectedPrice.productColor &&
+            price.productFlavor === cartItem.selectedPrice.productFlavor &&
+            price.productImage === cartItem.selectedPrice.productImage &&
+            price.productPrice === cartItem.selectedPrice.productPrice &&
+            price.productSize === cartItem.selectedPrice.productSize &&
+            price.productStock === cartItem.selectedPrice.productStock &&
+            price.quantityInProduct === cartItem.selectedPrice.quantityInProduct &&
+            price.setAsDefaultPrice === cartItem.selectedPrice.setAsDefaultPrice
+          ) {
+            // If it matches, return a new object with updated `productStock`
+            return {
+              ...price, // Keep all other properties the same
+              productStock: price.productStock - cartItem.quantity, // Update the stock
+            };
+          }
+          // If it does not match, return the original `price` object unchanged
+          return price;
+        });
+
+        await productRef.update({ prices: updatedPrices });
+      }
+    }
+  }
+
   async addOrderToFirebase() {
     if (this.paymentSuccess) {
       await this.loadingService.withLoading(async () => {
+
+
+        // Prepare order data
         this.order.orderDate = Timestamp.now();
 
         // Calculate loyalty points if the user is not guest
         const calculatLoyaltyPointsFromOrder = Math.floor((this.order.subtotal - this.order.discountAmount) / 100);
         let loyaltyPoints = this.shippingAddress.id !== 'Guest' ? calculatLoyaltyPointsFromOrder : 0;
-        console.log(calculatLoyaltyPointsFromOrder, this.shippingAddress.id, this.activeReward)
 
         if (this.activeReward) {
           loyaltyPoints -= this.activeReward.pointsRequired;
         }
 
-        // Add the new order
         try {
+          // Add the new order
           const documentumRef = await this.db.collection("orders").add(this.order);
           // id the document created then save the document id in the field
           await documentumRef.update({ id: documentumRef.id });
           this.order.id = documentumRef.id;
 
+          // Update stock for each cart item
+          await this.handleProductsStock();
+
+          // Update the user's loyalty points if the user is not guest
           if (this.shippingAddress.id !== 'Guest') {
             await this.db.collection("users").doc(this.currentUserId).update({ loyaltyPoints: this.currentUser.loyaltyPoints + loyaltyPoints });
           }
+
+
 
           // Send confirmation email with loading spinner
           await this.loadingService.withLoading(async () => {
@@ -671,142 +719,8 @@ export class CheckoutPageComponent implements OnInit {
             localStorage.removeItem('activeReward');
             localStorage.removeItem('savedOrder');
 
-            // Get translations using translate.instant
-            const orderConfirmation = this.translate.instant('receipt.title');
-            const orderIdText = this.translate.instant('receipt.orderId');
-            const dateText = this.translate.instant('receipt.date');
-            const customerDetailsText = this.translate.instant('receipt.customerDetails');
-            const nameText = this.translate.instant('receipt.name');
-            const quantity = this.translate.instant('products.quantity');
-            const emailText = this.translate.instant('receipt.email');
-            const phoneText = this.translate.instant('receipt.phone');
-            const shippingAddressText = this.translate.instant('receipt.shippingAddress');
-            const companyNameText = this.translate.instant('profileMenu.shippingAddressForm.companyName');
-            const taxNumber = this.translate.instant('profileMenu.shippingAddressForm.taxNumber');
-            const billingAddressText = this.translate.instant('profileMenu.shippingAddressForm.billingAddress');
-            const orderItemsText = this.translate.instant('receipt.orderItems');
-            const paymentSummaryText = this.translate.instant('receipt.paymentSummary');
-            const subtotalText = this.translate.instant('receipt.subtotal');
-            const shippingText = this.translate.instant('receipt.shipping');
-            const discountText = this.translate.instant('checkout.discount');
-            const cashOnDeliveryText = this.translate.instant('checkout.orderSummary.paymentFee');
-            const totalText = this.translate.instant('receipt.total');
-            const thankYouText = this.translate.instant('receipt.thankYou');
-            const priceUnit = this.translate.instant('products.huf');
-            const orderStatusTitle = this.translate.instant('orders.orderStatus');
-            const orderStatusText = this.translate.instant(`${this.order.orderStatus}`);
-
-            // send the confirmation email
-            return await this.sendEmail({
-              userEmail: this.order.email,
-              subject: orderConfirmation,
-              template: `
-        <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
-        <tr>
-            <td style="padding: 20px; text-align: center;">
-                <h2 style="color: #0b8e92;">${orderConfirmation}</h2>
-                <h3 style="color: #000000;">${orderIdText}: #${this.order.id}</h3>
-                <p style="color: #000000;"><strong>${dateText}:</strong> ${this.order.orderDate.toDate().toLocaleDateString()}</p>
-                <p style="color: #0b8e92; font-size: 1.3em;"><strong>${orderStatusTitle}</strong> ${orderStatusText}</p>
-                <p style="text-align: center; margin-top: 30px; font-size: 1.5em; color: #000000;">${thankYouText}</p>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 10px;">
-                <h3 style="color: #0b8e92;">${customerDetailsText}</h3>
-                <p style="color: #000000;"><strong>${nameText}:</strong> ${this.order.firstName} ${this.order.lastName}</p>
-                <p style="color: #000000;"><strong>${emailText}:</strong> ${this.order.email}</p>
-                <p style="color: #000000;"><strong>${phoneText}:</strong> ${this.order.phone}</p>
-            </td>
-        </tr>
-
-      ${this.order.shippingAddress.companyName !== '' ? `
-        <tr>
-          <td style="padding: 10px;">
-            <h3 style="color: #0b8e92;">${billingAddressText}</h3>
-               ${this.order.shippingAddress.isBillingDifferentFromShipping ? `
-              <p style="color: #000000;">${this.order.shippingAddress.billingAddress.street} ${this.order.shippingAddress.billingAddress.streetType}, ${this.order.shippingAddress.billingAddress.houseNumber}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.billingAddress.city}, ${this.order.shippingAddress.billingAddress.postalCode}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.billingAddress.country}</p>
-              <p style="color: #000000;"><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
-              <p style="color: #000000;"><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
-          ` : `
-              <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.country}</p>
-              <p style="color: #000000;"><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
-              <p style="color: #000000;"><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
-            `}
-           </td>
-        </tr>
-      ` : ''}
-
-      ${this.order.shippingAddress.companyName === '' && this.order.shippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? `
-      <tr>
-          <td style="padding: 10px;">
-            <h3 style="color: #0b8e92;">${billingAddressText}</h3>
-              <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.country}</p>
-           </td>
-        </tr>
-      ` : ''}
-
-      ${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) ? `
-      <tr>
-          <td style="padding: 10px;">
-            <h3 style="color: #0b8e92;">${shippingAddressText}</h3>
-              <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
-              <p style="color: #000000;">${this.order.shippingAddress.country}</p>
-           </td>
-        </tr>
-      ` : ``}
-
-        <tr>
-            <td style="padding: 20px;">
-                <h3 style="color: #0b8e92;">${orderItemsText}</h3>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tbody>
-                        ${this.order.productList.map(item => `
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px; width: 80px;">
-                                    <img src="${item.selectedPrice.productImage}" 
-                                         alt="${item.productName}" 
-                                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
-                                </td>
-                                <td style="padding: 10px; color: #000000;">
-                                    <strong>${item.productName}</strong>
-                                    <br><span>${quantity}: ${item.quantity}</span>
-                                </td>
-                                <td style="padding: 10px; text-align: right; color: #000000;">
-                                    ${item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice} ${priceUnit}
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 20px;">
-                <h3 style="color: #0b8e92;">${paymentSummaryText}</h3>
-                <p style="color: #000000;"><strong>${subtotalText}:</strong> ${this.order.subtotal} ${priceUnit}</p>
-                 ${this.order.shippingCost > 0 ? `<p style="color: #000000;"><strong>${shippingText}:</strong> ${this.order.shippingCost} ${priceUnit}</p>` : ''}
-                 ${this.order.cashOnDeliveryAmount > 0 ? `<p style="color: #000000;"><strong>${cashOnDeliveryText}:</strong> ${this.order.cashOnDeliveryAmount} ${priceUnit}</p>` : ''}
-                 ${this.order.discountAmount > 0 ? `<p style="color: #000000;"><strong>${discountText}:</strong> -${Math.floor(this.order.discountAmount)} ${priceUnit}</p>` : ''}
-                <p style="color: #000000;"><strong>${totalText}:</strong> ${this.order.totalPrice} ${priceUnit}</p>
-            </td>
-        </tr>
-        <tr style="align-items: center; display: grid; justify-content: center; text-align: center;">
-            <td>
-                <img src="${DefaultImageUrl.logo}"
-                style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
-            </td>
-        </tr>
-    </table>
-  `
-            });
+            // Send email to the user with order details
+            await this.emailPreparation();
           });
 
           // if everything was successful then open successful dialog
@@ -828,6 +742,176 @@ export class CheckoutPageComponent implements OnInit {
         }
       });
     }
+  }
+
+  async emailPreparation() {
+    // Get translations for the email
+    const orderConfirmation = this.translate.instant('receipt.title');
+    const orderIdText = this.translate.instant('receipt.orderId');
+    const dateText = this.translate.instant('receipt.date');
+    const customerDetailsText = this.translate.instant('receipt.customerDetails');
+    const nameText = this.translate.instant('receipt.name');
+    const quantity = this.translate.instant('products.quantity');
+    const emailText = this.translate.instant('receipt.email');
+    const phoneText = this.translate.instant('receipt.phone');
+    const shippingAddressText = this.translate.instant('receipt.shippingAddress');
+    const companyNameText = this.translate.instant('profileMenu.shippingAddressForm.companyName');
+    const taxNumber = this.translate.instant('profileMenu.shippingAddressForm.taxNumber');
+    const billingAddressText = this.translate.instant('profileMenu.shippingAddressForm.billingAddress');
+    const orderItemsText = this.translate.instant('receipt.orderItems');
+    const paymentSummaryText = this.translate.instant('receipt.paymentSummary');
+    const subtotalText = this.translate.instant('receipt.subtotal');
+    const shippingText = this.translate.instant('receipt.shipping');
+    const discountText = this.translate.instant('checkout.discount');
+    const cashOnDeliveryText = this.translate.instant('checkout.orderSummary.paymentFee');
+    const totalText = this.translate.instant('receipt.total');
+    const thankYouText = this.translate.instant('receipt.thankYou');
+    const priceUnit = this.translate.instant('products.huf');
+    const orderStatusTitle = this.translate.instant('orders.orderStatus');
+    const orderStatusText = this.translate.instant(`${this.order.orderStatus}`);
+    const quantityText = this.translate.instant('products.quantity');
+    const sizeText = this.translate.instant('products.clothes.size');
+    const colorText = this.translate.instant('products.clothes.color');
+    const flavorText = this.translate.instant('products.flavorsEmail');
+    const unitPriceText = this.translate.instant('products.unitPrice');
+    const piecesText = this.translate.instant('products.pcs');
+
+    // send the confirmation email
+    return await this.sendEmail({
+      userEmail: this.order.email,
+      subject: orderConfirmation,
+      template: `
+<table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
+<tr>
+<td style="padding: 20px; text-align: center;">
+    <h2 style="color: #0b8e92;">${orderConfirmation}</h2>
+    <h3 style="color: #000000;">${orderIdText}: #${this.order.id}</h3>
+    <p style="color: #000000;"><strong>${dateText}:</strong> ${this.order.orderDate.toDate().toLocaleDateString()}</p>
+    <p style="color: #0b8e92; font-size: 1.3em;"><strong>${orderStatusTitle}</strong> ${orderStatusText}</p>
+    <p style="text-align: center; margin-top: 30px; font-size: 1.5em; color: #000000;">${thankYouText}</p>
+</td>
+</tr>
+<tr>
+<td style="padding: 10px;">
+    <h3 style="color: #0b8e92;">${customerDetailsText}</h3>
+    <p style="color: #000000;"><strong>${nameText}:</strong> ${this.order.firstName} ${this.order.lastName}</p>
+    <p style="color: #000000;"><strong>${emailText}:</strong> ${this.order.email}</p>
+    <p style="color: #000000;"><strong>${phoneText}:</strong> ${this.order.phone}</p>
+</td>
+</tr>
+
+${this.order.shippingAddress.companyName !== '' ? `
+<tr>
+<td style="padding: 10px;">
+<h3 style="color: #0b8e92;">${billingAddressText}</h3>
+   ${this.order.shippingAddress.isBillingDifferentFromShipping ? `
+  <p style="color: #000000;">${this.order.shippingAddress.billingAddress.street} ${this.order.shippingAddress.billingAddress.streetType}, ${this.order.shippingAddress.billingAddress.houseNumber}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.billingAddress.city}, ${this.order.shippingAddress.billingAddress.postalCode}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.billingAddress.country}</p>
+  <p style="color: #000000;"><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
+  <p style="color: #000000;"><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
+` : `
+  <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.country}</p>
+  <p style="color: #000000;"><strong>${companyNameText}:</strong> ${this.order.shippingAddress.companyName}</p>
+  <p style="color: #000000;"><strong>${taxNumber}:</strong> ${this.order.shippingAddress.taxNumber}</p>
+`}
+</td>
+</tr>
+` : ''}
+
+${this.order.shippingAddress.companyName === '' && this.order.shippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE ? `
+<tr>
+<td style="padding: 10px;">
+<h3 style="color: #0b8e92;">${billingAddressText}</h3>
+  <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.country}</p>
+</td>
+</tr>
+` : ''}
+
+${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) ? `
+<tr>
+<td style="padding: 10px;">
+<h3 style="color: #0b8e92;">${shippingAddressText}</h3>
+  <p style="color: #000000;">${this.order.shippingAddress.street} ${this.order.shippingAddress.streetType}, ${this.order.shippingAddress.houseNumber}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.city}, ${this.order.shippingAddress.postalCode}</p>
+  <p style="color: #000000;">${this.order.shippingAddress.country}</p>
+</td>
+</tr>
+` : ``}
+
+<tr>
+  <td style="padding: 20px;">
+    <h3 style="color: #0b8e92;">${orderItemsText}</h3>
+    <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
+      <tbody>
+        ${this.order.productList.map(item => `
+          <tr style="border-bottom: 1px solid #ddd; padding: 10px;">
+            <td style="padding: 10px; width: 80px;">
+              <img src="${item.selectedPrice.productImage || 'fallback-image-url'}" 
+                   alt="${item.productName}" 
+                   style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
+            </td>
+            <td style="padding: 10px; color: #000000; font-size: 14px;">
+              <strong>${item.productName}</strong>
+               ${item.selectedPrice.quantityInProduct ? `
+              <div style="margin-top: 2px; display: flex; align-items: center;">
+                <span style="font-size: 14px; color: #555;"><strong>${item.selectedPrice.quantityInProduct} ${this.translate.instant(item.productUnit)}</strong></span>
+              </div>` : ''}
+              ${item.selectedPrice.productSize ? `
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${sizeText}: ${item.selectedPrice.productSize} </span>
+              </div>` : ''}
+              ${item.selectedPrice.productColor ? `
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${colorText}: ${this.translate.instant(item.selectedPrice.productColor)}</span>
+              </div>` : ''}
+              ${item.selectedPrice.productFlavor ? `
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${flavorText}: ${this.translate.instant(item.selectedPrice.productFlavor)}</span>
+              </div>` : ''}
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${quantityText}: ${item.quantity} ${piecesText}</span>
+              </div>
+            </td>
+
+            <td style="padding: 10px; text-align: right; color: #000000;">
+              <div style="font-size: 16px; font-weight: bold; color: #000;">
+                ${(item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice) * item.quantity} ${priceUnit}
+              </div>
+              <div style="font-size: 12px; color: #555;">
+                ${unitPriceText} ${item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice} ${priceUnit}
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </td>
+</tr>
+
+<tr>
+<td style="padding: 20px;">
+    <h3 style="color: #0b8e92;">${paymentSummaryText}</h3>
+    <p style="color: #000000;"><strong>${subtotalText}:</strong> ${this.order.subtotal} ${priceUnit}</p>
+     ${this.order.shippingCost > 0 ? `<p style="color: #000000;"><strong>${shippingText}:</strong> ${this.order.shippingCost} ${priceUnit}</p>` : ''}
+     ${this.order.cashOnDeliveryAmount > 0 ? `<p style="color: #000000;"><strong>${cashOnDeliveryText}:</strong> ${this.order.cashOnDeliveryAmount} ${priceUnit}</p>` : ''}
+     ${this.order.discountAmount > 0 ? `<p style="color: #0b8e92;"><strong>${discountText}:</strong> -${Math.floor(this.order.discountAmount)} ${priceUnit}</p>` : ''}
+    <p style="color: #000000;"><strong>${totalText}:</strong> ${this.order.totalPrice} ${priceUnit}</p>
+</td>
+</tr>
+<tr style="align-items: center; display: grid; justify-content: center; text-align: center;">
+<td>
+    <img src="${DefaultImageUrl.logo}"
+    style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px;">
+</td>
+</tr>
+</table>
+`
+    });
   }
 
   // Function to call the sendEmail cloud function

@@ -55,6 +55,12 @@ export class OrderListComponent implements OnInit {
   companyNameText = this.translate.instant('profileMenu.shippingAddressForm.companyName');
   taxNumber = this.translate.instant('profileMenu.shippingAddressForm.taxNumber');
   billingAddressText = this.translate.instant('profileMenu.shippingAddressForm.billingAddress');
+  quantityText = this.translate.instant('products.quantity');
+  sizeText = this.translate.instant('products.clothes.size');
+  colorText = this.translate.instant('products.clothes.color');
+  flavorText = this.translate.instant('products.flavorsEmail');
+  unitPriceText = this.translate.instant('products.unitPrice');
+  piecesText = this.translate.instant('products.pcs');
   orderStatusText = "";
 
   constructor(
@@ -209,38 +215,64 @@ export class OrderListComponent implements OnInit {
            </td>
         </tr>
       ` : ``}
-        <tr>
-            <td style="padding: 20px;">
-                <h3 style="color: #0b8e92;">${this.orderItemsText}</h3>
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tbody>
-                        ${order.productList.map(item => `
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px; width: 80px;">
-                                    <img src="${item.selectedPrice.productImage}" 
-                                         alt="${item.productName}" 
-                                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
-                                </td>
-                                <td style="padding: 10px; color: #000000;">
-                                    <strong>${item.productName}</strong>
-                                    <br><span>${this.quantity}: ${item.quantity}</span>
-                                </td>
-                                <td style="padding: 10px; text-align: right; color: #000000;">
-                                    ${item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice} ${this.priceUnit}
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
+        
+      <tr>
+  <td style="padding: 20px;">
+    <h3 style="color: #0b8e92;">${this.orderItemsText}</h3>
+    <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
+      <tbody>
+        ${order.productList.map(item => `
+          <tr style="border-bottom: 1px solid #ddd; padding: 10px;">
+            <td style="padding: 10px; width: 80px;">
+              <img src="${item.selectedPrice.productImage || 'fallback-image-url'}" 
+                   alt="${item.productName}" 
+                   style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;">
             </td>
-        </tr>
+            <td style="padding: 10px; color: #000000; font-size: 14px;">
+              <strong>${item.productName}</strong>
+               ${item.selectedPrice.quantityInProduct ? `
+              <div style="margin-top: 2px; display: flex; align-items: center;">
+                <span style="font-size: 14px; color: #555;"><strong>${item.selectedPrice.quantityInProduct} ${this.translate.instant(item.productUnit)}</strong></span>
+              </div>` : ''}
+              ${item.selectedPrice.productSize ? `
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${this.sizeText}: ${item.selectedPrice.productSize} </span>
+              </div>` : ''}
+              ${item.selectedPrice.productColor ? `
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${this.colorText}: ${this.translate.instant(item.selectedPrice.productColor)}</span>
+              </div>` : ''}
+              ${item.selectedPrice.productFlavor ? `
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${this.flavorText}: ${this.translate.instant(item.selectedPrice.productFlavor)}</span>
+              </div>` : ''}
+              <div style="margin-top: 5px; display: flex; align-items: center;">
+                <span style="font-size: 12px; color: #555;">${this.quantityText}: ${item.quantity} ${this.piecesText}</span>
+              </div>
+            </td>
+
+            <td style="padding: 10px; text-align: right; color: #000000;">
+              <div style="font-size: 16px; font-weight: bold; color: #000;">
+                ${(item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice) * item.quantity} ${this.priceUnit}
+              </div>
+              <div style="font-size: 12px; color: #555;">
+                ${this.unitPriceText} ${item.selectedPrice.discountedPrice > 0 ? item.selectedPrice.discountedPrice : item.selectedPrice.productPrice} ${this.priceUnit}
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </td>
+</tr>
+
         <tr>
             <td style="padding: 20px;">
                 <h3 style="color: #0b8e92;">${this.paymentSummaryText}</h3>
                 <p  style="color: #000000;"><strong>${this.subtotalText}:</strong> ${order.subtotal} ${this.priceUnit}</p>
                  ${order.shippingCost > 0 ? `<p  style="color: #000000;"><strong>${this.shippingText}:</strong> ${order.shippingCost} ${this.priceUnit}</p>` : ''}
                  ${order.cashOnDeliveryAmount > 0 ? `<p  style="color: #000000;"><strong>${this.cashOnDeliveryText}:</strong> ${order.cashOnDeliveryAmount} ${this.priceUnit}</p>` : ''}
-                 ${order.discountAmount > 0 ? `<p style="color: #000000;"><strong>${this.discountText}:</strong> -${Math.floor(order.discountAmount)} ${this.priceUnit}</p>` : ''}
+                 ${order.discountAmount > 0 ? `<p style="color: #0b8e92;"><strong>${this.discountText}:</strong> -${Math.floor(order.discountAmount)} ${this.priceUnit}</p>` : ''}
                 <p style="color: #000000;"><strong>${this.totalText}:</strong> ${order.totalPrice} ${this.priceUnit}</p>
             </td>
         </tr>
