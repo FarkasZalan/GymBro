@@ -1,15 +1,15 @@
 <div class="header-container">
     <!-- Left Side Elements -->
     <div class="logo-container" [ngClass]="{ 'hidden-mobile': searchExpanded }">
-        <!-- Sidebar toggle button -->
-        <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
-            <nb-icon icon="menu-2-outline"></nb-icon> <!-- Icon for menu toggle -->
-        </a>
+
+        <!-- Include Sidebar Component -->
+        <app-sidebar></app-sidebar>
 
         <!-- Logo that navigates to home when clicked -->
         <a class="logo" (click)="navigateHome()"><img src="../../../assets/images/gym-bro-logo.png" alt="GymBro"
                 class="logoImage"></a>
     </div>
+
 
     <!-- Right Side Elements -->
     <div class="header-container-right">

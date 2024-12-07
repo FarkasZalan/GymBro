@@ -1,0 +1,26 @@
+<!-- Hamburger Icon (Button to Toggle Sidebar) -->
+<nb-icon *ngIf="!sidebarOpen" icon="menu-outline" class="hamburger-icon" (click)="toggleSidebar()"></nb-icon>
+
+<!-- Sidebar Content -->
+<div class="sidebar" [ngClass]="{ 'sidebar-open': sidebarOpen }">
+    <div class="sidebar-header">
+        <!-- Logo at the top of the Sidebar -->
+        <div class="logo-container">
+            <img src="../../../assets/images/gym-bro-logo.png" alt="GymBro Logo" class="sidebar-logo">
+        </div>
+        <!-- Close Icon -->
+        <nb-icon icon="close-outline" class="close-icon" (click)="toggleSidebar()"></nb-icon>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-content">
+        <ul>
+            <li *ngFor="let link of pageLinks">
+                <a [routerLink]="link.route" (click)="closeSidebar()">
+                    <nb-icon [icon]="link.icon"></nb-icon>
+                    <span>{{ link.name | translate }}</span> <!-- Assuming you have translation set up -->
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

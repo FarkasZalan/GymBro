@@ -1,0 +1,181 @@
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    /* Start hidden off-screen */
+    width: 250px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    /* Semi-transparent black */
+    color: white;
+    z-index: 1000;
+    transition: transform 0.35s ease, box-shadow 0.3s ease;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    /* Subtle shadow for depth */
+}
+
+/* Sidebar Open State */
+.sidebar-open {
+    transform: translateX(250px);
+    /* Slide in */
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.4);
+    /* Stronger shadow */
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #111;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-header:hover {
+    background-color: #181818;
+    /* Darker shade on hover */
+}
+
+.sidebar-logo {
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-logo:hover {
+    transform: scale(1.05);
+    /* Slight scale on hover */
+}
+
+/* Close Icon */
+.close-icon {
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.close-icon:hover {
+    transform: rotate(180deg);
+    /* Rotate effect */
+}
+
+/* Hamburger Icon */
+.hamburger-icon {
+    font-size: 35px;
+    color: white;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    transition: transform 0.3s ease, opacity 0.3s ease, top 0.3s ease, left 0.3s ease;
+    z-index: 1100;
+}
+
+.hamburger-icon:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+/* Sidebar Menu */
+.sidebar-content {
+    padding: 20px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    opacity: 0;
+    /* Initially hidden */
+    transform: translateY(20px);
+    /* Start slightly down */
+}
+
+.sidebar-open .sidebar-content {
+    opacity: 1;
+    /* Fade in */
+    transform: translateY(0);
+    /* Slide in */
+}
+
+.sidebar-content ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-content ul li {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    opacity: 0;
+    transform: translateY(10px);
+    /* Slight slide in from the bottom */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition-delay: 0.2s;
+    /* Delay each item to appear sequentially */
+}
+
+/* Sequential Animation for Menu Items */
+.sidebar-open .sidebar-content ul li {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Sidebar Menu */
+.sidebar-content ul li a {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 0;
+    transition: color 0.3s ease, transform 0.3s ease, padding-left 0.3s ease;
+}
+
+/* Link Hover Effect - Gently move down */
+.sidebar-content ul li a:hover {
+    color: #0b8e92;
+    /* New color on hover */
+    border-radius: 5px;
+    /* Smooth rounded edges */
+}
+
+/* Icon effect on hover */
+.sidebar-content ul li a:hover nb-icon {
+    transform: scale(1.1);
+    /* Slight grow effect for the icon */
+}
+
+.sidebar-content ul li nb-icon {
+    margin-right: 15px;
+    font-size: 22px;
+    transition: transform 0.3s ease;
+}
+
+/* Icon Hover Effect */
+.sidebar-content ul li a:hover nb-icon {
+    transform: scale(1.2);
+    /* Icon grows smoothly */
+}
+
+/* Media Query for Smaller Screens */
+@media (max-width: 768px) {
+
+    /* Sidebar will take full width on small screens */
+    .sidebar {
+        left: -100%;
+        /* Start off-screen */
+        width: 100%;
+        /* Full width */
+    }
+
+    /* Sidebar Open State on Small Screens */
+    .sidebar-open {
+        transform: translateX(100%);
+        /* Full translation when open */
+    }
+
+    /* Adjust hamburger position when sidebar is open */
+    .sidebar-open+.hamburger-icon {
+        top: 15px;
+        left: 15px;
+        /* Hamburger icon shifts when the sidebar is open */
+    }
+}

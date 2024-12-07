@@ -189,10 +189,11 @@ export class HeaderComponent implements OnInit {
   }
 
   // Toggle the sidebar visibility
-  toggleSidebar(): boolean {
-    this.sidebarService.toggle(true, 'menu-sidebar');
+  sidebarOpen: boolean = false;
 
-    return false;
+  // Toggle Sidebar visibility
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
   openSearch() {

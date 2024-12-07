@@ -514,6 +514,7 @@ a .logo {
 .logoImage {
     width: 100px;
     height: auto;
+    margin-left: 40px;
 }
 
 .social-icons {
@@ -917,5 +918,6 @@ nb-layout-footer {
         transform: translateX(2px);
     }
 }
+
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';

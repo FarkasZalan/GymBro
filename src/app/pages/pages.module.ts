@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbActionsModule, NbButtonModule, NbCardModule, NbContextMenuModule, NbIconModule, NbLayoutModule, NbMenuModule, NbSearchModule, NbSelectModule, NbSidebarModule, NbUserModule } from '@nebular/theme';
+import { NbActionsModule, NbButtonModule, NbCardModule, NbContextMenuModule, NbIconModule, NbLayoutModule, NbMenuModule, NbSearchModule, NbSelectModule, NbUserModule } from '@nebular/theme';
 import { PagesComponent } from './pages.component';
 import { PagesRoutingModule } from './pages-routing.module';
 import { CommonModule } from '@angular/common';
@@ -11,12 +11,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../loading-spinner/shared.module';
+import { SidebarComponent } from '../layouts/sidebar/sidebar.component';
 
 @NgModule({
     declarations: [
         PagesComponent,
         FooterComponent,
         HeaderComponent,
+        SidebarComponent,
         NotFoundComponent,
     ],
     imports: [
@@ -28,7 +30,6 @@ import { SharedModule } from '../loading-spinner/shared.module';
         NbUserModule,
         NbActionsModule,
         NbSearchModule,
-        NbSidebarModule,
         NbContextMenuModule,
         NbButtonModule,
         NbSelectModule,

@@ -4,11 +4,6 @@
         <app-header></app-header>
     </nb-layout-header>
 
-    <!-- display menubar on the left side -->
-    <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
-        <nb-menu [items]="translatedMenu"></nb-menu>
-    </nb-sidebar>
-
     <!-- display the application body -->
     <nb-layout-column>
         <router-outlet></router-outlet>
