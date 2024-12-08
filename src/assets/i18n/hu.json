@@ -718,7 +718,8 @@
                 "paidVia": "Fizetési mód",
                 "printReceipt": "Nyugta nyomtatása",
                 "orderStatusChanged": "A rendelés státusza megváltozott",
-                "orderDeleted": "A rendelés visszamondásra került"
+                "orderDeleted": "A rendelés visszamondásra került",
+                "orderDelivered": "A rendelés kézbesítve"
         },
         "orders": {
                 "noOrdersYet": "Még nincsenek rendeléseid",

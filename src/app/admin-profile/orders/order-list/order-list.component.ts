@@ -36,6 +36,7 @@ export class OrderListComponent implements OnInit {
   // Get translations using translate.instant
   statusChangedText = this.translate.instant('receipt.orderStatusChanged');
   orderDeletedText = this.translate.instant('receipt.orderDeleted');
+  orderDeliveredText = this.translate.instant('receipt.orderDelivered');
   orderIdText = this.translate.instant('receipt.orderId');
   dateText = this.translate.instant('receipt.date');
   customerDetailsText = this.translate.instant('receipt.customerDetails');
@@ -112,11 +113,19 @@ export class OrderListComponent implements OnInit {
     if (newStatus !== order.orderStatus) {
       this.orderStatusText = this.translate.instant(newStatus);
       // send the confirmation email to order status changed
-      return await this.sendEmail({
-        userEmail: order.email,
-        subject: this.statusChangedText,
-        template: this.emailTemplate(order, true)
-      });
+      if (newStatus !== OrderStatus.DELIVERED) {
+        return await this.sendEmail({
+          userEmail: order.email,
+          subject: this.statusChangedText,
+          template: this.emailTemplate(order, true, this.statusChangedText)
+        });
+      } else {
+        return await this.sendEmail({
+          userEmail: order.email,
+          subject: this.orderDeliveredText,
+          template: this.emailTemplate(order, false, this.orderDeliveredText)
+        });
+      }
     }
   }
 
@@ -137,7 +146,7 @@ export class OrderListComponent implements OnInit {
         return await this.sendEmail({
           userEmail: order.email,
           subject: this.orderDeletedText,
-          template: this.emailTemplate(order, false)
+          template: this.emailTemplate(order, false, this.orderDeletedText)
         });
       });
     }
@@ -156,12 +165,12 @@ export class OrderListComponent implements OnInit {
   }
 
   // html template of the email
-  emailTemplate(order: Order, modifiedStatus: boolean) {
+  emailTemplate(order: Order, modifiedStatus: boolean, orderHeaderText: string = '') {
     return `
         <table style="width: 100%; max-width: 800px; margin: auto; border-collapse: collapse; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 10px;">
         <tr>
             <td style="padding: 20px; text-align: center;">
-                <h2 style="color: #0b8e92;">${modifiedStatus ? this.statusChangedText : this.orderDeletedText}</h2>
+                <h2 style="color: #0b8e92;">${orderHeaderText}</h2>
                 <h3 style="color: #000000;">${this.orderIdText}: #${order.id}</h3>
                 <p style="color: #000000;"><strong>${this.dateText}:</strong> ${order.orderDate.toDate().toLocaleDateString()}</p>
                 ${modifiedStatus ? `<p style="color: #0b8e92; font-size: 1.3em;"><strong>${this.orderStatusTitle}</strong> ${this.orderStatusText}</p>` : ""}

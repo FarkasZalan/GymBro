@@ -52,6 +52,29 @@
     }
 }
 
+@media (max-width: 1000px) {
+    .orders-stats {
+        display: block !important;
+    }
+
+    .stat-card {
+        margin-bottom: 2rem !important;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .manage-orders-btn {
+        font-size: 0.9rem !important;
+    }
+
+    .new-orders-badge {
+        font-size: 0.7rem !important;
+        width: 22px !important;
+        height: 22px !important;
+    }
+}
+
 .stat-content {
     display: flex;
     flex-direction: column;
