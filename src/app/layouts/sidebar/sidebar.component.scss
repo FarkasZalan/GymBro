@@ -39,7 +39,7 @@
 }
 
 .sidebar-logo {
-    height: 60px;
+    height: 80px;
     transition: transform 0.3s ease;
 }
 
@@ -324,7 +324,7 @@
 }
 
 /* Media Query for Smaller Screens */
-@media (max-width: 768px) {
+@media (max-width: 950px) {
 
     /* Sidebar will take full width on small screens */
     .sidebar {
