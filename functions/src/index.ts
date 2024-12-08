@@ -2,7 +2,6 @@ import * as admin from "firebase-admin";
 import Stripe from "stripe";
 import { onCall } from 'firebase-functions/v2/https';
 import { environment } from "./envinronment";
-import { publicEnvironment } from "./envinronment-public";
 import * as nodemailer from 'nodemailer';
 
 const stripe = new Stripe(environment.stripe.secretKey);
@@ -14,7 +13,7 @@ admin.initializeApp();
 export const stripeCheckout = onCall(
   { region: 'europe-central2' },
   async (request) => {
-    const { cartItems, shippingCost, activeReward } = request.data;
+    const { baseUrl, cartItems, shippingCost, activeReward } = request.data;
 
     try {
 
@@ -91,8 +90,8 @@ export const stripeCheckout = onCall(
           },
         ],
         discounts: discountCoupon ? [{ coupon: discountCoupon }] : [], // Apply the coupon
-        success_url: publicEnvironment.stripe.successUrl,
-        cancel_url: publicEnvironment.stripe.cancelUrl,
+        success_url: baseUrl + '/checkout?action=success',
+        cancel_url: baseUrl + '/checkout?action=cancel',
       });
 
       return { id: paymentIntent.id };

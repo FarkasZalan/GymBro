@@ -268,6 +268,12 @@ export class CheckoutPageComponent implements OnInit {
     this.order = savedOrder ? JSON.parse(savedOrder) : null;
     this.selectedPaymentMethod = this.order ? this.order.paymentMethod : '';
     this.selectedShippingMethod = this.order ? this.order.shippingMethod : '';
+    if (!this.userLoggedIn) {
+      this.guestFirstName = this.order.firstName;
+      this.guestLastName = this.order.lastName;
+      this.guestEmail = this.order.email;
+      this.guestPhone = this.order.phone;
+    }
     if (this.selectedShippingMethod === ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_TITLE) {
       this.shipping = 0;
     } else {
@@ -611,9 +617,11 @@ export class CheckoutPageComponent implements OnInit {
 
           /*
           * Start loading and wait for the Stripe checkout process
-          * pass the cartItems, shippingCost and activeReward to the Stripe checkout function to display the Stripe checkout page
+          * pass the baseUrl, cartItems, shippingCost and activeReward to the Stripe checkout function to display the Stripe checkout page
+          * baseUrl is the current url of the checkout page and it's important to can use the stripe checkout on deployed and local environment
           */
           const result = await this.functions.httpsCallable('stripeCheckout')({
+            baseUrl: window.location.origin,
             cartItems: this.cartItems,
             shippingCost: this.shipping,
             activeReward: this.activeReward
@@ -751,7 +759,6 @@ export class CheckoutPageComponent implements OnInit {
     const dateText = this.translate.instant('receipt.date');
     const customerDetailsText = this.translate.instant('receipt.customerDetails');
     const nameText = this.translate.instant('receipt.name');
-    const quantity = this.translate.instant('products.quantity');
     const emailText = this.translate.instant('receipt.email');
     const phoneText = this.translate.instant('receipt.phone');
     const shippingAddressText = this.translate.instant('receipt.shippingAddress');
