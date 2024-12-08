@@ -58,7 +58,7 @@
             <!-- User information section -->
             <div *ngIf="userLoggedIn" class="header-container-user">
                 <!-- Admin section with notifications -->
-                <div class="admin-notification-wrapper" *ngIf="user?.isAdmin">
+                <div class="admin-notification-wrapper account-wrapper" *ngIf="user?.isAdmin">
                     <nb-user name={{userFirstName}} [picture]="false" [nbContextMenu]="userMenu"
                         nbContextMenuTag="header-menu">
                     </nb-user>
@@ -112,9 +112,11 @@
                 <!-- Regular user section -->
                 <div class="admin-notification-wrapper" *ngIf="!user?.isAdmin">
                     <!-- User menu -->
-                    <nb-user name={{userFirstName}} [picture]="false" [nbContextMenu]="userMenu"
-                        nbContextMenuTag="header-menu">
-                    </nb-user>
+                    <div class="account-wrapper">
+                        <nb-user name={{userFirstName}} [picture]="false" [nbContextMenu]="userMenu"
+                            nbContextMenuTag="header-menu">
+                        </nb-user>
+                    </div>
 
                     <!-- Cart section with loading state -->
                     <div class="header-container-user cart-button-container">
@@ -178,7 +180,8 @@
                     <div class="notification-panel" *ngIf="showNotificationPanel && !user?.isAdmin" [@slideInOut]
                         (focusout)="onPanelBlur()" tabindex="0">
                         <div class="notification-header">
-                            <h3>{{ 'adminMenu.notifications.notifications' | translate }}</h3>
+                            <h3 class="notification-title">{{ 'adminMenu.notifications.notifications' | translate }}
+                            </h3>
                         </div>
 
                         <div class="notification-content">
@@ -205,7 +208,10 @@
             <!-- Non-logged in user section -->
             <div *ngIf="!userLoggedIn" class="header-container-user">
                 <div class="admin-notification-wrapper">
-                    <i (click)="navigateToLogin()" class="material-icons login-icon">login</i>
+                    <div class="profile-login account-wrapper" (click)="navigateToLogin()">
+                        <i class="material-icons login-icon">login</i>
+                        <span class="profile-text">{{ 'loginPage.login' | translate }}</span>
+                    </div>
 
                     <!-- Cart button still displayed if user is not logged in -->
                     <div class="header-container-user cart-button-container">
@@ -258,7 +264,7 @@
             </div>
 
             <!-- Language switch button -->
-            <div class="header-container-user">
+            <div class="header-container-user account-wrapper">
                 <div class="admin-notification-wrapper">
                     <button (click)="switchLanguage()" class="languageswitch-btn">{{
                         languageSwithButtonText.toUpperCase()

@@ -515,6 +515,11 @@ a .logo {
     width: 100px;
     height: auto;
     margin-left: 40px;
+
+    @media (max-width: 768px) {
+        width: 80px;
+        margin-left: 30px;
+    }
 }
 
 .social-icons {

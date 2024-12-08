@@ -39,7 +39,7 @@
 }
 
 .sidebar-logo {
-    height: 40px;
+    height: 60px;
     transition: transform 0.3s ease;
 }
 
@@ -88,6 +88,14 @@
     /* Start slightly down */
 }
 
+.sidebar-link-icon {
+    font-size: 30px;
+}
+
+.sidebar-link-name {
+    font-size: 20px;
+}
+
 .sidebar-open .sidebar-content {
     opacity: 1;
     /* Fade in */
@@ -103,7 +111,7 @@
 .sidebar-content ul li {
     display: flex;
     align-items: center;
-    padding: 12px 0;
+    padding: 4px 0;
     opacity: 0;
     transform: translateY(10px);
     /* Slight slide in from the bottom */
@@ -155,6 +163,165 @@
     /* Icon grows smoothly */
 }
 
+/* Sidebar Bottom Section */
+.sidebar-bottom {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 90%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Profile/ Login Section */
+.profile {
+    align-items: center;
+    padding: 15px 0;
+    cursor: pointer;
+    position: relative;
+    /* For positioning the dropdown */
+}
+
+.profile-icon {
+    font-size: 28px;
+    margin-right: 10px;
+    color: white;
+}
+
+.profile-text {
+    color: white;
+    font-size: 18px;
+}
+
+.profile-options {
+    width: 150px !important;
+}
+
+
+/* Notification Icon */
+.notifications {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.notification-icon {
+    font-size: 28px;
+    color: white;
+}
+
+.notification-trigger {
+    position: relative;
+    cursor: pointer;
+    margin-right: 10px;
+    padding: 15px 0;
+    /* Adjust spacing as needed */
+}
+
+.notification-panel {
+    background: #444;
+    border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    z-index: 100;
+    width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Add a subtle shadow */
+}
+
+.notification-badge {
+    position: absolute;
+    top: 1px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 3px;
+    font-size: 15px;
+}
+
+.notification-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.notification-item {
+    cursor: pointer;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+
+    i {
+        color: #0b8e92;
+        font-size: 26px;
+    }
+}
+
+.profile-item {
+    border-bottom: none !important;
+}
+
+.notification-details {
+    margin-left: 10px;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.notification-title {
+    font-weight: bold;
+    color: white !important;
+}
+
+.notification-count {
+    background: #0b8e92;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+.no-notifications {
+    text-align: center;
+    padding: 10px;
+}
+
+
+/* Language Changer */
+.language-changer {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Language Switch Button Styling */
+.languageswitch-btn {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 0 !important;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    padding-left: 0 !important;
+}
+
+.languageswitch-btn:hover {
+    color: #0b8e92;
+    /* New color on hover */
+}
+
 /* Media Query for Smaller Screens */
 @media (max-width: 768px) {
 
@@ -177,5 +344,15 @@
         top: 15px;
         left: 15px;
         /* Hamburger icon shifts when the sidebar is open */
+    }
+
+    /* Show profile, notifications, and language switch only on smaller screens */
+    .sidebar-bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
     }
 }

@@ -92,6 +92,29 @@
     cursor: pointer;
 }
 
+.profile-login {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease !important;
+
+    &:hover {
+        color: darken(white, 10%);
+        transform: scale(1.05);
+    }
+
+    &:active {
+        transform: scale(0.9);
+        color: darken(white, 15%);
+    }
+}
+
+.profile-text {
+    color: white;
+    font-size: 22px;
+    margin-left: 10px;
+}
+
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -124,18 +147,8 @@
 
     .login-icon {
         cursor: pointer;
-        font-size: 30px !important;
-        transition: background-color 0.3s ease, transform 0.3s ease !important;
+        font-size: 34px !important;
 
-        &:hover {
-            color: darken(white, 10%);
-            transform: scale(1.1);
-        }
-
-        &:active {
-            transform: scale(0.95);
-            color: darken(white, 15%);
-        }
     }
 
     @include media-breakpoint-down(sm) {
@@ -762,6 +775,34 @@
         width: 100%;
     }
 
+    .header-container-user {
+        margin-right: 0 !important;
+    }
+
+    .cart-button {
+        width: 40px;
+        height: 40px;
+
+        .cart-icon {
+            font-size: 20px;
+        }
+    }
+
+    .cart-badge {
+        padding: 2px 6px;
+    }
+
+    .search-icon {
+        font-size: 35px;
+    }
+
+    .account-wrapper {
+        display: none;
+    }
+
+    .notification-trigger {
+        display: none;
+    }
 
 
     /* Expanded search bar styles */
@@ -787,15 +828,7 @@
     }
 
     /* Close button styling */
-    .close-icon {
-        position: absolute;
-        right: 25px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        font-size: 24px;
-        color: red;
-    }
+
 
     /* Hide other elements when search is expanded */
     .logo-container,

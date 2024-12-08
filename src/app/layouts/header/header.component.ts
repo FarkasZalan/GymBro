@@ -286,7 +286,7 @@ export class HeaderComponent implements OnInit {
     }
 
     // Open the logout confirmation dialog
-    const dialogRef = this.dialog.open(LogOutComponent);
+    this.dialog.open(LogOutComponent);
   }
 
   // Navigate to cart page
