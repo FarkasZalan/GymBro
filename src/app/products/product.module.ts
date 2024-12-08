@@ -30,6 +30,9 @@ import { AccessoriesPageComponent } from './accessories/accessories-page/accesso
 import { ClothesPageComponent } from './clothes/clothes-page/clothes-page.component';
 import { ReviewHandleComponent } from './review-handle/review-handle.component';
 import { DiscountedProductsComponent } from './discounted-products/discounted-products.component';
+import { MatIconModule } from '@angular/material/icon';
+import { AdminProfileModule } from '../admin-profile/admin-profile.module';
+import { FilterPageComponent } from '../filter-page/filter-page.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -49,7 +52,10 @@ import { DiscountedProductsComponent } from './discounted-products/discounted-pr
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
-        NgxEditorModule
+        NgxEditorModule,
+        MatIconModule,
+
+        AdminProfileModule
     ],
     declarations: [
         ProductsListComponent,
@@ -62,11 +68,13 @@ import { DiscountedProductsComponent } from './discounted-products/discounted-pr
         AccessoriesPageComponent,
         ClothesPageComponent,
         ReviewHandleComponent,
-        DiscountedProductsComponent
+        DiscountedProductsComponent,
+        FilterPageComponent
     ],
     providers: [
         CurrencyPipe
-    ]
+    ],
+
 })
 export class ProductModule {
 }

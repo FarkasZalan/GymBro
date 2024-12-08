@@ -59,26 +59,27 @@ export class SidebarComponent {
     {
       name: 'menu.foodSuplimentsMenu.foodSupliments',
       icon: 'flash-outline',
-      route: '/product/' + ProductViewText.FOOD_SUPLIMENTS,
-      image: '../../../assets/images/food-supliments-image.jpg'
+      route: '/product/' + ProductViewText.FOOD_SUPLIMENTS
     },
     {
       name: 'menu.organicFoodMenu.organicFood',
       icon: 'heart-outline',
-      route: '/product/' + ProductViewText.ORGANIC_FOOD,
-      image: '../../../assets/images/healthy-food-image.jpg'
+      route: '/product/' + ProductViewText.ORGANIC_FOOD
     },
     {
       name: 'menu.clothingMenu.clothing',
       icon: 'pricetags-outline',
-      route: '/product/' + ProductViewText.CLOTHES,
-      image: '../../../assets/images/clothing-image.jpg'
+      route: '/product/' + ProductViewText.CLOTHES
     },
     {
       name: 'menu.accessoriesMenu.accessories',
       icon: 'shield-outline',
-      route: '/product/' + ProductViewText.ACCESSORIES,
-      image: '../../../assets/images/gym-accessories-image.jpg'
+      route: '/product/' + ProductViewText.ACCESSORIES
+    },
+    {
+      name: 'menu.blog',
+      icon: 'book-outline',
+      route: '/blog'
     }
   ];
 

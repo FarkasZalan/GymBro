@@ -190,7 +190,9 @@ textarea.ng-valid {
     position: sticky;
     display: flex;
     justify-content: flex-end;
-    bottom: 20px;
+    bottom: env(safe-area-inset-bottom) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0) + 120px) !important;
+    z-index: 999 !important;
     /* Distance from the bottom of the viewport */
 }
 
@@ -216,9 +218,11 @@ textarea.ng-valid {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 
+    padding: 0 !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 
     &:hover {
         background-color: #0b8e92;
@@ -278,6 +282,23 @@ textarea.ng-valid {
     /* Make visible */
     transform: translate(-50%, 0);
     /* Move the label to its original position */
+}
+
+nb-layout-footer {
+    position: relative !important;
+    bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0) + 80px) !important;
+    background: white !important;
+    margin-top: 20px !important;
+}
+
+nb-layout-header {
+    top: env(safe-area-inset-top, 0px) !important;
+    margin-bottom: 10px !important;
+}
+
+nb-layout {
+    min-height: 100vh !important;
 }
 
 app-header {
@@ -687,10 +708,6 @@ nb-sidebar {
 .back-btn:hover .arrow path {
     color: white !important;
     fill: white !important;
-}
-
-nb-layout-footer {
-    margin-top: 20px !important;
 }
 
 /* Styles for average star rating section */

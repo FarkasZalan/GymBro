@@ -88,7 +88,6 @@ import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functio
         HandleBlogsComponent,
         BlogComponent,
         UserBlogListComponent,
-        FilterPageComponent,
         HandleReviewsComponent,
         OrdersComponent
     ],
@@ -96,6 +95,9 @@ import { AngularFireFunctionsModule, REGION } from '@angular/fire/compat/functio
         CurrencyPipe,
         // Firebase functions region
         { provide: REGION, useValue: 'europe-central2' }
+    ],
+    exports: [
+        AdminProfileComponent
     ]
 })
 export class AdminProfileModule {
