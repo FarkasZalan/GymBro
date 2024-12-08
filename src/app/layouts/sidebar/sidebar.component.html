@@ -4,7 +4,7 @@
 <!-- Sidebar Content -->
 <div class="sidebar" [ngClass]="{ 'sidebar-open': sidebarOpen }">
     <div class="sidebar-header">
-        <!-- Logo at the top of the Sidebar -->
+        <!-- Logo at the top left of the Sidebar -->
         <div class="logo-container">
             <img src="../../../assets/images/gym-bro-logo.png" alt="GymBro Logo" class="sidebar-logo">
         </div>
@@ -12,7 +12,19 @@
         <nb-icon icon="close-outline" class="close-icon" (click)="toggleSidebar()"></nb-icon>
     </div>
 
-    <!-- Profile/Login, Notification, Language Changer (Only visible on smaller screens) -->
+    <!-- Sidebar links -->
+    <div class="sidebar-content">
+        <ul>
+            <li *ngFor="let link of pageLinks">
+                <a [routerLink]="link.route" (click)="closeSidebar()">
+                    <nb-icon class="sidebar-link-icon" [icon]="link.icon"></nb-icon>
+                    <span class="sidebar-link-name">{{ link.name | translate }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Only visible for smaller screens -->
     <div class="sidebar-bottom">
         <!-- Profile Section -->
         <div class="profile" *ngIf="userLoggedIn">
@@ -22,10 +34,7 @@
             </span>
         </div>
 
-
-
-
-
+        <!-- Profile Options Section -->
         <div class="notification-panel profile-options" *ngIf="profileOptionsOpen" [@collapseField]>
             <div class="notification-content">
                 <!--Profile Section -->
@@ -34,21 +43,14 @@
                         <span>{{ 'header.profile' | translate }}</span>
                     </div>
                 </div>
-
+                <!-- Log out Section -->
                 <div class="notification-item profile-item" (click)="logOut()">
                     <div class="notification-details">
                         <span>{{ 'header.logOut' | translate }}</span>
                     </div>
                 </div>
-
             </div>
         </div>
-
-
-
-
-
-
 
         <!-- Login Button for Unauthenticated Users -->
         <div class="profile" *ngIf="!userLoggedIn" (click)="navigateToProfile()">
@@ -64,7 +66,7 @@
             <span class="notification-badge" *ngIf="!user?.isAdmin && (userOrdersCount$ | async) > 0">
                 {{userOrdersCount$ | async}}
             </span>
-
+            <!-- Admin notification badge - shows sum count of userOrdersCount$ and adminNotificationCount$ -->
             <span class="notification-badge" *ngIf="user?.isAdmin && (adminNotificationCount$ | async) > 0">
                 {{adminNotificationCount$ | async}}
             </span>
@@ -74,7 +76,7 @@
         <div class="notification-panel" *ngIf="showNotificationPanel && !user?.isAdmin" [@collapseField]>
             <div class="notification-content">
                 <!-- New Orders Section -->
-                <div class="notification-item" *ngIf="(userOrdersCount$ | async) > 0"
+                <div class="notification-item profile-item" *ngIf="(userOrdersCount$ | async) > 0"
                     (click)="navigateToBasicUserToOrders()">
                     <i class="material-icons">shopping_basket</i>
                     <div class="notification-details">
@@ -91,6 +93,7 @@
             </div>
         </div>
 
+        <!-- Admin Notification Panel -->
         <div class="notification-panel" *ngIf="showNotificationPanel && user?.isAdmin" [@collapseField]>
             <div class="notification-content">
                 <!-- New Orders Section -->
@@ -128,17 +131,5 @@
                 {{ languageSwithButtonText.toUpperCase() }}
             </button>
         </div>
-    </div>
-
-    <!-- Sidebar Menu -->
-    <div class="sidebar-content">
-        <ul>
-            <li *ngFor="let link of pageLinks">
-                <a [routerLink]="link.route" (click)="closeSidebar()">
-                    <nb-icon class="sidebar-link-icon" [icon]="link.icon"></nb-icon>
-                    <span class="sidebar-link-name">{{ link.name | translate }}</span>
-                </a>
-            </li>
-        </ul>
     </div>
 </div>

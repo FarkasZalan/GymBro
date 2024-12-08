@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
-import { TranslateService } from '@ngx-translate/core';
 import { AppComponent } from '../../app.component';
 import { User } from '../../profile/user.model';
 import { AuthService } from '../../auth/auth.service';
@@ -102,7 +101,6 @@ export class SidebarComponent {
   userOrdersCount$ = this.userNotificationService.ordersCount$;
 
   constructor(
-    private translate: TranslateService,
     private appComponent: AppComponent,
     private auth: AngularFireAuth,
     private authService: AuthService,
@@ -164,8 +162,8 @@ export class SidebarComponent {
 
   // Open logout confirmation dialog
   logOut() {
-    // Check if there's already an open dialog
     this.profileOptionsOpen = false; // Close dropdown
+    // Check if there's already an open dialog
     if (this.dialog.openDialogs.length > 0) {
       this.dialog.closeAll();
     }
@@ -250,6 +248,8 @@ export class SidebarComponent {
   // Toggle Sidebar visibility
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
+    this.profileOptionsOpen = false;
+    this.showNotificationPanel = false;
 
     // Slight delay to ensure the sidebar closes before navigation
     setTimeout(() => {
@@ -259,6 +259,8 @@ export class SidebarComponent {
   // Method to close the sidebar when a link is clicked
   closeSidebar() {
     this.sidebarOpen = false;
+    this.profileOptionsOpen = false;
+    this.showNotificationPanel = false;
 
     // Slight delay to ensure the sidebar closes before navigation
     setTimeout(() => {
