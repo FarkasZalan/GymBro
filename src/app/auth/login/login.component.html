@@ -7,8 +7,8 @@
 <div class="container" [@zoomIn]>
     <nb-card>
         <nb-card-body class="login-col">
-
-            <div class="row">
+            <div class="row responsive-row">
+                <!-- login form -->
                 <div class="col">
                     <form (ngSubmit)="login()" #form="ngForm">
                         <!-- email block -->
@@ -28,8 +28,7 @@
                                 <input [type]="showPassword ? 'text' : 'password'" class="form-control" ngModel
                                     name="password" fullWidth placeholder="{{ 'loginPage.password' | translate }}"
                                     minlength="6" required #password="ngModel" />
-                                <i class="eye-icon" (mousedown)="togglePassword(true)" (mouseup)="togglePassword(false)"
-                                    (mouseleave)="togglePassword(false)">
+                                <i class="eye-icon" (click)="togglePassword()">
                                     <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                                 </i>
                             </div>
@@ -58,7 +57,7 @@
 
                         <!-- login submit button -->
                         <div class="login-button-container">
-                            <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
+                            <button class="btn btn-primary basic-btn login-btn" type="submit" nbButton status="success"
                                 [disabled]="!form.valid">{{ 'loginPage.login' | translate }}</button>
                         </div>
 
@@ -69,7 +68,9 @@
                             </p>
                         </div>
                     </form>
-                </div>
+                </div><br>
+
+                <!-- dont have account -->
                 <div class="col">
                     <div class="register-div">
                         <i class="fas fa-user"></i>
@@ -81,13 +82,13 @@
                     </ul><br>
                     <!-- go to register button -->
                     <div class="login-button-container">
-                        <button class="btn btn-primary basic-btn" type="submit" nbButton status="success"
+                        <button class="btn btn-primary basic-btn login-btn" type="submit" nbButton status="success"
                             (click)="goToRegister()">{{ 'loginPage.register' | translate }}</button>
                     </div>
                 </div>
             </div>
             <div class="login-button-container">
-                <button class="btn btn-primary basic-btn back-btn" type="submit" nbButton status="success"
+                <button class="btn btn-primary basic-btn back-btn login-btn" type="submit" nbButton status="success"
                     (click)="goToItems()">
                     <span class="arrow">
                         <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">

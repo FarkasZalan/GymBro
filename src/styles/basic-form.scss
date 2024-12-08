@@ -482,6 +482,14 @@ ul.custom-list li::before {
     .emptyCard {
         width: 400px;
     }
+
+    .responsive-row {
+        display: block;
+    }
+
+    .login-btn {
+        width: 270px;
+    }
 }
 
 @media(max-width: 850px) {
@@ -492,15 +500,35 @@ ul.custom-list li::before {
     .emptyCard {
         width: 300px;
     }
+
+    .responsive-field-row {
+        display: block;
+    }
 }
 
 @media(max-width: 750px) {
+    .forgot-password-text {
+        margin-top: 20px !important;
+    }
+
     .container-profile {
         max-width: 100%;
     }
 
     .emptyCard {
         width: 200px;
+    }
+
+    .login-btn {
+        width: 250px;
+        font-size: 14px !important;
+    }
+}
+
+@media(max-width: 350px) {
+    .login-btn {
+        width: 200px;
+        font-size: 12px !important;
     }
 }
 

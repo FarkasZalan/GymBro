@@ -161,8 +161,8 @@ export class LoginComponent {
   }
 
   // Method to toggle password visibility
-  togglePassword(isHolding: boolean) {
-    this.showPassword = isHolding;
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   forgotPassword() {

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -32,7 +32,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
     ]),
   ]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   @ViewChild('form') createUserForm: NgForm;  // Access the form for validation
   newUser: User;
   password: string = "";
@@ -55,6 +55,9 @@ export class RegisterComponent {
   public errorMessage = false;
   errorMessagePassword: boolean = false;
 
+  // responsibility
+  isLargeScreen: boolean = window.innerWidth > 850;
+
   constructor(
     private authService: AuthService,
     public loadingService: LoadingService,
@@ -66,6 +69,19 @@ export class RegisterComponent {
     private functions: AngularFireFunctions,
     private db: AngularFirestore
   ) { }
+
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 850;
+  }
 
   // Method to handle user registration
   async register() {
@@ -190,11 +206,11 @@ export class RegisterComponent {
   }
 
   // Method to toggle password visibility
-  togglePassword(isHolding: boolean) {
-    this.showPassword = isHolding;
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
-  toggleConfirmPassword(isHolding: boolean) {
-    this.showConfirmPassword = isHolding;
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }

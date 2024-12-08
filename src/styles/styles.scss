@@ -526,6 +526,12 @@ a .logo {
     }
 }
 
+@media (max-width: 400px) {
+    .cdk-overlay-pane.mat-mdc-dialog-panel {
+        min-width: 360px !important;
+    }
+}
+
 .social-icons {
     display: flex;
     align-items: center;

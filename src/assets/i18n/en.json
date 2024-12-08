@@ -54,7 +54,7 @@
       "loginError": "Invalid email or password!",
       "forgotPasswordPageTitle": "Password recovery",
       "emailNotRegistered": "No user is registered with this email address!",
-      "sendEmail": "Send password recovery link",
+      "sendEmail": "Send link",
       "dontHaveAccount": "Don't have an account?",
       "collectCuponsText": "Collect points for discounts!",
       "saveDateText": "Save your data for easier shopping!",
@@ -717,7 +717,8 @@
       "paidVia": "Paid via",
       "printReceipt": "Print Receipt",
       "orderStatusChanged": "Order status changed",
-      "orderDeleted": "Order deleted"
+      "orderDeleted": "Order deleted",
+      "orderDelivered": "Order delivered"
    },
    "orders": {
       "noOrdersYet": "You don't have any orders yet",
