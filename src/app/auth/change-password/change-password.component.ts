@@ -129,12 +129,12 @@ export class ChangePasswordComponent implements OnInit {
     }
   }
 
-  toggleNewPassword(isHolding: boolean) {
-    this.showNewPassword = isHolding;
+  toggleNewPassword() {
+    this.showNewPassword = !this.showNewPassword;
   }
 
-  toggleConfirmPassword(isHolding: boolean) {
-    this.showConfirmPassword = isHolding;
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   goToLogin() {

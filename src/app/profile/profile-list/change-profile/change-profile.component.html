@@ -4,15 +4,14 @@
 <!-- Change Data title -->
 <h1 id="title" class="title">{{ 'profilePage.dataChange' | translate }}</h1>
 <!-- Change Data form -->
-<div class="container">
+<div class="container" [@zoomIn]>
     <nb-card>
         <nb-card-body class="login-col">
-
             <div class="row">
                 <div class="col">
                     <form (ngSubmit)="changeData()" #form="ngForm">
                         <div class="row">
-                            <div class="col-6">
+                            <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- First Name block -->
                                 <div class="form-group">
                                     <label for="firstName" class="label">{{ 'register.firstName' | translate }}</label>
@@ -23,7 +22,7 @@
                                         'register.fieldRequired' | translate }}</span>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Last Name block -->
                                 <div class="form-group">
                                     <label for="lastName" class="label">{{ 'register.lastName' | translate }}</label>
@@ -36,7 +35,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <!-- Phone block -->
                                 <div class="form-group">
                                     <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
@@ -55,8 +54,7 @@
                                 <input [type]="showPassword ? 'text' : 'password'" class="form-control" ngModel
                                     name="password" placeholder="{{ 'loginPage.password' | translate }}" minlength="6"
                                     #password="ngModel" #passwordFirst="ngModel" />
-                                <i class="eye-icon" (mousedown)="togglePassword(true)" (mouseup)="togglePassword(false)"
-                                    (mouseleave)="togglePassword(false)">
+                                <i class="eye-icon" (click)="togglePassword()">
                                     <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                                 </i>
                             </div>
@@ -73,9 +71,7 @@
                                 <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" ngModel
                                     name="passwordAgain" placeholder="{{ 'profilePage.newPasswordAgain' | translate }}"
                                     minlength="6" required #passwordAgain="ngModel" />
-                                <i class="eye-icon" (mousedown)="toggleConfirmPassword(true)"
-                                    (mouseup)="toggleConfirmPassword(false)"
-                                    (mouseleave)="toggleConfirmPassword(false)">
+                                <i class="eye-icon" (click)="toggleConfirmPassword()">
                                     <i class="fas" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
                                 </i>
                             </div>

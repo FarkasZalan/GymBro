@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
   errorMessagePassword: boolean = false;
 
   // responsibility
-  isLargeScreen: boolean = window.innerWidth > 850;
+  isLargeScreen: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -74,6 +74,7 @@ export class RegisterComponent implements OnInit {
     this.checkScreenSize();
   }
 
+  // display in 1 column the form fields on smaller screens and 2 columns on larger screens
   @HostListener('window:resize', [])
   onResize(): void {
     this.checkScreenSize();

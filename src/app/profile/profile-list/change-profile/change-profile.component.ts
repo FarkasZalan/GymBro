@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SuccessfullDialogComponent } from '../../../successfull-dialog/successfull-dialog.component';
@@ -7,14 +7,22 @@ import { User } from '../../user.model';
 import { DocumentHandlerService } from '../../../document.handler.service';
 import { UserService } from '../../user.service';
 import { LoadingService } from '../../../loading-spinner/loading.service';
-import { ShippingAddress } from '../../shipping-address/shipping-address.model';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-change-profile',
   templateUrl: './change-profile.component.html',
-  styleUrl: '../../../../styles/basic-form.scss'
+  styleUrl: '../../../../styles/basic-form.scss',
+  animations: [
+    trigger('zoomIn', [
+      transition(':enter', [
+        style({ transform: 'scale(0.8)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
+      ]),
+    ]),
+  ]
 })
-export class ChangeProfileComponent {
+export class ChangeProfileComponent implements OnInit {
   @ViewChild('form') modifyUserForm: NgForm;
   modifyUserId: string = "";
   modifyUser: User;
@@ -31,6 +39,9 @@ export class ChangeProfileComponent {
   showPassword: boolean = false; // For password visibility
   showConfirmPassword: boolean = false; // For confirm password visibility
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data,
@@ -39,6 +50,20 @@ export class ChangeProfileComponent {
     public loadingService: LoadingService
   ) {
     this.initializeComponent();
+  }
+
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
+
+  // display in 1 column the form fields on smaller screens and 2 columns on larger screens
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 850;
   }
 
   private async initializeComponent() {
@@ -106,11 +131,11 @@ export class ChangeProfileComponent {
     this.dialog.closeAll();
   }
 
-  togglePassword(isHolding: boolean) {
-    this.showPassword = isHolding;
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
-  toggleConfirmPassword(isHolding: boolean) {
-    this.showConfirmPassword = isHolding;
+  toggleConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }
