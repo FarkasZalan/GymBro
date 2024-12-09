@@ -470,7 +470,7 @@
    },
    "filter": {
       "orderBy": {
-         "orderByText": "Choose Sorting Order",
+         "orderByText": "Sorting Order",
          "latest": "Order by latest",
          "oldest": "Order by oldest",
          "cheapest": "Cheapest",

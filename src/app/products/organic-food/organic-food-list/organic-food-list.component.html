@@ -1,68 +1,276 @@
-<!-- If no products, display the empty card -->
-<div *ngIf="(emptyCollection === true)" class="product-empty-list-container">
-    <nb-card class="emptyCard" [@zoomIn]>
-        <nb-card-body>
-            <div>
-                <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
-                <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
-            </div>
-            <div class="button-container">
-                <button class="btn btn-primary basic-btn basic-form-btn products-button delete-btn" type="submit"
-                    nbButton status="success" (click)="deleteFilters()">{{
-                    'filter.deleteFilter' | translate
-                    }}</button>
-            </div>
-        </nb-card-body>
-    </nb-card>
-</div>
+<!-- that's just need to navigate to the top -->
+<p #toScrollAfterNavigate></p>
+<div class="page-container">
+    <!-- Filter Section -->
+    <div class="filter-container">
+        <!-- Category section -->
+        <div class="row">
+            <h3 class="title">{{ 'blog.filter' | translate }}</h3>
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
 
-<div class="row">
-    <!-- Display product prices dynamically in a 2-column layout -->
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleCategoryDropdown()">
 
-    <!-- Organic food -->
-    <div *ngIf="organicFoods" class="product-list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let organicFood of organicFoods" [@zoomIn]>
-            <nb-card-body class="product-image" (click)="goToProductPage(organicFood.id)">
+                        <!-- Select category dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select"
+                            name="category" #category="ngModel" [(ngModel)]="filterObject.category"
+                            (change)="applyFilters()">
+                            <!-- Placeholder option -->
+                            <option value="" selected>{{ 'filter.selectCategory' |
+                                translate }}
+                            </option>
 
-                <!-- display the sale badge if there is a discount -->
-                <span *ngIf="getDefaultPrice(organicFood).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
-                    translate }}</span>
+                            <!-- List of order options -->
+                            <option *ngFor="let category of availableCategories" [value]="category">
+                                {{ category | translate }}
+                            </option>
+                        </select>
 
-                <div *ngIf="getDefaultPrice(organicFood) as defaultPrice" class="details-container text-center">
-                    <div class="image-container text-center">
-                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                            alt="Product Image" class="card-image" />
-                        <img *ngIf="defaultPrice.productImage === ''"
-                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                            class="card-image" />
-                    </div>
-
-
-                    <h4>{{ organicFood.productName }}</h4>
-
-
-                    <!-- Display the average rating of the product -->
-                    <div *ngIf="getProductReviews(organicFood.id).length > 0" class="average-rating-product-display">
-                        <i [attr.data-star]="getAverageRating(organicFood.id)"></i>
-                        <span class="rating-number-product-display">
-                            {{ getProductReviews(organicFood.id).length }} {{ 'review.reviewText' | translate }}
-                        </span>
-                    </div>
-
-                    <!-- display the price and if there is a discount, display the discounted price -->
-                    <div class="price-container" *ngIf="getDefaultPrice(organicFood) as defaultPrice">
-                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
-                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                        </h5>
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isCategoryDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isCategoryDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
-            </nb-card-body>
-        </nb-card>
+            </div>
+            <br>
+        </div>
+
+        <!-- Order by section -->
+        <div class="row">
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+
+                    <label for="order" class="order-by-label">{{ 'filter.orderBy.orderByText' | translate }}</label>
+
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleOrderDropdown()">
+
+                        <!-- Select order dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select" name="order"
+                            #order="ngModel" [(ngModel)]="filterObject.orderBy" (change)="orderItems()">
+
+                            <!-- List of order options -->
+                            <option *ngFor="let order of availableOrders" [value]="order">
+                                {{ order | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        <div class="row">
+            <!-- Flavors and Allergens Section -->
+            <div class="row"
+                *ngIf="filterObject.category !== productViewText.COOKING_iNGREDIENTS && filterObject.category !== productViewText.CEREALS && filterObject.category !== ''"
+                [@collapseField]>
+                <!-- Flavors Section -->
+                <div class="col-md-12 form-group">
+                    <label for="flavors" class="label">{{ 'products.productFlavors' | translate
+                        }}</label>
+                    <div class="multi-select-container">
+                        <select class="form-control allow-selected-multiple-list-color" multiple="multiple">
+                            <option *ngFor="let flavor of availableFlavors" [value]="flavor"
+                                [ngClass]="{'active': filterObject.flavors.includes(flavor) && filterObject.flavors.length > 0}"
+                                (click)="selectionOfTheList(productViewText.FLAVORS, flavor)">
+                                {{ flavor | translate }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- display the selected flavors -->
+                    <div *ngIf="filterObject.flavors.length > 0">
+                        <div class="selected-items-display" *ngFor="let selected of filterObject.flavors"
+                            (click)="removeItemFromTheList(productViewText.FLAVORS, selected)" [@zoomIn]>
+                            {{ selected | translate }}
+                            <span style="cursor: pointer; color: red;">&times;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Allergens Section -->
+            <div class="row">
+                <!-- Allergenes Section -->
+                <div class="col-md-12 form-group">
+                    <label for="allregenes" class="label">{{ 'products.productAllergens' | translate
+                        }}</label>
+                    <div class="multi-select-container">
+                        <select class="form-control allow-selected-multiple-list-color" multiple="multiple">
+                            <option *ngFor="let allergene of availableAllergens" [value]="allergene"
+                                [ngClass]="{'active': filterObject.allergenes.includes(allergene) && filterObject.allergenes.length > 0}"
+                                (click)="selectionOfTheList(productViewText.ALLERGENES, allergene)">
+                                {{ allergene | translate}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- display the selected allergenes -->
+                    <div *ngIf="filterObject.allergenes.length > 0">
+                        <div class="selected-items-display" *ngFor="let selected of filterObject.allergenes"
+                            (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)" [@zoomIn]>
+                            {{ selected | translate }}
+                            <span style="cursor: pointer; color: red;">&times;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Section -->
+            <div class="checkbox-container">
+                <div class="row">
+                    <!-- Safe for Pregnancy -->
+                    <div class="col-md-12 form-group">
+                        <label class="checkbox-container">
+                            {{ 'products.safeForPregnancy' | translate }}
+                            <input type="checkbox" [(ngModel)]="filterObject.safeForConsumptionDuringPregnancy"
+                                (change)="applyFilters()" name="safeForConsumptionDuringPregnancy">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <!-- Safe for Breastfeeding -->
+                    <div class="col-md-12 form-group">
+                        <label class="checkbox-container">
+                            {{ 'products.safeForBreastfeeding' | translate }}
+                            <input type="checkbox" [(ngModel)]="filterObject.safeForConsumptionDuringBreastfeeding"
+                                (change)="applyFilters()" name="safeForConsumptionDuringBreastfeeding">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="send-button-container">
+            <button class="btn btn-primary forgot-btn btn delete-btn" type="button" nbButton status="warning"
+                (click)="deleteFilters()">
+                {{ 'filter.deleteFilter' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Product Section -->
+    <div class="product-container">
+        <!-- If no products, display the empty card -->
+        <div *ngIf="(emptyCollection === true)" class="product-empty-list-container">
+            <nb-card class="emptyCard" [@zoomIn]>
+                <nb-card-body>
+                    <div>
+                        <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                        <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
+                    </div>
+                    <div class="button-container">
+                        <button class="btn btn-primary basic-btn basic-form-btn products-button delete-btn"
+                            type="submit" nbButton status="success" (click)="deleteFilters()">{{
+                            'filter.deleteFilter' | translate
+                            }}</button>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+
+        <div class="row">
+            <!-- Product list -->
+            <div *ngIf="paginatedOrganicFoods" class="product-list-container">
+                <nb-card class="rounded-card productCard" *ngFor="let organicFood of paginatedOrganicFoods" [@zoomIn]>
+                    <nb-card-body class="product-image" (click)="goToProductPage(organicFood.id)">
+
+                        <!-- display the sale badge if there is a discount -->
+                        <span *ngIf="getDefaultPrice(organicFood).discountedPrice > 0" class="badge discount">{{
+                            'home.sale' |
+                            translate }}</span>
+
+                        <div *ngIf="getDefaultPrice(organicFood) as defaultPrice" class="details-container text-center">
+                            <div class="image-container text-center">
+                                <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                    alt="Product Image" class="card-image" />
+                                <img *ngIf="defaultPrice.productImage === ''"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                    class="card-image" />
+                            </div>
+
+
+                            <h4>{{ organicFood.productName }}</h4>
+
+
+                            <!-- Display the average rating of the product -->
+                            <div *ngIf="getProductReviews(organicFood.id).length > 0"
+                                class="average-rating-product-display">
+                                <i [attr.data-star]="getAverageRating(organicFood.id)"></i>
+                                <span class="rating-number-product-display">
+                                    {{ getProductReviews(organicFood.id).length }} {{ 'review.reviewText' | translate }}
+                                </span>
+                            </div>
+
+                            <!-- display the price and if there is a discount, display the discounted price -->
+                            <div class="price-container" *ngIf="getDefaultPrice(organicFood) as defaultPrice">
+                                <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                    <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                    <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                </h5>
+                            </div>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Left Arrow -->
+            </button>
+
+            <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                {{ i + 1 }}
+            </button>
+
+            <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                (click)="goToPage(currentPage + 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled right arrow -->
+                        <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Right Arrow -->
+            </button>
+        </div>
     </div>
 </div>
 

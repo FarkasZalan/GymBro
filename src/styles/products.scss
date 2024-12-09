@@ -124,10 +124,63 @@
     margin-right: 30% !important;
 }
 
+.order-by-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0b8e92;
+    margin-bottom: 8px;
+    /* Space between the label and dropdown */
+    display: block;
+    /* Ensures the label is on its own line */
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    /* Adds an elegant touch */
+}
+
 @media (max-width: 768px) {
     .filter-container {
         display: none !important;
     }
+
+    .emptyCard {
+        width: 600px !important
+    }
+}
+
+@media (max-width: 680px) {
+    .emptyCard {
+        width: 500px !important
+    }
+}
+
+@media (max-width: 580px) {
+    .emptyCard {
+        width: 400px !important
+    }
+}
+
+@media (max-width: 490px) {
+    .emptyCard {
+        width: 300px !important
+    }
+
+    .products-button {
+        width: 250px !important;
+    }
+}
+
+@media (max-width: 370px) {
+    .emptyCard {
+        width: 250px !important
+    }
+
+    .products-button {
+        width: 200px !important;
+    }
+}
+
+.emptyCardText {
+    line-height: normal;
 }
 
 .product-container {
@@ -141,7 +194,7 @@
     margin-left: auto;
     margin-right: auto;
     margin-bottom: auto;
-    padding: 16px;
+    padding: 10px;
     height: fit-content;
     justify-content: center;
 }
@@ -161,6 +214,7 @@
 }
 
 .checkbox-container {
+    margin-top: 10px !important;
     display: grid !important;
     justify-content: center !important;
 }
@@ -722,6 +776,30 @@ h5 {
 
     .emptyCardImage {
         animation: bounce 2s ease-in-out infinite;
+    }
+}
+
+@media (max-width: 1200px) {
+    .emptyCard {
+        width: 600px
+    }
+}
+
+@media (max-width: 1024px) {
+    .emptyCard {
+        width: 500px
+    }
+}
+
+@media (max-width: 900px) {
+    .emptyCard {
+        width: 400px
+    }
+}
+
+@media (max-width: 820px) {
+    .emptyCard {
+        width: 370px
     }
 }
 

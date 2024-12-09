@@ -156,7 +156,7 @@
                         <!-- display the selected flavors -->
                         <div *ngIf="selectedFlavors.length > 0">
                             <div class="selected-items-display" *ngFor="let selected of selectedFlavors"
-                                (click)="removeItemFromTheList(productViewText.FLAVORS, selected)">
+                                (click)="removeItemFromTheList(productViewText.FLAVORS, selected)" [@zoomIn]>
                                 {{ selected | translate }}
                                 <span style="cursor: pointer; color: red;">&times;</span>
                             </div>
@@ -180,7 +180,7 @@
                         <!-- display the selected allergenes -->
                         <div *ngIf="selectedAllergenes.length > 0">
                             <div class="selected-items-display" *ngFor="let selected of selectedAllergenes"
-                                (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)">
+                                (click)="removeItemFromTheList(productViewText.ALLERGENES, selected)" [@zoomIn]>
                                 {{ selected | translate }}
                                 <span style="cursor: pointer; color: red;">&times;</span>
                             </div>

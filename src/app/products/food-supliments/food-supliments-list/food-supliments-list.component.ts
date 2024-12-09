@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FoodSupliment } from '../../../admin-profile/product-management/product-models/food-supliment.model';
 import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { ProductService } from '../../product.service';
 import { Filter } from '../../../filter-page/filter.model';
 import { FilterPageComponent } from '../../../filter-page/filter-page.component';
@@ -46,7 +46,7 @@ export class FoodSuplimentsListComponent implements OnInit {
   originalFoodSuplimentList: FoodSupliment[] = [];
 
   paginatedFoodSupliments: FoodSupliment[] = [];
-  itemsPerPage = 6;
+  itemsPerPage = 12;
   currentPage = 1;
 
   productViewText = ProductViewText;
@@ -191,6 +191,7 @@ export class FoodSuplimentsListComponent implements OnInit {
     });
   }
 
+  // navigation for the pagination
   updatePaginatedList(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
@@ -415,6 +416,8 @@ export class FoodSuplimentsListComponent implements OnInit {
     }
     this.emptyCollection = false;
 
+    // to set the default filters
+    this.applyFilters();
     this.updatePaginatedList();
   }
 }

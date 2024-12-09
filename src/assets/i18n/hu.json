@@ -474,7 +474,7 @@
         },
         "filter": {
                 "orderBy": {
-                        "orderByText": "Rendezési sorrend kiválasztása",
+                        "orderByText": "Rendezési sorrend",
                         "latest": "Legújabb szerint",
                         "oldest": "Legrégebbi szerint",
                         "cheapest": "Legolcsóbb szerint",

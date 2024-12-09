@@ -49,6 +49,8 @@
             <div class="dropdown-list-container">
                 <div class="form-group position-relative order-by-container">
 
+                    <label for="order" class="order-by-label">{{ 'filter.orderBy.orderByText' | translate }}</label>
+
                     <!-- Dropdown container with arrow icon -->
                     <div class="dropdown-container" (click)="toggleOrderDropdown()">
 
@@ -273,8 +275,6 @@
         </div>
 
         <div class="row">
-            <!-- Display product prices dynamically in a 2-column layout -->
-
             <!-- Product list -->
             <div *ngIf="paginatedFoodSupliments" class="product-list-container">
                 <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of paginatedFoodSupliments"
