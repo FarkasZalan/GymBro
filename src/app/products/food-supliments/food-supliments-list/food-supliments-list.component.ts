@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FoodSupliment } from '../../../admin-profile/product-management/product-models/food-supliment.model';
 import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
 import { MatDialog } from '@angular/material/dialog';
@@ -6,8 +6,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../product.service';
 import { Filter } from '../../../filter-page/filter.model';
 import { FilterPageComponent } from '../../../filter-page/filter-page.component';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate, state } from '@angular/animations';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-food-supliments-list',
@@ -20,12 +21,34 @@ import { ProductReeviews } from '../../../admin-profile/product-management/produ
         animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
       ]),
     ]),
+    trigger('collapseField', [
+      state('void', style({
+        height: '0px', // Initially collapsed
+        overflow: 'hidden'
+      })),
+      state('*', style({
+        height: '*', // Expands to the full height of the content
+        overflow: 'hidden'
+      })),
+      transition('void => *', [
+        animate('250ms ease-out') // Expands smoothly
+      ]),
+      transition('* => void', [
+        animate('250ms ease-in') // Collapses smoothly
+      ])
+    ])
   ]
 })
 export class FoodSuplimentsListComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   // store the products one of the array
   foodSupliments: FoodSupliment[] = [];
   originalFoodSuplimentList: FoodSupliment[] = [];
+
+  paginatedFoodSupliments: FoodSupliment[] = [];
+  itemsPerPage = 6;
+  currentPage = 1;
+
   productViewText = ProductViewText;
 
   // Add property to store reviews
@@ -51,9 +74,96 @@ export class FoodSuplimentsListComponent implements OnInit {
     equipmentType: ''
   };
 
-  constructor(private productService: ProductService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
+  // Filters
+  // categories
+  availableCategories = [
+    ProductViewText.PROTEINS,
+    ProductViewText.MASS_GAINERS,
+    ProductViewText.AMINO_ACIDS,
+    ProductViewText.CREATINES,
+    ProductViewText.VITAMINS_AND_MINERALS,
+    ProductViewText.JOIN_SUPPORT,
+    ProductViewText.FAT_BURNERS
+  ];
+  isCategoryDropdownOpen: boolean = false;
+
+  // order by
+  availableOrders = [
+    ProductViewText.ORDER_BY_BEST_RATING,
+    ProductViewText.ORDER_BY_WORST_RATING,
+    ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+    ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE,
+    ProductViewText.ORDER_BY_NAME_ASC,
+    ProductViewText.ORDER_BY_NAME_DESC
+  ];
+  isOrderByDropdownOpen: boolean = false;
+
+  // Flavors and Allergens
+  availableFlavors: string[] = [
+    ProductViewText.UNFLAVORED,
+    ProductViewText.VANILLA_FLAVOR,
+    ProductViewText.CHOCOLATE_FLAVOR,
+    ProductViewText.STRAWBERRY_FLAVOR,
+    ProductViewText.PINEAPPLE_MANGO_FLAVOR,
+    ProductViewText.COCONUT_FLAVOR,
+    ProductViewText.TIRAMISU_FLAVOR,
+    ProductViewText.COOKIES_AND_CREAM_FLAVOR,
+    ProductViewText.PEANUT_BUTTER_FLAVOR,
+    ProductViewText.WHITE_CHOCOLATE_FLAVOR,
+    ProductViewText.PISTACHIO_FLAVOR,
+    ProductViewText.CHOCOLATE_TOFFEE_FLAVOR,
+    ProductViewText.BANANA_FLAVOR,
+    ProductViewText.COFFEE_FLAVOR,
+    ProductViewText.SALT_CARAMEL_FLAVOR,
+    ProductViewText.MINT_CHOCOLATE_FLAVOR,
+    ProductViewText.MOCHA_FLAVOR,
+    ProductViewText.CINNAMON_ROLL_FLAVOR,
+    ProductViewText.BLUEBERRY_FLAVOR,
+    ProductViewText.PUMPKIN_SPICE_FLAVOR,
+    ProductViewText.CHOCOLATE_PEANUT_BUTTER_FLAVOR,
+    ProductViewText.APPLE_PIE_FLAVOR,
+    ProductViewText.LEMON_CHEESECAKE_FLAVOR,
+    ProductViewText.BLACK_BISCUIT_FLAVOR,
+    ProductViewText.CAPPUCINO
+  ];
+
+
+  // Allergens
+  availableAllergens: string[] = [
+    ProductViewText.LACTOSE_FREE_ALLERGEN,
+    ProductViewText.GLUTEN_FREE_ALLERGEN,
+    ProductViewText.SOY_FREE_ALLERGEN,
+    ProductViewText.EGG_FREE_ALLERGEN,
+    ProductViewText.SUGAR_FREE_ALLERGEN,
+    ProductViewText.PEANUTS_FREE_ALLERGEN,
+    ProductViewText.FISH_FREE_ALLERGEN
+  ];
+
+  // Protein type
+  availableProteins: string[] = [
+    ProductViewText.CASEIN,
+    ProductViewText.PLANT_BASED_PROTEIN,
+    ProductViewText.DAIRY_FREE_PROTEIN,
+    ProductViewText.WHEY_PROTEIN,
+    ProductViewText.ANIMAL_BASED_PROTEIN
+  ];
+  isProteinTypeDropdownOpen: boolean = false;
+
+  // Gender
+  availableGenders: string[] = [
+    ProductViewText.MALE,
+    ProductViewText.FEMALE,
+    ProductViewText.UNISEX
+  ];
+  isGenderDropdownOpen: boolean = false;
+
+  constructor(private productService: ProductService, private router: Router, private translate: TranslateService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    // sort the available filter sections
+    this.sortAvailableFilterSections();
+
+    // get all the products
     this.productService.getAllProductByCategory(ProductViewText.FOOD_SUPLIMENTS).subscribe((foodSuplimentsCollection: FoodSupliment[]) => {
       this.foodSupliments = foodSuplimentsCollection;
       this.originalFoodSuplimentList = foodSuplimentsCollection;
@@ -68,13 +178,38 @@ export class FoodSuplimentsListComponent implements OnInit {
           .subscribe(reviews => {
             this.productReviews.set(product.id, reviews);
           });
+
+        this.updatePaginatedList();
       });
+
+      this.applyFilters();
 
       // if the collection doesn't have any products
       if (this.foodSupliments.length === 0) {
         this.emptyCollection = true;
       }
     });
+  }
+
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedFoodSupliments = this.foodSupliments.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.updatePaginatedList();
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.foodSupliments.length / this.itemsPerPage);
+  }
+
+  sortAvailableFilterSections() {
+    this.availableAllergens.sort((a, b) => this.translate.instant(a).localeCompare(this.translate.instant(b)) || a.localeCompare(b));
+    this.availableFlavors.sort((a, b) => this.translate.instant(a).localeCompare(this.translate.instant(b)) || a.localeCompare(b));
   }
 
   // Method to get the default price for a the products
@@ -102,6 +237,61 @@ export class FoodSuplimentsListComponent implements OnInit {
     return Math.round(average * 100) / 100;
   }
 
+  toggleOrderDropdown() {
+    this.isOrderByDropdownOpen = !this.isOrderByDropdownOpen;
+  }
+
+  toggleCategoryDropdown() {
+    this.isCategoryDropdownOpen = !this.isCategoryDropdownOpen;
+  }
+
+  toggleGenderDropdown() {
+    this.isGenderDropdownOpen = !this.isGenderDropdownOpen;
+  }
+
+  toggleProteinTypeDropdown() {
+    this.isProteinTypeDropdownOpen = !this.isProteinTypeDropdownOpen;
+  }
+
+  // Handle selection of flavors, allergens, and genders
+  selectionOfTheList(type: string, item: string): void {
+    switch (type) {
+      case ProductViewText.FLAVORS:
+        this.toggleSelection(this.filterObject.flavors, item);
+        break;
+      case ProductViewText.ALLERGENES:
+        this.toggleSelection(this.filterObject.allergenes, item);
+        break;
+      case ProductViewText.GENDER:
+    }
+  }
+
+  // Helper function to toggle item selection in an array
+  toggleSelection(list: string[], item: string): void {
+    const index = list.indexOf(item);
+
+    // remove item from the list if it's selected othervise add to the list
+    index > -1 ? list.splice(index, 1) : list.push(item);
+    this.applyFilters();
+  }
+
+  // Remove selected item
+  removeItemFromTheList(type: string, item: string): void {
+    if (type === ProductViewText.FLAVORS) {
+      this.removeItem(this.filterObject.flavors, item);
+    }
+    if (type === ProductViewText.ALLERGENES) {
+      this.removeItem(this.filterObject.allergenes, item);
+    }
+    this.applyFilters();
+  }
+
+  // Helper function to remove item from array
+  removeItem(list: string[], item: string): void {
+    const index = list.indexOf(item);
+    if (index > -1) list.splice(index, 1);
+  }
+
   openFilterMenu() {
     const dialogRef = this.dialog.open(FilterPageComponent, {
       data: {
@@ -117,48 +307,26 @@ export class FoodSuplimentsListComponent implements OnInit {
       } else if (filterObject && typeof filterObject === 'object') {
         this.filterObject = filterObject;
         this.applyFilters(); // Apply the filters to the original list
-        if (this.foodSupliments.length === 0) {
-          this.emptyCollection = true;
-        } else {
-          this.emptyCollection = false;
-
-          if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
-            this.foodSupliments = this.productService.sortFoodSuplimentsByPriceDESC(this.foodSupliments);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
-            this.foodSupliments = this.productService.sortFoodSuplimentsByPriceASC(this.foodSupliments);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
-            this.foodSupliments = this.productService.sortFoodSuplimentsByNameASC(this.foodSupliments);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
-            this.foodSupliments = this.productService.sortFoodSuplimentsByNameDESC(this.foodSupliments);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
-            this.foodSupliments.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
-            this.foodSupliments.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
-          }
-        }
       }
     });
   }
 
-  deleteFilters() {
-    this.foodSupliments = [...this.originalFoodSuplimentList];
-    this.filterObject = {
-      language: '',
-      category: '',
-      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
-      flavors: [],
-      allergenes: [],
-      safeForConsumptionDuringBreastfeeding: true,
-      safeForConsumptionDuringPregnancy: true,
-      proteinType: '',
-      gender: '',
-      color: '',
-      size: '',
-      clothingType: '',
-      material: '',
-      equipmentType: ''
+  orderItems() {
+    if (this.filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
+      this.foodSupliments = this.productService.sortFoodSuplimentsByPriceDESC(this.foodSupliments);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
+      this.foodSupliments = this.productService.sortFoodSuplimentsByPriceASC(this.foodSupliments);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
+      this.foodSupliments = this.productService.sortFoodSuplimentsByNameASC(this.foodSupliments);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
+      this.foodSupliments = this.productService.sortFoodSuplimentsByNameDESC(this.foodSupliments);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
+      this.foodSupliments.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
+      this.foodSupliments.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
     }
-    this.emptyCollection = false;
+
+    this.updatePaginatedList();
   }
 
   applyFilters() {
@@ -170,16 +338,18 @@ export class FoodSuplimentsListComponent implements OnInit {
         return false;
       }
 
-      // Flavors (array contains any)
+      // Flavors (strict check: all filterObject.flavors must be in item.flavors)
       if (this.filterObject.flavors && this.filterObject.flavors.length > 0) {
-        if (!this.filterObject.flavors.some(flavor => item.flavors.includes(flavor))) {
+        const hasExcludedFlavors = this.filterObject.flavors.some(flavor => !item.flavors.includes(flavor));
+        if (hasExcludedFlavors) {
           return false;
         }
       }
 
-      // Allergens (array contains any)
+      // Allergens (strict check: all filterObject.allergenes must be in item.allergens)
       if (this.filterObject.allergenes && this.filterObject.allergenes.length > 0) {
-        if (!this.filterObject.allergenes.some(allergen => item.allergens.includes(allergen))) {
+        const hasExcludedAllergens = this.filterObject.allergenes.some(allergen => !item.allergens.includes(allergen));
+        if (hasExcludedAllergens) {
           return false;
         }
       }
@@ -215,5 +385,36 @@ export class FoodSuplimentsListComponent implements OnInit {
       // If all conditions are met, include this item
       return true;
     });
+
+    if (this.foodSupliments.length === 0) {
+      this.emptyCollection = true;
+    } else {
+      this.emptyCollection = false;
+      this.orderItems();
+    }
+    this.updatePaginatedList();
+  }
+
+  deleteFilters() {
+    this.foodSupliments = [...this.originalFoodSuplimentList];
+    this.filterObject = {
+      language: '',
+      category: '',
+      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+      flavors: [],
+      allergenes: [],
+      safeForConsumptionDuringBreastfeeding: true,
+      safeForConsumptionDuringPregnancy: true,
+      proteinType: '',
+      gender: '',
+      color: '',
+      size: '',
+      clothingType: '',
+      material: '',
+      equipmentType: ''
+    }
+    this.emptyCollection = false;
+
+    this.updatePaginatedList();
   }
 }

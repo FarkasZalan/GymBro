@@ -248,41 +248,26 @@ textarea.ng-valid {
     }
 }
 
-/* Style for the floating label */
-.floating-label {
-    position: absolute;
-    bottom: 90px;
-    /* Distance from the button */
-    left: 50%;
-    /* Center horizontally */
-    transform: translateX(-50%);
-    /* Center align */
-    background-color: #0b8e92;
-    /* Background color for the label */
-    color: white;
-    /* Text color for the label */
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 17px;
-    white-space: nowrap;
-    opacity: 0;
-    /* Hidden by default */
-    visibility: hidden;
-    /* Hidden by default */
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    transform: translate(-50%, 20px);
-    /* Move label down when hidden */
+@media only screen and (min-width: 769px) {
+    .floating-button-container {
+        display: none !important;
+    }
 }
 
-/* Show the label on hover */
-.floating-button:hover .floating-label {
-    opacity: 1;
-    /* Fade in */
-    visibility: visible;
-    /* Make visible */
-    transform: translate(-50%, 0);
-    /* Move the label to its original position */
+@media only screen and (max-width: 768px) {
+    .floating-button {
+        width: 90px !important;
+        height: 90px !important;
+    }
 }
+
+@media only screen and (max-width: 600px) {
+    .floating-button {
+        width: 80px !important;
+        height: 80px !important;
+    }
+}
+
 
 nb-layout-footer {
     position: relative !important;

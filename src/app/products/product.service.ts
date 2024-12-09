@@ -292,8 +292,13 @@ export class ProductService {
 
     // Helper method to get the effective price (product price or discounted price)
     getDefaultPrice(product: any): number {
-        const defaultPrice = product.prices.find(price => price.setAsDefaultPrice);
-        return defaultPrice?.productPrice || 0;
+        const defaultPrice: ProductPrice = product.prices.find(price => price.setAsDefaultPrice);
+        if (!defaultPrice) {
+            return 0; // Return 0 if no default price is found
+        }
+
+        // Use discountPrice if it is greater than 0, otherwise use productPrice
+        return defaultPrice.discountedPrice > 0 ? defaultPrice.discountedPrice : defaultPrice.productPrice;
     }
 
     // Get discounted products across all categories
