@@ -6,7 +6,7 @@ import { ProductViewText } from '../../../admin-profile/product-management/produ
 import { FilterPageComponent } from '../../../filter-page/filter-page.component';
 import { Filter } from '../../../filter-page/filter.model';
 import { ProductService } from '../../product.service';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate, state } from '@angular/animations';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -21,6 +21,22 @@ import { TranslateService } from '@ngx-translate/core';
         animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
       ]),
     ]),
+    trigger('collapseField', [
+      state('void', style({
+        height: '0px', // Initially collapsed
+        overflow: 'hidden'
+      })),
+      state('*', style({
+        height: '*', // Expands to the full height of the content
+        overflow: 'hidden'
+      })),
+      transition('void => *', [
+        animate('250ms ease-out') // Expands smoothly
+      ]),
+      transition('* => void', [
+        animate('250ms ease-in') // Collapses smoothly
+      ])
+    ])
   ]
 })
 export class ClothesListComponent implements OnInit {

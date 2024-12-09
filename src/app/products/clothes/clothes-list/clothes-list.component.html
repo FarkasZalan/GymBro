@@ -275,7 +275,7 @@
         </div>
 
         <div class="row">
-            <!-- Clothes -->
+            <!-- Product list -->
             <div *ngIf="paginatedClothes" class="product-list-container">
                 <nb-card class="rounded-card productCard" *ngFor="let cloth of paginatedClothes" [@zoomIn]>
                     <nb-card-body class="product-image" (click)="goToProductPage(cloth.id)">

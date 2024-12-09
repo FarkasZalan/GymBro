@@ -485,6 +485,7 @@
                         "worstRating": "Legrosszabb értékelés"
                 },
                 "apply": "Alkalmaz",
+                "filterByCOlor": "Színek",
                 "filterBlogByLanguage": "Nyelv szerint",
                 "deleteFilter": "Szűrők törlése",
                 "selectCategory": "Kategória",

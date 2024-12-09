@@ -481,6 +481,7 @@
          "worstRating": "Worst rating"
       },
       "apply": "Apply",
+      "filterByCOlor": "Colors",
       "deleteFilter": "Clear filters",
       "filterBlogByLanguage": "Languages",
       "selectCategory": "Category",

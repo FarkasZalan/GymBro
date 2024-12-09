@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Accessories } from '../../../admin-profile/product-management/product-models/accessories.model';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -6,8 +6,9 @@ import { ProductViewText } from '../../../admin-profile/product-management/produ
 import { FilterPageComponent } from '../../../filter-page/filter-page.component';
 import { Filter } from '../../../filter-page/filter.model';
 import { ProductService } from '../../product.service';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate, state } from '@angular/animations';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-accessories-list',
@@ -20,12 +21,34 @@ import { ProductReeviews } from '../../../admin-profile/product-management/produ
         animate('250ms ease-out', style({ transform: 'scale(1)', opacity: 1 })),
       ]),
     ]),
+    trigger('collapseField', [
+      state('void', style({
+        height: '0px', // Initially collapsed
+        overflow: 'hidden'
+      })),
+      state('*', style({
+        height: '*', // Expands to the full height of the content
+        overflow: 'hidden'
+      })),
+      transition('void => *', [
+        animate('250ms ease-out') // Expands smoothly
+      ]),
+      transition('* => void', [
+        animate('250ms ease-in') // Collapses smoothly
+      ])
+    ])
   ]
 })
 export class AccessoriesListComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   // store the products one of the array
   accessories: Accessories[] = [];
   originalAccessories: Accessories[] = [];
+
+  paginatedAccessories: Accessories[] = [];
+  itemsPerPage = 12;
+  currentPage = 1;
+
   productViewText = ProductViewText;
 
   // if there are no products in the collection
@@ -51,7 +74,46 @@ export class AccessoriesListComponent implements OnInit {
     equipmentType: ''
   };
 
-  constructor(private productService: ProductService, private router: Router, private dialog: MatDialog) { }
+  // Filter section
+  availableProductSizes: string[] = [];
+
+  // accessories type
+  availableAccessoriesTypes: string[] = [
+    ProductViewText.SHAKERS,
+    ProductViewText.WEIGHT_LIFTING
+  ];
+  isAccessoryDropdownOpen: boolean = false;
+
+  availableColors: string[] = [
+    ProductViewText.BROWN,
+    ProductViewText.BURGUNDY,
+    ProductViewText.WHITE,
+    ProductViewText.BLACK,
+    ProductViewText.BLUE,
+    ProductViewText.PURPLE,
+    ProductViewText.RED,
+    ProductViewText.PINK,
+    ProductViewText.GRAY,
+    ProductViewText.YELLOW,
+    ProductViewText.ORANGE,
+    ProductViewText.GREEN,
+    ProductViewText.BEIGE,
+    ProductViewText.MAUVE,
+  ];
+  isColorDropdownOpen: boolean = false;
+
+  // order by
+  availableOrders = [
+    ProductViewText.ORDER_BY_BEST_RATING,
+    ProductViewText.ORDER_BY_WORST_RATING,
+    ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+    ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE,
+    ProductViewText.ORDER_BY_NAME_ASC,
+    ProductViewText.ORDER_BY_NAME_DESC
+  ];
+  isOrderByDropdownOpen: boolean = false;
+
+  constructor(private productService: ProductService, private router: Router, private dialog: MatDialog, private translate: TranslateService) { }
 
   ngOnInit(): void {
     this.productService.getAllProductByCategory(ProductViewText.ACCESSORIES).subscribe((accessoriesCollection: Accessories[]) => {
@@ -68,13 +130,38 @@ export class AccessoriesListComponent implements OnInit {
           .subscribe(reviews => {
             this.productReviews.set(product.id, reviews);
           });
+        this.updatePaginatedList();
       });
+
+      this.applyFilters();
 
       // if the collection doesn't have any products
       if (this.accessories.length === 0) {
         this.emptyCollection = true;
       }
     });
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedAccessories = this.accessories.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.accessories.length / this.itemsPerPage);
+  }
+
+  sortAvailableFilterSections() {
+    this.availableAccessoriesTypes.sort((a, b) => this.translate.instant(a).localeCompare(this.translate.instant(b)) || a.localeCompare(b));
+    this.availableColors.sort((a, b) => this.translate.instant(a).localeCompare(this.translate.instant(b)) || a.localeCompare(b));
   }
 
   // Method to get the default price for a the products
@@ -102,6 +189,51 @@ export class AccessoriesListComponent implements OnInit {
     this.router.navigate(['product/' + ProductViewText.ACCESSORIES + '/' + productId])
   }
 
+  // Filter section for bigger screens
+  isAccessoryTypeSelected() {
+    if (this.filterObject.equipmentType === ProductViewText.SHAKERS) {
+
+      this.availableProductSizes = [
+        ProductViewText.BOTTLE_100_ML,
+        ProductViewText.BOTTLE_150_ML,
+        ProductViewText.BOTTLE_300_ML,
+        ProductViewText.BOTTLE_450_ML,
+        ProductViewText.BOTTLE_500_ML,
+        ProductViewText.BOTTLE_600_ML,
+        ProductViewText.BOTTLE_700_ML,
+        ProductViewText.BOTTLE_800_ML,
+        ProductViewText.BOTTLE_1000_ML,
+        ProductViewText.BOTTLE_1500_ML,
+      ];
+    } else {
+
+      this.availableProductSizes = [
+        ProductViewText.XS,
+        ProductViewText.S,
+        ProductViewText.M,
+        ProductViewText.L,
+        ProductViewText.XL,
+        ProductViewText.XXL,
+        ProductViewText.XXXL,
+      ];
+    }
+
+    this.filterObject.color = '';
+    this.filterObject.size = '';
+  }
+
+  toggleAccessoryTypeDropdown() {
+    this.isAccessoryDropdownOpen = !this.isAccessoryDropdownOpen;
+  }
+
+  toggleOrderDropdown() {
+    this.isOrderByDropdownOpen = !this.isOrderByDropdownOpen;
+  }
+
+  toggleColorDropdown() {
+    this.isColorDropdownOpen = !this.isColorDropdownOpen;
+  }
+
   openFilterMenu() {
     const dialogRef = this.dialog.open(FilterPageComponent, {
       data: {
@@ -121,44 +253,28 @@ export class AccessoriesListComponent implements OnInit {
           this.emptyCollection = true;
         } else {
           this.emptyCollection = false;
-
-          if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
-            this.accessories = this.productService.sortAccessoriesPriceByDESC(this.accessories);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
-            this.accessories = this.productService.sortAccessoriesPriceByASC(this.accessories);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
-            this.accessories = this.productService.sortAccessoriesByNameASC(this.accessories);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
-            this.accessories = this.productService.sortAccessoriesByNameDESC(this.accessories);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
-            this.accessories.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
-            this.accessories.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
-          }
+          this.orderItems();
         }
       }
     });
   }
 
-  deleteFilters() {
-    this.accessories = [...this.originalAccessories];
-    this.filterObject = {
-      language: '',
-      category: '',
-      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
-      flavors: [],
-      allergenes: [],
-      safeForConsumptionDuringBreastfeeding: true,
-      safeForConsumptionDuringPregnancy: true,
-      proteinType: '',
-      gender: '',
-      color: '',
-      size: '',
-      clothingType: '',
-      material: '',
-      equipmentType: ''
+  orderItems() {
+    if (this.filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
+      this.accessories = this.productService.sortAccessoriesPriceByDESC(this.accessories);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
+      this.accessories = this.productService.sortAccessoriesPriceByASC(this.accessories);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
+      this.accessories = this.productService.sortAccessoriesByNameASC(this.accessories);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
+      this.accessories = this.productService.sortAccessoriesByNameDESC(this.accessories);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
+      this.accessories.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
+      this.accessories.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
     }
-    this.emptyCollection = false;
+
+    this.updatePaginatedList();
   }
 
   applyFilters() {
@@ -195,6 +311,36 @@ export class AccessoriesListComponent implements OnInit {
 
       return true; // Keep the item if it passes all filter conditions
     });
+    if (this.accessories.length === 0) {
+      this.emptyCollection = true;
+    } else {
+      this.emptyCollection = false;
+      this.orderItems();
+    }
+    this.updatePaginatedList();
+  }
+
+  deleteFilters() {
+    this.accessories = [...this.originalAccessories];
+    this.filterObject = {
+      language: '',
+      category: '',
+      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+      flavors: [],
+      allergenes: [],
+      safeForConsumptionDuringBreastfeeding: true,
+      safeForConsumptionDuringPregnancy: true,
+      proteinType: '',
+      gender: '',
+      color: '',
+      size: '',
+      clothingType: '',
+      material: '',
+      equipmentType: ''
+    }
+    this.emptyCollection = false;
+    this.applyFilters();
+    this.updatePaginatedList();
   }
 
 }
