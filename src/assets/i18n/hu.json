@@ -196,6 +196,7 @@
                 "manageOrders": "Rendelések kezelése"
         },
         "products": {
+                "productList": "Termék lista",
                 "add": "Hozzáadás",
                 "pcs": "db",
                 "pieces": "Darab",

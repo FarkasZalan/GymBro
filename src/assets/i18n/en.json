@@ -195,6 +195,7 @@
       "manageOrders": "Manage Orders"
    },
    "products": {
+      "productList": "Product List",
       "add": "Add",
       "pcs": "pcs",
       "pieces": "Pieces",

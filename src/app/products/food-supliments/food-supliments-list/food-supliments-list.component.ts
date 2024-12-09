@@ -45,6 +45,7 @@ export class FoodSuplimentsListComponent implements OnInit {
   foodSupliments: FoodSupliment[] = [];
   originalFoodSuplimentList: FoodSupliment[] = [];
 
+  // pagination
   paginatedFoodSupliments: FoodSupliment[] = [];
   itemsPerPage = 12;
   currentPage = 1;

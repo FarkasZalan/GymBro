@@ -45,6 +45,7 @@ export class ClothesListComponent implements OnInit {
   clothes: Clothes[] = [];
   originaClothes: Clothes[] = [];
 
+  // pagination
   paginatedClothes: Clothes[] = [];
   itemsPerPage = 12;
   currentPage = 1;

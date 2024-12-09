@@ -45,6 +45,7 @@ export class OrganicFoodListComponent implements OnInit {
   organicFoods: OrganicFood[] = [];
   originalOrganicFood: OrganicFood[] = [];
 
+  // pagination
   paginatedOrganicFoods: OrganicFood[] = [];
   itemsPerPage = 12;
   currentPage = 1;

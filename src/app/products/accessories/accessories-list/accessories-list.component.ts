@@ -45,6 +45,7 @@ export class AccessoriesListComponent implements OnInit {
   accessories: Accessories[] = [];
   originalAccessories: Accessories[] = [];
 
+  // pagination
   paginatedAccessories: Accessories[] = [];
   itemsPerPage = 12;
   currentPage = 1;

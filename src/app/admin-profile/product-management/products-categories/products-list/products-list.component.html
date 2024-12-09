@@ -1,317 +1,377 @@
 <!-- loading spinner -->
 <app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
 
-<!-- If no products, display the empty card -->
-<div *ngIf="(emptyCollection === true)" class="empty-list-container">
-    <nb-card class="emptyCard" [@zoomIn]>
-        <nb-card-body>
-            <div>
-                <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
-                <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
-            </div>
-            <div class="button-container">
-                <button class="btn btn-primary basic-btn basic-form-btn products-button" type="submit" nbButton
-                    status="success" (click)="goToCreateProduct()">{{
-                    'products.addFirstProduct' | translate
+<!-- that's just need to navigate to the top -->
+<p #toScrollAfterNavigate></p>
+<div class="page-container">
+    <div class="product-container">
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="product-list-title">{{
+                    'products.productList' | translate
+                    }}</h1>
+                <button *ngIf="(emptyCollection !== true)" class="btn btn-primary add-button"
+                    (click)=" goToCreateProduct()">{{
+                    'products.addProduct' | translate
                     }}</button>
             </div>
-        </nb-card-body>
-    </nb-card>
+        </div>
+        <!-- If no products, display the empty card -->
+        <div *ngIf="(emptyCollection === true)" class="empty-list-container">
+            <nb-card class="emptyCard" [@zoomIn]>
+                <nb-card-body>
+                    <div>
+                        <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                        <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
+                    </div>
+                    <div class="button-container">
+                        <button class="btn btn-primary basic-btn basic-form-btn products-button" type="submit" nbButton
+                            status="success" (click)="goToCreateProduct()">{{
+                            'products.addFirstProduct' | translate
+                            }}</button>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+
+        <!-- Product list -->
+        <div class="row">
+            <!-- Food Supliments -->
+            <div *ngIf="paginatedFoodSupliments.length > 0" class="list-container">
+                <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of paginatedFoodSupliments"
+                    [@zoomIn] [class.has-unchecked-reviews]="productUncheckedReviewsMap[foodSupliment.id]">
+
+                    <!-- Icon for Unchecked Reviews -->
+                    <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[foodSupliment.id]">
+                        &#x26A0; <!-- warning icon -->
+                    </div>
+
+                    <!-- display the sale badge if there is a discount -->
+                    <span *ngIf="getDefaultPrice(foodSupliment).discountedPrice > 0" class="badge discount">{{
+                        'home.sale' |
+                        translate }}</span>
+
+                    <!-- product details -->
+                    <nb-card-body class="product-image">
+                        <div *ngIf="getDefaultPrice(foodSupliment) as defaultPrice"
+                            class="details-container text-center">
+                            <div class="image-container text-center">
+                                <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                    alt="Product Image" class="card-image" />
+                                <img *ngIf="defaultPrice.productImage === ''"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                    class="card-image" />
+                            </div>
+
+
+                            <h4>{{ foodSupliment.productName }}</h4>
+
+                            <!-- Display the average rating of the product -->
+                            <div *ngIf="getProductReviews(foodSupliment.id).length > 0"
+                                class="average-rating-product-display">
+                                <i [attr.data-star]="getAverageRating(foodSupliment.id)"></i>
+                                <span class="rating-number-product-display">
+                                    {{ getProductReviews(foodSupliment.id).length }} {{ 'review.reviewText' |
+                                    translate
+                                    }}
+                                </span>
+                            </div>
+
+                            <!-- display the price and if there is a discount, display the discounted price -->
+                            <div class="price-container" *ngIf="getDefaultPrice(foodSupliment) as defaultPrice">
+                                <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                    <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                    <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                </h5>
+                            </div>
+
+                            <h5 class="price-display">{{
+                                'products.stock' | translate }}: {{
+                                defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
+                        </div>
+
+                        <!-- Overlay buttons container for edit product or show reviews -->
+                        <div class="button-overlay">
+                            <button nbButton class="btn" (click)="goToEditProduct(foodSupliment.id)">{{
+                                'profilePage.modify' | translate }}</button>
+                            <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(foodSupliment.id)"
+                                [class.pulsing-button]="productUncheckedReviewsMap[foodSupliment.id]">
+                                {{ 'adminMenu.reviews' | translate }}
+
+                                <!-- Display the count of unchecked reviews -->
+                                <span *ngIf="productReviewCountMap[foodSupliment.id] !== 0" class="review-count">
+                                    ({{ productReviewCountMap[foodSupliment.id] }} {{ 'review.new' | translate
+                                    }})
+                                </span>
+                            </button>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+
+            <!-- Organic products -->
+            <div *ngIf="paginatedOrganicProducts.length > 0" class="list-container">
+                <nb-card class="rounded-card productCard" *ngFor="let organicProduct of paginatedOrganicProducts"
+                    [@zoomIn] [class.has-unchecked-reviews]="productUncheckedReviewsMap[organicProduct.id]">
+
+                    <!-- Icon for Unchecked Reviews -->
+                    <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[organicProduct.id]">
+                        &#x26A0; <!-- warning icon -->
+                    </div>
+
+                    <!-- display the sale badge if there is a discount -->
+                    <span *ngIf="getDefaultPrice(organicProduct).discountedPrice > 0" class="badge discount">{{
+                        'home.sale' |
+                        translate }}</span>
+
+                    <!-- product details -->
+                    <nb-card-body class="product-image">
+                        <div *ngIf="getDefaultPrice(organicProduct) as defaultPrice"
+                            class="details-container text-center">
+                            <div class="image-container text-center">
+                                <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                    alt="Product Image" class="card-image" />
+                                <img *ngIf="defaultPrice.productImage === ''"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                    class="card-image" />
+                            </div>
+
+
+                            <h4>{{ organicProduct.productName }}</h4>
+
+                            <!-- Display the average rating of the product -->
+                            <div *ngIf="getProductReviews(organicProduct.id).length > 0"
+                                class="average-rating-product-display">
+                                <i [attr.data-star]="getAverageRating(organicProduct.id)"></i>
+                                <span class="rating-number-product-display">
+                                    {{ getProductReviews(organicProduct.id).length }} {{ 'review.reviewText' |
+                                    translate
+                                    }}
+                                </span>
+                            </div>
+                            <div class="price-container" *ngIf="getDefaultPrice(organicProduct) as defaultPrice">
+                                <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                    <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                    <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                </h5>
+                            </div>
+                            <h5 class="price-display">{{
+                                'products.stock' | translate }}: {{
+                                defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
+                        </div>
+
+                        <!-- Overlay buttons container for edit product or show reviews -->
+                        <div class="button-overlay">
+                            <button nbButton class="btn" (click)="goToEditProduct(organicProduct.id)">{{
+                                'profilePage.modify' | translate }}</button>
+                            <button nbButton class="btn go-to-review-btn"
+                                (click)="goToShowReviews(organicProduct.id)">{{
+                                'adminMenu.reviews' |
+                                translate }}
+
+                                <!-- Display the count of unchecked reviews -->
+                                <span *ngIf="productReviewCountMap[organicProduct.id] !== 0" class="review-count">
+                                    ({{ productReviewCountMap[organicProduct.id] }} {{ 'review.new' | translate
+                                    }})
+                                </span>
+                            </button>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+
+            <!-- Clothes -->
+            <div *ngIf="paginatedClothes.length > 0" class="list-container">
+                <nb-card class="rounded-card productCard" *ngFor="let cloth of paginatedClothes" [@zoomIn]
+                    [class.has-unchecked-reviews]="productUncheckedReviewsMap[cloth.id]">
+
+                    <!-- Icon for Unchecked Reviews -->
+                    <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[cloth.id]">
+                        &#x26A0; <!-- warning icon -->
+                    </div>
+
+                    <!-- display the sale badge if there is a discount -->
+                    <span *ngIf="getDefaultPrice(cloth).discountedPrice > 0" class="badge discount">{{
+                        'home.sale' |
+                        translate }}</span>
+
+                    <!-- product details -->
+                    <nb-card-body class="product-image">
+                        <div *ngIf="getDefaultPrice(cloth) as defaultPrice" class="details-container text-center">
+                            <div class="image-container text-center">
+                                <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                    alt="Product Image" class="card-image" />
+                                <img *ngIf="defaultPrice.productImage === ''"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                    class="card-image" />
+                            </div>
+
+
+                            <h4>{{ cloth.productName }}</h4>
+
+                            <!-- Display the average rating of the product -->
+                            <div *ngIf="getProductReviews(cloth.id).length > 0" class="average-rating-product-display">
+                                <i [attr.data-star]="getAverageRating(cloth.id)"></i>
+                                <span class="rating-number-product-display">
+                                    {{ getProductReviews(cloth.id).length }} {{ 'review.reviewText' | translate
+                                    }}
+                                </span>
+                            </div>
+                            <div class="price-container" *ngIf="getDefaultPrice(cloth) as defaultPrice">
+                                <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                    <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                    <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                </h5>
+                            </div>
+                            <h5 class="price-display">{{
+                                'products.stock' | translate }}: {{
+                                defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
+                        </div>
+
+                        <!-- Overlay buttons container for edit product or show reviews -->
+                        <div class="button-overlay">
+                            <button nbButton class="btn" (click)="goToEditProduct(cloth.id)">{{
+                                'profilePage.modify' | translate }}</button>
+                            <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(cloth.id)">{{
+                                'adminMenu.reviews' |
+                                translate }}
+
+                                <!-- Display the count of unchecked reviews -->
+                                <span *ngIf="productReviewCountMap[cloth.id] !== 0" class="review-count">
+                                    ({{ productReviewCountMap[cloth.id] }} {{ 'review.new' | translate }})
+                                </span>
+                            </button>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+
+            <!-- Accessories -->
+            <div *ngIf="paginatedAccessories.length > 0" class="list-container">
+                <nb-card class="rounded-card productCard" *ngFor="let accessory of paginatedAccessories" [@zoomIn]
+                    [class.has-unchecked-reviews]="productUncheckedReviewsMap[accessory.id]">
+
+                    <!-- Icon for Unchecked Reviews -->
+                    <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[accessory.id]">
+                        &#x26A0; <!-- warning icon -->
+                    </div>
+
+                    <!-- display the sale badge if there is a discount -->
+                    <span *ngIf="getDefaultPrice(accessory).discountedPrice > 0" class="badge discount">{{
+                        'home.sale' |
+                        translate }}</span>
+
+                    <!-- product details -->
+                    <nb-card-body class="product-image">
+                        <div *ngIf="getDefaultPrice(accessory) as defaultPrice" class="details-container text-center">
+                            <div class="image-container text-center">
+                                <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                    alt="Product Image" class="card-image" />
+                                <img *ngIf="defaultPrice.productImage === ''"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                    class="card-image" />
+                            </div>
+
+
+                            <h4>{{ accessory.productName }}</h4>
+
+                            <!-- Display the average rating of the product -->
+                            <div *ngIf="getProductReviews(accessory.id).length > 0"
+                                class="average-rating-product-display">
+                                <i [attr.data-star]="getAverageRating(accessory.id)"></i>
+                                <span class="rating-number-product-display">
+                                    {{ getProductReviews(accessory.id).length }} {{ 'review.reviewText' |
+                                    translate }}
+                                </span>
+                            </div>
+                            <div class="price-container" *ngIf="getDefaultPrice(accessory) as defaultPrice">
+                                <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                    <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                    <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                </h5>
+                            </div>
+                            <h5 class="price-display">{{
+                                'products.stock' | translate }}: {{
+                                defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
+                        </div>
+
+                        <!-- Overlay buttons container for edit product or show reviews -->
+                        <div class="button-overlay">
+                            <button nbButton class="btn" (click)="goToEditProduct(accessory.id)">{{
+                                'profilePage.modify' | translate }}</button>
+                            <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(accessory.id)">{{
+                                'adminMenu.reviews' |
+                                translate }}
+
+                                <!-- Display the count of unchecked reviews -->
+                                <span *ngIf="productReviewCountMap[accessory.id] !== 0" class="review-count">
+                                    ({{ productReviewCountMap[accessory.id] }} {{ 'review.new' | translate }})
+                                </span>
+                            </button>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Left Arrow -->
+            </button>
+
+            <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                {{ i + 1 }}
+            </button>
+
+            <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                (click)="goToPage(currentPage + 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled right arrow -->
+                        <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Right Arrow -->
+            </button>
+        </div>
+
+        <!-- back button -->
+        <div class="button-container">
+            <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
+                status="success" (click)="back()">
+                <span class="arrow">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span>
+                {{ 'products.backToTheCategories' | translate }}</button>
+        </div>
+    </div>
 </div>
-
-<div class="row">
-    <!-- Display product prices dynamically in a 2-column layout -->
-
-    <!-- Food Supliments -->
-    <div *ngIf="foodSupliments" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let foodSupliment of foodSupliments" [@zoomIn]
-            [class.has-unchecked-reviews]="productUncheckedReviewsMap[foodSupliment.id]">
-
-            <!-- Icon for Unchecked Reviews -->
-            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[foodSupliment.id]">
-                &#x26A0; <!-- warning icon -->
-            </div>
-
-            <!-- display the sale badge if there is a discount -->
-            <span *ngIf="getDefaultPrice(foodSupliment).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
-                translate }}</span>
-
-            <!-- product details -->
-            <nb-card-body class="product-image">
-                <div *ngIf="getDefaultPrice(foodSupliment) as defaultPrice" class="details-container text-center">
-                    <div class="image-container text-center">
-                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                            alt="Product Image" class="card-image" />
-                        <img *ngIf="defaultPrice.productImage === ''"
-                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                            class="card-image" />
-                    </div>
-
-
-                    <h4>{{ foodSupliment.productName }}</h4>
-
-                    <!-- Display the average rating of the product -->
-                    <div *ngIf="getProductReviews(foodSupliment.id).length > 0" class="average-rating-product-display">
-                        <i [attr.data-star]="getAverageRating(foodSupliment.id)"></i>
-                        <span class="rating-number-product-display">
-                            {{ getProductReviews(foodSupliment.id).length }} {{ 'review.reviewText' | translate }}
-                        </span>
-                    </div>
-
-                    <!-- display the price and if there is a discount, display the discounted price -->
-                    <div class="price-container" *ngIf="getDefaultPrice(foodSupliment) as defaultPrice">
-                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
-                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                        </h5>
-                    </div>
-
-                    <h5 class="price-display">{{
-                        'products.stock' | translate }}: {{
-                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
-                </div>
-
-                <!-- Overlay buttons container for edit product or show reviews -->
-                <div class="button-overlay">
-                    <button nbButton class="btn" (click)="goToEditProduct(foodSupliment.id)">{{
-                        'profilePage.modify' | translate }}</button>
-                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(foodSupliment.id)"
-                        [class.pulsing-button]="productUncheckedReviewsMap[foodSupliment.id]">
-                        {{ 'adminMenu.reviews' | translate }}
-
-                        <!-- Display the count of unchecked reviews -->
-                        <span *ngIf="productReviewCountMap[foodSupliment.id] !== 0" class="review-count">
-                            ({{ productReviewCountMap[foodSupliment.id] }} {{ 'review.new' | translate }})
-                        </span>
-                    </button>
-                </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
-
-    <!-- Organic products -->
-    <div *ngIf="organicProducts" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let organicProduct of organicProducts" [@zoomIn]
-            [class.has-unchecked-reviews]="productUncheckedReviewsMap[organicProduct.id]">
-
-            <!-- Icon for Unchecked Reviews -->
-            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[organicProduct.id]">
-                &#x26A0; <!-- warning icon -->
-            </div>
-
-            <!-- display the sale badge if there is a discount -->
-            <span *ngIf="getDefaultPrice(organicProduct).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
-                translate }}</span>
-
-            <!-- product details -->
-            <nb-card-body class="product-image">
-                <div *ngIf="getDefaultPrice(organicProduct) as defaultPrice" class="details-container text-center">
-                    <div class="image-container text-center">
-                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                            alt="Product Image" class="card-image" />
-                        <img *ngIf="defaultPrice.productImage === ''"
-                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                            class="card-image" />
-                    </div>
-
-
-                    <h4>{{ organicProduct.productName }}</h4>
-
-                    <!-- Display the average rating of the product -->
-                    <div *ngIf="getProductReviews(organicProduct.id).length > 0" class="average-rating-product-display">
-                        <i [attr.data-star]="getAverageRating(organicProduct.id)"></i>
-                        <span class="rating-number-product-display">
-                            {{ getProductReviews(organicProduct.id).length }} {{ 'review.reviewText' | translate }}
-                        </span>
-                    </div>
-                    <div class="price-container" *ngIf="getDefaultPrice(organicProduct) as defaultPrice">
-                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
-                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                        </h5>
-                    </div>
-                    <h5 class="price-display">{{
-                        'products.stock' | translate }}: {{
-                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
-                </div>
-
-                <!-- Overlay buttons container for edit product or show reviews -->
-                <div class="button-overlay">
-                    <button nbButton class="btn" (click)="goToEditProduct(organicProduct.id)">{{
-                        'profilePage.modify' | translate }}</button>
-                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(organicProduct.id)">{{
-                        'adminMenu.reviews' |
-                        translate }}
-
-                        <!-- Display the count of unchecked reviews -->
-                        <span *ngIf="productReviewCountMap[organicProduct.id] !== 0" class="review-count">
-                            ({{ productReviewCountMap[organicProduct.id] }} {{ 'review.new' | translate }})
-                        </span>
-                    </button>
-                </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
-
-    <!-- Clothes -->
-    <div *ngIf="clothes" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes" [@zoomIn]
-            [class.has-unchecked-reviews]="productUncheckedReviewsMap[cloth.id]">
-
-            <!-- Icon for Unchecked Reviews -->
-            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[cloth.id]">
-                &#x26A0; <!-- warning icon -->
-            </div>
-
-            <!-- display the sale badge if there is a discount -->
-            <span *ngIf="getDefaultPrice(cloth).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
-                translate }}</span>
-
-            <!-- product details -->
-            <nb-card-body class="product-image">
-                <div *ngIf="getDefaultPrice(cloth) as defaultPrice" class="details-container text-center">
-                    <div class="image-container text-center">
-                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                            alt="Product Image" class="card-image" />
-                        <img *ngIf="defaultPrice.productImage === ''"
-                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                            class="card-image" />
-                    </div>
-
-
-                    <h4>{{ cloth.productName }}</h4>
-
-                    <!-- Display the average rating of the product -->
-                    <div *ngIf="getProductReviews(cloth.id).length > 0" class="average-rating-product-display">
-                        <i [attr.data-star]="getAverageRating(cloth.id)"></i>
-                        <span class="rating-number-product-display">
-                            {{ getProductReviews(cloth.id).length }} {{ 'review.reviewText' | translate }}
-                        </span>
-                    </div>
-                    <div class="price-container" *ngIf="getDefaultPrice(cloth) as defaultPrice">
-                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
-                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                        </h5>
-                    </div>
-                    <h5 class="price-display">{{
-                        'products.stock' | translate }}: {{
-                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
-                </div>
-
-                <!-- Overlay buttons container for edit product or show reviews -->
-                <div class="button-overlay">
-                    <button nbButton class="btn" (click)="goToEditProduct(cloth.id)">{{
-                        'profilePage.modify' | translate }}</button>
-                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(cloth.id)">{{
-                        'adminMenu.reviews' |
-                        translate }}
-
-                        <!-- Display the count of unchecked reviews -->
-                        <span *ngIf="productReviewCountMap[cloth.id] !== 0" class="review-count">
-                            ({{ productReviewCountMap[cloth.id] }} {{ 'review.new' | translate }})
-                        </span>
-                    </button>
-                </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
-
-    <!-- Accessories -->
-    <div *ngIf="accessories" class="list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let accessory of accessories" [@zoomIn]
-            [class.has-unchecked-reviews]="productUncheckedReviewsMap[accessory.id]">
-
-            <!-- Icon for Unchecked Reviews -->
-            <div class="review-alert-icon" *ngIf="productUncheckedReviewsMap[accessory.id]">
-                &#x26A0; <!-- warning icon -->
-            </div>
-
-            <!-- display the sale badge if there is a discount -->
-            <span *ngIf="getDefaultPrice(accessory).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
-                translate }}</span>
-
-            <!-- product details -->
-            <nb-card-body class="product-image">
-                <div *ngIf="getDefaultPrice(accessory) as defaultPrice" class="details-container text-center">
-                    <div class="image-container text-center">
-                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                            alt="Product Image" class="card-image" />
-                        <img *ngIf="defaultPrice.productImage === ''"
-                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                            class="card-image" />
-                    </div>
-
-
-                    <h4>{{ accessory.productName }}</h4>
-
-                    <!-- Display the average rating of the product -->
-                    <div *ngIf="getProductReviews(accessory.id).length > 0" class="average-rating-product-display">
-                        <i [attr.data-star]="getAverageRating(accessory.id)"></i>
-                        <span class="rating-number-product-display">
-                            {{ getProductReviews(accessory.id).length }} {{ 'review.reviewText' | translate }}
-                        </span>
-                    </div>
-                    <div class="price-container" *ngIf="getDefaultPrice(accessory) as defaultPrice">
-                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
-                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                        </h5>
-                    </div>
-                    <h5 class="price-display">{{
-                        'products.stock' | translate }}: {{
-                        defaultPrice.productStock }} {{ productViewText.PCS | translate }}</h5>
-                </div>
-
-                <!-- Overlay buttons container for edit product or show reviews -->
-                <div class="button-overlay">
-                    <button nbButton class="btn" (click)="goToEditProduct(accessory.id)">{{
-                        'profilePage.modify' | translate }}</button>
-                    <button nbButton class="btn go-to-review-btn" (click)="goToShowReviews(accessory.id)">{{
-                        'adminMenu.reviews' |
-                        translate }}
-
-                        <!-- Display the count of unchecked reviews -->
-                        <span *ngIf="productReviewCountMap[accessory.id] !== 0" class="review-count">
-                            ({{ productReviewCountMap[accessory.id] }} {{ 'review.new' | translate }})
-                        </span>
-                    </button>
-                </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
-</div>
-
-<!-- back button -->
-<div class="button-container">
-    <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
-        status="success" (click)="back()">
-        <span class="arrow">
-            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                <!-- Filled left arrow -->
-                <path d="M26 6L14 16l12 10" fill="#0b8e92" />
-            </svg>
-        </span>
-        {{ 'products.backToTheCategories' | translate }}</button>
-</div>
-
-
 
 <!-- add button -->
 <div class="floating-button-container">

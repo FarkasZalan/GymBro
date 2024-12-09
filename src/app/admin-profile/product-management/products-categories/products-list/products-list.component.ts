@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../../../../products/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FoodSupliment } from '../../product-models/food-supliment.model';
@@ -26,6 +26,7 @@ import { LoadingService } from '../../../../loading-spinner/loading.service';
   ]
 })
 export class ProductsListComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   // store the products one of the array based on the productCategory value
   foodSupliments: FoodSupliment[];
   organicProducts: OrganicFood[];
@@ -33,6 +34,14 @@ export class ProductsListComponent implements OnInit {
   accessories: Accessories[];
   productCategory: string = '';
   productViewText = ProductViewText;
+
+  // pagination
+  paginatedFoodSupliments: FoodSupliment[] = [];
+  paginatedOrganicProducts: OrganicFood[] = [];
+  paginatedClothes: Clothes[] = [];
+  paginatedAccessories: Accessories[] = [];
+  itemsPerPage = 12;
+  currentPage = 1;
 
   // if there are no products in the collection
   emptyCollection: boolean;
@@ -71,6 +80,7 @@ export class ProductsListComponent implements OnInit {
           if (this.foodSupliments.length === 0) {
             this.emptyCollection = true;
           }
+          this.updatePaginatedList(this.productCategory);
         });
       }
       if (this.productCategory === ProductViewText.ORGANIC_FOOD) {
@@ -83,6 +93,7 @@ export class ProductsListComponent implements OnInit {
           if (this.organicProducts.length === 0) {
             this.emptyCollection = true;
           }
+          this.updatePaginatedList(this.productCategory);
         });
       }
       if (this.productCategory === ProductViewText.CLOTHES) {
@@ -95,6 +106,7 @@ export class ProductsListComponent implements OnInit {
           if (this.clothes.length === 0) {
             this.emptyCollection = true;
           }
+          this.updatePaginatedList(this.productCategory);
         });
       }
       if (this.productCategory === ProductViewText.ACCESSORIES) {
@@ -107,9 +119,44 @@ export class ProductsListComponent implements OnInit {
           if (this.accessories.length === 0) {
             this.emptyCollection = true;
           }
+          this.updatePaginatedList(this.productCategory);
         });
       }
     });
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(type: string): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    if (type === ProductViewText.ACCESSORIES) {
+      this.paginatedAccessories = this.accessories.slice(startIndex, endIndex);
+    } else if (type === ProductViewText.ORGANIC_FOOD) {
+      this.paginatedOrganicProducts = this.organicProducts.slice(startIndex, endIndex);
+    } else if (type === ProductViewText.FOOD_SUPLIMENTS) {
+      this.paginatedFoodSupliments = this.foodSupliments.slice(startIndex, endIndex);
+    } else if (type === ProductViewText.CLOTHES) {
+      this.paginatedClothes = this.clothes.slice(startIndex, endIndex);
+    }
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList(this.productCategory);
+  }
+
+  getTotalPages(): number {
+    if (this.productCategory === ProductViewText.ACCESSORIES) {
+      return Math.ceil(this.accessories.length / this.itemsPerPage);
+    } else if (this.productCategory === ProductViewText.ORGANIC_FOOD) {
+      return Math.ceil(this.organicProducts.length / this.itemsPerPage);
+    } else if (this.productCategory === ProductViewText.FOOD_SUPLIMENTS) {
+      return Math.ceil(this.foodSupliments.length / this.itemsPerPage);
+    } else if (this.productCategory === ProductViewText.CLOTHES) {
+      return Math.ceil(this.clothes.length / this.itemsPerPage);
+    }
+
   }
 
   // Helper method to load reviews for products
