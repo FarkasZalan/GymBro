@@ -40,13 +40,12 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 20px;
-    width: 200px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
     display: flex;
     gap: 1.5rem;
-    width: auto;
+    width: auto !important;
 
     &.active {
         border: 2px solid #0b8e92;
