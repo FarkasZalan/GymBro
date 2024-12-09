@@ -1,67 +1,352 @@
-<!-- If no products, display the empty card -->
-<div *ngIf="(emptyCollection === true)" class="product-empty-list-container">
-    <nb-card class="emptyCard" [@zoomIn]>
-        <nb-card-body>
-            <div>
-                <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
-                <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
-            </div>
-            <div class="button-container">
-                <button class="btn btn-primary basic-btn basic-form-btn products-button delete-btn" type="submit"
-                    nbButton status="success" (click)="deleteFilters()">{{
-                    'filter.deleteFilter' | translate
-                    }}</button>
-            </div>
-        </nb-card-body>
-    </nb-card>
-</div>
+<!-- that's just need to navigate to the top -->
+<p #toScrollAfterNavigate></p>
+<div class="page-container">
+    <!-- Filter Section -->
+    <div class="filter-container">
+        <!-- Category section -->
+        <div class="row">
+            <h3 class="title">{{ 'blog.filter' | translate }}</h3>
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
 
-<div class="row">
-    <!-- Display product prices dynamically in a 2-column layout -->
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleCategoryDropdown()">
 
-    <!-- Clothes -->
-    <div *ngIf="clothes" class="product-list-container">
-        <nb-card class="rounded-card productCard" *ngFor="let cloth of clothes" [@zoomIn]>
-            <nb-card-body class="product-image" (click)="goToProductPage(cloth.id)">
+                        <!-- Select category dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select"
+                            name="category" #category="ngModel" [(ngModel)]="filterObject.category"
+                            (change)="applyFilters()">
+                            <!-- Placeholder option -->
+                            <option value="" selected>{{ 'filter.selectCategory' |
+                                translate }}
+                            </option>
 
-                <!-- display the sale badge if there is a discount -->
-                <span *ngIf="getDefaultPrice(cloth).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
-                    translate }}</span>
+                            <!-- List of order options -->
+                            <option *ngFor="let category of availableCategories" [value]="category">
+                                {{ category | translate }}
+                            </option>
+                        </select>
 
-                <div *ngIf="getDefaultPrice(cloth) as defaultPrice" class="details-container text-center">
-                    <div class="image-container text-center">
-                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                            alt="Product Image" class="card-image" />
-                        <img *ngIf="defaultPrice.productImage === ''"
-                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                            class="card-image" />
-                    </div>
-
-
-                    <h4>{{ cloth.productName }}</h4>
-
-                    <!-- Display the average rating of the product -->
-                    <div *ngIf="getProductReviews(cloth.id).length > 0" class="average-rating-product-display">
-                        <i [attr.data-star]="getAverageRating(cloth.id)"></i>
-                        <span class="rating-number-product-display">
-                            {{ getProductReviews(cloth.id).length }} {{ 'review.reviewText' | translate }}
-                        </span>
-                    </div>
-
-                    <!-- display the price and if there is a discount, display the discounted price -->
-                    <div class="price-container" *ngIf="getDefaultPrice(cloth) as defaultPrice">
-                        <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
-                            <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
-                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
-                            </span>
-                        </h5>
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isCategoryDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isCategoryDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
-            </nb-card-body>
-        </nb-card>
+            </div>
+            <br>
+        </div>
+
+        <!-- Order by section -->
+        <div class="row">
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+                    <!-- title -->
+                    <label for="order" class="order-by-label">{{ 'filter.orderBy.orderByText' | translate }}</label>
+
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleOrderDropdown()">
+
+                        <!-- Select order dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select" name="order"
+                            #order="ngModel" [(ngModel)]="filterObject.orderBy" (change)="orderItems()">
+
+                            <!-- List of order options -->
+                            <option *ngFor="let order of availableOrders" [value]="order">
+                                {{ order | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        <!-- Color section -->
+        <div class="row">
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+                    <!-- title -->
+                    <label for="color" class="order-by-label">{{ 'filter.filterBySizeAndColor' | translate }}</label>
+
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleColorDropdown()" (change)="applyFilters()">
+
+                        <!-- Select color dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select" name="color"
+                            #color="ngModel" [(ngModel)]="filterObject.color">
+
+                            <!-- Placeholder option -->
+                            <option value="" selected>{{ 'filter.filterBlogByColor' |
+                                translate }}
+                            </option>
+
+                            <!-- List of color options -->
+                            <option *ngFor="let color of availableColors" [value]="color">
+                                {{ color | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isColorDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isColorDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+
+
+        <!-- Size section -->
+        <div class="row">
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleSizeDropdown()" (change)="applyFilters()">
+
+                        <!-- Select size dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select" name="size"
+                            #size="ngModel" [(ngModel)]="filterObject.size">
+
+                            <!-- Placeholder option -->
+                            <option value="" selected>{{ 'filter.filterBlogBySize' |
+                                translate }}
+                            </option>
+
+                            <!-- List of size options -->
+                            <option *ngFor="let size of availableProductSizes" [value]="size">
+                                {{ size | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isSizeDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isSizeDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- clothType section -->
+        <div class="row">
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+                    <!-- title -->
+                    <label for="clothType" class="order-by-label">{{ 'filter.clothTypeAndMaterialText' | translate
+                        }}</label>
+
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleClothingTypeDropdown()" (change)="applyFilters()">
+
+                        <!-- Select clothType dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select"
+                            name="clothType" #clothType="ngModel" [(ngModel)]="filterObject.clothingType">
+
+                            <!-- Placeholder option -->
+                            <option value="" selected>{{ 'filter.filterBlogByClothType' |
+                                translate }}
+                            </option>
+
+                            <!-- List of clothType options -->
+                            <option *ngFor="let clothType of availableClothingTypes" [value]="clothType">
+                                {{ clothType | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isClothingTypeDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isClothingTypeDropdownOpen" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24" fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+
+        <!-- Material section -->
+        <div class="row">
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleMaterialDropdown()" (change)="applyFilters()">
+
+                        <!-- Select size dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select"
+                            name="material" #material="ngModel" [(ngModel)]="filterObject.material">
+
+                            <!-- Placeholder option -->
+                            <option value="" selected>{{ 'filter.filterBlogByMaterial' |
+                                translate }}
+                            </option>
+
+                            <!-- List of material options -->
+                            <option *ngFor="let material of availableMaterials" [value]="material">
+                                {{ material | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isMaterialDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isMaterialDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="send-button-container">
+            <button class="btn btn-primary forgot-btn btn delete-btn" type="button" nbButton status="warning"
+                (click)="deleteFilters()">
+                {{ 'filter.deleteFilter' | translate }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Product Section -->
+    <div class="product-container">
+        <!-- If no products, display the empty card -->
+        <div *ngIf="(emptyCollection === true)" class="product-empty-list-container">
+            <nb-card class="emptyCard" [@zoomIn]>
+                <nb-card-body>
+                    <div>
+                        <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                        <p class="emptyCardText">{{ 'products.noProducts' | translate }}</p>
+                    </div>
+                    <div class="button-container">
+                        <button class="btn btn-primary basic-btn basic-form-btn products-button delete-btn"
+                            type="submit" nbButton status="success" (click)="deleteFilters()">{{
+                            'filter.deleteFilter' | translate
+                            }}</button>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+
+        <div class="row">
+            <!-- Clothes -->
+            <div *ngIf="paginatedClothes" class="product-list-container">
+                <nb-card class="rounded-card productCard" *ngFor="let cloth of paginatedClothes" [@zoomIn]>
+                    <nb-card-body class="product-image" (click)="goToProductPage(cloth.id)">
+
+                        <!-- display the sale badge if there is a discount -->
+                        <span *ngIf="getDefaultPrice(cloth).discountedPrice > 0" class="badge discount">{{ 'home.sale' |
+                            translate }}</span>
+
+                        <div *ngIf="getDefaultPrice(cloth) as defaultPrice" class="details-container text-center">
+                            <div class="image-container text-center">
+                                <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
+                                    alt="Product Image" class="card-image" />
+                                <img *ngIf="defaultPrice.productImage === ''"
+                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                    class="card-image" />
+                            </div>
+
+
+                            <h4>{{ cloth.productName }}</h4>
+
+                            <!-- Display the average rating of the product -->
+                            <div *ngIf="getProductReviews(cloth.id).length > 0" class="average-rating-product-display">
+                                <i [attr.data-star]="getAverageRating(cloth.id)"></i>
+                                <span class="rating-number-product-display">
+                                    {{ getProductReviews(cloth.id).length }} {{ 'review.reviewText' | translate }}
+                                </span>
+                            </div>
+
+                            <!-- display the price and if there is a discount, display the discounted price -->
+                            <div class="price-container" *ngIf="getDefaultPrice(cloth) as defaultPrice">
+                                <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                    <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                    <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                        {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                    </span>
+                                </h5>
+                            </div>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Left Arrow -->
+            </button>
+
+            <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                {{ i + 1 }}
+            </button>
+
+            <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                (click)="goToPage(currentPage + 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled right arrow -->
+                        <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Right Arrow -->
+            </button>
+        </div>
     </div>
 </div>
 

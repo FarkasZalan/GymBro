@@ -66,8 +66,8 @@ export class ClothesPageComponent implements OnInit {
 
   // gender
   availableGenders: string[] = [
-    ProductViewText.MALE,
-    ProductViewText.FEMALE,
+    ProductViewText.MAN_CLOTHES,
+    ProductViewText.WOMEN_CLOTHES,
     ProductViewText.UNISEX
   ];
   selectedGender: string = '';
@@ -200,6 +200,11 @@ export class ClothesPageComponent implements OnInit {
 
         // Set other properties based on the selected price
         this.selectedGender = clothes.productGender;
+        if (this.selectedGender === ProductViewText.MAN_CLOTHES) {
+          this.selectedGender = ProductViewText.MALE;
+        } else if (this.selectedGender === ProductViewText.WOMEN_CLOTHES) {
+          this.selectedGender = ProductViewText.FEMALE;
+        }
         this.selectedClothingType = clothes.clothingType;
         this.selectedMaterial = clothes.material;
         this.selectedColor = this.productPriceObject.productColor;

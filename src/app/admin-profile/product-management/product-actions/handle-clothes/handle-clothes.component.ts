@@ -65,8 +65,8 @@ export class HandleClothesComponent {
   // Product categories
   productViewText = ProductViewText;
   availableGenders: string[] = [
-    ProductViewText.MALE,
-    ProductViewText.FEMALE,
+    ProductViewText.MAN_CLOTHES,
+    ProductViewText.WOMEN_CLOTHES,
     ProductViewText.UNISEX
   ];
 

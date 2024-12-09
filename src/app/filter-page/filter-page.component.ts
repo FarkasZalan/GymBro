@@ -255,6 +255,7 @@ export class FilterPageComponent {
       this.availableCategories = [
         ProductViewText.MAN_CLOTHES,
         ProductViewText.WOMEN_CLOTHES,
+        ProductViewText.UNISEX
       ];
 
       // order by

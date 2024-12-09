@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Clothes } from '../../../admin-profile/product-management/product-models/clothing.model';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -8,6 +8,7 @@ import { Filter } from '../../../filter-page/filter.model';
 import { ProductService } from '../../product.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-clothes-list',
@@ -23,9 +24,15 @@ import { ProductReeviews } from '../../../admin-profile/product-management/produ
   ]
 })
 export class ClothesListComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   // store the products one of the array
   clothes: Clothes[] = [];
   originaClothes: Clothes[] = [];
+
+  paginatedClothes: Clothes[] = [];
+  itemsPerPage = 12;
+  currentPage = 1;
+
   productViewText = ProductViewText;
 
   // if there are no products in the collection
@@ -51,7 +58,74 @@ export class ClothesListComponent implements OnInit {
     equipmentType: ''
   };
 
-  constructor(private productService: ProductService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { }
+  // Filter section
+  availableCategories = [
+    ProductViewText.MAN_CLOTHES,
+    ProductViewText.WOMEN_CLOTHES,
+    ProductViewText.UNISEX
+  ];
+  isCategoryDropdownOpen: boolean = false;
+
+  // order by
+  availableOrders = [
+    ProductViewText.ORDER_BY_BEST_RATING,
+    ProductViewText.ORDER_BY_WORST_RATING,
+    ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+    ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE,
+    ProductViewText.ORDER_BY_NAME_ASC,
+    ProductViewText.ORDER_BY_NAME_DESC
+  ];
+  isOrderByDropdownOpen: boolean = false;
+
+  // clothing type
+  availableClothingTypes: string[] = [
+    ProductViewText.COAT,
+    ProductViewText.PANTS,
+    ProductViewText.SWEATER,
+    ProductViewText.T_SHIRT,
+    ProductViewText.SPORTS_BRA,
+    ProductViewText.TANK_TOP
+  ];
+  isClothingTypeDropdownOpen: boolean = false;
+
+  // clothing material
+  availableMaterials: string[] = [
+    ProductViewText.BLENDED_FIBER,
+    ProductViewText.COTTON,
+  ];
+  isMaterialDropdownOpen: boolean = false;
+
+  // cloting size
+  availableProductSizes = [
+    ProductViewText.XS,
+    ProductViewText.S,
+    ProductViewText.M,
+    ProductViewText.L,
+    ProductViewText.XL,
+    ProductViewText.XXL,
+    ProductViewText.XXXL,
+  ];
+  isSizeDropdownOpen: boolean = false;
+
+  availableColors: string[] = [
+    ProductViewText.BROWN,
+    ProductViewText.BURGUNDY,
+    ProductViewText.WHITE,
+    ProductViewText.BLACK,
+    ProductViewText.BLUE,
+    ProductViewText.PURPLE,
+    ProductViewText.RED,
+    ProductViewText.PINK,
+    ProductViewText.GRAY,
+    ProductViewText.YELLOW,
+    ProductViewText.ORANGE,
+    ProductViewText.GREEN,
+    ProductViewText.BEIGE,
+    ProductViewText.MAUVE,
+  ];
+  isColorDropdownOpen: boolean = false;
+
+  constructor(private productService: ProductService, private router: Router, private translate: TranslateService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.productService.getAllProductByCategory(ProductViewText.CLOTHES).subscribe((organicFoodCollection: Clothes[]) => {
@@ -68,13 +142,40 @@ export class ClothesListComponent implements OnInit {
           .subscribe(reviews => {
             this.productReviews.set(product.id, reviews);
           });
+
+        this.updatePaginatedList();
       });
+
+      this.applyFilters();
 
       // if the collection doesn't have any products
       if (this.clothes.length === 0) {
         this.emptyCollection = true;
       }
     });
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedClothes = this.clothes.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.updatePaginatedList();
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.clothes.length / this.itemsPerPage);
+  }
+
+  sortAvailableFilterSections() {
+    this.availableCategories.sort((a, b) => this.translate.instant(a).localeCompare(this.translate.instant(b)) || a.localeCompare(b));
+    this.availableColors.sort((a, b) => this.translate.instant(a).localeCompare(this.translate.instant(b)) || a.localeCompare(b));
+    this.availableMaterials.sort((a, b) => this.translate.instant(a).localeCompare(this.translate.instant(b)) || a.localeCompare(b));
   }
 
   // Method to get the default price for a the products
@@ -102,6 +203,31 @@ export class ClothesListComponent implements OnInit {
     this.router.navigate(['product/' + ProductViewText.CLOTHES + '/' + productId])
   }
 
+  // Filter section on destop
+  toggleOrderDropdown() {
+    this.isOrderByDropdownOpen = !this.isOrderByDropdownOpen;
+  }
+
+  toggleCategoryDropdown() {
+    this.isCategoryDropdownOpen = !this.isCategoryDropdownOpen;
+  }
+
+  toggleColorDropdown() {
+    this.isColorDropdownOpen = !this.isColorDropdownOpen;
+  }
+
+  toggleSizeDropdown() {
+    this.isSizeDropdownOpen = !this.isSizeDropdownOpen;
+  }
+
+  toggleClothingTypeDropdown() {
+    this.isClothingTypeDropdownOpen = !this.isClothingTypeDropdownOpen;
+  }
+
+  toggleMaterialDropdown() {
+    this.isMaterialDropdownOpen = !this.isMaterialDropdownOpen;
+  }
+
   openFilterMenu() {
     const dialogRef = this.dialog.open(FilterPageComponent, {
       data: {
@@ -117,54 +243,32 @@ export class ClothesListComponent implements OnInit {
       } else if (filterObject && typeof filterObject === 'object') {
         this.filterObject = filterObject;
         this.applyFilters(); // Apply the filters to the original list
-        if (this.clothes.length === 0) {
-          this.emptyCollection = true;
-        } else {
-          this.emptyCollection = false;
-
-          if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
-            this.clothes = this.productService.sortClothesPriceByDESC(this.clothes);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
-            this.clothes = this.productService.sortClothesPriceByASC(this.clothes);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
-            this.clothes = this.productService.sortClothesByNameASC(this.clothes);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
-            this.clothes = this.productService.sortClothesByNameDESC(this.clothes);
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
-            this.clothes.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
-          } else if (filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
-            this.clothes.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
-          }
-        }
       }
     });
   }
 
-  deleteFilters() {
-    this.clothes = [...this.originaClothes];
-    this.filterObject = {
-      language: '',
-      category: '',
-      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
-      flavors: [],
-      allergenes: [],
-      safeForConsumptionDuringBreastfeeding: true,
-      safeForConsumptionDuringPregnancy: true,
-      proteinType: '',
-      gender: '',
-      color: '',
-      size: '',
-      clothingType: '',
-      material: '',
-      equipmentType: ''
+  orderItems() {
+    if (this.filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_CHEAPEST) {
+      this.clothes = this.productService.sortClothesPriceByDESC(this.clothes);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_PRICE_MOST_EXPENSIVE) {
+      this.clothes = this.productService.sortClothesPriceByASC(this.clothes);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_NAME_ASC) {
+      this.clothes = this.productService.sortClothesByNameASC(this.clothes);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_NAME_DESC) {
+      this.clothes = this.productService.sortClothesByNameDESC(this.clothes);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_BEST_RATING) {
+      this.clothes.sort((a, b) => this.getAverageRating(b.id) - this.getAverageRating(a.id));
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_WORST_RATING) {
+      this.clothes.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
     }
-    this.emptyCollection = false;
+
+    this.updatePaginatedList();
   }
 
   applyFilters() {
     this.clothes = this.originaClothes.filter((item) => {
       // Category
-      if (this.filterObject.gender && item.productGender !== this.filterObject.gender) {
+      if (this.filterObject.category && item.productGender !== this.filterObject.category) {
         return false;
       }
 
@@ -200,5 +304,39 @@ export class ClothesListComponent implements OnInit {
 
       return true; // Keep the item if it passes all filter conditions
     });
+
+    if (this.clothes.length === 0) {
+      this.emptyCollection = true;
+    } else {
+      this.emptyCollection = false;
+      this.orderItems();
+    }
+
+    this.updatePaginatedList();
+  }
+
+  deleteFilters() {
+    this.clothes = [...this.originaClothes];
+    this.filterObject = {
+      language: '',
+      category: '',
+      orderBy: ProductViewText.ORDER_BY_PRICE_CHEAPEST,
+      flavors: [],
+      allergenes: [],
+      safeForConsumptionDuringBreastfeeding: true,
+      safeForConsumptionDuringPregnancy: true,
+      proteinType: '',
+      gender: '',
+      color: '',
+      size: '',
+      clothingType: '',
+      material: '',
+      equipmentType: ''
+    }
+    this.emptyCollection = false;
+
+    // to set the default filters
+    this.applyFilters();
+    this.updatePaginatedList();
   }
 }

@@ -92,6 +92,19 @@
     transform: scale(1.1);
 }
 
+.pagination-button.active {
+    background-color: #0b8e92;
+    /* Highlight active button */
+    color: #ffffff;
+    /* White text for contrast */
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(11, 142, 146, 0.5);
+    /* Add a glow effect */
+    transform: scale(1.1);
+    /* Slightly enlarge the active button */
+    border-color: #0b8e92;
+}
+
 .pagination-button:disabled {
     cursor: not-allowed;
     opacity: 0.5;
