@@ -276,13 +276,10 @@ nb-layout-footer {
     margin-top: 20px !important;
 }
 
-nb-layout-header {
-    top: env(safe-area-inset-top, 0px) !important;
-    margin-bottom: 10px !important;
-}
-
-nb-layout {
-    min-height: 100vh !important;
+/* Add a margin by default */
+nb-layout-header.with-margin {
+    margin-top: 30px;
+    /* Adjust this value as needed */
 }
 
 app-header {

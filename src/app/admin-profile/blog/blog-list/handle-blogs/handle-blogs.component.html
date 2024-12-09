@@ -9,16 +9,18 @@
                 <h3>{{ 'blog.blogDetails' | translate }}</h3>
                 <div class="row">
                     <!-- Blog title -->
-                    <div class="col-md-8 form-group">
-                        <label for="blogTitle" class="label">{{ 'blog.blogTitleText' | translate }}</label>
-                        <input type="text" class="form-control" [(ngModel)]="blogObject.title" name="blogTitle" required
-                            placeholder="{{ 'blog.enterBlogTitle' | translate }}" #blogTitle="ngModel">
-                        <span class="help-block" *ngIf="blogTitle.touched && !blogTitle.valid" [@zoomIn]>{{
-                            'register.fieldRequired' | translate }}</span>
+                    <div [ngClass]="{'col-8': isLargeScreen, 'col-12': !isLargeScreen}">
+                        <div class="form-group">
+                            <label for="blogTitle" class="label">{{ 'blog.blogTitleText' | translate }}</label>
+                            <input type="text" class="form-control" [(ngModel)]="blogObject.title" name="blogTitle"
+                                required placeholder="{{ 'blog.enterBlogTitle' | translate }}" #blogTitle="ngModel">
+                            <span class="help-block" *ngIf="blogTitle.touched && !blogTitle.valid" [@zoomIn]>{{
+                                'register.fieldRequired' | translate }}</span>
+                        </div>
                     </div>
 
                     <!-- Blog language (Dropdown) -->
-                    <div class="col-md-4 form-group">
+                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}" class="form-group">
                         <label for="selectLanguage" class="label">{{ 'blog.selectBlogLanguageText' | translate
                             }}</label>
                         <select class="form-control drop-down-list allow-selected-list-color" name="selectLanguage"
@@ -100,12 +102,13 @@
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label for="blogTags" class="label">{{ 'blog.blogTags' | translate }}</label>
-                        <div class="d-flex align-items-center">
+                        <div [ngClass]="{'d-flex': isLargeScreen, '': !isLargeScreen}" class="align-items-center">
                             <input type="text" class="form-control" [(ngModel)]="tagInput" name="blogTags" minlength="1"
                                 placeholder="{{ 'blog.enterBlogTags' | translate }}" #blogTags="ngModel">
                             <button class="btn btn-primary basic-btn basic-form-btn tag-btn" type="submit" nbButton
                                 status="success" (click)="addTag()" [disabled]="tagInput===''">{{ 'products.add' |
                                 translate }}</button>
+                            <hr>
                         </div>
                         <!-- tag already is in use error block -->
                         <span *ngIf="tagAlreadyExists" class="help-block-login-error" [@zoomIn]>
@@ -115,10 +118,11 @@
 
                         <div *ngIf="selectedTags.length > 0">
                             <div class="selected-items-display" *ngFor="let selected of selectedTags"
-                                (click)="removeItemFromTheList( selected)">
+                                (click)="removeItemFromTheList( selected)" [@zoomIn]>
                                 {{ selected | translate }}
                                 <span style="cursor: pointer; color: red;">&times;</span>
                             </div>
+                            <hr>
                         </div>
                     </div>
                 </div>

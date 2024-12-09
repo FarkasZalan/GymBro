@@ -1,90 +1,93 @@
 <!-- loading spinner -->
 <app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
 
-<!-- orders details -->
-<nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
-    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orderCard>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">{{
-                'profileMenu.orders' | translate }}
-            </h2>
+<div class="container">
+    <!-- orders details -->
+    <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
+        [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orderCard>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
+                <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">{{
+                    'profileMenu.orders' | translate }}
+                </h2>
 
-            <!-- Icon for New Orders -->
-            <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
-                &#x26A0; <!-- warning icon -->
+                <!-- Icon for New Orders -->
+                <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
+                    &#x26A0; <!-- warning icon -->
+                </div>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="categorie-arrow" *ngIf="isCollapsedOrders">▼</span>
+                    <span class="categorie-arrow" *ngIf="!isCollapsedOrders">▲</span>
+                </button>
             </div>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="categorie-arrow" *ngIf="isCollapsedOrders">▼</span>
-                <span class="categorie-arrow" *ngIf="!isCollapsedOrders">▲</span>
-            </button>
-        </div>
 
-        <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
-            <app-orders></app-orders>
-        </div>
-    </nb-card-body>
-</nb-card>
-
-<!-- product categories -->
-<nb-card class="container-collapse-component" [class.has-unchecked-items]="uncheckedReviewsCount !== 0"
-    [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails" #itemsCard>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedItemsDetails, 'left': !isCollapsedItemsDetails}">{{
-                'adminMenu.items' | translate }}
-            </h2>
-
-            <!-- Icon for Unchecked Reviews -->
-            <div class="review-alert-icon" *ngIf="uncheckedReviewsCount !== 0">
-                &#x26A0; <!-- warning icon -->
+            <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
+                <app-orders></app-orders>
             </div>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="categorie-arrow" *ngIf="isCollapsedItemsDetails">▼</span>
-                <span class="categorie-arrow" *ngIf="!isCollapsedItemsDetails">▲</span>
-            </button>
-        </div>
+        </nb-card-body>
+    </nb-card>
 
-        <div *ngIf="!isCollapsedItemsDetails" [@collapseComponent] class="collapse-container">
-            <app-products-categories></app-products-categories>
-        </div>
-    </nb-card-body>
-</nb-card>
+    <!-- product categories -->
+    <nb-card class="container-collapse-component" [class.has-unchecked-items]="uncheckedReviewsCount !== 0"
+        [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails" #itemsCard>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()">
+                <h2 class="title" [ngClass]="{'center': isCollapsedItemsDetails, 'left': !isCollapsedItemsDetails}">{{
+                    'adminMenu.items' | translate }}
+                </h2>
 
-<!-- blog list -->
-<nb-card class="container-collapse-component" #blogCard>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedBlogDetails()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedBlogDetails, 'left': !isCollapsedBlogDetails}">{{
-                'adminMenu.blog' | translate }}
-            </h2>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="categorie-arrow" *ngIf="isCollapsedBlogDetails">▼</span>
-                <span class="categorie-arrow" *ngIf="!isCollapsedBlogDetails">▲</span>
-            </button>
-        </div>
+                <!-- Icon for Unchecked Reviews -->
+                <div class="review-alert-icon" *ngIf="uncheckedReviewsCount !== 0">
+                    &#x26A0; <!-- warning icon -->
+                </div>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="categorie-arrow" *ngIf="isCollapsedItemsDetails">▼</span>
+                    <span class="categorie-arrow" *ngIf="!isCollapsedItemsDetails">▲</span>
+                </button>
+            </div>
 
-        <div *ngIf="!isCollapsedBlogDetails" [@collapseComponent] class="collapse-container">
-            <app-blog></app-blog>
-        </div>
-    </nb-card-body>
-</nb-card>
+            <div *ngIf="!isCollapsedItemsDetails" [@collapseComponent] class="collapse-container">
+                <app-products-categories></app-products-categories>
+            </div>
+        </nb-card-body>
+    </nb-card>
 
-<!-- profile details -->
-<nb-card class="container-collapse-component" #profileCard>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">{{
-                'adminMenu.adminProfile' | translate }}
-            </h2>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="categorie-arrow" *ngIf="isCollapsedProfileDetails">▼</span>
-                <span class="categorie-arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
-            </button>
-        </div>
+    <!-- blog list -->
+    <nb-card class="container-collapse-component" #blogCard>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedBlogDetails()">
+                <h2 class="title" [ngClass]="{'center': isCollapsedBlogDetails, 'left': !isCollapsedBlogDetails}">{{
+                    'adminMenu.blog' | translate }}
+                </h2>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="categorie-arrow" *ngIf="isCollapsedBlogDetails">▼</span>
+                    <span class="categorie-arrow" *ngIf="!isCollapsedBlogDetails">▲</span>
+                </button>
+            </div>
 
-        <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
-            <app-profile-list></app-profile-list>
-        </div>
-    </nb-card-body>
-</nb-card>
+            <div *ngIf="!isCollapsedBlogDetails" [@collapseComponent] class="collapse-container">
+                <app-blog></app-blog>
+            </div>
+        </nb-card-body>
+    </nb-card>
+
+    <!-- profile details -->
+    <nb-card class="container-collapse-component" #profileCard>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
+                <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
+                    {{
+                    'adminMenu.adminProfile' | translate }}
+                </h2>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="categorie-arrow" *ngIf="isCollapsedProfileDetails">▼</span>
+                    <span class="categorie-arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
+                </button>
+            </div>
+
+            <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
+                <app-profile-list></app-profile-list>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

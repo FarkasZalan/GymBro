@@ -415,7 +415,7 @@
                 "blogTitleText": "Blog címe",
                 "blogText": "Blog szövege",
                 "enterBlogText": "Add meg a bejegyzés szövegét*",
-                "enterBlogTitle": "Add meg a bejegyzés címét*",
+                "enterBlogTitle": "Bejegyzés címe*",
                 "blogTags": "Blog címkéi",
                 "enterBlogTags": "Blog címkék megadása",
                 "editor": {
@@ -454,7 +454,7 @@
                         "removeLink": "Hivatkozás eltávolítása"
                 },
                 "selectBlogLanguageText": "Blog nyelve",
-                "selectBlogLanguage": "Válaszd ki a blog nyelvét*",
+                "selectBlogLanguage": "Blog nyelve*",
                 "languages": {
                         "hungarian": "Magyar",
                         "english": "Angol"

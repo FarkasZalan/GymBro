@@ -1,84 +1,87 @@
 <!-- Loading spinner -->
 <app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
 
-<!-- profile details -->
-<nb-card class="container-collapse-component" #profile>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
-                {{ 'profileMenu.prodilDetails' | translate }}
-            </h2>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="arrow" *ngIf="isCollapsedProfileDetails">▼</span>
-                <span class="arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
-            </button>
-        </div>
-
-        <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
-            <app-profile-list></app-profile-list>
-        </div>
-    </nb-card-body>
-</nb-card>
-
-<!-- orders -->
-<nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
-    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orders>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">
-                {{ 'profileMenu.orders' | translate }}
-            </h2>
-
-            <!-- Icon for New Orders -->
-            <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
-                &#x26A0; <!-- warning icon -->
+<div class="container">
+    <!-- profile details -->
+    <nb-card class="container-collapse-component" #profile>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
+                <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
+                    {{ 'profileMenu.prodilDetails' | translate }}
+                </h2>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="arrow" *ngIf="isCollapsedProfileDetails">▼</span>
+                    <span class="arrow" *ngIf="!isCollapsedProfileDetails">▲</span>
+                </button>
             </div>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="arrow" *ngIf="isCollapsedOrders">▼</span>
-                <span class="arrow" *ngIf="!isCollapsedOrders">▲</span>
-            </button>
-        </div>
 
-        <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
-            <app-profile-orders></app-profile-orders>
-        </div>
-    </nb-card-body>
-</nb-card>
+            <div *ngIf="!isCollapsedProfileDetails" [@collapseComponent] class="collapse-container">
+                <app-profile-list></app-profile-list>
+            </div>
+        </nb-card-body>
+    </nb-card>
 
-<!-- shipping addresses -->
-<nb-card class="container-collapse-component" #shipping>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedShippingAddress()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedShippingAddress, 'left': !isCollapsedShippingAddress}">
-                {{ 'profileMenu.addresses' | translate }}
-            </h2>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="arrow" *ngIf="isCollapsedShippingAddress">▼</span>
-                <span class="arrow" *ngIf="!isCollapsedShippingAddress">▲</span>
-            </button>
-        </div>
+    <!-- orders -->
+    <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
+        [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orders>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
+                <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">
+                    {{ 'profileMenu.orders' | translate }}
+                </h2>
 
-        <div *ngIf="!isCollapsedShippingAddress" [@collapseComponent] class="collapse-container">
-            <app-profile-shipping-address></app-profile-shipping-address>
-        </div>
-    </nb-card-body>
-</nb-card>
+                <!-- Icon for New Orders -->
+                <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
+                    &#x26A0; <!-- warning icon -->
+                </div>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="arrow" *ngIf="isCollapsedOrders">▼</span>
+                    <span class="arrow" *ngIf="!isCollapsedOrders">▲</span>
+                </button>
+            </div>
 
-<!-- loyality program -->
-<nb-card class="container-collapse-component" #loyalty>
-    <nb-card-body>
-        <div class="header-collapse-component" (click)="toggleCollapsedLoyaltyProgram()">
-            <h2 class="title" [ngClass]="{'center': isCollapsedLoyaltyProgram, 'left': !isCollapsedLoyaltyProgram}">
-                {{ 'profileMenu.loyaltyProgram' | translate }}
-            </h2>
-            <button class="toggle-button-collapse-component back-btn">
-                <span class="arrow" *ngIf="isCollapsedLoyaltyProgram">▼</span>
-                <span class="arrow" *ngIf="!isCollapsedLoyaltyProgram">▲</span>
-            </button>
-        </div>
+            <div *ngIf="!isCollapsedOrders" [@collapseComponent] class="collapse-container">
+                <app-profile-orders></app-profile-orders>
+            </div>
+        </nb-card-body>
+    </nb-card>
 
-        <div *ngIf="!isCollapsedLoyaltyProgram" [@collapseComponent] class="collapse-container">
-            <app-loyalty-program [openedFromProfile]="true"></app-loyalty-program>
-        </div>
-    </nb-card-body>
-</nb-card>
+    <!-- shipping addresses -->
+    <nb-card class="container-collapse-component" #shipping>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedShippingAddress()">
+                <h2 class="title"
+                    [ngClass]="{'center': isCollapsedShippingAddress, 'left': !isCollapsedShippingAddress}">
+                    {{ 'profileMenu.addresses' | translate }}
+                </h2>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="arrow" *ngIf="isCollapsedShippingAddress">▼</span>
+                    <span class="arrow" *ngIf="!isCollapsedShippingAddress">▲</span>
+                </button>
+            </div>
+
+            <div *ngIf="!isCollapsedShippingAddress" [@collapseComponent] class="collapse-container">
+                <app-profile-shipping-address></app-profile-shipping-address>
+            </div>
+        </nb-card-body>
+    </nb-card>
+
+    <!-- loyality program -->
+    <nb-card class="container-collapse-component" #loyalty>
+        <nb-card-body>
+            <div class="header-collapse-component" (click)="toggleCollapsedLoyaltyProgram()">
+                <h2 class="title" [ngClass]="{'center': isCollapsedLoyaltyProgram, 'left': !isCollapsedLoyaltyProgram}">
+                    {{ 'profileMenu.loyaltyProgram' | translate }}
+                </h2>
+                <button class="toggle-button-collapse-component back-btn">
+                    <span class="arrow" *ngIf="isCollapsedLoyaltyProgram">▼</span>
+                    <span class="arrow" *ngIf="!isCollapsedLoyaltyProgram">▲</span>
+                </button>
+            </div>
+
+            <div *ngIf="!isCollapsedLoyaltyProgram" [@collapseComponent] class="collapse-container">
+                <app-loyalty-program [openedFromProfile]="true"></app-loyalty-program>
+            </div>
+        </nb-card-body>
+    </nb-card>
+</div>

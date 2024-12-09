@@ -14,6 +14,7 @@
 }
 
 .page-container {
+    margin-top: 2rem !important;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -629,6 +630,10 @@ nb-card-body {
     text-align: center;
     justify-content: center;
 
+    @media screen and (max-width: 768px) {
+        padding-bottom: 0 !important;
+    }
+
     h1 {
         color: darken($color: #0b8e92, $amount: 5%)
     }
@@ -675,8 +680,8 @@ nb-card-body {
         // Increase the width of the address card
         width: calc(50% - 40px);
         /* Ensure the card takes up half of the container width */
-        max-width: 280px;
-        height: 450px !important;
+        max-width: 280px !important;
+        height: auto !important;
         flex: 1 1 calc(50% - 20px);
         /* Two columns with space between */
         display: flex;
@@ -698,6 +703,10 @@ nb-card-body {
         overflow: hidden;
         /* To prevent overflow of the button overlay */
         position: relative;
+
+        @media screen and (max-width: 768px) {
+            max-width: 260px !important;
+        }
 
         // Enhanced discount badge
         .badge.discount {
@@ -806,9 +815,13 @@ nb-card-body {
     max-width: 300px !important;
 }
 
+.back-from-product-list-admin {
+    width: 270px !important;
+    margin-bottom: 30px !important;
+}
 
 .products-button {
-    width: 330px !important;
+    width: 330px;
     font-size: 18px !important;
     margin-top: 20px;
     margin-bottom: 30px
@@ -1183,8 +1196,8 @@ h5 {
 }
 
 .blogCard {
-    width: 350px !important;
-    height: 550px !important;
+    max-width: 300px !important;
+    height: 580px !important;
     flex: 1 1 calc(50% - 20px);
     /* Two columns with space between */
     display: flex;
@@ -1202,6 +1215,11 @@ h5 {
     align-self: flex-start; // Align card to the start (left) of its container
     transition: background-color 0.3s ease, transform 0.3s ease !important;
     height: fit-content;
+
+    @media screen and (max-width: 768px) {
+        max-width: 260px !important;
+        height: auto !important;
+    }
 
     &:hover {
         cursor: pointer;

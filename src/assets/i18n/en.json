@@ -411,7 +411,7 @@
       "enterBlogText": "Enter blog text*",
       "blogTitleText": "Blog title",
       "blogText": "Blog text",
-      "enterBlogTitle": "Enter blog title*",
+      "enterBlogTitle": "Blog title*",
       "blogTags": "Blog tags",
       "enterBlogTags": "Enter blog tags",
       "editor": {
@@ -450,7 +450,7 @@
          "removeLink": "Remove link"
       },
       "selectBlogLanguageText": "Blog language",
-      "selectBlogLanguage": "Select blog language*",
+      "selectBlogLanguage": "Blog language*",
       "languages": {
          "hungarian": "Hungarian",
          "english": "English"

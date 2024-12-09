@@ -9,6 +9,10 @@
     }
 }
 
+.container {
+    margin-top: 2rem !important
+}
+
 /* Orange border when there are unchecked items */
 .container-collapse-component.has-unchecked-items {
     border: 2px solid orange;

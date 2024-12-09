@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { FormGroup, NgForm } from '@angular/forms';
@@ -83,6 +83,9 @@ export class HandleBlogsComponent implements OnInit {
 
   descriptionLength: number = 0;
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(
     private storage: AngularFireStorage,
     private db: AngularFirestore,
@@ -96,6 +99,7 @@ export class HandleBlogsComponent implements OnInit {
 
   ngOnInit(): void {
     this.editor = new Editor();
+    this.checkScreenSize();
 
     // Set up toolbar with command keys
     this.toolbar = [
@@ -144,6 +148,16 @@ export class HandleBlogsComponent implements OnInit {
         }
       });
     });
+  }
+
+  // display in 1 column the form fields on smaller screens and 2 columns on larger screens
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 900;
   }
 
   // make sure to destory the editor
