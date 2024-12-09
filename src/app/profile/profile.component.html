@@ -2,7 +2,7 @@
 <app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
 
 <!-- profile details -->
-<nb-card class="container-collapse-component">
+<nb-card class="container-collapse-component" #profile>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
             <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
@@ -22,7 +22,7 @@
 
 <!-- orders -->
 <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
-    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
+    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orders>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
             <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">
@@ -46,7 +46,7 @@
 </nb-card>
 
 <!-- shipping addresses -->
-<nb-card class="container-collapse-component">
+<nb-card class="container-collapse-component" #shipping>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedShippingAddress()">
             <h2 class="title" [ngClass]="{'center': isCollapsedShippingAddress, 'left': !isCollapsedShippingAddress}">
@@ -65,7 +65,7 @@
 </nb-card>
 
 <!-- loyality program -->
-<nb-card class="container-collapse-component">
+<nb-card class="container-collapse-component" #loyalty>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedLoyaltyProgram()">
             <h2 class="title" [ngClass]="{'center': isCollapsedLoyaltyProgram, 'left': !isCollapsedLoyaltyProgram}">

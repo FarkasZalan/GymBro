@@ -735,7 +735,8 @@
       "cancelOrderText": "Are you sure you want to cancel this order?",
       "cancelOrder": "Cancel Order",
       "modified": "Modified",
-      "orderStatus": "Order Status:"
+      "orderStatus": "Order Status:",
+      "orderList": "Order List"
    },
    "orderStatus": {
       "PROCESSING": "Processing",

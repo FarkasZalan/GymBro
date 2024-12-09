@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { AdminService } from '../../admin.service';
@@ -28,10 +28,16 @@ import { Location } from '@angular/common';
   ]
 })
 export class OrderListComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   orders: Order[] = [];
+
+  // pagination
+  paginatedOrderList: Order[] = [];
+  itemsPerPage = 6;
+  currentPage = 1;
+
   orderStatus = OrderStatus;
-  initialOrderCount: number = 5;
-  showAllOrders: boolean = false;
+  initialOrderCount: number = 0;
 
   // Get translations using translate.instant
   statusChangedText = this.translate.instant('receipt.orderStatusChanged');
@@ -83,8 +89,27 @@ export class OrderListComponent implements OnInit {
     await this.loadingService.withLoading(async () => {
       (await this.adminService.getAllOrders()).subscribe((orders: Order[]) => {
         this.orders = orders;
+
+        this.updatePaginatedList();
       });
     });
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedOrderList = this.orders.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.orders.length / this.itemsPerPage);
   }
 
   async markOrderAsChecked(order: Order) {
@@ -97,14 +122,6 @@ export class OrderListComponent implements OnInit {
 
   viewReceipt(orderId: string) {
     this.router.navigate(['/receipt', orderId], { queryParams: { fromCheckout: 'false' } });
-  }
-
-  get visibleOrders(): Order[] {
-    return this.showAllOrders ? this.orders : this.orders.slice(0, this.initialOrderCount);
-  }
-
-  toggleOrdersDisplay() {
-    this.showAllOrders = !this.showAllOrders;
   }
 
   async updateOrderStatus(order: Order, newStatus: OrderStatus) {
@@ -329,13 +346,11 @@ export class OrderListComponent implements OnInit {
   }
 
   hasUncheckedHiddenOrders(): boolean {
-    if (this.showAllOrders) return false;
     const hiddenOrders = this.orders.slice(this.initialOrderCount);
     return hiddenOrders.some(order => !order.isAdminChecked);
   }
 
   getUncheckedHiddenOrdersCount(): number {
-    if (this.showAllOrders) return 0;
     const hiddenOrders = this.orders.slice(this.initialOrderCount);
     return hiddenOrders.filter(order => !order.isAdminChecked).length;
   }

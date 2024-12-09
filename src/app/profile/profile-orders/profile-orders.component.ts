@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Order } from '../../payment/order.model';
 import { UserService } from '../user.service';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -23,8 +23,14 @@ import { LoadingService } from '../../loading-spinner/loading.service';
   ]
 })
 export class ProfileOrdersComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   orders: Order[] = [];
   orderStatus = OrderStatus;
+
+  // pagination
+  paginatedOrderList: Order[] = [];
+  itemsPerPage = 3;
+  currentPage = 1;
 
   currentUser: User | undefined;
   currentUserId: string | undefined;
@@ -64,8 +70,27 @@ export class ProfileOrdersComponent implements OnInit {
       const ordersObservable = await this.userService.getAllOrders(this.currentUserId);
       ordersObservable.subscribe((orders: Order[]) => {
         this.orders = orders;
+
+        this.updatePaginatedList();
       });
     });
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedOrderList = this.orders.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.orders.length / this.itemsPerPage);
   }
 
   async markOrderAsChecked(order: Order) {
@@ -124,20 +149,12 @@ export class ProfileOrdersComponent implements OnInit {
   }
 
   hasUncheckedHiddenOrders(): boolean {
-    if (this.showAllOrders) {
-      return false;
-    }
-
     // Check orders that are not visible (after initialOrderCount)
     const hiddenOrders = this.orders.slice(this.initialOrderCount);
     return hiddenOrders.some(order => !order.isUserChecked);
   }
 
   getUncheckedHiddenOrdersCount(): number {
-    if (this.showAllOrders) {
-      return 0;
-    }
-
     // Count unchecked orders that are not visible (after initialOrderCount)
     const hiddenOrders = this.orders.slice(this.initialOrderCount);
     return hiddenOrders.filter(order => !order.isUserChecked).length;

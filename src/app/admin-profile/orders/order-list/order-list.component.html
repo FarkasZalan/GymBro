@@ -1,9 +1,20 @@
 <!-- loading spinner -->
 <app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
 
+<!-- that's just need to navigate to the top -->
+<p #toScrollAfterNavigate></p>
 <div class="orders-container" [@zoomIn]>
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="product-list-title">{{
+                'orders.orderList' | translate
+                }} <span *ngIf="hasUncheckedHiddenOrders()" class="unchecked-count">• {{
+                    getUncheckedHiddenOrdersCount() }} {{ 'orders.new' |
+                    translate }}</span></h1>
+        </div>
+    </div>
     <!-- No orders message -->
-    <div *ngIf="orders?.length === 0" class="product-empty-list-container">
+    <div *ngIf="paginatedOrderList?.length === 0" class="product-empty-list-container">
         <nb-card class="emptyCard" [@zoomIn]>
             <nb-card-body>
                 <div>
@@ -15,7 +26,7 @@
     </div>
 
     <!-- Orders list -->
-    <div class="col-12" *ngFor="let order of visibleOrders">
+    <div class="col-12" *ngFor="let order of paginatedOrderList">
         <nb-card class="order-card mb-3" [ngClass]="{ 
             'new-order-card': !order.isAdminChecked,
             'cancelled-order': order.orderStatus === orderStatus.CANCELLED
@@ -113,15 +124,30 @@
         </nb-card>
     </div>
 
-    <!-- Show more/less button -->
-    <div *ngIf="orders.length > initialOrderCount" class="show-more-container">
-        <button class="btn btn-primary show-more-button order-list-btn"
-            [ngClass]="{'has-unchecked-orders': hasUncheckedHiddenOrders()}" (click)="toggleOrdersDisplay()">
-            {{ (showAllOrders ? 'orders.showLess' : 'orders.showMore') | translate }}
-            {{ showAllOrders ? '' : ' (' + (orders.length - initialOrderCount) + ')' }}
-            <span *ngIf="getUncheckedHiddenOrdersCount() > 0" class="unchecked-count">
-                • {{ getUncheckedHiddenOrdersCount() }} {{ 'orders.new' | translate }}
-            </span>
+    <!-- Pagination Controls -->
+    <div class="pagination-container">
+        <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+            <span class="icon">
+                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Filled left arrow -->
+                    <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                </svg>
+            </span> <!-- Left Arrow -->
+        </button>
+
+        <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+            [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+            {{ i + 1 }}
+        </button>
+
+        <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+            (click)="goToPage(currentPage + 1)">
+            <span class="icon">
+                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Filled right arrow -->
+                    <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                </svg>
+            </span> <!-- Right Arrow -->
         </button>
     </div>
 

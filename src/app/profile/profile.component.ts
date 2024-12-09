@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UserService } from './user.service';
 import { UserNotificationService } from './user-notification.service';
 import { User } from './user.model';
@@ -33,10 +33,14 @@ import { ActivatedRoute } from '@angular/router';
   ]
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('profile') profile: ElementRef;
+  @ViewChild('orders') orders: ElementRef;
+  @ViewChild('shipping') shipping: ElementRef;
+  @ViewChild('loyalty') loyalty: ElementRef;
+
   isCollapsedProfileDetails = false;
   isCollapsedOrders = true;
   isCollapsedShippingAddress = true;
-  isCollapsedPayemenetMethods = true;
   isCollapsedLoyaltyProgram = true;
   numberOfNewOrders: number = 0;
 
@@ -88,10 +92,13 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedProfilDetails() {
     this.isCollapsedProfileDetails = !this.isCollapsedProfileDetails;
 
+    if (this.isCollapsedProfileDetails) {
+      this.profile.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedProfileDetails) {
       this.isCollapsedOrders = true;
       this.isCollapsedShippingAddress = true;
-      this.isCollapsedPayemenetMethods = true;
       this.isCollapsedLoyaltyProgram = true;
     }
   }
@@ -99,10 +106,13 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedOrders() {
     this.isCollapsedOrders = !this.isCollapsedOrders;
 
+    if (this.isCollapsedOrders) {
+      this.orders.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedOrders) {
       this.isCollapsedProfileDetails = true;
       this.isCollapsedShippingAddress = true;
-      this.isCollapsedPayemenetMethods = true;
       this.isCollapsedLoyaltyProgram = true;
     }
   }
@@ -110,20 +120,12 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedShippingAddress() {
     this.isCollapsedShippingAddress = !this.isCollapsedShippingAddress;
 
+    if (this.isCollapsedShippingAddress) {
+      this.shipping.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedShippingAddress) {
       this.isCollapsedOrders = true;
-      this.isCollapsedProfileDetails = true;
-      this.isCollapsedPayemenetMethods = true;
-      this.isCollapsedLoyaltyProgram = true;
-    }
-  }
-
-  toggleCollapsedPayemenetMethods() {
-    this.isCollapsedPayemenetMethods = !this.isCollapsedPayemenetMethods;
-
-    if (!this.isCollapsedPayemenetMethods) {
-      this.isCollapsedOrders = true;
-      this.isCollapsedShippingAddress = true;
       this.isCollapsedProfileDetails = true;
       this.isCollapsedLoyaltyProgram = true;
     }
@@ -132,10 +134,13 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedLoyaltyProgram() {
     this.isCollapsedLoyaltyProgram = !this.isCollapsedLoyaltyProgram;
 
+    if (this.isCollapsedLoyaltyProgram) {
+      this.loyalty.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedLoyaltyProgram) {
       this.isCollapsedOrders = true;
       this.isCollapsedShippingAddress = true;
-      this.isCollapsedPayemenetMethods = true;
       this.isCollapsedProfileDetails = true;
     }
   }
