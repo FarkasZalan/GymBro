@@ -447,6 +447,18 @@
     }
 }
 
+@media (max-width: 500px) {
+    .btn {
+        width: 250px !important;
+    }
+}
+
+@media (max-width: 4300px) {
+    .btn {
+        width: 230px !important;
+    }
+}
+
 .new-badge {
     position: absolute;
     top: 1rem;
