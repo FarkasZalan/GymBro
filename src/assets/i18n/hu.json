@@ -407,6 +407,8 @@
                 }
         },
         "blog": {
+                "blogList": "Blog bejegyzések",
+                "blogDetails": "Blog részletei",
                 "noBlogs": "Nincs egyetlen megjeleníthető blog sem!",
                 "blogImage": "Bejegyzés képe",
                 "adNewBlog": "Új blog hozzáadása",

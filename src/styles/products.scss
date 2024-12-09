@@ -1280,6 +1280,24 @@ h5 {
     }
 }
 
+@media (min-width: 1650px) {
+    .categoryCard {
+        max-width: 500px;
+        max-height: 700px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 1650px) {
+    .categoryCard {
+        max-width: 350px;
+        max-height: 450px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
 @media (max-width: 1650px) {
     .categoryCard {
         max-width: 350px;
@@ -1291,17 +1309,8 @@ h5 {
 
 @media (max-width: 1493px) {
     .categoryCard {
-        max-width: 290px;
-        max-height: 390px;
-        margin-left: 5%;
-        margin-right: 5%;
-    }
-}
-
-@media (max-width: 1400px) {
-    .categoryCard {
-        max-width: 250px;
-        max-height: 350px;
+        max-width: 320px;
+        max-height: 420px;
         margin-left: 5%;
         margin-right: 5%;
     }
@@ -1309,8 +1318,8 @@ h5 {
 
 @media (max-width: 1180px) {
     .categoryCard {
-        max-width: 400px;
-        max-height: 500px;
+        max-width: 420px;
+        max-height: 520px;
         margin-left: 5%;
         margin-right: 5%;
     }
@@ -1318,8 +1327,26 @@ h5 {
 
 @media (max-width: 800px) {
     .categoryCard {
-        max-width: 350px;
-        max-height: 450px;
+        max-width: 370px;
+        max-height: 470px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 400px) {
+    .categoryCard {
+        max-width: 220px;
+        max-height: 320px;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}
+
+@media (max-width: 400px) {
+    .categoryCard {
+        max-width: 200px;
+        max-height: 300px;
         margin-left: 5%;
         margin-right: 5%;
     }
@@ -1327,8 +1354,8 @@ h5 {
 
 @media (max-width: 680px) {
     .categoryCard {
-        max-width: 300px;
-        max-height: 400px;
+        max-width: 320px;
+        max-height: 420px;
         margin-left: 5%;
         margin-right: 5%;
     }

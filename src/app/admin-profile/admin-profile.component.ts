@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AdminService } from './admin.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingService } from '../loading-spinner/loading.service';
@@ -29,6 +29,12 @@ import { LoadingService } from '../loading-spinner/loading.service';
   ]
 })
 export class AdminProfileComponent implements OnInit {
+  // if open the cards scroll to the top of the card
+  @ViewChild('orderCard') orderCard: ElementRef;
+  @ViewChild('itemsCard') itemsCard: ElementRef;
+  @ViewChild('blogCard') blogCard: ElementRef;
+  @ViewChild('profileCard') profileCard: ElementRef;
+
   isCollapsedProfileDetails = true;
   isCollapsedItemsDetails = true;
   isCollapsedBlogDetails = true;
@@ -67,6 +73,10 @@ export class AdminProfileComponent implements OnInit {
   toggleCollapsedProfilDetails() {
     this.isCollapsedProfileDetails = !this.isCollapsedProfileDetails;
 
+    if (this.isCollapsedProfileDetails) {
+      this.profileCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedProfileDetails) {
       this.isCollapsedOrders = true;
       this.isCollapsedItemsDetails = true;
@@ -76,6 +86,10 @@ export class AdminProfileComponent implements OnInit {
 
   toggleCollapsedItemDetails() {
     this.isCollapsedItemsDetails = !this.isCollapsedItemsDetails;
+
+    if (this.isCollapsedItemsDetails) {
+      this.itemsCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     if (!this.isCollapsedItemsDetails) {
       this.isCollapsedOrders = true;
@@ -87,6 +101,10 @@ export class AdminProfileComponent implements OnInit {
   toggleCollapsedBlogDetails() {
     this.isCollapsedBlogDetails = !this.isCollapsedBlogDetails;
 
+    if (this.isCollapsedBlogDetails) {
+      this.blogCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedBlogDetails) {
       this.isCollapsedOrders = true;
       this.isCollapsedItemsDetails = true;
@@ -96,6 +114,10 @@ export class AdminProfileComponent implements OnInit {
 
   toggleCollapsedOrders() {
     this.isCollapsedOrders = !this.isCollapsedOrders;
+
+    if (this.isCollapsedOrders) {
+      this.orderCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     if (!this.isCollapsedOrders) {
       this.isCollapsedProfileDetails = true;

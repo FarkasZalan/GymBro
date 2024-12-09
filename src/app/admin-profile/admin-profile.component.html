@@ -3,7 +3,7 @@
 
 <!-- orders details -->
 <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
-    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
+    [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orderCard>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
             <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">{{
@@ -28,7 +28,7 @@
 
 <!-- product categories -->
 <nb-card class="container-collapse-component" [class.has-unchecked-items]="uncheckedReviewsCount !== 0"
-    [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails">
+    [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails" #itemsCard>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()">
             <h2 class="title" [ngClass]="{'center': isCollapsedItemsDetails, 'left': !isCollapsedItemsDetails}">{{
@@ -52,7 +52,7 @@
 </nb-card>
 
 <!-- blog list -->
-<nb-card class="container-collapse-component">
+<nb-card class="container-collapse-component" #blogCard>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedBlogDetails()">
             <h2 class="title" [ngClass]="{'center': isCollapsedBlogDetails, 'left': !isCollapsedBlogDetails}">{{
@@ -71,7 +71,7 @@
 </nb-card>
 
 <!-- profile details -->
-<nb-card class="container-collapse-component">
+<nb-card class="container-collapse-component" #profileCard>
     <nb-card-body>
         <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
             <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">{{

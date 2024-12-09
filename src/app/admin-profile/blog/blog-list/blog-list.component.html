@@ -1,57 +1,108 @@
 <!-- loading spinner -->
 <app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
 
-<!-- Only show content when blogList is defined -->
-<ng-container *ngIf="blogList !== undefined">
-    <!-- If no blogs are present, display the empty card -->
-    <div *ngIf="blogList.length === 0" class="empty-list-container" [@zoomIn]>
-        <nb-card class="emptyCard">
-            <nb-card-body>
-                <div>
-                    <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
-                    <p class="emptyCardText">{{ 'blog.noBlogs' | translate }}</p>
-                </div>
-                <!-- open new blog button -->
-                <div class="button-container">
-                    <button class="btn btn-primary basic-btn basic-form-btn products-button" type="submit" nbButton
-                        status="success" (click)="goToAddNewBlog()">{{
-                        'blog.adNewBlog' | translate }}</button>
-                </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
+<!-- that's just need to navigate to the top -->
+<p #toScrollAfterNavigate></p>
+<div class="page-container">
+    <div class="product-container">
+        <div class="page-header">
+            <div class="header-content">
+                <h1 class="product-list-title">{{
+                    'blog.blogList' | translate
+                    }}</h1>
+                <button *ngIf="paginatedBlogList !== undefined" class="btn btn-primary add-button"
+                    (click)="goToAddNewBlog()">{{
+                    'blog.adNewBlog' | translate
+                    }}</button>
+            </div>
+        </div>
+        <!-- blog list -->
+        <!-- Only show content when blogList is defined -->
+        <ng-container *ngIf="paginatedBlogList !== undefined">
+            <!-- If no blogs are present, display the empty card -->
+            <div *ngIf="paginatedBlogList.length === 0" class="empty-list-container" [@zoomIn]>
+                <nb-card class="emptyCard">
+                    <nb-card-body>
+                        <div>
+                            <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                            <p class="emptyCardText">{{ 'blog.noBlogs' | translate }}</p>
+                        </div>
+                        <!-- open new blog button -->
+                        <div class="button-container">
+                            <button class="btn btn-primary basic-btn basic-form-btn products-button" type="submit"
+                                nbButton status="success" (click)="goToAddNewBlog()">{{
+                                'blog.adNewBlog' | translate }}</button>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
 
-    <!-- Display each blog as an nb-card -->
-    <div class="list-container">
-        <nb-card *ngFor="let blog of blogList" class="rounded-card-blog blogCard" (click)="editBlogs(blog.id)"
-            [@zoomIn]>
-            <nb-card-body class="product-image">
-                <div class="details-container text-center">
-                    <div class="image-container text-center">
-                        <img *ngIf="blog.headerImageUrl !== ''" [src]="blog.headerImageUrl" alt="Product Image"
-                            class="card-image" />
-                        <img *ngIf="blog.headerImageUrl === ''" src="../../../../../assets/images/gym-bro-logo.png"
-                            alt="Product Image" class="card-image" />
-                    </div>
-                    <h4>{{ blog.title }}</h4>
-                    <p class="blog-date">{{ 'blog.language' | translate }} {{ blog.language | translate }}</p>
+            <!-- Display each blog as an nb-card -->
+            <div class="row">
+                <div class="list-container">
+                    <nb-card *ngFor="let blog of paginatedBlogList" class="rounded-card-blog blogCard"
+                        (click)="editBlogs(blog.id)" [@zoomIn]>
+                        <nb-card-body class="product-image">
+                            <div class="details-container text-center">
+                                <div class="image-container text-center">
+                                    <img *ngIf="blog.headerImageUrl !== ''" [src]="blog.headerImageUrl"
+                                        alt="Product Image" class="card-image" />
+                                    <img *ngIf="blog.headerImageUrl === ''"
+                                        src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
+                                        class="card-image" />
+                                </div>
+                                <h4>{{ blog.title }}</h4>
+                                <p class="blog-date">{{ 'blog.language' | translate }} {{ blog.language | translate
+                                    }}
+                                </p>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
                 </div>
-            </nb-card-body>
-        </nb-card>
-    </div>
-</ng-container>
+            </div>
+        </ng-container>
 
-<!-- back button -->
-<div class="button-container">
-    <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
-        status="success" (click)="back()">
-        <span class="arrow">
-            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                <!-- Filled left arrow -->
-                <path d="M26 6L14 16l12 10" fill="#0b8e92" />
-            </svg>
-        </span>
-        {{ 'products.backToTheCategories' | translate }}</button>
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Left Arrow -->
+            </button>
+
+            <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                {{ i + 1 }}
+            </button>
+
+            <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                (click)="goToPage(currentPage + 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled right arrow -->
+                        <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Right Arrow -->
+            </button>
+        </div>
+
+        <!-- back button -->
+        <div class="button-container">
+            <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
+                status="success" (click)="back()">
+                <span class="arrow">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span>
+                {{ 'products.backToTheCategories' | translate }}</button>
+        </div>
+
+    </div>
 </div>
 
 <!-- add button -->

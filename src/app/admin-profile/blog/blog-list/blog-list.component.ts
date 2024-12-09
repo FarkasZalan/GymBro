@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { Blog } from '../blog.model';
@@ -20,8 +20,14 @@ import { LoadingService } from '../../../loading-spinner/loading.service';
   ]
 })
 export class BlogListComponent {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   blogId: string;
   blogList: Blog[] | undefined;
+
+  // pagination
+  paginatedBlogList: Blog[] = [];
+  itemsPerPage = 12;
+  currentPage = 1;
 
   constructor(private db: AngularFirestore, private router: Router, private location: Location, public loadingService: LoadingService) { }
 
@@ -47,8 +53,27 @@ export class BlogListComponent {
         .valueChanges()
         .subscribe((blogs: Blog[]) => {
           this.blogList = blogs;
+
+          this.updatePaginatedList();
         });
     });
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedBlogList = this.blogList.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.blogList.length / this.itemsPerPage);
   }
 
   // Method to sort blogs by name

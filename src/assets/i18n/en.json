@@ -403,6 +403,8 @@
       }
    },
    "blog": {
+      "blogList": "Blog list",
+      "blogDetails": "Blog details",
       "noBlogs": "There are no blogs to display!",
       "blogImage": "Blog image",
       "adNewBlog": "Add new blog",
