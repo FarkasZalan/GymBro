@@ -487,6 +487,7 @@
       "selectCategory": "Category",
       "filterByGender": "Genders",
       "filterBlogByColor": "Colors",
+      "filterByLanguage": "Languages",
       "filterBlogBySize": "sizes",
       "filterBlogByMaterial": "Materials",
       "filterBlogByClothType": "Clothing types",

@@ -1,63 +1,179 @@
-<!-- If no shipping addresses are present, display the empty card -->
-<div *ngIf="blogList.length === 0" class="empty-list-container">
-    <nb-card class="emptyCard" [@zoomIn]>
-        <nb-card-body>
-            <div>
-                <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
-                <p class="emptyCardText">{{ 'blog.noBlogs' | translate }}</p>
-            </div>
-        </nb-card-body>
-    </nb-card>
-</div>
+<!-- that's just need to navigate to the top -->
+<p #toScrollAfterNavigate></p>
+<div class="page-container">
+    <!-- Filter Section -->
+    <div class="filter-container">
+        <!-- Order by section -->
+        <div class="row">
+            <h3 class="title">{{ 'blog.filter' | translate }}</h3>
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+                    <!-- title -->
+                    <label for="order" class="order-by-label">{{ 'filter.orderBy.orderByText' | translate }}</label>
 
-<!-- Centered Title and Description Above Blog List -->
-<div *ngIf="blogList.length !== 0" class="text-center text-container">
-    <h1>{{ 'blog.gymBroBlogText' | translate }}</h1>
-    <p>
-        "{{ 'blog.blogPageText' | translate }}"
-    </p>
-</div>
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleOrderDropdown()" (change)="orderItems()">
 
-<!-- Blog list -->
-<div *ngIf="blogList.length !== 0" class="list-container">
-    <nb-card *ngFor="let blog of blogList" class="rounded-card-blog blogCard" (click)="openBlog(blog.id)" [@zoomIn]>
-        <nb-card-body class="product-image">
-            <div class="details-container text-center">
-                <div class="image-container text-center">
-                    <img *ngIf="blog.headerImageUrl !== ''" [src]="blog.headerImageUrl" alt="Product Image"
-                        class="card-image" />
-                    <img *ngIf="blog.headerImageUrl === ''" src="../../../../../assets/images/gym-bro-logo.png"
-                        alt="Product Image" class="card-image" />
+                        <!-- Select order dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select" name="order"
+                            #order="ngModel" [(ngModel)]="filterObject.orderBy">
+
+                            <!-- List of order options -->
+                            <option *ngFor="let order of availableOrders" [value]="order">
+                                {{ order | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isOrderByDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
-                <p class="blog-title">{{ blog.title }}</p>
-                <div class="description-container">
-                    <p class="description">{{ blog.description }}</p>
-                </div>
-                <p class="blog-title read-more">{{ 'blog.readMore' | translate }}
-                    <span class="arrow-blog">
-                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
-                            <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
-                        </svg>
-                    </span>
-                </p>
             </div>
-        </nb-card-body>
-    </nb-card>
-</div>
+            <br>
+        </div>
 
+        <!-- Blog language section -->
+        <div class="row">
+            <div class="dropdown-list-container">
+                <div class="form-group position-relative order-by-container">
+                    <!-- title -->
+                    <label for="language" class="order-by-label">{{ 'filter.filterByLanguage' | translate }}</label>
 
-<!-- back button -->
-<div class="button-container">
-    <button class="btn btn-primary basic-btn back-btn basic-form-btn products-button" type="submit" nbButton
-        status="success" (click)="back()">
-        <span class="arrow">
-            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                <!-- Filled left arrow -->
-                <path d="M26 6L14 16l12 10" fill="#0b8e92" />
-            </svg>
-        </span>
-        {{ 'notFoundPage.backTohome' | translate }}</button>
+                    <!-- Dropdown container with arrow icon -->
+                    <div class="dropdown-container" (click)="toggleLanguageDropdown()" (change)="applyFilters()">
+
+                        <!-- Select language dropdown aligned to the right -->
+                        <select class="form-control drop-down-list allow-selected-list-color arrow-select"
+                            name="language" #language="ngModel" [(ngModel)]="filterObject.language">
+
+                            <!-- Placeholder option -->
+                            <option value="" selected>{{ 'filter.filterBlogByLanguage' |
+                                translate }}
+                            </option>
+
+                            <!-- List of language options -->
+                            <option *ngFor="let language of availableLanguage" [value]="language">
+                                {{ language | translate }}
+                            </option>
+                        </select>
+
+                        <!-- Arrow icon based on dropdown open/closed state -->
+                        <div class="arrow-icon">
+                            <svg *ngIf="isLanguageDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 14l5-5 5 5z" />
+                            </svg>
+                            <svg *ngIf="!isLanguageDropdownOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="#0b8e92" width="40px" height="50px">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+        <div class="send-button-container">
+            <button class="btn btn-primary forgot-btn btn delete-btn" type="button" nbButton status="warning"
+                (click)="deleteFilters()">
+                {{ 'filter.deleteFilter' | translate }}
+            </button>
+        </div>
+    </div>
+    <!-- Product Section -->
+    <div class="product-container">
+        <!-- If no shipping addresses are present, display the empty card -->
+        <div *ngIf="paginatedBlogList.length === 0" class="empty-list-container">
+            <nb-card class="emptyCard" [@zoomIn]>
+                <nb-card-body>
+                    <div>
+                        <img src="../../../assets/images/no-products.jpg" alt="EmptyBox" class="emptyCardImage">
+                        <p class="emptyCardText">{{ 'blog.noBlogs' | translate }}</p>
+                    </div>
+
+                    <div class="button-container">
+                        <button class="btn btn-primary basic-btn basic-form-btn products-button delete-btn"
+                            type="submit" nbButton status="success" (click)="deleteFilters()">{{
+                            'filter.deleteFilter' | translate
+                            }}</button>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+
+        <!-- Centered Title and Description Above Blog List -->
+        <div *ngIf="paginatedBlogList.length !== 0" class="text-center text-container">
+            <h1>{{ 'blog.gymBroBlogText' | translate }}</h1>
+            <p>
+                "{{ 'blog.blogPageText' | translate }}"
+            </p>
+        </div>
+
+        <!-- Blog list -->
+        <div *ngIf="paginatedBlogList.length !== 0" class="list-container">
+            <nb-card *ngFor="let blog of paginatedBlogList" class="rounded-card-blog blogCard"
+                (click)="openBlog(blog.id)" [@zoomIn]>
+                <nb-card-body class="product-image">
+                    <div class="details-container text-center">
+                        <div class="image-container text-center">
+                            <img *ngIf="blog.headerImageUrl !== ''" [src]="blog.headerImageUrl" alt="Product Image"
+                                class="card-image" />
+                            <img *ngIf="blog.headerImageUrl === ''" src="../../../../../assets/images/gym-bro-logo.png"
+                                alt="Product Image" class="card-image" />
+                        </div>
+                        <p class="blog-title">{{ blog.title }}</p>
+                        <div class="description-container">
+                            <p class="description">{{ blog.description }}</p>
+                        </div>
+                        <p class="blog-title read-more">{{ 'blog.readMore' | translate }}
+                            <span class="arrow-blog">
+                                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                                    <path d="M8 2l5 6-5 6" fill="none" stroke="#0b8e92" stroke-width="2" />
+                                </svg>
+                            </span>
+                        </p>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Left Arrow -->
+            </button>
+
+            <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                {{ i + 1 }}
+            </button>
+
+            <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                (click)="goToPage(currentPage + 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled right arrow -->
+                        <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Right Arrow -->
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- filter button -->

@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { Blog } from '../admin-profile/blog/blog.model';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterPageComponent } from '../filter-page/filter-page.component';
@@ -23,10 +22,17 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ]),
   ]
 })
-export class UserBlogListComponent {
+export class UserBlogListComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
+
   blogId: string;
   blogList: Blog[];
   originalBlogList: Blog[] = []; // original, unfiltered blog list
+
+  paginatedBlogList: Blog[] = [];
+  itemsPerPage = 3;
+  currentPage = 1;
+
   filterObject: Filter = {
     language: '',
     category: '',
@@ -44,7 +50,21 @@ export class UserBlogListComponent {
     equipmentType: ''
   };
 
-  constructor(private db: AngularFirestore, private router: Router, private location: Location, private dialog: MatDialog, private productService: ProductService) { }
+  // Filter section
+  availableOrders = [
+    ProductViewText.ORDER_BY_LATEST,
+    ProductViewText.ORDER_BY_OLDEST
+  ];
+  isOrderByDropdownOpen: boolean = false;
+
+  // language
+  availableLanguage: string[] = [
+    ProductViewText.HUNGARIAN,
+    ProductViewText.ENGLISH
+  ];
+  isLanguageDropdownOpen: boolean = false;
+
+  constructor(private db: AngularFirestore, private router: Router, private dialog: MatDialog, private productService: ProductService) { }
 
   ngOnInit(): void {
     //load all the blogs
@@ -64,7 +84,26 @@ export class UserBlogListComponent {
         this.originalBlogList = [...blogs]; // Save the unfiltered list
         this.blogList = blogs;
         this.sortAddresses()
+        this.updatePaginatedList();
+        this.applyFilters();
       });
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedBlogList = this.blogList.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.blogList.length / this.itemsPerPage);
   }
 
   // Method to sort blogs by date
@@ -73,9 +112,13 @@ export class UserBlogListComponent {
     this.originalBlogList = this.productService.sortByDateASC(this.originalBlogList);
   }
 
-  back() {
-    this.location.back();
-    this.router.navigate(['']);
+  // Filter section on bigger screens
+  toggleOrderDropdown() {
+    this.isOrderByDropdownOpen = !this.isOrderByDropdownOpen;
+  }
+
+  toggleLanguageDropdown() {
+    this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
   }
 
   openFilterMenu() {
@@ -111,16 +154,54 @@ export class UserBlogListComponent {
         // Reset blogList to the original unfiltered list
         this.blogList = [...this.originalBlogList];
         // Apply the selected filter on the reset list
-        if (filterObject.language !== '') {
-          this.blogList = this.productService.filterBlogByLanguage(this.blogList, filterObject.language);
-        }
-        if (filterObject.orderBy === ProductViewText.ORDER_BY_OLDEST) {
-          this.blogList = this.productService.sortByDateDESC(this.blogList);
-        } else if (filterObject.orderBy === ProductViewText.ORDER_BY_LATEST) {
-          this.blogList = this.productService.sortByDateASC(this.blogList);
-        }
+        this.applyFilters();
+
       }
     });
+  }
+
+  orderItems() {
+    if (this.filterObject.orderBy === ProductViewText.ORDER_BY_OLDEST) {
+      this.blogList = this.productService.sortByDateDESC(this.blogList);
+    } else if (this.filterObject.orderBy === ProductViewText.ORDER_BY_LATEST) {
+      this.blogList = this.productService.sortByDateASC(this.blogList);
+    }
+
+    this.updatePaginatedList();
+  }
+
+  applyFilters() {
+    this.blogList = [...this.originalBlogList];
+    if (this.filterObject.language !== '') {
+      this.blogList = this.productService.filterBlogByLanguage(this.blogList, this.filterObject.language);
+    } if (this.blogList.length !== 0) {
+      this.orderItems();
+    }
+
+    this.updatePaginatedList();
+  }
+
+  deleteFilters() {
+    this.blogList = [...this.originalBlogList];
+    this.filterObject = {
+      language: '',
+      category: '',
+      orderBy: ProductViewText.ORDER_BY_LATEST,
+      flavors: [],
+      allergenes: [],
+      safeForConsumptionDuringBreastfeeding: true,
+      safeForConsumptionDuringPregnancy: true,
+      proteinType: '',
+      gender: '',
+      color: '',
+      size: '',
+      clothingType: '',
+      material: '',
+      equipmentType: ''
+    }
+
+    this.applyFilters();
+    this.updatePaginatedList();
   }
 }
 // ötlet: a blogot megnyitva az első sorban legyen 6 legrissebb, legyen 1 kiemelt

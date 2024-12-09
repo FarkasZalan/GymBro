@@ -88,6 +88,29 @@
     /* Start slightly down */
 }
 
+/* Active Link Styling */
+.sidebar-content ul li a.active-link {
+    color: #0b8e92;
+    /* New color on hover */
+    border-radius: 5px;
+    /* Smooth transition */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+
+    a {
+        transform: scale(1.1) !important;
+    }
+}
+
+/* Active Link Icon Styling */
+.sidebar-content ul li a.active-link nb-icon {
+    transform: scale(1.2);
+    /* Slightly enlarge icon */
+    color: #0b8e92;
+    /* Match icon color with active link */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+
+}
+
 .sidebar-link-icon {
     font-size: 30px;
 }

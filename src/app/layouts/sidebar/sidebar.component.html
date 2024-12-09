@@ -16,7 +16,7 @@
     <div class="sidebar-content">
         <ul>
             <li *ngFor="let link of pageLinks">
-                <a [routerLink]="link.route" (click)="closeSidebar()">
+                <a [routerLink]="link.route" routerLinkActive="active-link" (click)="closeSidebar()">
                     <nb-icon class="sidebar-link-icon" [icon]="link.icon"></nb-icon>
                     <span class="sidebar-link-name">{{ link.name | translate }}</span>
                 </a>
