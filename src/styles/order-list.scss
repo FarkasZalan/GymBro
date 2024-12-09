@@ -412,8 +412,13 @@
     }
 }
 
-.product-list-title {
-    color: #0b8e92;
+.order-list-title {
+    color: #0b8e92 !important;
+    margin-bottom: 3rem !important;
+
+    @media screen and (max-width: 768px) {
+        font-size: 18px !important;
+    }
 }
 
 @media (max-width: 1000px) {

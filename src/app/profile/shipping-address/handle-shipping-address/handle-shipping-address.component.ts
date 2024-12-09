@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, HostListener, Inject, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NgForm } from '@angular/forms';
@@ -64,6 +64,9 @@ export class HandleShippingAddressComponent {
   // the tag, name for the address type
   addressTypeTexts = AddressTypeText;
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<HandleShippingAddressComponent>,
@@ -77,6 +80,20 @@ export class HandleShippingAddressComponent {
     public loadingService: LoadingService
   ) {
     this.initializeComponent();
+  }
+
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
+
+  // display in 1 column the form fields on smaller screens and 2 columns on larger screens
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 900;
   }
 
   private async initializeComponent() {

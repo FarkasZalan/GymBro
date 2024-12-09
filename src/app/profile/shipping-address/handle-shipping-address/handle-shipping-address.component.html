@@ -18,7 +18,7 @@
                 <div class="col">
                     <form (ngSubmit)="saveAddress()" #form="ngForm">
                         <div class="row">
-                            <div class="col-8">
+                            <div [ngClass]="{'col-8': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Country block -->
                                 <div class="form-group">
                                     <label for="country" class="label">{{ 'profileMenu.shippingAddressForm.country'
@@ -32,7 +32,7 @@
                                         'register.fieldRequired' | translate }}</span>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Postal code block -->
                                 <div class="form-group">
                                     <label for="postalCode" class="label">{{
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4">
+                            <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- City block -->
                                 <div class="form-group">
                                     <label for="city" class="label">{{
@@ -60,7 +60,7 @@
                                         'register.fieldRequired' | translate }}</span>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Street block -->
                                 <div class="form-group">
                                     <label for="streetName" class="label">{{
@@ -73,7 +73,7 @@
                                         'register.fieldRequired' | translate }}</span>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Street type block -->
                                 <div class="form-group">
                                     <label for="streetType" class="label">{{
@@ -88,7 +88,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-4">
+                            <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- House number block -->
                                 <div class="form-group">
                                     <label for="houseNumber" class="label">{{
@@ -101,7 +101,7 @@
                                         'register.fieldRequired' | translate }}</span>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Floor block -->
                                 <div class="form-group">
                                     <label for="floor" class="label">{{ 'profileMenu.shippingAddressForm.floor' |
@@ -112,7 +112,7 @@
                                         #floor="ngModel">
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Door block -->
                                 <div class="form-group">
                                     <label for="door" class="label">{{ 'profileMenu.shippingAddressForm.door' |
@@ -137,7 +137,7 @@
                             </label>
                         </div>
                         <div *ngIf="isCompanyAddressChecked" [@collapseFields] class="row">
-                            <div class="col-6">
+                            <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Company name block -->
                                 <div class="form-group">
                                     <label for="companyName" class="label">{{
@@ -151,7 +151,7 @@
                                         'register.fieldRequired' | translate }}</span>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}">
                                 <!-- Tax number block -->
                                 <div class="form-group">
                                     <label for="taxNumber" class="label">{{
@@ -181,7 +181,7 @@
                             <!-- billing address details -->
                             <div *ngIf="shippingAddress.isBillingDifferentFromShipping" [@collapseFields] class="row">
                                 <div [@collapseFields] class="row">
-                                    <div class="col-8">
+                                    <div [ngClass]="{'col-8': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- Billing Country block -->
                                         <div class="form-group">
                                             <label for="billingCountry" class="label">{{
@@ -198,7 +198,7 @@
                                                 'register.fieldRequired' | translate }}</span>
                                         </div>
                                     </div>
-                                    <div class="col-4">
+                                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- Postal code block -->
                                         <div class="form-group">
                                             <label for="billingPostalCode" class="label">{{
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- City block -->
                                         <div class="form-group">
                                             <label for="billingCity" class="label">{{
@@ -230,7 +230,7 @@
                                                 'register.fieldRequired' | translate }}</span>
                                         </div>
                                     </div>
-                                    <div class="col-4">
+                                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- Street block -->
                                         <div class="form-group">
                                             <label for="billingStreetName" class="label">{{
@@ -245,7 +245,7 @@
                                                 'register.fieldRequired' | translate }}</span>
                                         </div>
                                     </div>
-                                    <div class="col-4">
+                                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- Street type block -->
                                         <div class="form-group">
                                             <label for="billingStreetType" class="label">{{
@@ -262,7 +262,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- House number block -->
                                         <div class="form-group">
                                             <label for="billingHouseNumber" class="label">{{
@@ -277,7 +277,7 @@
                                                 'register.fieldRequired' | translate }}</span>
                                         </div>
                                     </div>
-                                    <div class="col-4">
+                                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- Floor block -->
                                         <div class="form-group">
                                             <label for="billingFloor" class="label">{{
@@ -290,7 +290,7 @@
                                                 #billingFloor="ngModel">
                                         </div>
                                     </div>
-                                    <div class="col-4">
+                                    <div [ngClass]="{'col-4': isLargeScreen, 'col-12': !isLargeScreen}">
                                         <!-- Door block -->
                                         <div class="form-group">
                                             <label for="billingDoor" class="label">{{

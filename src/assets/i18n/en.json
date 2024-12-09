@@ -736,7 +736,8 @@
       "cancelOrder": "Cancel Order",
       "modified": "Modified",
       "orderStatus": "Order Status:",
-      "orderList": "Order List"
+      "orderList": "Order List",
+      "ownOrderList": "My Orders"
    },
    "orderStatus": {
       "PROCESSING": "Processing",

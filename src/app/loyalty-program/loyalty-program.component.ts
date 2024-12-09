@@ -61,7 +61,7 @@ export class LoyaltyProgramComponent implements OnInit {
   ];
 
   userLoggedIn: boolean = false;
-  currentUser: User | undefined;
+  currentUser: User;
   currentUserId: string = "";
 
   constructor(
@@ -74,7 +74,6 @@ export class LoyaltyProgramComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkAuthStatus();
-    this.calculatePointsThisMonth();
   }
 
   checkAuthStatus() {
@@ -110,16 +109,18 @@ export class LoyaltyProgramComponent implements OnInit {
   }
 
   isRewardAvailable(rewardId: string): boolean {
-    if (rewardId === RewardText.Discount10Id) {
-      return this.currentUser.loyaltyPoints >= 300;
-    } else if (rewardId === RewardText.Discount20Id) {
-      return this.currentUser.loyaltyPoints >= 600;
-    } else if (rewardId === RewardText.Discount30Id) {
-      return this.currentUser.loyaltyPoints >= 700;
-    } else if (rewardId === RewardText.FreeShippingId) {
-      return this.currentUser.loyaltyPoints >= 850;
-    } else if (rewardId === RewardText.FiveThousandHufDiscountId) {
-      return this.currentUser.loyaltyPoints >= 1500;
+    if (this.currentUser) {
+      if (rewardId === RewardText.Discount10Id) {
+        return this.currentUser.loyaltyPoints >= 300;
+      } else if (rewardId === RewardText.Discount20Id) {
+        return this.currentUser.loyaltyPoints >= 600;
+      } else if (rewardId === RewardText.Discount30Id) {
+        return this.currentUser.loyaltyPoints >= 700;
+      } else if (rewardId === RewardText.FreeShippingId) {
+        return this.currentUser.loyaltyPoints >= 850;
+      } else if (rewardId === RewardText.FiveThousandHufDiscountId) {
+        return this.currentUser.loyaltyPoints >= 1500;
+      }
     }
     return false;
   }

@@ -6,8 +6,8 @@
 <div class="orders-container" [@zoomIn]>
     <div class="page-header">
         <div class="header-content">
-            <h1 class="product-list-title">{{
-                'orders.orderList' | translate
+            <h1 class="order-list-title">{{
+                'orders.ownOrderList' | translate
                 }} <span *ngIf="hasUncheckedHiddenOrders()" class="unchecked-count">• {{
                     getUncheckedHiddenOrdersCount() }} {{ 'orders.new' |
                     translate }}</span></h1>

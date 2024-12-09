@@ -1,4 +1,38 @@
 <div class="loyalty-dashboard">
+    <!-- Login Section -->
+    <div class="login-prompt-container" *ngIf="!userLoggedIn">
+        <div class="login-prompt">
+            <div class="login-content">
+                <div class="login-info">
+                    <nb-icon icon="person-outline" class="login-icon"></nb-icon>
+                    <p class="login-text">
+                        {{ 'checkout.login.alreadyMember' | translate }}
+                        <a (click)="navigateToLogin()" class="login-link">{{ 'checkout.login.loginHere' |
+                            translate
+                            }}</a>
+                        {{ 'checkout.login.or' | translate }}
+                        <a (click)="navigateToRegister()" class="login-link">{{ 'checkout.login.createAccount' |
+                            translate }}</a>
+                        {{ 'checkout.login.forBetterExperience' | translate }}
+                    </p>
+                    <ul class="benefits-list">
+                        <li>
+                            <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                            {{ 'checkout.login.benefit1' | translate }}
+                        </li>
+                        <li>
+                            <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                            {{ 'checkout.login.benefit2' | translate }}
+                        </li>
+                        <li>
+                            <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
+                            {{ 'checkout.login.benefit3' | translate }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="loyalty-intro-content">
         <!-- Loyalty Header -->
         <div class="loyalty-header">
@@ -18,7 +52,7 @@
                 </div>
                 <div class="benefit-content">
                     <h3>{{ 'loyaltyProgram.basicIntro.earnPoints' | translate }}</h3>
-                    <p>{{ 'loyaltyProgram.basicIntro.earnPointsDesc' | translate }}</p>
+                    <p class="benefit-description">{{ 'loyaltyProgram.basicIntro.earnPointsDesc' | translate }}</p>
                 </div>
             </div>
         </div><br>
@@ -59,42 +93,6 @@
                     </div>
                 </div>
             </ng-container>
-
-            <!-- logged out section -->
-            <!-- Login Section -->
-            <div class="login-prompt-container" *ngIf="!userLoggedIn">
-                <div class="login-prompt">
-                    <div class="login-content">
-                        <div class="login-info">
-                            <nb-icon icon="person-outline" class="login-icon"></nb-icon>
-                            <p class="login-text">
-                                {{ 'checkout.login.alreadyMember' | translate }}
-                                <a (click)="navigateToLogin()" class="login-link">{{ 'checkout.login.loginHere' |
-                                    translate
-                                    }}</a>
-                                {{ 'checkout.login.or' | translate }}
-                                <a (click)="navigateToRegister()" class="login-link">{{ 'checkout.login.createAccount' |
-                                    translate }}</a>
-                                {{ 'checkout.login.forBetterExperience' | translate }}
-                            </p>
-                            <ul class="benefits-list">
-                                <li>
-                                    <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
-                                    {{ 'checkout.login.benefit1' | translate }}
-                                </li>
-                                <li>
-                                    <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
-                                    {{ 'checkout.login.benefit2' | translate }}
-                                </li>
-                                <li>
-                                    <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
-                                    {{ 'checkout.login.benefit3' | translate }}
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- logged out section -->
             <ng-template #loggedOutPoints>

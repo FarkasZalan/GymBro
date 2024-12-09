@@ -737,7 +737,8 @@
                 "cancelOrder": "Rendelés törlése",
                 "modified": "Módosítva",
                 "orderStatus": "Rendelés státusza:",
-                "orderList": "Beérkező rendelések"
+                "orderList": "Beérkező rendelések",
+                "ownOrderList": "Rendeléseim"
         },
         "orderStatus": {
                 "PROCESSING": "Feldolgozás alatt",

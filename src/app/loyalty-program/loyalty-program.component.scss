@@ -82,6 +82,10 @@
                 font-size: 1.2rem;
                 animation: none;
             }
+
+            @media screen and (max-width: 830px) {
+                right: 0.5rem !important;
+            }
         }
     }
 
@@ -229,6 +233,10 @@
                 max-width: 400px;
                 margin: 0 auto;
 
+                @media screen and (max-width: 560px) {
+                    margin: 0 !important;
+                }
+
                 li {
                     display: flex;
                     align-items: center;
@@ -266,14 +274,28 @@
 }
 
 .loyalty-dashboard {
+    background: #f8f9fa;
+    border-radius: 50px;
     padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto !important;
+    width: auto !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    @media screen and (max-width: 520px) {
+        max-width: 480px !important;
+    }
+
+    @media screen and (max-width: 420px) {
+        max-width: 340px !important;
+    }
+
 
     .loyalty-header {
         text-align: center;
         margin-bottom: 3rem;
         position: relative;
+        margin: 40px;
+        margin-left: 0;
 
         h2 {
             font-size: 2.5rem;
@@ -284,10 +306,18 @@
             justify-content: center;
             gap: 1rem;
 
+            @media screen and (max-width: 500px) {
+                font-size: 2rem !important;
+            }
+
             nb-icon {
                 font-size: 2.5rem;
                 color: #ffd700;
                 animation: rotate 20s linear infinite;
+
+                @media screen and (max-width: 520px) {
+                    display: none !important;
+                }
             }
         }
 
@@ -296,6 +326,10 @@
             color: var(--text-hint-color);
             max-width: 600px;
             margin: 0 auto;
+
+            @media screen and (max-width: 500px) {
+                font-size: 1rem !important;
+            }
         }
     }
 
@@ -308,10 +342,16 @@
         position: relative;
         overflow: hidden;
 
+
+
         &:not(:has(.logged-out-points)) {
             display: flex;
             gap: 3rem;
             align-items: center;
+
+            @media screen and (max-width: 768px) {
+                flex-direction: column;
+            }
         }
 
         .logged-out-points {
@@ -327,6 +367,10 @@
 
             h3 {
                 margin-bottom: 0.5rem;
+
+                @media screen and (max-width: 500px) {
+                    text-align: left !important;
+                }
             }
 
             p {
@@ -372,12 +416,20 @@
                     font-weight: bold;
                     color: #ffd700;
                     text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+
+                    @media screen and (max-width: 550px) {
+                        font-size: 2.5rem !important;
+                    }
                 }
 
                 .points-label {
                     font-size: 1.5rem !important;
                     opacity: 0.8;
                     margin-top: 15px !important;
+
+                    @media screen and (max-width: 550px) {
+                        font-size: 1rem !important;
+                    }
                 }
             }
         }
@@ -416,6 +468,10 @@
                     .stat-value {
                         font-size: 1.5rem;
                         font-weight: bold;
+
+                        @media screen and (max-width: 550px) {
+                            font-size: 1.3rem !important;
+                        }
                     }
                 }
             }
@@ -430,6 +486,14 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+
+            @media screen and (max-width: 500px) {
+                font-size: 1.5rem !important;
+            }
+
+            @media screen and (max-width: 370px) {
+                font-size: 1.4rem !important;
+            }
 
             nb-icon {
                 color: #0b8e92;
@@ -451,7 +515,22 @@
                 overflow: hidden;
                 display: flex;
                 gap: 1.5rem;
-                width: auto;
+
+                @media screen and (max-width: 812px) {
+                    gap: 0 !important;
+                }
+
+                @media screen and (max-width: 700px) {
+                    display: grid !important;
+                }
+
+                @media screen and (max-width: 520px) {
+                    max-width: 460px !important;
+                }
+
+                @media screen and (max-width: 420px) {
+                    max-width: 360px !important;
+                }
 
                 &:hover {
                     transform: translateY(-5px);
@@ -649,6 +728,8 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease;
 
+
+
             &:hover {
                 transform: translateY(-4px);
             }
@@ -663,10 +744,6 @@
 
                 h3 {
                     color: #0b8e92 !important;
-                }
-
-                p {
-                    color: white;
                 }
             }
 
