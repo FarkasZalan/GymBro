@@ -77,8 +77,8 @@
             gap: 0.5rem;
             z-index: 2;
 
-            @media screen and (max-width: 520px) {
-                top: 0.2rem !important;
+            @media screen and (max-width: 960px) {
+                right: 1rem !important;
             }
 
             nb-icon {
@@ -291,12 +291,10 @@
     width: auto !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
-    @media screen and (max-width: 520px) {
-        max-width: 480px !important;
-    }
-
-    @media screen and (max-width: 420px) {
-        max-width: 340px !important;
+    @media screen and (max-width: 960px) {
+        width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 
 
@@ -549,11 +547,28 @@
                     margin-left: -10px;
                 }
 
-                @media screen and (max-width: 420px) {
+                @media screen and (max-width: 450px) {
                     max-width: 300px !important;
                     min-width: 300px !important;
                     margin-left: -30px;
+                }
 
+                @media screen and (max-width: 410px) {
+                    max-width: 270px !important;
+                    min-width: 270px !important;
+                    margin-left: -15px;
+                }
+
+                @media screen and (max-width: 390px) {
+                    max-width: 250px !important;
+                    min-width: 250px !important;
+                    margin-left: -25px;
+                }
+
+                @media screen and (max-width: 350px) {
+                    max-width: 230px !important;
+                    min-width: 230px !important;
+                    margin-left: -25px;
                 }
 
                 &:hover {
@@ -605,6 +620,10 @@
                         font-size: 1.4rem;
                         margin-bottom: 0.75rem;
                         color: var(--text-primary-color);
+
+                        @media screen and (max-width: 757px) and (min-width: 701px) {
+                            margin-top: 25px !important
+                        }
                     }
 
                     p {

@@ -30,7 +30,7 @@ export class UserBlogListComponent implements OnInit {
   originalBlogList: Blog[] = []; // original, unfiltered blog list
 
   paginatedBlogList: Blog[] = [];
-  itemsPerPage = 3;
+  itemsPerPage = 6;
   currentPage = 1;
 
   filterObject: Filter = {

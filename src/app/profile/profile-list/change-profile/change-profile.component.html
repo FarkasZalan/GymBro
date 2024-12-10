@@ -1,10 +1,13 @@
 <!-- Loading spinner -->
 <app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
 
-<!-- Change Data title -->
-<h1 id="title" class="title">{{ 'profilePage.dataChange' | translate }}</h1>
 <!-- Change Data form -->
 <div class="container" [@zoomIn]>
+    <div class="dialog-header">
+        <!-- Change Data title -->
+        <h5 id="title" class="title">{{ 'profilePage.dataChange' | translate }}</h5>
+        <button class="close-button" (click)="goToBack()">×</button>
+    </div>
     <nb-card>
         <nb-card-body class="login-col">
             <div class="row">

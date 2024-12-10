@@ -14,6 +14,33 @@ input[type='email'] {
     max-height: 600px;
 }
 
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h5 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .close-button {
+        background: none;
+        border: none;
+        font-size: 1.9rem !important;
+        color: #000000;
+        cursor: pointer;
+        padding: 0.5rem;
+        line-height: 1;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+}
+
 input.ng-invalid.ng-touched {
     border: 1px solid red;
     margin-bottom: 2% !important;

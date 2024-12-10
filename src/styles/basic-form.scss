@@ -68,6 +68,10 @@ input[type='password'] {
 
 .container {
     margin-top: 2rem !important;
+
+    @media(max-width: 430px) {
+        max-height: 450px !important;
+    }
 }
 
 .dialog-header {
@@ -85,7 +89,8 @@ input[type='password'] {
     .close-button {
         background: none;
         border: none;
-        font-size: 1.5rem;
+        font-size: 1.9rem !important;
+        color: #000000;
         cursor: pointer;
         padding: 0.5rem;
         line-height: 1;
