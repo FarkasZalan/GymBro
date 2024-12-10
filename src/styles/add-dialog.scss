@@ -11,13 +11,59 @@ input[type='email'] {
     margin: 30px;
     max-width: 600px;
     max-height: 600px;
+    min-width: 400px;
     padding: 10px;
+    cursor: default;
+
+    @media (max-width: 600px) {
+        max-height: 70vh;
+        min-width: 350px;
+        margin: 10px;
+    }
+
+    @media (max-width: 500px) {
+        min-width: 300px;
+
+        .card-body {
+            padding: 0px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        min-width: 200px;
+    }
 }
 
 input.ng-invalid.ng-touched {
     border: 1px solid red;
     margin-bottom: 2% !important;
     margin-top: 1% !important;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h5 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .close-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        line-height: 1;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
 }
 
 .cursor-pointer {
@@ -80,8 +126,7 @@ img {
 }
 
 .forgot-btn {
-    max-width: 366px;
-    min-width: 366px;
+    width: 100% !important;
 }
 
 .image-preview-container {
@@ -94,6 +139,10 @@ img {
     margin-right: auto;
 
     text-align: center;
+
+    @media (max-width: 600px) {
+        width: 100% !important;
+    }
 }
 
 .delete-image-button {

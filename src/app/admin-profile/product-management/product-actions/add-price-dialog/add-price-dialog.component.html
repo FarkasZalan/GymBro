@@ -2,15 +2,18 @@
 <app-loading-spinner [overlay]="true" *ngIf="loadingService.loading$ | async"></app-loading-spinner>
 
 <div class="container-all-window">
-    <!-- add price title -->
-    <h1 *ngIf="!editText" id="title" class="title">{{ 'products.addNewPrice' | translate
-        }}</h1>
-    <h1 *ngIf="editText" id="title" class="title">{{ 'products.editPrice' | translate
-        }}</h1>
+    <div class="dialog-header">
+        <!-- add price title -->
+        <h5 *ngIf="!editText" id="title" class="title">{{ 'products.addNewPrice' | translate
+            }}</h5>
+        <h5 *ngIf="editText" id="title" class="title">{{ 'products.editPrice' | translate
+            }}</h5>
+        <button class="close-button" (click)="back()">×</button>
+    </div>
     <!-- add price form -->
     <div class="container">
         <nb-card>
-            <nb-card-body>
+            <nb-card-body class="card-body">
                 <div>
                     <form (ngSubmit)="addNewPrice()" #form="ngForm">
                         <!-- quantity in product (lbs, gram, pcs) block -->
