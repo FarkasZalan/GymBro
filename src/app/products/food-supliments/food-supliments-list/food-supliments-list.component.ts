@@ -328,6 +328,7 @@ export class FoodSuplimentsListComponent implements OnInit {
       this.foodSupliments.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
     }
 
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 
@@ -394,6 +395,8 @@ export class FoodSuplimentsListComponent implements OnInit {
       this.emptyCollection = false;
       this.orderItems();
     }
+
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 
@@ -419,6 +422,7 @@ export class FoodSuplimentsListComponent implements OnInit {
 
     // to set the default filters
     this.applyFilters();
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 }

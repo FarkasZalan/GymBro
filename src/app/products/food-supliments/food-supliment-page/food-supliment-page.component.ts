@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FoodSupliment } from '../../../admin-profile/product-management/product-models/food-supliment.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentHandlerService } from '../../../document.handler.service';
@@ -50,6 +50,7 @@ import { Timestamp } from 'firebase/firestore';
   ]
 })
 export class FoodSuplimentPageComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   @ViewChild('userLoggedOutLikeErrorMessage') errorMessage: ElementRef;
   @ViewChild('reviewsSection') reviewsSection: ElementRef;
   foodSupliment: FoodSupliment;
@@ -88,6 +89,12 @@ export class FoodSuplimentPageComponent implements OnInit {
   // reviews
   displayedReviews: ProductReeviews[] = []; // Display data - gets sorted
   originalReviews: ProductReeviews[] = [];  // Original data - never sorted
+
+  // pagination
+  paginatedReviews: ProductReeviews[] = [];
+  itemsPerPage = 6;
+  currentPage = 1;
+
   averageRating: number = 0;
 
   userLoggedIn: boolean = false;
@@ -98,10 +105,6 @@ export class FoodSuplimentPageComponent implements OnInit {
   productId: string = '';
   isProductInCart: boolean = false;
 
-  // show all reviews
-  showAllReviews: boolean = false;
-  readonly initialReviewCount: number = 3;
-
   //filter reviews
   availableReviewFilters: string[] = [
     ProductViewText.ORDER_BY_OLDEST,
@@ -110,6 +113,9 @@ export class FoodSuplimentPageComponent implements OnInit {
     ProductViewText.ORDER_BY_BEST_RATING
   ];
   currentSortOrder: string = ProductViewText.ORDER_BY_LATEST;
+
+  // responsibility
+  isLargeScreen: boolean = false;
 
   constructor(private router: Router,
     private route: ActivatedRoute,
@@ -125,6 +131,7 @@ export class FoodSuplimentPageComponent implements OnInit {
     private currencyPipe: CurrencyPipe) { }
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.foodSupliment = {
       id: "",
       productName: "",
@@ -215,6 +222,15 @@ export class FoodSuplimentPageComponent implements OnInit {
         this.loadRelatedProducts();
       });
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 1400;
   }
 
   // Function to get unique quantities for display
@@ -477,6 +493,9 @@ export class FoodSuplimentPageComponent implements OnInit {
 
     // set the sorted reviews to the display array
     this.displayedReviews = sortedReviews;
+    this.currentPage = 1;
+    this.updatePaginatedList();
+
   }
 
   getReviews() {
@@ -484,13 +503,33 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.productService.getReviewsForProduct(this.productId, ProductViewText.FOOD_SUPLIMENTS).subscribe(reviews => {
       // set the original reviews
       this.originalReviews = reviews;
+
       // set the display reviews
       this.displayedReviews = [...reviews];
+
+      this.updatePaginatedList();
       // calculate the average rating
       this.calculateAverageRating();
       // sort the reviews based on the current sort order
       this.filterRating(this.currentSortOrder);
     })
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedReviews = this.displayedReviews.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.displayedReviews.length / this.itemsPerPage);
   }
 
   calculateAverageRating(): void {
@@ -616,16 +655,6 @@ export class FoodSuplimentPageComponent implements OnInit {
         category: ProductViewText.FOOD_SUPLIMENTS
       }
     });
-  }
-
-  get visibleReviews(): ProductReeviews[] {
-    return this.showAllReviews
-      ? this.displayedReviews
-      : this.displayedReviews.slice(0, this.initialReviewCount);
-  }
-
-  toggleReviewsDisplay() {
-    this.showAllReviews = !this.showAllReviews;
   }
 
   goToLogin() {

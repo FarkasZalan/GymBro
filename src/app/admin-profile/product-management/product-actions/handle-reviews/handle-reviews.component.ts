@@ -60,6 +60,7 @@ export class HandleReviewsComponent implements OnInit {
   paginatedReviews: ProductReeviews[] = [];
   itemsPerPage = 6;
   currentPage = 1;
+
   userLoggedIn: boolean = false;
   reviewChecked: boolean = false;
 
@@ -192,6 +193,7 @@ export class HandleReviewsComponent implements OnInit {
         return dateA.getTime() - dateB.getTime(); // Sort in descending order
       });
     }
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 

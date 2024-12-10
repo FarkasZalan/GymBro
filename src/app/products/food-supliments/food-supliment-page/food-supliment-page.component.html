@@ -3,11 +3,11 @@
         <nb-card-body style="overflow: hidden;">
             <div class="row">
                 <!-- Product image -->
-                <div class="col-md-4 form-group">
+                <div [ngClass]="{'col-md-4': isLargeScreen, 'col-md-12': !isLargeScreen}" class="form-group">
                     <div class="details-container">
                         <div class="image-container">
                             <img *ngIf="selectedImage !== ''" [@zoomIn] [src]="selectedImage" alt="Product Image"
-                                class="product-image" />
+                                [ngStyle]="{'width': !isLargeScreen ? '100%' : '400px'}" class="product-image" />
                             <img *ngIf="selectedImage === ''" [@zoomIn]
                                 src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
                                 class="product-image" />
@@ -16,7 +16,7 @@
                 </div>
 
                 <!-- Product Details: Name, Allergen Information, Quantity Selection -->
-                <div class="col-md-4 form-group">
+                <div [ngClass]="{'col-md-4': isLargeScreen, 'col-md-6': !isLargeScreen}" class="form-group">
                     <!-- Product Name -->
                     <h2 class="product-name">{{ foodSupliment.productName | translate }}</h2>
                     <!-- Selected quantity Name -->
@@ -130,7 +130,7 @@
                 </div>
 
                 <!-- cart and amount section -->
-                <div class="col-md-4 form-group">
+                <div [ngClass]="{'col-md-4': isLargeScreen, 'col-md-6': !isLargeScreen}" class="form-group">
                     <!-- display the price and if there is a discount, display the discounted price -->
                     <div class="price-container">
                         <h3 class="price-display" [class.has-discount]="productPriceObject.discountedPrice > 0">
@@ -469,7 +469,7 @@
                 <h2>{{ 'products.customerReviews' | translate }}</h2>
 
                 <!-- no reviews section -->
-                <div *ngIf="displayedReviews.length === 0" class="product-empty-list-container">
+                <div *ngIf="paginatedReviews.length === 0" class="product-empty-list-container">
                     <nb-card class="emptyCard" [@zoomIn]>
                         <nb-card-body>
                             <div>
@@ -478,10 +478,9 @@
                                 <p class="emptyCardText">{{ 'review.noReviewsYetForProduct' | translate }}</p>
                             </div>
                             <!-- add new review button (only for users) -->
-                            <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn"
-                                class="button-container review-button">
-                                <button class="btn btn-primary " type="submit" nbButton status="success"
-                                    (click)="gotoCreateNewRReview()">
+                            <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn" class="button-container ">
+                                <button class="btn btn-primary empty-review-button" type="submit" nbButton
+                                    status="success" (click)="gotoCreateNewRReview()">
                                     {{ 'review.addNewReview' | translate }}</button>
                             </div>
 
@@ -501,13 +500,13 @@
                 </div>
 
                 <!-- have any reviews -->
-                <div *ngIf="displayedReviews.length !== 0">
+                <div *ngIf="paginatedReviews.length !== 0">
                     <div class="ratings-container">
                         <div class="average-rating">
                             <i [attr.data-star]="averageRating"></i>
                             <span class="rating-number">{{ averageRating }}</span>
                         </div>
-                        <p class="review-numbers-display">{{ displayedReviews.length }} {{ 'review.reviewText' |
+                        <p class="review-numbers-display">{{ paginatedReviews.length }} {{ 'review.reviewText' |
                             translate }}</p>
 
                         <div class="ratings-breakdown" #reviewsSection>
@@ -544,7 +543,9 @@
                     </div>
 
                     <!-- Display Reviews -->
-                    <div *ngIf="displayedReviews && displayedReviews.length > 0">
+                    <!-- that's just need to navigate to the top -->
+                    <p #toScrollAfterNavigate></p>
+                    <div *ngIf="paginatedReviews && paginatedReviews.length > 0">
                         <!-- Filter Section -->
                         <div class="dropdown-container filter-review-section">
                             <select class="form-control drop-down-list allow-selected-list-color" name="reviewFilter"
@@ -583,7 +584,7 @@
 
                         <!-- display reviews -->
                         <div class="reviews-list">
-                            <div class="col-12 review-item" *ngFor="let review of visibleReviews">
+                            <div class="col-12 review-item" *ngFor="let review of paginatedReviews">
                                 <!-- Review Card -->
                                 <nb-card class="review-card-user mb-3">
                                     <nb-card-body>
@@ -674,18 +675,37 @@
                                     </nb-card-body>
                                 </nb-card>
                             </div>
-
-                            <!-- show more reviews button -->
-                            <div *ngIf="displayedReviews.length > initialReviewCount" class="show-more-container">
-                                <button class="btn btn-primary show-more-button" (click)="toggleReviewsDisplay()">
-                                    {{ (showAllReviews ? 'review.showLess' : 'review.showMore') | translate }}
-                                    {{ showAllReviews ? '' :' (' + (displayedReviews.length - initialReviewCount) +
-                                    ')'}}
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div *ngIf="paginatedReviews.length !== 0" class="pagination-container">
+                <button class="pagination-button prev" [disabled]="currentPage === 1"
+                    (click)="goToPage(currentPage - 1)">
+                    <span class="icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Filled left arrow -->
+                            <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                        </svg>
+                    </span> <!-- Left Arrow -->
+                </button>
+
+                <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                    [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                    {{ i + 1 }}
+                </button>
+
+                <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                    (click)="goToPage(currentPage + 1)">
+                    <span class="icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Filled right arrow -->
+                            <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                        </svg>
+                    </span> <!-- Right Arrow -->
+                </button>
             </div>
 
 

@@ -1,10 +1,16 @@
 <div class="create-review">
     <nb-card class="review-container">
         <nb-card-body>
-            <h3 *ngIf="!edit && pageFrom !== productViewText.ADMIN_REVIEW" class="text-center">{{ 'review.createReview'
-                | translate }}</h3>
-            <h3 *ngIf="edit && pageFrom !== productViewText.ADMIN_REVIEW" class="text-center">{{ 'review.editReview' |
-                translate }}</h3>
+            <div class="dialog-header">
+                <h5 *ngIf="!edit && pageFrom !== productViewText.ADMIN_REVIEW" class="text-center">{{
+                    'review.createReview'
+                    | translate }}</h5>
+                <h5 *ngIf="edit && pageFrom !== productViewText.ADMIN_REVIEW" class="text-center">{{ 'review.editReview'
+                    |
+                    translate }}</h5>
+                <button class="close-button" (click)="back()">×</button>
+            </div>
+
             <form #reviewForm="ngForm">
                 <!-- Rating Stars Input -->
                 <div class="star-rating">

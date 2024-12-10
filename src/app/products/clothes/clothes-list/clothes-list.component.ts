@@ -279,6 +279,7 @@ export class ClothesListComponent implements OnInit {
       this.clothes.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
     }
 
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 
@@ -329,6 +330,7 @@ export class ClothesListComponent implements OnInit {
       this.orderItems();
     }
 
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 
@@ -354,6 +356,7 @@ export class ClothesListComponent implements OnInit {
 
     // to set the default filters
     this.applyFilters();
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 }

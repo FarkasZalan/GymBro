@@ -275,6 +275,7 @@ export class AccessoriesListComponent implements OnInit {
       this.accessories.sort((a, b) => this.getAverageRating(a.id) - this.getAverageRating(b.id));
     }
 
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 
@@ -318,6 +319,7 @@ export class AccessoriesListComponent implements OnInit {
       this.emptyCollection = false;
       this.orderItems();
     }
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 
@@ -341,6 +343,7 @@ export class AccessoriesListComponent implements OnInit {
     }
     this.emptyCollection = false;
     this.applyFilters();
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 

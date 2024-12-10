@@ -1,13 +1,17 @@
 <!-- Loading spinner -->
 <app-loading-spinner *ngIf="loadingService.loading$ | async" [overlay]="true"></app-loading-spinner>
 
-<!-- Address action title -->
-<h1 *ngIf="isEditing" id="title" class="title">{{ 'profileMenu.shippingAddressForm.modifyAddressTitle' |
-    translate }}
-</h1>
-<h1 *ngIf="!isEditing" id="title" class="title">{{ 'profileMenu.shippingAddressForm.newAddressTitle' |
-    translate }}
-</h1>
+<div class="dialog-container"></div>
+<div class="dialog-header">
+    <!-- Address action title -->
+    <h5 *ngIf="isEditing" id="title" class="title">{{ 'profileMenu.shippingAddressForm.modifyAddressTitle' |
+        translate }}
+    </h5>
+    <h5 *ngIf="!isEditing" id="title" class="title">{{ 'profileMenu.shippingAddressForm.newAddressTitle' |
+        translate }}
+    </h5>
+    <button class="close-button" (click)="back()">×</button>
+</div>
 
 <!-- address form -->
 <div class="container-addresses">

@@ -500,8 +500,8 @@ input[type="number"] {
 
 // image
 .product-image {
-    height: 500px !important;
-    width: 400px !important;
+    height: 500px;
+    width: 400px;
     object-fit: cover;
     /* Ensures the image covers the entire area without distortion */
     border-radius: 8px 8px 0 0;
@@ -509,6 +509,10 @@ input[type="number"] {
     transition: filter 0.3s ease, transform 0.3s ease;
     /* Smooth transition */
     border-radius: 20px;
+}
+
+.large-image {
+    width: 600px !important;
 }
 
 // image
@@ -679,6 +683,7 @@ input[type="number"] {
     width: calc(50% - 40px);
     /* Ensure the card takes up half of the container width */
     max-width: 280px;
+    width: 100% !important;
     height: 450px !important;
     flex: 1 1 calc(50% - 20px);
     /* Two columns with space between */
@@ -790,6 +795,10 @@ input[type="number"] {
     padding: 16px;
     height: fit-content;
     justify-content: center;
+
+    @media screen and (max-width: 500px) {
+        display: grid;
+    }
 }
 
 .related-product-image {
@@ -866,9 +875,14 @@ input[type="number"] {
     }
 }
 
-@media (max-width: 370px) {
+@media (max-width: 392px) {
     .emptyCard {
         width: 250px !important
+    }
+
+    .empty-review-button {
+        width: 90%;
+        font-size: 13px !important;
     }
 }
 
@@ -1693,6 +1707,7 @@ input[type="number"] {
     .price-display {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
         color: #0b8e92;
 
         &.has-discount {
@@ -1723,6 +1738,7 @@ input[type="number"] {
     .unit-price-display {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
         color: #313131;
         font-weight: 600;
         font-size: 19px;
