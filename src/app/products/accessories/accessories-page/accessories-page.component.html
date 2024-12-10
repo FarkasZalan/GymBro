@@ -193,7 +193,7 @@
                 <div class="row">
                     <!-- Display product prices dynamically in a 3-column layout -->
                     <hr>
-                    <h2>{{ 'products.relatedProducts' | translate }}</h2>
+                    <h2 class="section-title">{{ 'products.relatedProducts' | translate }}</h2>
                     <!-- Related prpduct list -->
                     <div *ngIf="relatedProducts" class="product-list-container">
                         <nb-card class="rounded-card productCard" *ngFor="let relatedProduct of relatedProducts"
@@ -237,7 +237,7 @@
                 <br>
                 <div class="row">
                     <hr>
-                    <h2>{{ 'products.customerReviews' | translate }}</h2>
+                    <h2 class="section-title">{{ 'products.customerReviews' | translate }}</h2>
 
                     <!-- no reviews section -->
                     <div *ngIf="paginatedReviews.length === 0" class="product-empty-list-container">

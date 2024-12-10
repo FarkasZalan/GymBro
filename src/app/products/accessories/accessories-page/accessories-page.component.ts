@@ -482,6 +482,7 @@ export class AccessoriesPageComponent implements OnInit {
       this.filterRating(this.currentSortOrder);
     } else {
       this.userLoggedOutLikeError = true;
+      this.scrollToErrorMessage();
       this.userLoggedOutError = false;
     }
   }
@@ -505,13 +506,8 @@ export class AccessoriesPageComponent implements OnInit {
 
     } else {
       this.userLoggedOutLikeError = true;
-      this.userLoggedOutError = false;
-    }
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.userLoggedOutLikeError && this.errorMessage) {
       this.scrollToErrorMessage();
+      this.userLoggedOutError = false;
     }
   }
 

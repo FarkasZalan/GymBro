@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CurrencyPipe, Location } from '@angular/common';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
@@ -49,8 +49,14 @@ import { Timestamp } from 'firebase/firestore';
   ]
 })
 export class ClothesPageComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   @ViewChild('userLoggedOutLikeErrorMessage') errorMessage: ElementRef;
+
+  // Collapsible sections
   @ViewChild('reviewsSection') reviewsSection: ElementRef;
+  @ViewChild('description') description: ElementRef;
+  @ViewChild('returnPolicy') returnPolicy: ElementRef;
+
   clothes: Clothes;
   selectedSizeInProduct: string = '';
   productViewText = ProductViewText;
@@ -109,7 +115,14 @@ export class ClothesPageComponent implements OnInit {
   // Need two arrays for the reviews, one for the display the reviews and one for handling the reviews likes
   displayedReviews: ProductReeviews[] = []; // Display data - gets sorted
   originalReviews: ProductReeviews[] = [];  // Original data - never sorted
+
+  // pagination
+  paginatedReviews: ProductReeviews[] = [];
+  itemsPerPage = 6;
+  currentPage = 1;
+
   averageRating: number = 0;
+
   userLoggedIn: boolean = false;
   userReview: User;
   currentUserId: string = '';
@@ -131,6 +144,9 @@ export class ClothesPageComponent implements OnInit {
   ];
   currentSortOrder: string = ProductViewText.ORDER_BY_LATEST;
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private documentHandler: DocumentHandlerService,
@@ -145,6 +161,7 @@ export class ClothesPageComponent implements OnInit {
     private currencyPipe: CurrencyPipe) { }
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.clothes = {
       id: "",
       productName: "",
@@ -228,6 +245,15 @@ export class ClothesPageComponent implements OnInit {
     });
   }
 
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 1400;
+  }
+
   // Function to get unique sizes for display
   getUniqueSizes() {
     return Array.from(new Set(this.clothes.prices.map(price => price.productSize)));
@@ -306,6 +332,10 @@ export class ClothesPageComponent implements OnInit {
   toggleCollapsedDescription() {
     this.isCollapsedDescription = !this.isCollapsedDescription;
 
+    if (!this.isCollapsedReturn) {
+      this.returnPolicy.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedDescription) {
       this.isCollapsedReturn = true;
     }
@@ -313,6 +343,10 @@ export class ClothesPageComponent implements OnInit {
 
   toggleCollapsedReturn() {
     this.isCollapsedReturn = !this.isCollapsedReturn;
+
+    if (!this.isCollapsedDescription) {
+      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     if (!this.isCollapsedReturn) {
       this.isCollapsedDescription = true;
@@ -407,6 +441,8 @@ export class ClothesPageComponent implements OnInit {
 
     // set the sorted reviews to the display array
     this.displayedReviews = sortedReviews;
+    this.currentPage = 1;
+    this.updatePaginatedList();
   }
 
   getReviews() {
@@ -415,6 +451,8 @@ export class ClothesPageComponent implements OnInit {
       this.originalReviews = reviews;
       // set the display reviews
       this.displayedReviews = [...reviews];
+
+      this.updatePaginatedList();
       // calculate the average rating
       this.calculateAverageRating();
       // sort the reviews based on the current sort order
@@ -433,6 +471,23 @@ export class ClothesPageComponent implements OnInit {
     } else {
       this.averageRating = 1;
     }
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedReviews = this.displayedReviews.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.displayedReviews.length / this.itemsPerPage);
   }
 
   getRatingCount(star: number): number {
@@ -476,6 +531,7 @@ export class ClothesPageComponent implements OnInit {
       this.filterRating(this.currentSortOrder);
     } else {
       this.userLoggedOutLikeError = true;
+      this.scrollToErrorMessage();
       this.userLoggedOutError = false;
     }
   }
@@ -492,13 +548,8 @@ export class ClothesPageComponent implements OnInit {
       await this.db.collection('reviews').doc(ProductViewText.CLOTHES).collection('allReview').doc(review.id).update({ responseLikes: review.responseLikes });
     } else {
       this.userLoggedOutLikeError = true;
-      this.userLoggedOutError = false;
-    }
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.userLoggedOutLikeError && this.errorMessage) {
       this.scrollToErrorMessage();
+      this.userLoggedOutError = false;
     }
   }
 

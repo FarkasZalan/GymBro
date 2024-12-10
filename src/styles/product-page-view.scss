@@ -1631,6 +1631,10 @@ input[type="number"] {
     gap: 20px;
     margin: 15px 0;
     cursor: default !important;
+
+    @media screen and (max-width: 570px) {
+        flex-direction: column;
+    }
 }
 
 .spec-item {
@@ -1845,6 +1849,12 @@ input[type="number"] {
     h2 {
         transform: translateX(0) !important;
         /* Adjust translate for smaller screens */
+    }
+
+    .section-title {
+        text-align: center !important;
+        font-size: 27px;
+        text-align: center;
     }
 }
 

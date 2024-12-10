@@ -594,6 +594,7 @@ export class OrganicFoodPageComponent implements OnInit {
       this.filterRating(this.currentSortOrder);
     } else {
       this.userLoggedOutLikeError = true;
+      this.scrollToErrorMessage();
       this.userLoggedOutError = false;
     }
   }
@@ -610,13 +611,8 @@ export class OrganicFoodPageComponent implements OnInit {
       await this.db.collection('reviews').doc(ProductViewText.ORGANIC_FOOD).collection('allReview').doc(review.id).update({ responseLikes: review.responseLikes });
     } else {
       this.userLoggedOutLikeError = true;
-      this.userLoggedOutError = false;
-    }
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.userLoggedOutLikeError && this.errorMessage) {
       this.scrollToErrorMessage();
+      this.userLoggedOutError = false;
     }
   }
 
