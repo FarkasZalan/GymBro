@@ -264,7 +264,7 @@
             <!-- Description section -->
             <nb-card class="container-collapse-component">
                 <nb-card-body>
-                    <div class="header-collapse-component" (click)="toggleCollapsedDescription()">
+                    <div class="header-collapse-component" (click)="toggleCollapsedDescription()" #description>
                         <h2 class="title"
                             [ngClass]="{'center': isCollapsedDescription, 'left': !isCollapsedDescription}">{{
                             'products.description' | translate }}
@@ -285,7 +285,7 @@
             <!-- Ingredients section -->
             <nb-card class="container-collapse-component">
                 <nb-card-body>
-                    <div class="header-collapse-component" (click)="toggleCollapsedIngredients()">
+                    <div class="header-collapse-component" (click)="toggleCollapsedIngredients()" #ingredients>
                         <h2 class="title"
                             [ngClass]="{'center': isCollapsedIngredients, 'left': !isCollapsedIngredients}">{{
                             'products.ingredients' | translate }}
@@ -308,7 +308,8 @@
                 *ngIf="foodSupliment.productCategory === productViewText.VITAMINS_AND_MINERALS || foodSupliment.productCategory === productViewText.JOIN_SUPPORT"
                 class="container-collapse-component">
                 <nb-card-body>
-                    <div class="header-collapse-component" (click)="toggleCollapsedActiveIngredients()">
+                    <div class="header-collapse-component" (click)="toggleCollapsedActiveIngredients()"
+                        #activeIngredients>
                         <h2 class="title"
                             [ngClass]="{'center': isCollapsedActiveIngredients, 'left': !isCollapsedActiveIngredients}">
                             {{ 'products.activeIngredients' | translate }}
@@ -352,7 +353,7 @@
                 *ngIf="foodSupliment.productCategory !== productViewText.VITAMINS_AND_MINERALS && foodSupliment.productCategory !== productViewText.JOIN_SUPPORT"
                 class="container-collapse-component">
                 <nb-card-body>
-                    <div class="header-collapse-component" (click)="toggleCollapsedNutritionTable()">
+                    <div class="header-collapse-component" (click)="toggleCollapsedNutritionTable()" #nutritionalTable>
                         <h2 class="title"
                             [ngClass]="{'center': isCollapsedNutritionTable, 'left': !isCollapsedNutritionTable}">
                             {{ 'products.nutritionalInformation' | translate }}

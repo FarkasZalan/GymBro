@@ -92,8 +92,14 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedProfilDetails() {
     this.isCollapsedProfileDetails = !this.isCollapsedProfileDetails;
 
-    if (this.isCollapsedProfileDetails) {
-      this.profile.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!this.isCollapsedLoyaltyProgram) {
+      this.loyalty.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
+      this.orders.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedShippingAddress) {
+      this.shipping.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (!this.isCollapsedProfileDetails) {
@@ -106,8 +112,14 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedOrders() {
     this.isCollapsedOrders = !this.isCollapsedOrders;
 
-    if (this.isCollapsedOrders) {
-      this.orders.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!this.isCollapsedLoyaltyProgram) {
+      this.loyalty.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedProfileDetails) {
+      this.profile.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedShippingAddress) {
+      this.shipping.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (!this.isCollapsedOrders) {
@@ -120,8 +132,14 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedShippingAddress() {
     this.isCollapsedShippingAddress = !this.isCollapsedShippingAddress;
 
-    if (this.isCollapsedShippingAddress) {
-      this.shipping.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!this.isCollapsedLoyaltyProgram) {
+      this.loyalty.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
+      this.orders.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedProfileDetails) {
+      this.profile.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (!this.isCollapsedShippingAddress) {
@@ -134,8 +152,14 @@ export class ProfileComponent implements OnInit {
   toggleCollapsedLoyaltyProgram() {
     this.isCollapsedLoyaltyProgram = !this.isCollapsedLoyaltyProgram;
 
-    if (this.isCollapsedLoyaltyProgram) {
-      this.loyalty.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!this.isCollapsedProfileDetails) {
+      this.profile.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
+      this.orders.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedShippingAddress) {
+      this.shipping.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (!this.isCollapsedLoyaltyProgram) {

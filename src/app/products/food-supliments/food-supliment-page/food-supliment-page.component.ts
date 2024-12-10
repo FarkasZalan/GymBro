@@ -52,7 +52,14 @@ import { Timestamp } from 'firebase/firestore';
 export class FoodSuplimentPageComponent implements OnInit {
   @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   @ViewChild('userLoggedOutLikeErrorMessage') errorMessage: ElementRef;
+
+  // Collapsible sections
   @ViewChild('reviewsSection') reviewsSection: ElementRef;
+  @ViewChild('description') description: ElementRef;
+  @ViewChild('ingredients') ingredients: ElementRef;
+  @ViewChild('activeIngredients') activeIngredients: ElementRef;
+  @ViewChild('nutritionalTable') nutritionalTable: ElementRef;
+
   foodSupliment: FoodSupliment;
   selectedQuantityInProduct: number = 0;
   productViewText = ProductViewText;
@@ -367,6 +374,16 @@ export class FoodSuplimentPageComponent implements OnInit {
   toggleCollapsedDescription() {
     this.isCollapsedDescription = !this.isCollapsedDescription;
 
+    if (!this.isCollapsedNutritionTable) {
+      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedIngredients) {
+      this.ingredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedActiveIngredients) {
+      this.activeIngredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedDescription) {
       this.isCollapsedIngredients = true;
       this.isCollapsedActiveIngredients = true;
@@ -376,6 +393,16 @@ export class FoodSuplimentPageComponent implements OnInit {
 
   toggleCollapsedIngredients() {
     this.isCollapsedIngredients = !this.isCollapsedIngredients;
+
+    if (!this.isCollapsedDescription) {
+      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedActiveIngredients) {
+      this.activeIngredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedNutritionTable) {
+      this.nutritionalTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     if (!this.isCollapsedIngredients) {
       this.isCollapsedDescription = true;
@@ -387,6 +414,16 @@ export class FoodSuplimentPageComponent implements OnInit {
   toggleCollapsedActiveIngredients() {
     this.isCollapsedActiveIngredients = !this.isCollapsedActiveIngredients;
 
+    if (!this.isCollapsedDescription) {
+      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedIngredients) {
+      this.ingredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedNutritionTable) {
+      this.nutritionalTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (!this.isCollapsedActiveIngredients) {
       this.isCollapsedDescription = true;
       this.isCollapsedIngredients = true;
@@ -396,6 +433,16 @@ export class FoodSuplimentPageComponent implements OnInit {
 
   toggleCollapsedNutritionTable() {
     this.isCollapsedNutritionTable = !this.isCollapsedNutritionTable;
+
+    if (!this.isCollapsedDescription) {
+      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedIngredients) {
+      this.ingredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedActiveIngredients) {
+      this.activeIngredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     if (!this.isCollapsedNutritionTable) {
       this.isCollapsedDescription = true;

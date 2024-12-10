@@ -4,9 +4,9 @@
 <div class="container">
     <!-- orders details -->
     <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
-        [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orderCard>
+        [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
+            <div class="header-collapse-component" (click)="toggleCollapsedOrders()" #orderCard>
                 <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">{{
                     'profileMenu.orders' | translate }}
                 </h2>
@@ -29,9 +29,9 @@
 
     <!-- product categories -->
     <nb-card class="container-collapse-component" [class.has-unchecked-items]="uncheckedReviewsCount !== 0"
-        [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails" #itemsCard>
+        [class.pulse-effect]="uncheckedReviewsCount !== 0 && isCollapsedItemsDetails">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()">
+            <div class="header-collapse-component" (click)="toggleCollapsedItemDetails()" #itemsCard>
                 <h2 class="title" [ngClass]="{'center': isCollapsedItemsDetails, 'left': !isCollapsedItemsDetails}">{{
                     'adminMenu.items' | translate }}
                 </h2>
@@ -53,9 +53,9 @@
     </nb-card>
 
     <!-- blog list -->
-    <nb-card class="container-collapse-component" #blogCard>
+    <nb-card class="container-collapse-component">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedBlogDetails()">
+            <div class="header-collapse-component" (click)="toggleCollapsedBlogDetails()" #blogCard>
                 <h2 class="title" [ngClass]="{'center': isCollapsedBlogDetails, 'left': !isCollapsedBlogDetails}">{{
                     'adminMenu.blog' | translate }}
                 </h2>
@@ -72,9 +72,9 @@
     </nb-card>
 
     <!-- profile details -->
-    <nb-card class="container-collapse-component" #profileCard>
+    <nb-card class="container-collapse-component">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
+            <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()" #profileCard>
                 <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
                     {{
                     'adminMenu.adminProfile' | translate }}

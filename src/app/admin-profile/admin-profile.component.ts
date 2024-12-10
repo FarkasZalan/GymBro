@@ -73,8 +73,14 @@ export class AdminProfileComponent implements OnInit {
   toggleCollapsedProfilDetails() {
     this.isCollapsedProfileDetails = !this.isCollapsedProfileDetails;
 
-    if (this.isCollapsedProfileDetails) {
-      this.profileCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!this.isCollapsedItemsDetails) {
+      this.itemsCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
+      this.orderCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedBlogDetails) {
+      this.blogCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (!this.isCollapsedProfileDetails) {
@@ -87,8 +93,14 @@ export class AdminProfileComponent implements OnInit {
   toggleCollapsedItemDetails() {
     this.isCollapsedItemsDetails = !this.isCollapsedItemsDetails;
 
-    if (this.isCollapsedItemsDetails) {
-      this.itemsCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!this.isCollapsedProfileDetails) {
+      this.profileCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
+      this.orderCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedBlogDetails) {
+      this.blogCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (!this.isCollapsedItemsDetails) {
@@ -101,8 +113,14 @@ export class AdminProfileComponent implements OnInit {
   toggleCollapsedBlogDetails() {
     this.isCollapsedBlogDetails = !this.isCollapsedBlogDetails;
 
-    if (this.isCollapsedBlogDetails) {
-      this.blogCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!this.isCollapsedItemsDetails) {
+      this.itemsCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
+      this.orderCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedProfileDetails) {
+      this.profileCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (!this.isCollapsedBlogDetails) {
@@ -115,7 +133,13 @@ export class AdminProfileComponent implements OnInit {
   toggleCollapsedOrders() {
     this.isCollapsedOrders = !this.isCollapsedOrders;
 
-    if (this.isCollapsedOrders) {
+    if (!this.isCollapsedItemsDetails) {
+      this.itemsCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
+      this.orderCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (!this.isCollapsedOrders) {
       this.orderCard.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 

@@ -3,9 +3,9 @@
 
 <div class="container">
     <!-- profile details -->
-    <nb-card class="container-collapse-component" #profile>
+    <nb-card class="container-collapse-component">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()">
+            <div class="header-collapse-component" (click)="toggleCollapsedProfilDetails()" #profile>
                 <h2 class="title" [ngClass]="{'center': isCollapsedProfileDetails, 'left': !isCollapsedProfileDetails}">
                     {{ 'profileMenu.prodilDetails' | translate }}
                 </h2>
@@ -23,9 +23,9 @@
 
     <!-- orders -->
     <nb-card class="container-collapse-component" [class.has-unchecked-items]="numberOfNewOrders !== 0"
-        [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders" #orders>
+        [class.pulse-effect]="numberOfNewOrders !== 0 && isCollapsedOrders">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedOrders()">
+            <div class="header-collapse-component" (click)="toggleCollapsedOrders()" #orders>
                 <h2 class="title" [ngClass]="{'center': isCollapsedOrders, 'left': !isCollapsedOrders}">
                     {{ 'profileMenu.orders' | translate }}
                 </h2>
@@ -47,9 +47,9 @@
     </nb-card>
 
     <!-- shipping addresses -->
-    <nb-card class="container-collapse-component" #shipping>
+    <nb-card class="container-collapse-component">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedShippingAddress()">
+            <div class="header-collapse-component" (click)="toggleCollapsedShippingAddress()" #shipping>
                 <h2 class="title"
                     [ngClass]="{'center': isCollapsedShippingAddress, 'left': !isCollapsedShippingAddress}">
                     {{ 'profileMenu.addresses' | translate }}
@@ -67,9 +67,9 @@
     </nb-card>
 
     <!-- loyality program -->
-    <nb-card class="container-collapse-component" #loyalty>
+    <nb-card class="container-collapse-component">
         <nb-card-body>
-            <div class="header-collapse-component" (click)="toggleCollapsedLoyaltyProgram()">
+            <div class="header-collapse-component" (click)="toggleCollapsedLoyaltyProgram()" #loyalty>
                 <h2 class="title" [ngClass]="{'center': isCollapsedLoyaltyProgram, 'left': !isCollapsedLoyaltyProgram}">
                     {{ 'profileMenu.loyaltyProgram' | translate }}
                 </h2>
