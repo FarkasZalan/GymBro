@@ -466,7 +466,7 @@ export class FilterPageComponent {
       allergenes: this.selectedAllergenes,
       safeForConsumptionDuringBreastfeeding: this.isSafeForConsumptionDuringBreastfeeding,
       safeForConsumptionDuringPregnancy: this.isSafeForConsumptionDuringPregnancy,
-      proteinType: this.selectedClothingType,
+      proteinType: this.selectedProteinType,
       gender: this.selectedGender,
       color: this.selectedColor,
       size: this.selectedSize,

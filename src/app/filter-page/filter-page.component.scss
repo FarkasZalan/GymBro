@@ -3,15 +3,15 @@ input[type='email'] {
     margin-top: 1% !important;
 }
 
-.container {
-    margin-top: 30px;
-}
-
 .container-all-window {
-    margin: 30px;
+    margin-top: 2rem !important;
+    margin: 0.5rem !important;
     max-width: 800px;
-    min-width: 800px;
     max-height: 600px;
+
+    @media (max-width: 768px) {
+        max-height: 450px !important;
+    }
 }
 
 .dialog-header {
@@ -103,8 +103,7 @@ img {
 }
 
 .forgot-btn {
-    max-width: 500px;
-    min-width: 500px;
+    width: 100% !important;
 }
 
 .image-preview {

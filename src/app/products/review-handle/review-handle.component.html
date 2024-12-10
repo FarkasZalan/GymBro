@@ -6,7 +6,7 @@
         <h5 *ngIf="edit && pageFrom !== productViewText.ADMIN_REVIEW" class="text-center">{{ 'review.editReview'
             |
             translate }}</h5>
-        <button class="close-button" (click)="back()">×</button>
+        <button class="close-button" (click)="back()" tabindex="-1">×</button>
     </div>
     <nb-card class="review-container">
         <nb-card-body>

@@ -202,8 +202,9 @@ textarea.ng-valid {
     border: none;
     border-radius: 50%;
     /* Use 50% for a perfect circle */
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    right: 2rem !important;
+    height: 100px;
     font-size: 32px !important;
     /* Adjusted font size for better scaling */
     outline: none;
@@ -248,9 +249,15 @@ textarea.ng-valid {
     }
 }
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 1086px) {
     .floating-button-container {
         display: none !important;
+    }
+}
+
+@media only screen and (max-width: 920px) {
+    .floating-button {
+        right: 1rem !important;
     }
 }
 
@@ -258,6 +265,7 @@ textarea.ng-valid {
     .floating-button {
         width: 90px !important;
         height: 90px !important;
+        right: 0.5rem !important;
     }
 }
 
@@ -265,6 +273,7 @@ textarea.ng-valid {
     .floating-button {
         width: 80px !important;
         height: 80px !important;
+        right: 0.3rem !important
     }
 }
 
