@@ -375,7 +375,7 @@ export class FoodSuplimentPageComponent implements OnInit {
     this.isCollapsedDescription = !this.isCollapsedDescription;
 
     if (!this.isCollapsedNutritionTable) {
-      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.nutritionalTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     if (!this.isCollapsedIngredients) {
       this.ingredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });

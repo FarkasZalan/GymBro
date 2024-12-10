@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CurrencyPipe, Location } from '@angular/common';
 import { Accessories } from '../../../admin-profile/product-management/product-models/accessories.model';
 import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
@@ -7,7 +7,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Clothes } from '../../../admin-profile/product-management/product-models/clothing.model';
 import { ProductReeviews } from '../../../admin-profile/product-management/product-models/product-reviews.model';
 import { AuthService } from '../../../auth/auth.service';
 import { CartService } from '../../../cart/cart.service';
@@ -50,8 +49,13 @@ import { Timestamp } from 'firebase/firestore';
   ]
 })
 export class AccessoriesPageComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   @ViewChild('userLoggedOutLikeErrorMessage') errorMessage: ElementRef;
+
+  // Collapsible sections
   @ViewChild('reviewsSection') reviewsSection: ElementRef;
+  @ViewChild('description') description: ElementRef;
+
   accessories: Accessories;
   selectedSizeInProduct: string = '';
   productViewText = ProductViewText;
@@ -85,6 +89,12 @@ export class AccessoriesPageComponent implements OnInit {
   // Need two arrays for the reviews, one for the display the reviews and one for handling the reviews likes
   displayedReviews: ProductReeviews[] = []; // Display data - gets sorted
   originalReviews: ProductReeviews[] = [];  // Original data - never sorted
+
+  // pagination
+  paginatedReviews: ProductReeviews[] = [];
+  itemsPerPage = 6;
+  currentPage = 1;
+
   averageRating: number = 0;
 
   userLoggedIn: boolean = false;
@@ -108,6 +118,9 @@ export class AccessoriesPageComponent implements OnInit {
   ];
   currentSortOrder: string = ProductViewText.ORDER_BY_LATEST;
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private documentHandler: DocumentHandlerService,
@@ -122,6 +135,7 @@ export class AccessoriesPageComponent implements OnInit {
     private currencyPipe: CurrencyPipe) { }
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.accessories = {
       id: "",
       productName: "",
@@ -196,6 +210,15 @@ export class AccessoriesPageComponent implements OnInit {
         this.loadRelatedProducts();
       });
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 1400;
   }
 
   // Function to get unique sizes for display
@@ -275,6 +298,10 @@ export class AccessoriesPageComponent implements OnInit {
 
   toggleCollapsedDescription() {
     this.isCollapsedDescription = !this.isCollapsedDescription;
+
+    if (!this.isCollapsedDescription) {
+      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
   toggleColorDropdown() {
@@ -365,6 +392,8 @@ export class AccessoriesPageComponent implements OnInit {
 
     // set the sorted reviews to the display array
     this.displayedReviews = sortedReviews;
+    this.currentPage = 1;
+    this.updatePaginatedList();
   }
 
   getReviews() {
@@ -373,11 +402,30 @@ export class AccessoriesPageComponent implements OnInit {
       this.originalReviews = reviews;
       // set the display reviews
       this.displayedReviews = [...reviews];
+
+      this.updatePaginatedList();
       // calculate the average rating
       this.calculateAverageRating();
       // sort the reviews based on the current sort order
       this.filterRating(this.currentSortOrder);
     })
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedReviews = this.displayedReviews.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.displayedReviews.length / this.itemsPerPage);
   }
 
   calculateAverageRating(): void {
