@@ -308,7 +308,7 @@
                     </div>
                     <div class="row">
                         <!-- Proteins -->
-                        <div class="col-md-6 form-group">
+                        <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}" class="form-group">
                             <label for="nutritionalValueProteins" class="label">{{ 'products.proteinsGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"
@@ -317,7 +317,7 @@
                                 #nutritionalValueProteins="ngModel">
                         </div>
                         <!-- Salt -->
-                        <div class="col-md-6 form-group">
+                        <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}" class="form-group">
                             <label for="nutritionalValueSalt" class="label">{{ 'products.saltGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"

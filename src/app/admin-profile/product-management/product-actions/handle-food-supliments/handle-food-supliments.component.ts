@@ -200,7 +200,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   // date added
   dateAdded: Timestamp;
 
-
   // responsibility
   isLargeScreen: boolean = false;
 
@@ -324,7 +323,6 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     });
   }
 
-  // display in 1 column the form fields on smaller screens and 2 columns on larger screens
   @HostListener('window:resize', [])
   onResize(): void {
     this.checkScreenSize();

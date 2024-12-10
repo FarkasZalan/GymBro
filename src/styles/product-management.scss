@@ -521,6 +521,11 @@ h1.title {
     position: relative;
     margin-bottom: 20px;
     /* Add spacing between sections */
+
+    @media screen and (max-width: 600px) {
+        margin-left: 1rem !important;
+        margin-right: 1rem !important;
+    }
 }
 
 .drop-down-list {
@@ -699,6 +704,14 @@ option.active {
     /* Optional: rounded corners only at the top */
     transition: filter 0.3s ease, transform 0.3s ease;
     /* Smooth transition */
+
+    @media screen and (max-width: 768px) {
+        height: 240px !important;
+    }
+
+    @media screen and (max-width: 400px) {
+        height: 200px !important;
+    }
 }
 
 .row {
@@ -706,7 +719,7 @@ option.active {
 }
 
 .categoryCard {
-    width: 250px;
+    max-width: 280px !important;
     /* Set a width suitable for 2 columns */
     flex: 1 1 calc(50% - 20px);
     /* 2 columns with space between */

@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { NgForm } from '@angular/forms';
@@ -155,6 +155,9 @@ export class HandleOrganicFoodComponent {
   // date added
   dateAdded: Timestamp;
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private storage: AngularFireStorage,
@@ -167,6 +170,7 @@ export class HandleOrganicFoodComponent {
   ) { }
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.editor = new Editor();
 
     // Set up toolbar with command keys
@@ -248,6 +252,15 @@ export class HandleOrganicFoodComponent {
       });
     });
     this.sortItems();
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 770;
   }
 
   // Sort product categories, genders, flavors, proteins and allergies

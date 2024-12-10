@@ -681,7 +681,7 @@ nb-card-body {
         width: calc(50% - 40px);
         /* Ensure the card takes up half of the container width */
         max-width: 280px !important;
-        height: auto !important;
+        max-height: 460px !important;
         flex: 1 1 calc(50% - 20px);
         /* Two columns with space between */
         display: flex;
@@ -706,6 +706,7 @@ nb-card-body {
 
         @media screen and (max-width: 768px) {
             max-width: 260px !important;
+            height: auto !important;
         }
 
         // Enhanced discount badge
@@ -731,6 +732,10 @@ nb-card-body {
             h5,
             p {
                 color: #0b8e92 !important;
+            }
+
+            h5 {
+                margin-bottom: 10px !important;
             }
 
             .badge {
@@ -1016,7 +1021,7 @@ h5 {
     width: calc(50% - 40px);
     /* Ensure the card takes up half of the container width */
     max-width: 280px;
-    height: 450px !important;
+    height: 460px !important;
     flex: 1 1 calc(50% - 20px);
     /* Two columns with space between */
     display: flex;
