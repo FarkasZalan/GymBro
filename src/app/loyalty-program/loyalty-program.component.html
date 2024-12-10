@@ -1,4 +1,5 @@
-<div class="loyalty-dashboard">
+<div [ngStyle]="!openedFromProfile ? {'padding-left': '1rem', 'padding-right': '1rem'} : {'padding-left': '0rem', 'padding-right': '0rem'}"
+    class="loyalty-dashboard">
     <!-- Login Section -->
     <div class="login-prompt-container" *ngIf="!userLoggedIn">
         <div class="login-prompt">
@@ -111,7 +112,7 @@
         <div class="rewards-section">
             <h3 class="rewards-title">{{ 'loyaltyProgram.rewardsSection.title' | translate }}</h3>
             <div class="rewards-grid">
-                <div *ngFor="let reward of availableRewards" class="reward-card"
+                <div *ngFor="let reward of availableRewards" [ngStyle]="rewardCardStyle" class="reward-card"
                     [class.locked]="currentUser?.loyaltyPoints < reward.pointsRequired && !isRewardAvailable(reward.id)"
                     [class.active]="isRewardAvailable(reward.id)">
                     <div class="active-indicator" *ngIf="isRewardAvailable(reward.id)">
@@ -137,8 +138,8 @@
 
         <!-- back button -->
         <div class="button-container" *ngIf="!openedFromProfile">
-            <button class="btn basic-btn back-btn basic-form-btn" type="submit" nbButton status="success"
-                (click)="back()">
+            <button style="margin-top: 20px !important;" class="btn basic-btn back-btn basic-form-btn" type="submit"
+                nbButton status="success" (click)="back()">
                 <span class="arrow">
                     <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                         <!-- Filled left arrow -->
