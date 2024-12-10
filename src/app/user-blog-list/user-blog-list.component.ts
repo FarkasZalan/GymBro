@@ -178,6 +178,7 @@ export class UserBlogListComponent implements OnInit {
       this.orderItems();
     }
 
+    this.currentPage = 1;
     this.updatePaginatedList();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentHandlerService } from '../../document.handler.service';
 import { Blog } from '../../admin-profile/blog/blog.model';
@@ -30,9 +30,13 @@ export class BlogPageViewComponent implements OnInit {
   blogNormalText: string = '';
   relatedBlogs: Blog[] = [];
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(private route: ActivatedRoute, private productService: ProductService, private documentHandler: DocumentHandlerService, private location: Location, private router: Router) { }
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.relatedBlogs = [];
     this.route.params.subscribe(params => {
       // get the food supliment product by id
@@ -50,6 +54,15 @@ export class BlogPageViewComponent implements OnInit {
         this.loadRelatedBlogs(params['blogId']);
       });
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 1400;
   }
 
   // get related blog list

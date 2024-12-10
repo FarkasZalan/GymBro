@@ -1,11 +1,16 @@
 .list-container {
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin-top: 2rem !important;
     margin-bottom: auto;
     padding: 16px;
     height: fit-content;
     justify-content: center;
     display: flex;
+
+    @media screen and (max-width: 768px) {
+        padding-left: 0 !important;
+        padding-right: 0% !important;
+    }
 }
 
 .empty-list-container {
@@ -37,6 +42,12 @@
     height: fit-content;
     /* Allow the card to grow with content */
     position: relative;
+
+    @media screen and (max-width: 768px) {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
+    }
 }
 
 .image {
@@ -89,7 +100,7 @@
 }
 
 .button-container {
-    margin-top: 20px;
+    margin: 20px;
     text-align: center;
 }
 
@@ -97,7 +108,12 @@
     width: 180px !important;
     font-size: 18px !important;
     margin-top: 20px;
-    margin-bottom: 30px
+    margin-bottom: 30px;
+
+    @media screen and (max-width: 520px) {
+        margin: 20px auto !important;
+        width: 100% !important;
+    }
 }
 
 
@@ -162,9 +178,19 @@
 
     @media (max-width: 992px) {
         width: calc(100% - 2rem) !important;
-        max-width: none !important;
+        max-width: 300px !important;
         height: auto !important;
         margin: 1rem !important;
+    }
+}
+
+.blog-header {
+    display: flex;
+    flex-direction: column-reverse !important;
+
+    @media screen and (max-width: 768px) {
+        display: flex;
+        flex-direction: column-reverse !important;
     }
 }
 
@@ -176,6 +202,17 @@
     padding: 0;
     margin: 0;
     border-radius: 20px;
+}
+
+h2 {
+    @media screen and (max-width: 768px) {
+        text-align: center !important;
+        font-size: 27px !important;
+    }
+
+    @media screen and (max-width: 400px) {
+        font-size: 25px !important;
+    }
 }
 
 .card-image {
@@ -236,11 +273,17 @@
 .details-container {
     @media (max-width: 768px) {
         h1 {
-            font-size: 1.5rem !important;
+            text-align: center !important;
         }
 
         .blog-text {
             font-size: 0.9rem !important;
+        }
+    }
+
+    @media (max-width: 470px) {
+        h1 {
+            font-size: 2rem !important;
         }
     }
 }

@@ -210,7 +210,9 @@ export class FilterPageComponent {
         ProductViewText.ORDER_BY_LATEST,
         ProductViewText.ORDER_BY_OLDEST
       ];
-      this.selectedOrder = ProductViewText.ORDER_BY_LATEST;
+      if (this.selectedOrder === '') {
+        this.selectedOrder = ProductViewText.ORDER_BY_LATEST;
+      }
     } else if (this.fromPageFilter === ProductViewText.FOOD_SUPLIMENTS) {
       this.isFoodSupliments = true;
       this.availableCategories = [

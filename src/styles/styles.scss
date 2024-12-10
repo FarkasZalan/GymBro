@@ -187,13 +187,10 @@ textarea.ng-valid {
 }
 
 .floating-button-container {
-    position: sticky;
-    display: flex;
-    justify-content: flex-end;
+    float: right !important;
+    position: sticky !important;
     bottom: env(safe-area-inset-bottom) !important;
     padding-bottom: calc(env(safe-area-inset-bottom, 0) + 120px) !important;
-    z-index: 999 !important;
-    /* Distance from the bottom of the viewport */
 }
 
 // create product and filter dialog open button
@@ -249,7 +246,7 @@ textarea.ng-valid {
     }
 }
 
-@media only screen and (min-width: 1086px) {
+@media only screen and (min-width: 1161px) {
     .floating-button-container {
         display: none !important;
     }

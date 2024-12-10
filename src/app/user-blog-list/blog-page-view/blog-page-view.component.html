@@ -1,13 +1,18 @@
 <!-- Display each blog as an nb-card -->
-<div class="list-container" [@zoomIn]>
+<div class="list-container">
     <nb-card class="rounded-card blogCard">
         <nb-card-body class="image">
-            <div class="details-container">
-                <h1>{{ blogObject.title }}</h1>
-                <p class="blog-date">{{ blogCreatedDate.toDate() | date: 'yyyy/MM/dd' }}</p>
-            </div>
-            <div class="parallax"
-                [ngStyle]="{'background-image': 'url(' + (blogImage || '../../../../../assets/images/gym-bro-logo.png') + ')'}">
+            <!-- blog name, date and imaege -->
+            <div class="blog-header">
+                <div class="details-container">
+                    <h1>{{ blogObject.title }}</h1>
+                    <p class="blog-date">{{ blogCreatedDate.toDate() | date: 'yyyy/MM/dd' }}</p>
+                </div>
+                <div class="parallax" [ngStyle]="{
+                    'background-image': 'url(' + blogImage + ')',
+                    'background-attachment': isLargeScreen ? 'fixed' : 'scroll'
+                  }">
+                </div>
             </div>
             <div class="details-container">
                 <div class="blog-text" [innerHTML]="blogHtmlText"></div>
@@ -24,11 +29,7 @@
                     <nb-card-body class="blog-image">
                         <div class="related-details-container text-center">
                             <div class="image-container text-center">
-                                <img *ngIf="relatedBlog.headerImageUrl !== ''" [src]="relatedBlog.headerImageUrl"
-                                    alt="Related Blog Image" class="card-image" />
-                                <img *ngIf="relatedBlog.headerImageUrl === ''"
-                                    src="../../../../../assets/images/gym-bro-logo.png" alt="Related Blog Image"
-                                    class="card-image" />
+                                <img [src]="relatedBlog.headerImageUrl" alt="Related Blog Image" class="card-image" />
                             </div>
                             <p class="blog-title">{{ relatedBlog.title }}</p>
                             <div class="description-container">
