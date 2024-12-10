@@ -93,6 +93,7 @@ declare var Stripe;
 export class CheckoutPageComponent implements OnInit {
   @ViewChild('form') guestForm: NgForm;  // Access the form for validation
   @ViewChild('cartItems') cartItemsElement: ElementRef; // Access the cart section element
+  @ViewChild('couponSection') couponSection: ElementRef;
 
   // Cart items
   cartItems: CartItem[] = [];
@@ -944,6 +945,7 @@ ${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_
   }
 
   activateCoupon(reward: any) {
+    this.couponSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     this.activeReward = reward;
     this.couponUsed = true;
     this.calculateTotals();
@@ -952,6 +954,7 @@ ${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_
   removeCoupon() {
     this.activeReward = null;
     this.couponUsed = false;
+    this.couponSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     this.calculateTotals();
   }
 

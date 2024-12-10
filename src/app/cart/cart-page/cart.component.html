@@ -1,5 +1,5 @@
-<div class="container" [@zoomIn]>
-    <nb-card class="cart-container">
+<div class="container">
+    <nb-card class="cart-container" [@zoomIn]>
         <nb-card-header>
             <h2>{{ 'cart.title' | translate }}</h2>
         </nb-card-header>
@@ -32,7 +32,7 @@
             </div>
 
             <!-- Cart items list (only shown when cart has items) -->
-            <div *ngIf="(cartItems$ | async)?.length > 0" #cartItems>
+            <div *ngIf="(cartItems$ | async)?.length > 0" #cartItems class="product-list-container">
                 <!-- Cart item list with quantity controls and price calculations -->
                 <div *ngFor="let item of (visibleCartItems$ | async); let i = index" class="cart-item"
                     (click)="navigateToProduct(item)" [@removeItem]="'in'">

@@ -106,10 +106,13 @@ export class CartComponent {
     // Remove item from cart
     removeItem(index: number) {
         this.cartService.removeFromCart(index);
+
+        this.goTopOfTheCartItemSection();
     }
 
     // Clear all items from cart
     clearCart() {
+        this.goTopOfTheCartItemSection();
         this.cartService.clearCart();
     }
 

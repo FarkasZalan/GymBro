@@ -70,7 +70,7 @@ export class LoginComponent {
 
       if (success === true) {
         this.errorMessage = false;
-        this.router.navigate(['/']);
+        this.location.back();
       } else if (success === false) {
         this.errorMessage = true;
         this.notVerrifiedError = false;

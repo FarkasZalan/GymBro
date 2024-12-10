@@ -1,23 +1,16 @@
 .cart-container {
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 5rem auto;
     border-radius: 50px;
 
-    nb-card-header {
-        h2 {
-            margin: 0;
-            color: var(--text-primary);
-        }
-    }
-
     @media (max-width: 768px) {
-        margin: 1rem auto !important;
+        margin: 3rem auto !important;
         border-radius: 25px !important;
     }
 }
 
 .container {
-    margin-top: 2rem !important;
+    margin-top: 3rem !important;
 }
 
 .remove-btn {
@@ -227,16 +220,79 @@
             color: var(--danger-hover);
         }
     }
+}
 
-    @media (max-width: 992px) {
-        grid-template-columns: 100px 1fr 100px 100px 50px !important;
-        gap: 1rem !important;
+@media (max-width: 768px) {
+
+    .cart-item {
+        grid-template-columns: 1fr !important;
     }
 
-    @media (max-width: 768px) {
-        grid-template-columns: 80px 1fr 80px !important;
-        gap: 0.75rem !important;
-        padding: 0.75rem !important;
+    .item-image {
+        img {
+            height: 350px !important;
+        }
+    }
+
+    .item-details {
+        text-align: center !important;
+    }
+
+    .button-container {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .item-price {
+        text-align: center !important;
+    }
+
+    .remove-btn {
+        margin-bottom: 1rem !important;
+    }
+
+    .cart-footer {
+        justify-content: center !important;
+        flex-direction: column !important;
+
+        .cart-total {
+            flex-wrap: wrap !important;
+            margin-bottom: 2rem !important;
+        }
+
+        .cart-actions {
+            flex-direction: column !important;
+        }
+
+        button {
+            margin-top: 20px !important;
+        }
+
+        .button-container {
+            margin-top: 0px !important;
+        }
+    }
+
+    .stock-error-label {
+        left: 0;
+        transform: translateX(0);
+    }
+
+    .plus-btn {
+        width: 40px !important;
+        height: 40px !important;
+        margin-left: 1rem !important;
+    }
+
+    .minus-btn {
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 1rem !important;
+    }
+
+    .quantity-input {
+        width: 80px !important;
+        height: 40px !important;
     }
 }
 
@@ -266,6 +322,12 @@
 
     &:active {
         transform: scale(0.95);
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .cart-item {
+        grid-template-columns: 100px 1fr 150px 150px 50px;
     }
 }
 

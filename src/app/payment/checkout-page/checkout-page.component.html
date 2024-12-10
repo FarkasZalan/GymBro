@@ -323,7 +323,7 @@
                 <form (ngSubmit)="addNewGuestAddress()" #form="ngForm">
                     <!-- Name block -->
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <!-- First Name block -->
                             <div class="form-group">
                                 <label for="firstName" class="label">{{ 'register.firstName' | translate }}</label>
@@ -334,7 +334,7 @@
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <!-- Last Name block -->
                             <div class="form-group">
                                 <label for="lastName" class="label">{{ 'register.lastName' | translate }}</label>
@@ -347,7 +347,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <!-- Email block -->
                             <div class="form-group">
                                 <label for="email" class="label">{{ 'loginPage.email' | translate }}</label>
@@ -357,7 +357,7 @@
                                     'loginPage.invalidEmail' | translate }}</span>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <!-- Phone block -->
                             <div class="form-group">
                                 <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
@@ -371,7 +371,7 @@
 
                     <!-- Shipping Address block -->
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-md-8">
                             <!-- Country block -->
                             <div class="form-group">
                                 <label for="country" class="label">{{ 'profileMenu.shippingAddressForm.country' |
@@ -384,7 +384,7 @@
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <!-- Postal code block -->
                             <div class="form-group">
                                 <label for="postalCode" class="label">{{
@@ -399,7 +399,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <!-- City block -->
                             <div class="form-group">
                                 <label for="city" class="label">{{
@@ -411,7 +411,7 @@
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <!-- Street block -->
                             <div class="form-group">
                                 <label for="streetName" class="label">{{
@@ -424,7 +424,7 @@
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <!-- Street type block -->
                             <div class="form-group">
                                 <label for="streetType" class="label">{{
@@ -439,7 +439,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <!-- House number block -->
                             <div class="form-group">
                                 <label for="houseNumber" class="label">{{
@@ -452,7 +452,7 @@
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <!-- Floor block -->
                             <div class="form-group">
                                 <label for="floor" class="label">{{ 'profileMenu.shippingAddressForm.floor' |
@@ -462,7 +462,7 @@
                                     translate }}" #floor="ngModel">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <!-- Door block -->
                             <div class="form-group">
                                 <label for="door" class="label">{{ 'profileMenu.shippingAddressForm.door' |
@@ -476,7 +476,7 @@
                         </div>
                     </div>
                     <!-- company address Checkbox -->
-                    <div class="form-group">
+                    <div style="margin-top: 10px; margin-bottom: 10px;" class="form-group">
                         <label for="companyAddress" class="checkbox-container">
                             <label for="companyAddress">{{ 'profileMenu.shippingAddressForm.setAsCompanyAddress'
                                 | translate }}
@@ -487,7 +487,7 @@
                         </label>
                     </div>
                     <div *ngIf="isCompanyAddressChecked" [@collapseFields] class="row">
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <!-- Company name block -->
                             <div class="form-group">
                                 <label for="companyName" class="label">{{
@@ -501,7 +501,7 @@
                                     'register.fieldRequired' | translate }}</span>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6">
                             <!-- Tax number block -->
                             <div class="form-group">
                                 <label for="taxNumber" class="label">{{
@@ -517,7 +517,7 @@
 
                         <!-- Billing address section -->
                         <!-- billing address same as shipping Checkbox -->
-                        <div class="form-group">
+                        <div style="margin-top: 10px; margin-bottom: 10px;" class="form-group">
                             <label for="setToDefaultAddress" class="checkbox-container">
                                 <label for="setToDefaultAddress">{{
                                     'profileMenu.shippingAddressForm.billingAddressSameAsShipping' |
@@ -529,9 +529,10 @@
                             </label>
                         </div>
                         <!-- billing address details -->
-                        <div *ngIf="shippingAddress.isBillingDifferentFromShipping" [@collapseFields] class="row">
+                        <div *ngIf="shippingAddress.isBillingDifferentFromShipping" [@collapseFields]
+                            class="row billing-address-form ">
                             <div [@collapseFields] class="row">
-                                <div class="col-8">
+                                <div class="col-md-8">
                                     <!-- Billing Country block -->
                                     <div class="form-group">
                                         <label for="billingCountry" class="label">{{
@@ -548,7 +549,7 @@
                                             'register.fieldRequired' | translate }}</span>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <!-- Postal code block -->
                                     <div class="form-group">
                                         <label for="billingPostalCode" class="label">{{
@@ -565,7 +566,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <!-- City block -->
                                     <div class="form-group">
                                         <label for="billingCity" class="label">{{
@@ -579,7 +580,7 @@
                                             'register.fieldRequired' | translate }}</span>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <!-- Street block -->
                                     <div class="form-group">
                                         <label for="billingStreetName" class="label">{{
@@ -594,7 +595,7 @@
                                             'register.fieldRequired' | translate }}</span>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <!-- Street type block -->
                                     <div class="form-group">
                                         <label for="billingStreetType" class="label">{{
@@ -611,7 +612,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <!-- House number block -->
                                     <div class="form-group">
                                         <label for="billingHouseNumber" class="label">{{
@@ -626,7 +627,7 @@
                                             'register.fieldRequired' | translate }}</span>
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <!-- Floor block -->
                                     <div class="form-group">
                                         <label for="billingFloor" class="label">{{
@@ -639,7 +640,7 @@
                                             #billingFloor="ngModel">
                                     </div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-md-4">
                                     <!-- Door block -->
                                     <div class="form-group">
                                         <label for="billingDoor" class="label">{{
@@ -667,14 +668,14 @@
             </div>
 
             <!-- Coupon Section -->
-            <div *ngIf="userLoggedIn" @fadeInUp>
+            <div *ngIf="userLoggedIn" @fadeInUp name="couponSection" id="couponSection" #couponSection>
                 <nb-card class="rounded-card checkout-section rewards-section">
                     <nb-card-header>
                         <h3>
                             {{ 'checkout.availableRewards' | translate }}
                         </h3>
                     </nb-card-header>
-                    <nb-card-body>
+                    <nb-card-body class="rewards-body">
                         <!-- Active Reward -->
                         <div class="active-reward" *ngIf="activeReward" @fadeSlide>
                             <div class="reward-card active">
@@ -740,7 +741,8 @@
                         <nb-icon class="summary-icon" icon="shopping-cart-outline"></nb-icon>
                         {{ 'checkout.orderSummary.subtotal' | translate }}
                     </span>
-                    <span>{{subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                    <span class="total-cost">{{subtotal | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate
+                        }}</span>
                 </div>
                 <div class="summary-row shipping" *ngIf="selectedShippingMethod" @fadeInUp>
                     <span>
@@ -748,10 +750,10 @@
                         {{ 'checkout.orderSummary.shipping' | translate }}
                     </span>
                     <div class="shipping-cost" [class.free-shipping]="isFreeShippingActive()">
-                        <span class="original-cost" *ngIf="isFreeShippingActive()">
+                        <span class="original-cost total-cost" *ngIf="isFreeShippingActive()">
                             {{ getOriginalShippingCost() | currency:'':'':'1.0-0' }} {{ 'products.huf' | translate }}
                         </span>
-                        <span class="final-cost">
+                        <span class="final-cost total-cost">
                             {{ isFreeShippingActive() ? '0' : shipping | currency:'':'':'1.0-0' }} {{ 'products.huf' |
                             translate }}
                         </span>
@@ -762,7 +764,8 @@
                         <nb-icon class="summary-icon" icon="credit-card-outline"></nb-icon>
                         {{ 'checkout.orderSummary.paymentFee' | translate }}
                     </span>
-                    <span>{{cashOnDeliveryAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' | translate }}</span>
+                    <span class="total-cost">{{cashOnDeliveryAmount | currency:'':'':'1.0-0'}} {{ 'products.huf' |
+                        translate }}</span>
                 </div>
                 <div class="summary-row" *ngIf="discountAmount > 0">
                     <span>
