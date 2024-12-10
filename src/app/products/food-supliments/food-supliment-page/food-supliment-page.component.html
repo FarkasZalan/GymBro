@@ -6,11 +6,8 @@
                 <div [ngClass]="{'col-md-4': isLargeScreen, 'col-md-12': !isLargeScreen}" class="form-group">
                     <div class="details-container">
                         <div class="image-container">
-                            <img *ngIf="selectedImage !== ''" [@zoomIn] [src]="selectedImage" alt="Product Image"
+                            <img [@zoomIn] [src]="selectedImage" alt="Product Image"
                                 [ngStyle]="{'width': !isLargeScreen ? '100%' : '400px'}" class="product-image" />
-                            <img *ngIf="selectedImage === ''" [@zoomIn]
-                                src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                                class="product-image" />
                         </div>
                     </div>
                 </div>
@@ -438,25 +435,35 @@
                 <!-- Display product prices dynamically in a 2-column layout -->
                 <hr>
                 <h2>{{ 'products.relatedProducts' | translate }}</h2>
-                <!-- Food Supliments -->
+                <!-- Related prpduct list -->
                 <div *ngIf="relatedProducts" class="product-list-container">
                     <nb-card class="rounded-card productCard" *ngFor="let relatedProduct of relatedProducts" [@zoomIn]>
                         <nb-card-body class="related-product-image" (click)="goToProductPage(relatedProduct.id)">
 
+                            <span *ngIf="getDefaultPrice(relatedProduct).discountedPrice > 0" class="badge discount">{{
+                                'home.sale' |
+                                translate }}</span>
+
                             <div *ngIf="getDefaultPrice(relatedProduct) as defaultPrice"
                                 class="details-container text-center">
                                 <div class="related-image-container text-center">
-                                    <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                                        alt="Product Image" class="card-image" />
-                                    <img *ngIf="defaultPrice.productImage === ''"
-                                        src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                                        class="card-image" />
+                                    <img [src]="defaultPrice.productImage" alt="Product Image" class="card-image" />
                                 </div>
 
 
                                 <h4>{{ relatedProduct.productName }}</h4>
-                                <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
-                                    'products.huf' | translate }}</h5>
+                                <!-- display the price and if there is a discount, display the discounted price -->
+                                <div class="price-container related-product-price-container"
+                                    *ngIf="getDefaultPrice(relatedProduct) as defaultPrice">
+                                    <h5 class="price-display" [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                        <span class="original-price" [class.crossed]="defaultPrice.discountedPrice > 0">
+                                            {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                        </span>
+                                        <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                            {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                        </span>
+                                    </h5>
+                                </div>
                             </div>
                         </nb-card-body>
                     </nb-card>
@@ -507,7 +514,7 @@
                             <i [attr.data-star]="averageRating"></i>
                             <span class="rating-number">{{ averageRating }}</span>
                         </div>
-                        <p class="review-numbers-display">{{ paginatedReviews.length }} {{ 'review.reviewText' |
+                        <p class="review-numbers-display">{{ originalReviews.length }} {{ 'review.reviewText' |
                             translate }}</p>
 
                         <div class="ratings-breakdown" #reviewsSection>

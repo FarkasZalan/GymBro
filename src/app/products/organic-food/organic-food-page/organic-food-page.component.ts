@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CurrencyPipe, Location } from '@angular/common';
 import { OrganicFood } from '../../../admin-profile/product-management/product-models/organic-food.model';
 import { ProductViewText } from '../../../admin-profile/product-management/product-view-texts';
@@ -51,7 +51,14 @@ import { Timestamp } from 'firebase/firestore';
 })
 export class OrganicFoodPageComponent implements OnInit {
   @ViewChild('userLoggedOutLikeErrorMessage') errorMessage: ElementRef;
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   @ViewChild('reviewsSection') reviewsSection: ElementRef;
+
+  // Collapsible sections
+  @ViewChild('description') description: ElementRef;
+  @ViewChild('ingredients') ingredients: ElementRef;
+  @ViewChild('nutritionalTable') nutritionalTable: ElementRef;
+
   organicFood: OrganicFood;
   selectedQuantityInProduct: number = 0;
   productViewText = ProductViewText;
@@ -89,6 +96,12 @@ export class OrganicFoodPageComponent implements OnInit {
   // Need two arrays for the reviews, one for the display the reviews and one for handling the reviews likes
   displayedReviews: ProductReeviews[] = []; // Display data - gets sorted
   originalReviews: ProductReeviews[] = []; // Original data - never sorted
+
+  // pagination
+  paginatedReviews: ProductReeviews[] = [];
+  itemsPerPage = 3;
+  currentPage = 1;
+
   averageRating: number = 0;
 
   userLoggedIn: boolean = false;
@@ -112,6 +125,9 @@ export class OrganicFoodPageComponent implements OnInit {
   ];
   currentSortOrder: string = ProductViewText.ORDER_BY_LATEST;
 
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     private documentHandler: DocumentHandlerService,
@@ -126,6 +142,7 @@ export class OrganicFoodPageComponent implements OnInit {
     private currencyPipe: CurrencyPipe) { }
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.organicFood = {
       id: "",
       productName: "",
@@ -208,6 +225,15 @@ export class OrganicFoodPageComponent implements OnInit {
         this.loadRelatedProducts();
       });
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 1400;
   }
 
   // Function to get unique quantities for display
@@ -457,6 +483,8 @@ export class OrganicFoodPageComponent implements OnInit {
 
     // set the sorted reviews to the display array
     this.displayedReviews = sortedReviews;
+    this.currentPage = 1;
+    this.updatePaginatedList();
   }
 
   getReviews() {
@@ -465,11 +493,30 @@ export class OrganicFoodPageComponent implements OnInit {
       this.originalReviews = reviews;
       // set the display reviews
       this.displayedReviews = [...reviews];
+
+      this.updatePaginatedList();
       // calculate the average rating
       this.calculateAverageRating();
       // sort the reviews based on the current sort order
       this.filterRating(this.currentSortOrder); // Apply initial sort
     })
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedReviews = this.displayedReviews.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.displayedReviews.length / this.itemsPerPage);
   }
 
   calculateAverageRating(): void {

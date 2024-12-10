@@ -197,26 +197,39 @@
                     <!-- Display product prices dynamically in a 3-column layout -->
                     <hr>
                     <h2>{{ 'products.relatedProducts' | translate }}</h2>
-                    <!-- Organic Foods -->
+                    <!-- Related prpduct list -->
                     <div *ngIf="relatedProducts" class="product-list-container">
                         <nb-card class="rounded-card productCard" *ngFor="let relatedProduct of relatedProducts"
                             [@zoomIn]>
                             <nb-card-body class="related-product-image" (click)="goToProductPage(relatedProduct.id)">
 
+                                <span *ngIf="getDefaultPrice(relatedProduct).discountedPrice > 0"
+                                    class="badge discount">{{
+                                    'home.sale' |
+                                    translate }}</span>
+
                                 <div *ngIf="getDefaultPrice(relatedProduct) as defaultPrice"
                                     class="details-container text-center">
                                     <div class="related-image-container text-center">
-                                        <img *ngIf="defaultPrice.productImage !== ''" [src]="defaultPrice.productImage"
-                                            alt="Product Image" class="card-image" />
-                                        <img *ngIf="defaultPrice.productImage === ''"
-                                            src="../../../../../assets/images/gym-bro-logo.png" alt="Product Image"
-                                            class="card-image" />
+                                        <img [src]="defaultPrice.productImage" alt="Product Image" class="card-image" />
                                     </div>
 
 
                                     <h4>{{ relatedProduct.productName }}</h4>
-                                    <h5 class="price-display"> {{ defaultPrice.productPrice }} {{
-                                        'products.huf' | translate }}</h5>
+                                    <!-- display the price and if there is a discount, display the discounted price -->
+                                    <div class="price-container related-product-price-container"
+                                        *ngIf="getDefaultPrice(relatedProduct) as defaultPrice">
+                                        <h5 class="price-display"
+                                            [class.has-discount]="defaultPrice.discountedPrice > 0">
+                                            <span class="original-price"
+                                                [class.crossed]="defaultPrice.discountedPrice > 0">
+                                                {{ defaultPrice.productPrice }} {{ 'products.huf' | translate }}
+                                            </span>
+                                            <span class="discounted-price" *ngIf="defaultPrice.discountedPrice > 0">
+                                                {{ defaultPrice.discountedPrice }} {{ 'products.huf' | translate }}
+                                            </span>
+                                        </h5>
+                                    </div>
                                 </div>
                             </nb-card-body>
                         </nb-card>
@@ -240,9 +253,9 @@
                                 </div>
                                 <!-- add new review button (only for users) -->
                                 <div *ngIf="userLoggedIn && !userReview.isAdmin || !userLoggedIn"
-                                    class="button-container review-button">
-                                    <button class="btn btn-primary " type="submit" nbButton status="success"
-                                        (click)="gotoCreateNewRReview()">
+                                    class="button-container ">
+                                    <button class="btn btn-primary empty-review-button" type="submit" nbButton
+                                        status="success" (click)="gotoCreateNewRReview()">
                                         {{ 'review.addNewReview' | translate }}</button>
                                 </div>
 

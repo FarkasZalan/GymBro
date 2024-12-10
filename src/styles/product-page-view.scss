@@ -421,6 +421,10 @@ input[type="number"] {
     /* Margin around the error block */
     font-size: 16px !important;
     /* Adjust font size as needed */
+
+    @media screen and (max-width: 768px) {
+        display: grid !important;
+    }
 }
 
 .help-block-login-error .icon {
@@ -545,6 +549,25 @@ input[type="number"] {
     border-radius: 4px;
     animation: pulseEffect 1.5s infinite;
     /* Optional pulse effect */
+}
+
+.badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    z-index: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &.discount {
+        background-color: white !important;
+        color: red !important;
+    }
 }
 
 /* Checked review text */
@@ -684,7 +707,7 @@ input[type="number"] {
     /* Ensure the card takes up half of the container width */
     max-width: 280px;
     width: 100% !important;
-    height: 450px !important;
+    max-height: 450px !important;
     flex: 1 1 calc(50% - 20px);
     /* Two columns with space between */
     display: flex;
@@ -703,6 +726,10 @@ input[type="number"] {
     transition: background-color 0.3s ease, transform 0.3s ease !important;
     height: fit-content;
     max-height: 500px;
+
+    @media screen and (max-width: 500px) {
+        height: auto !important;
+    }
 
     &:hover {
         cursor: pointer;
@@ -809,6 +836,10 @@ input[type="number"] {
     padding: 0;
     margin: 0;
     border-radius: 20px;
+
+    img {
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 }
 
 .details-container {
@@ -1699,6 +1730,11 @@ input[type="number"] {
             }
         }
     }
+}
+
+.related-product-price-container {
+    justify-content: center !important;
+    display: grid !important;
 }
 
 .price-container {

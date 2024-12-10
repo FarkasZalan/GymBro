@@ -436,6 +436,25 @@ h1.title {
     text-align: center;
 }
 
+.badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    z-index: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &.discount {
+        background-color: white !important;
+        color: red !important;
+    }
+}
+
 .blog-btn {
     font-size: 56px !important;
     padding: 30px !important;
