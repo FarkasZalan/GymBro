@@ -154,10 +154,10 @@
             <br>
             <div class="row">
                 <hr>
-                <h2>{{ 'products.customerReviews' | translate }}</h2>
+                <h2 class="reviews-title">{{ 'products.customerReviews' | translate }}</h2>
 
                 <!-- no reviews section -->
-                <div *ngIf="reviews.length === 0" class="product-empty-list-container">
+                <div *ngIf="paginatedReviews.length === 0" class="product-empty-list-container">
                     <nb-card class="emptyCard" [@zoomIn]>
                         <nb-card-body>
                             <div>
@@ -170,13 +170,14 @@
                 </div>
 
                 <!-- have any reviews -->
-                <div *ngIf="reviews.length !== 0">
+                <div *ngIf="paginatedReviews.length !== 0">
                     <div class="ratings-container">
                         <div class="average-rating">
                             <i [attr.data-star]="averageRating"></i>
                             <span class="rating-number">{{ averageRating }}</span>
                         </div>
-                        <p class="review-numbers-display">{{ reviews.length }} {{ 'review.reviewText' | translate }}</p>
+                        <p class="review-numbers-display">{{ paginatedReviews.length }} {{ 'review.reviewText' |
+                            translate }}</p>
 
                         <div class="ratings-breakdown" #reviewsSection>
                             <div class="rating-row" *ngFor="let star of [5, 4, 3, 2, 1]">
@@ -192,7 +193,9 @@
                     </div><br>
 
                     <!-- Display Reviews -->
-                    <div *ngIf="reviews && reviews.length > 0">
+                    <!-- that's just need to navigate to the top -->
+                    <p #toScrollAfterNavigate></p>
+                    <div *ngIf="paginatedReviews && paginatedReviews.length > 0">
                         <!-- Filter Section -->
                         <div class="dropdown-container filter-review-section">
                             <select class="form-control drop-down-list allow-selected-list-color" name="reviewFilter"
@@ -216,7 +219,7 @@
                             </div>
                         </div>
 
-                        <div class="col-12" *ngFor="let review of reviews">
+                        <div class="col-12" *ngFor="let review of paginatedReviews">
                             <!-- Review Card -->
                             <!-- Apply 'no-overlay' class when response section is shown -->
                             <nb-card class="review-card mb-3" [ngClass]="{ 
@@ -306,6 +309,34 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div *ngIf="paginatedReviews.length !== 0" class="pagination-container">
+                <button class="pagination-button prev" [disabled]="currentPage === 1"
+                    (click)="goToPage(currentPage - 1)">
+                    <span class="icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Filled left arrow -->
+                            <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                        </svg>
+                    </span> <!-- Left Arrow -->
+                </button>
+
+                <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                    [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                    {{ i + 1 }}
+                </button>
+
+                <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                    (click)="goToPage(currentPage + 1)">
+                    <span class="icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Filled right arrow -->
+                            <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                        </svg>
+                    </span> <!-- Right Arrow -->
+                </button>
             </div>
 
             <!-- back button -->

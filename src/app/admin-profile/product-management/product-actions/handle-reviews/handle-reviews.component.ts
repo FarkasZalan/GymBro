@@ -18,6 +18,7 @@ import { ReviewHandleComponent } from '../../../../products/review-handle/review
 import { AdminNotificationService } from '../../../admin-notification.service';
 import { AdminService } from '../../../admin.service';
 import { LoadingService } from '../../../../loading-spinner/loading.service';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-handle-reviews',
@@ -33,6 +34,7 @@ import { LoadingService } from '../../../../loading-spinner/loading.service';
   ]
 })
 export class HandleReviewsComponent implements OnInit {
+  @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
   @ViewChild('reviewsSection') reviewsSection: ElementRef;
   // product details
   foodSuplimentObject: FoodSupliment;
@@ -53,6 +55,11 @@ export class HandleReviewsComponent implements OnInit {
   // reviews
   averageRating: number = 0;
   reviews: ProductReeviews[] = [];
+
+  // pagination
+  paginatedReviews: ProductReeviews[] = [];
+  itemsPerPage = 6;
+  currentPage = 1;
   userLoggedIn: boolean = false;
   reviewChecked: boolean = false;
 
@@ -169,31 +176,50 @@ export class HandleReviewsComponent implements OnInit {
 
   filterRating() {
     if (this.selectedReviewFilter === ProductViewText.ORDER_BY_BEST_RATING) {
-      this.productService.sortReviewsByRatingASC(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
-        this.reviews = reviews;
-      });
+      this.reviews = this.reviews.sort((a, b) => b.rating - a.rating);
     } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_WORST_RATING) {
-      this.productService.sortReviewsByRatingDESC(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
-        this.reviews = reviews;
-      });
+      this.reviews = this.reviews.sort((a, b) => a.rating - b.rating);
     } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_LATEST) {
-      this.productService.sortReviewsByNewest(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
-        this.reviews = reviews;
+      this.reviews = this.reviews.sort((a, b) => {
+        const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
+        const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
+        return dateB.getTime() - dateA.getTime(); // Sort in descending order
       });
     } else if (this.selectedReviewFilter === ProductViewText.ORDER_BY_OLDEST) {
-      this.productService.sortReviewsByOldest(this.productCategory).subscribe((reviews: ProductReeviews[]) => {
-        this.reviews = reviews;
+      this.reviews = this.reviews.sort((a, b) => {
+        const dateA = a.date instanceof Timestamp ? a.date.toDate() : new Date(a.date);
+        const dateB = b.date instanceof Timestamp ? b.date.toDate() : new Date(b.date);
+        return dateA.getTime() - dateB.getTime(); // Sort in descending order
       });
     }
+    this.updatePaginatedList();
   }
 
   getReviews() {
     this.productService.getReviewsForProduct(this.productId, this.productCategory).subscribe(reviews => {
       this.reviews = reviews;
+      this.updatePaginatedList();
       this.selectedReviewFilter = ProductViewText.ORDER_BY_LATEST;
       this.calculateAverageRating();
       this.filterRating();
     })
+  }
+
+  // navigation for the pagination
+  updatePaginatedList(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedReviews = this.reviews.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.updatePaginatedList();
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.reviews.length / this.itemsPerPage);
   }
 
   calculateAverageRating(): void {

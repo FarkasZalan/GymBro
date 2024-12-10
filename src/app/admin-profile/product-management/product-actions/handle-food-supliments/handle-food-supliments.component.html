@@ -43,7 +43,7 @@
                     <!-- Dosage -->
                     <div class="col-md-6 form-group">
                         <label for="dailyDosage" class="label">{{ 'products.dailyDosage' | translate }}</label>
-                        <div class="input-group">
+                        <div class="input-group col-md-6">
                             <!-- Daily dosage input -->
                             <div class="input-container">
                                 <input type="number" min="0" class="form-control"
@@ -54,7 +54,7 @@
                             </div>
 
                             <!-- Daily dosage unit -->
-                            <div class="input-container">
+                            <div class="input-container col-md-6">
                                 <select class="form-control drop-down-list allow-selected-list-color selection"
                                     name="unit" required #dosageUnit="ngModel" [(ngModel)]="selectedUnit">
                                     <option value="" disabled selected>{{ 'products.selectUnit' | translate }}</option>
@@ -345,32 +345,41 @@
                     </div>
 
                     <!-- Vitamins Table -->
-                    <table *ngIf="vitaminList.length !== 0" [@collapseField] class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>{{ 'products.vitaminName' | translate }}</th>
-                                <th>{{ 'products.vitaminQuantityPerCapsule' | translate }}</th>
-                                <th>{{ 'products.vitaminUnit' | translate }}</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let vitamin of vitaminList; let i = index">
-                                <td>{{ vitamin.name }}</td>
-                                <td>{{ vitamin.stock }}</td>
-                                <td>{{ vitamin.unit }}</td>
-                                <td>
-                                    <div class="buttons">
-                                        <button class="btn btn-primary basic-btn basic-form-btn btn-edit"
-                                            (click)="displayEditVitamin(i)">{{ 'profilePage.modify' | translate
-                                            }}</button>
-                                        <button class="btn delete-table-btn" (click)="deleteVitamin(i)">{{
-                                            'profileMenu.shippingAddressForm.deleteAddress' | translate }}</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table *ngIf="vitaminList.length !== 0" [@collapseField] class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'products.vitaminName' | translate }}</th>
+                                    <th>{{ 'products.vitaminQuantityPerCapsule' | translate }}</th>
+                                    <th>{{ 'products.vitaminUnit' | translate }}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let vitamin of vitaminList; let i = index">
+                                    <td data-label="{{ 'products.vitaminName' | translate }}"><span
+                                            class="smallScreens">{{ 'products.vitaminName' | translate }}:</span>{{
+                                        vitamin.name }}</td>
+                                    <td data-label="{{ 'products.vitaminQuantityPerCapsule' | translate }}"><span
+                                            class="smallScreens">{{ 'products.vitaminQuantityPerCapsule' | translate
+                                            }}:</span>{{
+                                        vitamin.stock }}</td>
+                                    <td data-label="{{ 'products.vitaminUnit' | translate }}"><span
+                                            class="smallScreens">{{ 'products.vitaminUnit' | translate }}:</span>{{
+                                        vitamin.unit }}</td>
+                                    <td class="smaller-screens-buttons">
+                                        <div class="buttons">
+                                            <button class="btn btn-primary basic-btn basic-form-btn btn-edit"
+                                                (click)="displayEditVitamin(i)">{{ 'profilePage.modify' | translate
+                                                }}</button>
+                                            <button class="btn delete-table-btn" (click)="deleteVitamin(i)">{{
+                                                'profileMenu.shippingAddressForm.deleteAddress' | translate }}</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- Nutritional Information Section -->
@@ -440,7 +449,7 @@
                     </div>
                     <div class="row">
                         <!-- Proteins -->
-                        <div class="col-md-6 form-group">
+                        <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}" class="form-group">
                             <label for="nutritionalValueProteins" class="label">{{ 'products.proteinsGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"
@@ -449,7 +458,7 @@
                                 #nutritionalValueProteins="ngModel">
                         </div>
                         <!-- Salt -->
-                        <div class="col-md-6 form-group">
+                        <div [ngClass]="{'col-6': isLargeScreen, 'col-12': !isLargeScreen}" class="form-group">
                             <label for="nutritionalValueSalt" class="label">{{ 'products.saltGram' | translate
                                 }}</label>
                             <input type="number" class="form-control"

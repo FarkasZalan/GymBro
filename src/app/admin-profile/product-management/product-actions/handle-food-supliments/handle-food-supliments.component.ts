@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -200,6 +200,10 @@ export class HandleFoodSuplimentsComponent implements OnInit {
   // date added
   dateAdded: Timestamp;
 
+
+  // responsibility
+  isLargeScreen: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private storage: AngularFireStorage,
@@ -214,6 +218,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.editor = new Editor();
+    this.checkScreenSize();
 
     // Set up toolbar with command keys
     this.toolbar = [
@@ -317,6 +322,16 @@ export class HandleFoodSuplimentsComponent implements OnInit {
         }
       });
     });
+  }
+
+  // display in 1 column the form fields on smaller screens and 2 columns on larger screens
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.isLargeScreen = window.innerWidth > 770;
   }
 
   // Sort product categories, genders, flavors, proteins and allergies
