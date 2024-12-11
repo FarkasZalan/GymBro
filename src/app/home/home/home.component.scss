@@ -436,6 +436,7 @@ section {
     margin: 20px auto 0;
     width: 100%;
     min-height: 600px;
+    max-height: 1700px;
     overflow: hidden;
     border-radius: 50px 50px 0 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -846,7 +847,7 @@ html {
 
 // Main Content Card
 .main-content-card {
-    width: 100%;
+    width: 100% !important;
     max-width: 1360px;
     margin: 0 auto;
     background: white;
@@ -910,7 +911,6 @@ html {
     }
 
     .main-content-card {
-        width: 95%;
         border-radius: 0 0 30px 30px;
     }
 }
@@ -925,7 +925,7 @@ html {
     }
 
     .main-content-card {
-        width: 98%;
+        width: 100% !important;
         border-radius: 0 0 20px 20px;
     }
 }
@@ -945,8 +945,7 @@ html {
 
     .hero-section,
     .main-content-card {
-        margin: 10px;
-        border-radius: 15px;
+        width: 100% !important;
         margin-left: 5px !important;
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../product.service';
 import { Product } from '../../admin-profile/product-management/product-models/product.model';
@@ -21,7 +21,14 @@ import { DiscountedPrice } from '../discounted-price.model';
     ]
 })
 export class DiscountedProductsComponent implements OnInit {
+    @ViewChild('toScrollAfterNavigate') toScrollAfterNavigate: ElementRef;
     discountedProducts: Product[] = [];
+
+    // pagination
+    paginatedProducts: Product[] = [];
+    itemsPerPage = 12;
+    currentPage = 1;
+
     productReviews: Map<string, ProductReeviews[]> = new Map();
     emptyCollection: boolean = false;
 
@@ -38,6 +45,8 @@ export class DiscountedProductsComponent implements OnInit {
         this.productService.getDiscountedProducts(0, false).subscribe((products: Product[]) => {
             this.discountedProducts = products;
             this.emptyCollection = products.length === 0;
+
+            this.updatePaginatedList();
             this.loadReviewsForProducts();
         });
     }
@@ -49,6 +58,23 @@ export class DiscountedProductsComponent implements OnInit {
                     this.productReviews.set(product.id, reviews);
                 });
         });
+    }
+
+    // navigation for the pagination
+    updatePaginatedList(): void {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        this.paginatedProducts = this.discountedProducts.slice(startIndex, endIndex);
+    }
+
+    goToPage(page: number): void {
+        this.currentPage = page;
+        this.toScrollAfterNavigate.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        this.updatePaginatedList();
+    }
+
+    getTotalPages(): number {
+        return Math.ceil(this.discountedProducts.length / this.itemsPerPage);
     }
 
     navigateToProduct(product: DiscountedPrice) {

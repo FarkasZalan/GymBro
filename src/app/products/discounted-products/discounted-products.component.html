@@ -1,4 +1,6 @@
 <div class="container">
+    <!-- that's just need to navigate to the top -->
+    <p id="toScrollAfterNavigate" name="toScrollAfterNavigate" #toScrollAfterNavigate></p>
     <!-- Empty collection message -->
     <div *ngIf="emptyCollection" class="product-empty-list-container">
         <nb-card class="emptyCard" [@zoomIn]>
@@ -14,7 +16,7 @@
     <div class="row">
         <!-- Products grid -->
         <div *ngIf="!emptyCollection" class="product-list-container">
-            <nb-card class="rounded-card productCard" *ngFor="let product of discountedProducts" [@zoomIn]>
+            <nb-card class="rounded-card productCard" *ngFor="let product of paginatedProducts" [@zoomIn]>
                 <nb-card-body class="product-image" (click)="navigateToProduct(product)">
                     <span class="category-badge">
                         <nb-icon [icon]="getCategoryIcon(product.category)"></nb-icon>
@@ -54,5 +56,33 @@
                 </nb-card-body>
             </nb-card>
         </div>
+
+        <!-- Pagination Controls -->
+        <div *ngIf="paginatedProducts?.length !== 0" class="pagination-container">
+            <button class="pagination-button prev" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled left arrow -->
+                        <path d="M26 6L14 16l12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Left Arrow -->
+            </button>
+
+            <button *ngFor="let page of [].constructor(getTotalPages()); let i = index" class="pagination-button"
+                [class.active]="currentPage === i + 1" (click)="goToPage(i + 1)">
+                {{ i + 1 }}
+            </button>
+
+            <button class="pagination-button next" [disabled]="currentPage === getTotalPages()"
+                (click)="goToPage(currentPage + 1)">
+                <span class="icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Filled right arrow -->
+                        <path d="M6 6l12 10-12 10" fill="#0b8e92" />
+                    </svg>
+                </span> <!-- Right Arrow -->
+            </button>
+        </div>
+
     </div>
 </div>

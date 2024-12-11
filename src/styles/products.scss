@@ -13,8 +13,12 @@
     text-align: center;
 }
 
+.container {
+    margin-top: 3rem !important;
+}
+
 .page-container {
-    margin-top: 2rem !important;
+    margin-top: 3rem !important;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
