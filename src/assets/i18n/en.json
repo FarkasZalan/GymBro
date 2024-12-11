@@ -71,6 +71,8 @@
       "phone": "Phone Number",
       "passwordAgain": "Confirm Password",
       "passwordsNotMatch": "The passwords do not match!",
+      "fieldError": "Invalid phone number",
+      "invalidField": "Invalid field",
       "acceptTerms": "I accept the Privacy Policy",
       "welcomeText": "Hello there!",
       "forgotPasswordSent": "Forgot password",

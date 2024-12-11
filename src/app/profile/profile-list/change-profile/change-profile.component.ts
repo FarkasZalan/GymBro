@@ -31,7 +31,7 @@ export class ChangeProfileComponent implements OnInit {
   passwordAgain: string;
 
   // save the user loyalty points data
-  loyaltyPoints: number;
+  loyaltyPoints: number = 0;
 
   // for error handleing
   errorMessage: boolean = false;
@@ -73,7 +73,9 @@ export class ChangeProfileComponent implements OnInit {
       // Fetch user details by ID when the component initializes
       this.documentumHandler.getDocumentByID("users", this.modifyUserId).subscribe((user: User) => {
         this.modifyUser = user;
-        this.loyaltyPoints = this.modifyUser.loyaltyPoints;
+        if (!this.modifyUser.isAdmin) {
+          this.loyaltyPoints = this.modifyUser.loyaltyPoints || 0;
+        }
         this.userIsAdmin = this.modifyUser.isAdmin;
       });
     });

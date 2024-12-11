@@ -51,13 +51,15 @@ input[type='password'] {
 }
 
 .container {
-    margin-top: 2rem !important;
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
     padding: 16px;
 }
 
 @media screen and (max-width: 550px) {
     .container {
         margin-top: 3rem !important;
+        margin-bottom: 3rem !important;
         padding: 0 !important;
         padding-top: 16px !important;
         padding-bottom: 16px !important;

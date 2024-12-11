@@ -54,7 +54,7 @@
                                 <!-- Email block -->
                                 <div class="form-group">
                                     <label for="email" class="label">{{ 'loginPage.email' | translate }}</label>
-                                    <input type="email" class="form-control" ngModel name="email" required
+                                    <input type="email" class="form-control" ngModel name="email" required email
                                         placeholder="{{ 'loginPage.emailAddress' | translate }}*" #email="ngModel">
                                     <span class="help-block" *ngIf="email.touched && !email.valid" [@zoomIn]>{{
                                         'loginPage.invalidEmail' | translate }}</span>
@@ -65,9 +65,13 @@
                                 <div class="form-group">
                                     <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
                                     <input type="tel" class="form-control" ngModel name="phone" required
-                                        placeholder="{{ 'register.phone' | translate }}*" #phone="ngModel">
-                                    <span class="help-block" *ngIf="phone.touched && !phone.valid" [@zoomIn]>{{
-                                        'register.fieldRequired' | translate }}</span>
+                                        pattern="^\+?[0-9 ]{10,20}$" placeholder="+36 XXX XXX XXX" #phone="ngModel">
+                                    <span class="help-block" *ngIf="phone.touched && phone.errors?.required" [@zoomIn]>
+                                        {{ 'register.fieldRequired' | translate }}
+                                    </span>
+                                    <span class="help-block" *ngIf="phone.touched && phone.errors?.pattern" [@zoomIn]>
+                                        {{ 'register.fieldError' | translate }}
+                                    </span>
                                 </div>
                             </div>
                         </div>

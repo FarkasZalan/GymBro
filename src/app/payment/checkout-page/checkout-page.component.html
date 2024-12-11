@@ -352,7 +352,7 @@
                             <div class="form-group">
                                 <label for="email" class="label">{{ 'loginPage.email' | translate }}</label>
                                 <input type="email" class="form-control" [(ngModel)]="guestEmail" name="email" required
-                                    placeholder="{{ 'loginPage.emailAddress' | translate }}*" #email="ngModel">
+                                    email placeholder="{{ 'loginPage.emailAddress' | translate }}*" #email="ngModel">
                                 <span class="help-block" *ngIf="email.touched && !email.valid" [@zoomIn]>{{
                                     'loginPage.invalidEmail' | translate }}</span>
                             </div>
@@ -362,9 +362,13 @@
                             <div class="form-group">
                                 <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
                                 <input type="tel" class="form-control" [(ngModel)]="guestPhone" name="phone" required
-                                    placeholder="{{ 'register.phone' | translate }}*" #phone="ngModel">
-                                <span class="help-block" *ngIf="phone.touched && !phone.valid" [@zoomIn]>{{
-                                    'register.fieldRequired' | translate }}</span>
+                                    pattern="^\+?[0-9 ]{10,20}$" placeholder="+36 XXX XXX XXX" #phone="ngModel">
+                                <span class="help-block" *ngIf="phone.touched && phone.errors?.required" [@zoomIn]>
+                                    {{ 'register.fieldRequired' | translate }}
+                                </span>
+                                <span class="help-block" *ngIf="phone.touched && phone.errors?.pattern" [@zoomIn]>
+                                    {{ 'register.fieldError' | translate }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -389,7 +393,7 @@
                             <div class="form-group">
                                 <label for="postalCode" class="label">{{
                                     'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
-                                <input type="text" class="form-control" [(ngModel)]="shippingAddress.postalCode"
+                                <input type="number" class="form-control" [(ngModel)]="shippingAddress.postalCode"
                                     name="postalCode" minlength="1" required
                                     placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"
                                     #postalCode="ngModel">
@@ -554,7 +558,7 @@
                                     <div class="form-group">
                                         <label for="billingPostalCode" class="label">{{
                                             'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
-                                        <input type="text" class="form-control"
+                                        <input type="number" class="form-control"
                                             [(ngModel)]="shippingAddress.billingAddress.postalCode"
                                             name="billingPostalCode" minlength="1" required
                                             placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"
@@ -802,10 +806,10 @@
                     {{ 'checkout.minimum2000HufError' | translate }}
                 </span>
 
+                <!-- Proceed Button -->
                 <div class="button-container">
-                    <button nbButton status="success" class="proceed-btn btn"
-                        [disabled]="!selectedPaymentMethod || shippingAddress === null || !selectedShippingMethod"
-                        (click)="proceedToPayment()">
+                    <button nbButton status="success" class="proceed-btn btn" [disabled]="!selectedPaymentMethod || shippingAddress === null || !selectedShippingMethod ||
+                        (displayGuestForm)" (click)="proceedToPayment()">
                         <nb-icon icon="checkmark-circle-2-outline"></nb-icon>
                         {{ 'checkout.actions.placeOrder' | translate }}
                     </button>

@@ -43,10 +43,14 @@
                                 <div class="form-group">
                                     <label for="phone" class="label">{{ 'register.phone' | translate }}</label>
                                     <input type="tel" class="form-control" ngModel name="phone" required
-                                        placeholder="{{ 'register.phone' | translate }}*" #phone="ngModel"
+                                        pattern="^\+?[0-9 ]{10,20}$" placeholder="+36 XXX XXX XXX" #phone="ngModel"
                                         [(ngModel)]="modifyUser.phone">
-                                    <span class="help-block" *ngIf="phone.touched && !phone.valid">{{
-                                        'register.fieldRequired' | translate }}</span>
+                                    <span class="help-block" *ngIf="phone.touched && phone.errors?.required">
+                                        {{ 'register.fieldRequired' | translate }}
+                                    </span>
+                                    <span class="help-block" *ngIf="phone.touched && phone.errors?.pattern">
+                                        {{ 'register.fieldError' | translate }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +84,7 @@
                             </div>
                         </div>
                         <!-- modify error -->
-                        <span *ngIf="errorMessage" class="help-block-login-error">
+                        <span *ngIf="errorMessage" class="help-block-login-error" [@zoomIn]>
                             <i class="fas fa-exclamation-triangle icon"></i> <!-- Caution icon -->
                             {{ 'register.passwordsNotMatch' | translate }}
                         </span><br>
@@ -88,7 +92,7 @@
                         <div class="login-button-container">
                             <button class="btn btn-primary basic-btn basic-form-btn" type="submit" nbButton
                                 status="success"
-                                [disabled]="!form.valid && (passwordAgain.value !== passwordFirst.value)">{{
+                                [disabled]="phone.errors?.pattern || !form.valid && (passwordAgain.value !== passwordFirst.value)">{{
                                 'profilePage.modify' | translate }}</button>
                         </div>
                     </form>

@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label for="postalCode" class="label">{{
                                         'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
-                                    <input type="text" class="form-control" [(ngModel)]="shippingAddress.postalCode"
+                                    <input type="number" class="form-control" [(ngModel)]="shippingAddress.postalCode"
                                         name="postalCode" minlength="1" required
                                         placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"
                                         #postalCode="ngModel">
@@ -205,7 +205,7 @@
                                         <div class="form-group">
                                             <label for="billingPostalCode" class="label">{{
                                                 'profileMenu.shippingAddressForm.postalCode' | translate }}</label>
-                                            <input type="text" class="form-control"
+                                            <input type="number" class="form-control"
                                                 [(ngModel)]="shippingAddress.billingAddress.postalCode"
                                                 name="billingPostalCode" minlength="1" required
                                                 placeholder="{{ 'profileMenu.shippingAddressForm.postalCode' | translate }}*"

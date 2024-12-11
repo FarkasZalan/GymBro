@@ -67,10 +67,11 @@ input[type='password'] {
 }
 
 .container {
-    margin-top: 2rem !important;
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
 
     max-height: 80vh !important;
-    max-width: 760px !important;
+    max-width: 1200px !important;
     /* Set a maximum height (80% of the viewport height) */
     overflow-y: auto;
     /* Enable vertical scrolling */
