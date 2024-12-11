@@ -668,10 +668,10 @@
             </div>
 
             <!-- Coupon Section -->
-            <div *ngIf="userLoggedIn" @fadeInUp name="couponSection" id="couponSection" #couponSection>
+            <div *ngIf="userLoggedIn" @fadeInUp>
                 <nb-card class="rounded-card checkout-section rewards-section">
                     <nb-card-header>
-                        <h3>
+                        <h3 name="couponSection" id="couponSection" #couponSection>
                             {{ 'checkout.availableRewards' | translate }}
                         </h3>
                     </nb-card-header>

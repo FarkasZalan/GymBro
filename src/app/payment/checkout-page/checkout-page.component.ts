@@ -945,10 +945,10 @@ ${(this.order.shippingMethod !== ProductViewText.CHECKOUT_SHIPPING_STORE_PICKUP_
   }
 
   activateCoupon(reward: any) {
-    this.couponSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     this.activeReward = reward;
     this.couponUsed = true;
     this.calculateTotals();
+    this.couponSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   removeCoupon() {

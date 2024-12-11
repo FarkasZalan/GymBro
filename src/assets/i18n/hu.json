@@ -140,7 +140,7 @@
         "profileMenu": {
                 "prodilDetails": "Profil adatok",
                 "orders": "Rendelések",
-                "addresses": "Szállítás/Számlázás",
+                "addresses": "Címlista",
                 "loyaltyProgram": "Hűségprogram",
                 "addNewShippingAddress": "Cím hozzáadása",
                 "noAddresses": "Nincs egyetlen mentett cím sem!",
