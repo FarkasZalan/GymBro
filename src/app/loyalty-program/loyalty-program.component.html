@@ -1,5 +1,4 @@
-<div [ngStyle]="!openedFromProfile ? {'padding-left': '1rem', 'padding-right': '1rem'} : {'padding-left': '0rem', 'padding-right': '0rem'}"
-    class="loyalty-dashboard">
+<div class="loyalty-dashboard">
     <!-- Login Section -->
     <div class="login-prompt-container" *ngIf="!userLoggedIn">
         <div class="login-prompt">
@@ -112,7 +111,7 @@
         <div class="rewards-section">
             <h3 class="rewards-title">{{ 'loyaltyProgram.rewardsSection.title' | translate }}</h3>
             <div class="rewards-grid">
-                <div *ngFor="let reward of availableRewards" [ngStyle]="rewardCardStyle" class="reward-card"
+                <div *ngFor="let reward of availableRewards" class="reward-card"
                     [class.locked]="currentUser?.loyaltyPoints < reward.pointsRequired && !isRewardAvailable(reward.id)"
                     [class.active]="isRewardAvailable(reward.id)">
                     <div class="active-indicator" *ngIf="isRewardAvailable(reward.id)">

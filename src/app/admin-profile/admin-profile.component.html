@@ -13,7 +13,7 @@
 
                 <!-- Icon for New Orders -->
                 <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
-                    &#x26A0; <!-- warning icon -->
+                    <nb-icon icon="alert-circle-outline"></nb-icon> <!-- alert icon -->
                 </div>
                 <button class="toggle-button-collapse-component back-btn">
                     <span class="categorie-arrow" *ngIf="isCollapsedOrders">▼</span>
@@ -38,7 +38,7 @@
 
                 <!-- Icon for Unchecked Reviews -->
                 <div class="review-alert-icon" *ngIf="uncheckedReviewsCount !== 0">
-                    &#x26A0; <!-- warning icon -->
+                    <nb-icon icon="alert-circle-outline"></nb-icon> <!-- alert icon -->
                 </div>
                 <button class="toggle-button-collapse-component back-btn">
                     <span class="categorie-arrow" *ngIf="isCollapsedItemsDetails">▼</span>

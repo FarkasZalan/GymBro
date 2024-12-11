@@ -5,9 +5,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Reward } from './reward.model';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { RewardText } from './reward-text';
-import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../profile/user.service';
 import { Order } from '../payment/order.model';
 
@@ -64,9 +62,6 @@ export class LoyaltyProgramComponent implements OnInit {
   currentUser: User;
   currentUserId: string = "";
 
-  // responibility
-  rewardCardStyle: { [key: string]: string } = {}; // Stores the dynamic styles
-
   constructor(
     private auth: AngularFireAuth,
     private authService: AuthService,
@@ -76,77 +71,7 @@ export class LoyaltyProgramComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.updateRewardCardStyle();
     this.checkAuthStatus();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.updateRewardCardStyle();
-  }
-
-  updateRewardCardStyle() {
-    const screenWidth = window.innerWidth;
-
-    if (this.openedFromProfile) {
-      if (screenWidth <= 350) {
-        this.rewardCardStyle = {
-          maxWidth: '250px',
-          minWidth: '250px',
-          marginLeft: '-25px',
-        };
-      } else if (screenWidth <= 390) {
-        this.rewardCardStyle = {
-          maxWidth: '270px',
-          minWidth: '270px',
-          marginLeft: '-25px',
-        };
-      } else if (screenWidth <= 410) {
-        this.rewardCardStyle = {
-          maxWidth: '290px',
-          minWidth: '290px',
-          marginLeft: '-15px',
-        };
-      } else if (screenWidth <= 450) {
-        this.rewardCardStyle = {
-          maxWidth: '300px',
-          minWidth: '300px',
-          marginLeft: '-30px',
-        };
-      } else if (screenWidth <= 520) {
-        this.rewardCardStyle = {
-          maxWidth: '360px',
-          minWidth: '360px',
-          marginLeft: '-10px',
-        };
-      } else {
-        this.rewardCardStyle = {}; // Default styles if no condition matches
-      }
-    } else {
-      if (screenWidth <= 350) {
-        this.rewardCardStyle = {
-          maxWidth: '280px',
-          minWidth: '280px',
-        };
-      } else if (screenWidth <= 400) {
-        this.rewardCardStyle = {
-          maxWidth: '300px',
-          minWidth: '300px',
-        };
-      } else if (screenWidth <= 430) {
-        this.rewardCardStyle = {
-          maxWidth: '340px',
-          minWidth: '340px',
-        };
-      } else if (screenWidth <= 450) {
-        this.rewardCardStyle = {
-          maxWidth: '360px',
-          minWidth: '360px',
-        };
-      } else {
-        this.rewardCardStyle = {}; // Default styles if no condition matches
-      }
-    }
   }
 
   checkAuthStatus() {

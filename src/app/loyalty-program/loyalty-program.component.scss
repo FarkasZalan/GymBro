@@ -78,6 +78,7 @@
 
             @media screen and (max-width: 960px) {
                 right: 1rem !important;
+                top: 0.5rem !important;
             }
 
             nb-icon {
@@ -518,6 +519,11 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
+
+            @media screen and (max-width: 700px) {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                grid-template-columns: 1fr !important;
+            }
 
             .reward-card {
                 background: var(--card-background-color);

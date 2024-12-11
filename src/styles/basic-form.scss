@@ -267,8 +267,7 @@ ul.custom-list li {
 
 }
 
-ul.custom-list li::before {
-    content: "🏋️";
+ul.custom-list .icon {
     /* Custom symbol */
     position: absolute;
     color: #0b8e92 !important;

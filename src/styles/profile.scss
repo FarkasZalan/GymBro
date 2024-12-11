@@ -13,6 +13,11 @@
     margin-top: 2rem !important
 }
 
+.loyalty-collapse {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 /* Orange border when there are unchecked items */
 .container-collapse-component.has-unchecked-items {
     border: 2px solid orange;
@@ -124,7 +129,6 @@
 }
 
 .collapse-container {
-    padding: 16px;
     background-color: white;
     border-top: 1px solid #0b8e92;
 }

@@ -32,7 +32,7 @@
 
                 <!-- Icon for New Orders -->
                 <div class="review-alert-icon" *ngIf="numberOfNewOrders !== 0">
-                    &#x26A0; <!-- warning icon -->
+                    <nb-icon icon="alert-circle-outline"></nb-icon> <!-- alert icon -->
                 </div>
                 <button class="toggle-button-collapse-component back-btn">
                     <span class="arrow" *ngIf="isCollapsedOrders">▼</span>
@@ -68,7 +68,7 @@
 
     <!-- loyality program -->
     <nb-card class="container-collapse-component">
-        <nb-card-body>
+        <nb-card-body class="loyalty-container">
             <div class="header-collapse-component" (click)="toggleCollapsedLoyaltyProgram()" #loyalty>
                 <h2 class="title" [ngClass]="{'center': isCollapsedLoyaltyProgram, 'left': !isCollapsedLoyaltyProgram}">
                     {{ 'profileMenu.loyaltyProgram' | translate }}

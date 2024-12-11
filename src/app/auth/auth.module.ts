@@ -7,6 +7,7 @@ import {
     NbButtonModule,
     NbCardModule,
     NbCheckboxModule,
+    NbIconModule,
     NbInputModule
 } from '@nebular/theme';
 import { AuthRoutingModule } from './auth-routing.module';
@@ -29,6 +30,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
         RouterModule,
         NbCardModule,
         NbInputModule,
+        NbIconModule,
         NbButtonModule,
         NbCheckboxModule,
         AuthRoutingModule,

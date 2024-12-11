@@ -170,7 +170,13 @@ export class SidebarComponent {
     }
 
     // Open the logout confirmation dialog
-    this.dialog.open(LogOutComponent);
+    const dialogRef = this.dialog.open(LogOutComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.closeSidebar();
+      }
+    });
   }
 
   /**
