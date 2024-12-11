@@ -392,7 +392,7 @@ export class OrganicFoodPageComponent implements OnInit {
   toggleCollapsedNutritionTable() {
     this.isCollapsedNutritionTable = !this.isCollapsedNutritionTable;
 
-    this.nutritionalTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.ingredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     if (!this.isCollapsedNutritionTable) {
       this.isCollapsedDescription = true;
