@@ -141,10 +141,10 @@
                 <div class="row">
                     <!-- Flavors Section -->
                     <div class="col-md-6 form-group">
-                        <label for="flavors" class="label">{{ 'products.productFlavors' | translate }}</label>
+                        <label for="flavors" class="label">{{ 'products.productFlavors' | translate
+                            }}</label>
                         <div class="multi-select-container">
-                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
-                                [(ngModel)]="selectedFlavors" #flavorSelect="ngModel">
+                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple">
                                 <option *ngFor="let flavor of availableFlavors" [value]="flavor"
                                     [ngClass]="{'active': selectedFlavors.includes(flavor) && selectedFlavors.length > 0}"
                                     (click)="selectionOfTheList(productViewText.FLAVORS, flavor)">
@@ -162,13 +162,12 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Allergenes Section -->
                     <div class="col-md-6 form-group">
-                        <label for="allregenes" class="label">{{ 'products.productAllergens' | translate }}</label>
+                        <label for="allregenes" class="label">{{ 'products.productAllergens' | translate
+                            }}</label>
                         <div class="multi-select-container">
-                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple"
-                                [(ngModel)]="selectedAllergenes" #allergeneSelect="ngModel">
+                            <select class="form-control allow-selected-multiple-list-color" multiple="multiple">
                                 <option *ngFor="let allergene of availableAllergens" [value]="allergene"
                                     [ngClass]="{'active': selectedAllergenes.includes(allergene) && selectedAllergenes.length > 0}"
                                     (click)="selectionOfTheList(productViewText.ALLERGENES, allergene)">

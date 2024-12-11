@@ -66,8 +66,8 @@ export class HandleBlogsComponent implements OnInit {
   ]
   selectedLanguage: string = '';
 
-  imageBase64: string = '';
-  imagePreview: string = '';
+  imageBase64: string = DefaultImageUrl.blogUrl;
+  imagePreview: string = DefaultImageUrl.blogUrl;
 
   tagInput: string = '';
   selectedTags: string[] = [];

@@ -525,6 +525,12 @@ export class HandleOrganicFoodComponent {
         this.productPrices[0].setAsDefaultPrice = true;
       }
 
+      if (this.selectedCategory === ProductViewText.DRINKS || this.selectedCategory === ProductViewText.HEALTHY_SNACKS) {
+        if (this.selectedFlavors.length === 0) {
+          this.selectedFlavors.push(ProductViewText.UNFLAVORED);
+        }
+      }
+
       // create new Organic food object
       this.organicFoodObject = {
         id: "",
@@ -610,6 +616,13 @@ export class HandleOrganicFoodComponent {
       if (!hasDefaultPrice) {
         this.productPrices[0].setAsDefaultPrice = true;
       }
+
+      if (this.selectedCategory === ProductViewText.DRINKS || this.selectedCategory === ProductViewText.HEALTHY_SNACKS) {
+        if (this.selectedFlavors.length === 0) {
+          this.selectedFlavors.push(ProductViewText.UNFLAVORED);
+        }
+      }
+
       this.productPrices = await this.adminService.uploadImagesAndSaveProduct(ProductViewText.ORGANIC_FOOD, this.organicFoodId, this.unifiedImageUrl, this.productPrices);
 
       // create new Food supliment object

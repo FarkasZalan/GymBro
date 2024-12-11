@@ -50,8 +50,8 @@ export class AddPriceDialogComponent implements OnInit {
   // error handleing
   public errorMessage = false;
 
-  imageBase64: string;
-  imagePreview: string;
+  imageBase64: string = DefaultImageUrl.productUrl;
+  imagePreview: string = DefaultImageUrl.productUrl;
 
   editText: boolean = false;
 

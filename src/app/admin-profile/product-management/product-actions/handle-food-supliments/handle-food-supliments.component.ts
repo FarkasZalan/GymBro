@@ -765,7 +765,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     await this.loadingService.withLoading(async () => {
       // error handleing
       if (this.selectedFlavors.length === 0) {
-        this.selectedFlavors.push(this.availableFlavors[0]);
+        this.selectedFlavors.push(ProductViewText.UNFLAVORED);
       }
 
       if (this.selectedGenders.length === 0) {
@@ -865,7 +865,7 @@ export class HandleFoodSuplimentsComponent implements OnInit {
     await this.loadingService.withLoading(async () => {
       // error handleing
       if (this.selectedFlavors.length === 0) {
-        this.selectedFlavors.push(this.availableFlavors[0]);
+        this.selectedFlavors.push(ProductViewText.UNFLAVORED);
       }
 
       if (this.selectedGenders.length === 0) {
