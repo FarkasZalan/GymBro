@@ -1,14 +1,11 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../../products/product.service';
 import { Blog } from '../../admin-profile/blog/blog.model';
 import { ProductViewText } from '../../admin-profile/product-management/product-view-texts';
-import { trigger, transition, style, animate, query, group } from '@angular/animations';
-import { TranslateService } from '@ngx-translate/core';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { Product } from '../../admin-profile/product-management/product-models/product.model';
-import { interval, Subscription } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
-import { NgbCarousel } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { DiscountedPrice } from '../../products/discounted-price.model';
 import { DefaultImageUrl } from '../../admin-profile/default-image-url';
 
@@ -75,12 +72,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   newArrivalsInterval = 5000; // 5 seconds
   blogsInterval = 6000;       // 6 seconds
 
+  // responsibility
+  screenSize: number = 0;
+
   constructor(
     private router: Router,
     private productService: ProductService
   ) { }
 
   ngOnInit() {
+    this.checkScreenSize();
     // Get featured blogs (max 9)
     this.productService.getLatestBlogs(9).subscribe((blogs: Blog[]) => {
       this.featuredBlogs = blogs.slice(0, 9);  // Ensure max 9 items
@@ -95,6 +96,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.productService.getNewArrivals(9).subscribe((products: Product[]) => {
       this.newArrivals = products.slice(0, 9);  // Ensure max 9 items
     });
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize(): void {
+    this.screenSize = window.innerWidth;
+    if (this.screenSize > 1400) {
+      this.displayCount = 3;
+    }
+    if (this.screenSize <= 1400 && this.screenSize > 1000) {
+      this.displayCount = 2;
+    }
+
+    if (this.screenSize <= 1000) {
+      this.displayCount = 1;
+    }
   }
 
   ngOnDestroy() {
@@ -183,8 +203,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getCarouselSlides(totalItems: number): number[] {
-    const itemsPerSlide = 3;
-    const totalSlides = Math.ceil(totalItems / itemsPerSlide);
+    const totalSlides = Math.ceil(totalItems / this.displayCount);
     return Array.from({ length: totalSlides }, (_, i) => i);
   }
 

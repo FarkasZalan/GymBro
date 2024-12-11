@@ -1,8 +1,9 @@
 <!-- Add this class to your nb-layout or the root element -->
 <div class="home-layout">
     <!-- Dynamic Hero Section -->
-    <section class="hero-section" @fadeIn
-        [ngStyle]="{'background': 'url(' + defaultImage.homePageUrl + ') no-repeat center center fixed'}">
+    <section class="hero-section" @fadeIn [ngStyle]="screenSize > 1000 
+    ? {'background': 'url(' + defaultImage.homePageUrl + ') no-repeat center center fixed'} 
+    : {'background': 'linear-gradient(rgb(95, 95, 95), rgb(25 134 137))'}">
         <nb-card class="hero-card">
             <nb-card-body>
                 <div class="hero-content">
@@ -60,10 +61,13 @@
                         <nb-icon icon="arrow-forward-outline"></nb-icon>
                     </button>
                 </div>
-                <ngb-carousel #discountedCarousel [interval]="discountedInterval" [pauseOnHover]="true">
+                <ngb-carousel class="carousel" #discountedCarousel [interval]="discountedInterval"
+                    [pauseOnHover]="true">
                     <ng-template ngbSlide *ngFor="let i of getCarouselSlides(discountedProducts.length)">
                         <div class="products-grid">
-                            <nb-card *ngFor="let product of getDiscountedProductsSlice(i*3, (i+1)*3)" @zoomIn>
+                            <nb-card
+                                *ngFor="let product of getDiscountedProductsSlice(i*displayCount, (i+1)*displayCount)"
+                                @zoomIn class="product-card">
                                 <nb-card-body (click)="navigateToProduct(product)">
                                     <span class="category-badge">
                                         <nb-icon [icon]="getCategoryIcon(product.category)"></nb-icon>
@@ -109,7 +113,8 @@
                 <ngb-carousel #newArrivalsCarousel [interval]="newArrivalsInterval" [pauseOnHover]="true">
                     <ng-template ngbSlide *ngFor="let i of getCarouselSlides(newArrivals.length)">
                         <div class="products-grid">
-                            <nb-card *ngFor="let product of getNewArrivalsSlice(i*3, (i+1)*3)" @zoomIn>
+                            <nb-card *ngFor="let product of getNewArrivalsSlice(i*displayCount, (i+1)*displayCount)"
+                                @zoomIn class="product-card">
                                 <nb-card-body (click)="navigateToProduct(product)">
                                     <span class="category-badge">
                                         <nb-icon [icon]="getCategoryIcon(product.category)"></nb-icon>
@@ -175,8 +180,9 @@
                 <ngb-carousel #blogsCarousel [interval]="blogsInterval" [pauseOnHover]="true">
                     <ng-template ngbSlide *ngFor="let i of getCarouselSlides(featuredBlogs.length)">
                         <div class="blogs-grid">
-                            <nb-card class="blogCard" *ngFor="let blog of getBlogsSlice(i*3, (i+1)*3)"
-                                (click)="navigateToBlog(blog.id)" @zoomIn>
+                            <nb-card class="blogCard"
+                                *ngFor="let blog of getBlogsSlice(i*displayCount, (i+1)*displayCount)"
+                                (click)="navigateToBlog(blog.id)" @zoomIn class="product-card">
                                 <nb-card-body>
                                     <span class="badge new">{{ 'home.new' | translate }}</span>
                                     <div class="image-container">
