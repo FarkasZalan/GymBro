@@ -126,6 +126,11 @@
 
 .receipt-body {
     padding: 2rem;
+
+    @media screen and (max-width: 768px) {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }
 
 .checkout-section {
@@ -135,6 +140,11 @@
     border-radius: 1rem;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    @media screen and (max-width: 768px) {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
 
     &:hover {
         transform: translateY(-2px);
@@ -148,6 +158,14 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
+
+        @media screen and (max-width: 768px) {
+            justify-content: center !important;
+        }
+
+        @media screen and (max-width: 410px) {
+            font-size: 27px !important;
+        }
 
         nb-icon {
             font-size: 1.5rem !important;
@@ -197,6 +215,14 @@
         transition: background-color 0.3s ease, transform 0.3s ease !important;
         will-change: transform, opacity, height;
 
+        @media screen and (max-width: 660px) {
+            grid-template-columns: 1fr !important;
+            text-align: center !important;
+            margin-left: 1rem !important;
+            margin-right: 1rem !important;
+
+        }
+
         &:hover {
             cursor: pointer;
             background-color: darken(#ffffff, 5%);
@@ -221,6 +247,11 @@
                 padding: 0;
                 margin: 0;
                 border-radius: 20px;
+
+                @media screen and (max-width: 660px) {
+                    width: 100% !important;
+                    height: 250px !important;
+                }
             }
         }
 
@@ -235,6 +266,7 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 0.75rem;
+                justify-content: center !important;
 
                 .attribute {
                     display: flex;
@@ -256,6 +288,10 @@
         .item-price {
             text-align: right;
 
+            @media screen and (max-width: 660px) {
+                text-align: center !important;
+            }
+
             .price-tag {
                 font-size: 1.25rem;
                 font-weight: 600;
@@ -266,6 +302,11 @@
             .unit-price {
                 font-size: 0.875rem;
                 color: var(--text-hint-color);
+
+                @media screen and (max-width: 660px) {
+                    font-size: 1.05rem !important;
+                    margin: 10px !important;
+                }
             }
         }
     }

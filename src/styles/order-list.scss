@@ -1,14 +1,6 @@
 .orders-container {
-    width: auto !important;
-    margin-top: 2rem !important;
-
-    @media screen and (max-width: 520px) {
-        max-width: 480px !important;
-    }
-
-    @media screen and (max-width: 420px) {
-        max-width: 340px !important;
-    }
+    width: 100% !important;
+    margin-top: 3rem !important;
 }
 
 .order-card {
