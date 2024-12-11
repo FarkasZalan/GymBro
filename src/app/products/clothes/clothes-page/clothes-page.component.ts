@@ -332,9 +332,7 @@ export class ClothesPageComponent implements OnInit {
   toggleCollapsedDescription() {
     this.isCollapsedDescription = !this.isCollapsedDescription;
 
-    if (!this.isCollapsedReturn) {
-      this.returnPolicy.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     if (!this.isCollapsedDescription) {
       this.isCollapsedReturn = true;
@@ -344,9 +342,7 @@ export class ClothesPageComponent implements OnInit {
   toggleCollapsedReturn() {
     this.isCollapsedReturn = !this.isCollapsedReturn;
 
-    if (!this.isCollapsedDescription) {
-      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     if (!this.isCollapsedReturn) {
       this.isCollapsedDescription = true;

@@ -370,12 +370,7 @@ export class OrganicFoodPageComponent implements OnInit {
   toggleCollapsedDescription() {
     this.isCollapsedDescription = !this.isCollapsedDescription;
 
-    if (!this.isCollapsedNutritionTable) {
-      this.nutritionalTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    if (!this.isCollapsedIngredients) {
-      this.ingredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     if (!this.isCollapsedDescription) {
       this.isCollapsedIngredients = true;
@@ -386,12 +381,7 @@ export class OrganicFoodPageComponent implements OnInit {
   toggleCollapsedIngredients() {
     this.isCollapsedIngredients = !this.isCollapsedIngredients;
 
-    if (!this.isCollapsedDescription) {
-      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    if (!this.isCollapsedNutritionTable) {
-      this.nutritionalTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     if (!this.isCollapsedIngredients) {
       this.isCollapsedDescription = true;
@@ -402,12 +392,7 @@ export class OrganicFoodPageComponent implements OnInit {
   toggleCollapsedNutritionTable() {
     this.isCollapsedNutritionTable = !this.isCollapsedNutritionTable;
 
-    if (!this.isCollapsedDescription) {
-      this.description.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    if (!this.isCollapsedIngredients) {
-      this.ingredients.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    this.nutritionalTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     if (!this.isCollapsedNutritionTable) {
       this.isCollapsedDescription = true;
