@@ -405,7 +405,7 @@
                 },
                 "loyaltyProgram": {
                         "points": "Pont",
-                        "loyalityPointPerItem": "Sszerezhető pontok (termékenként):"
+                        "loyalityPointPerItem": "Szerezhető pontok (termékenként):"
                 }
         },
         "blog": {
