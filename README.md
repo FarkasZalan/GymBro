@@ -158,8 +158,6 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 2. Install dependencies with npm install.
 
-3. Configure Firebase and Stripe keys in the environment files.
-
 ## Developer Notes
 
 - Use only Stripe’s [test card](https://docs.stripe.com/testing) numbers for transactions in the demo environment.
