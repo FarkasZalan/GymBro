@@ -10,7 +10,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 - Responsive Design: Accessible and visually appealing on all devices.
 
-- Paginated Navigation: Simplifies browsing for products, blogs, and orders.
+- Paginated Navigation: Simplifies browsing for products, blogs, reviews and orders.
 
 - Deployed App: Accessible at [https://gymbro-3b91b.web.app/](https://gymbro-3b91b.web.app/).
 
@@ -42,7 +42,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
     - Related blogs suggested based on tags.
 
-- **Search and Filter:** Advanced filtering options for blogs and products.
+- **Search and Filter:** filtering options for blogs and products.
 
 - **Content Curation:** If fewer than six related items are found, random selections are displayed to fill the list.
 
@@ -66,8 +66,6 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
     - Checkout with pre-saved or custom addresses.
 
-    - Restriction to one store’s products per order.
-
 - **Profile Management:**
 
     - Edit personal information.
@@ -84,9 +82,9 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 - **Content Management:**
 
-    - Manage products (quantity, size, flavor/color-specific stock, pricing, and images).
+    - Manage products (quantity, size, flavor/color-specific stock, pricing, images and specified details based on the category).
 
-    - Handle blogs (content, tags, and related settings).
+    - Handle blogs (content, tags, recommendation).
 
     - Update and oversee orders with notifications for new reviews or orders.
 
@@ -96,7 +94,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 ### Backend and Hosting
 
-- **Firebase Authentication:** Handles secure login and email verification.
+- **Firebase Authentication:** Handles secure register and login.
 
 - **Cloud Functions:** Automates processes for:
 
@@ -104,9 +102,9 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
     - Forgot password flow.
 
-    - Stripe payment processing (including mock transactions).
+    - Stripe payment processing.
 
-- **Admin SDK:** Provides secure management of user accounts for password resets and other operations.
+- **Admin SDK:** Provides secure management of user accounts for password reset.
 
 - **Firebase Hosting:** Efficiently deploys the application for public access.
 
@@ -152,7 +150,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
     - Automatic notifications for order placements and updates.
 
-    - Receipts and loyalty point status directly accessible within the user profile.
+    - Receipts, order status and loyalty point status directly accessible within the user profile.
 
 ## Installation and Deployment
 
@@ -162,12 +160,8 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 3. Configure Firebase and Stripe keys in the environment files.
 
-4. Deploy the application with firebase deploy.
-
 ## Developer Notes
 
 - Use only Stripe’s [test card](https://docs.stripe.com/testing) numbers for transactions in the demo environment.
-
-- Regular updates to enhance application performance and introduce new features are ongoing.
 
 Thank you for exploring GymBro! If you have any questions or need support, feel free to reach out via the contact information provided in the deployed application.
