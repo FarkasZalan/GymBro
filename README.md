@@ -14,7 +14,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 - Deployed App: Accessible at https://gymbro-3b91b.web.app/.
 
-#### Webshop Features
+#### - Webshop Features
 
 - Product Display: Each product page includes:
 
