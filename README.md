@@ -16,63 +16,63 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 #### Webshop Features
 
-- Product Display: Each product page includes:
+- **Product Display:** Each product page includes:
 
-- Reviews and likes from logged-in users.
+    - Reviews and likes from logged-in users.
 
-- Related products based on category.
+    - Related products based on category.
 
-- Real-time stock sensitivity (users cannot purchase beyond available stock).
+    - Real-time stock sensitivity (users cannot purchase beyond available stock).
 
-#### Purchase Options:
+-  **Purchase Options:**
 
-- Cash on delivery.
+    - Cash on delivery.
 
-- Stripe integration for test mode payments via card or digital wallets (e.g., Apple Pay, Google Pay). Use Stripe test cards for transactions.
+    - Stripe integration for test mode payments via card or digital wallets (e.g., Apple Pay, Google Pay). Use Stripe test cards for transactions.
 
-- Loyalty Program: Earn points on purchases; points can be redeemed for coupons.
+- **Loyalty Program:** Earn points on purchases; points can be redeemed for coupons.
 
-- Receipts: After a successful purchase, users can view and print receipts.
+- **Receipts:** After a successful purchase, users can view and print receipts.
 
 ### Blog Features
 
-#### Blog Interaction:
+- **Blog Interaction:**
 
-- Users can browse and read fitness-related blogs.
+    - Users can browse and read fitness-related blogs.
 
-- Related blogs suggested based on tags.
+    - Related blogs suggested based on tags.
 
-- Search and Filter: Advanced filtering options for blogs and products.
+- **Search and Filter:** Advanced filtering options for blogs and products.
 
-- Content Curation: If fewer than six related items are found, random selections are displayed to fill the list.
+- **Content Curation:** If fewer than six related items are found, random selections are displayed to fill the list.
 
 ### User Functionality
 
-#### Authentication:
+- **Authentication:**
 
-- Email verification required during registration (valid for 5 minutes, single-use tokens via SMTP).
+    - Email verification required during registration (valid for 5 minutes, single-use tokens via SMTP).
 
-- Forgot password flow via Firebase Admin SDK for secure reset without logging in.
+    - Forgot password flow via Firebase Admin SDK for secure reset without logging in.
 
-#### Address Management:
+- **Address Management:**
 
-- Shipping addresses for all users.
+    - Shipping addresses for all users.
 
-- Billing addresses for company accounts.
+    - Billing addresses for company accounts.
 
-#### Cart Management:
+- **Cart Management:**
 
-- Add, modify, or delete products in the cart.
+    - Add, modify, or delete products in the cart.
 
-- Checkout with pre-saved or custom addresses.
+    - Checkout with pre-saved or custom addresses.
 
-- Restriction to one store’s products per order.
+    - Restriction to one store’s products per order.
 
-#### Profile Management:
+- **Profile Management:**
 
-- Edit personal information.
+    - Edit personal information.
 
-- View and manage loyalty points, order history, and addresses.
+    - View and manage loyalty points, order history, and addresses.
 
 ### Admin Features
 
@@ -82,33 +82,33 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 - Password: admin123
 
-#### Content Management:
+- **Content Management:**
 
-- Manage products (quantity, size, flavor/color-specific stock, pricing, and images).
+    - Manage products (quantity, size, flavor/color-specific stock, pricing, and images).
 
-- Handle blogs (content, tags, and related settings).
+    - Handle blogs (content, tags, and related settings).
 
-- Update and oversee orders with notifications for new reviews or orders.
+    - Update and oversee orders with notifications for new reviews or orders.
 
-- Order Updates: Modify order statuses with one-click updates and notify customers via email about status changes.
+    - Order Updates: Modify order statuses with one-click updates and notify customers via email about status changes.
 
 ## Technical Details
 
 ### Backend and Hosting
 
-- Firebase Authentication: Handles secure login and email verification.
+- **Firebase Authentication:** Handles secure login and email verification.
 
-- Cloud Functions: Automates processes for:
+- **Cloud Functions:** Automates processes for:
 
-- Email handling (SMTP integration for verification and notifications).
+    - Email handling (SMTP integration for verification and notifications).
 
-- Forgot password flow.
+    - Forgot password flow.
 
-- Stripe payment processing (including mock transactions).
+    - Stripe payment processing (including mock transactions).
 
-- Admin SDK: Provides secure management of user accounts for password resets and other operations.
+- A**dmin SDK:** Provides secure management of user accounts for password resets and other operations.
 
-. Firebase Hosting: Efficiently deploys the application for public access.
+- **Firebase Hosting:** Efficiently deploys the application for public access.
 
 ## Product Features for Admin
 
@@ -118,21 +118,21 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 ## Application Highlights
 
-- Search and Filter
+### Search and Filter
 
 - Search functionality for products.
 
 - Dynamic filters to refine results based on user preferences.
 
-## Main Page
+### Main Page
 
-### Display:
+- **Display:**
 
-- Discounted products.
+    - Discounted products.
 
-. Recently added products and blogs.
+    . Recently added products and blogs.
 
-- All content sorted by creation date for user relevance.
+    - All content sorted by creation date for user relevance.
 
 ### Customer Interaction
 
@@ -142,17 +142,17 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 ### Notifications and Emails
 
-#### For Admins:
+-  **For Admins:**
 
-- Receive notifications for unchecked reviews and orders.
+    - Receive notifications for unchecked reviews and orders.
 
-- Streamlined communication with users regarding order status updates.
+    - Streamlined communication with users regarding order status updates.
 
-#### For Users:
+- **For Users:**
 
-- Automatic notifications for order placements and updates.
+    - Automatic notifications for order placements and updates.
 
-- Receipts and loyalty point status directly accessible within the user profile.
+    - Receipts and loyalty point status directly accessible within the user profile.
 
 ## Installation and Deployment
 
