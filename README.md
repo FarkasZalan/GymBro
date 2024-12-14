@@ -12,7 +12,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 - Paginated Navigation: Simplifies browsing for products, blogs, and orders.
 
-- Deployed App: Accessible at https://gymbro-3b91b.web.app/.
+- Deployed App: Accessible at [https://gymbro-3b91b.web.app/](https://gymbro-3b91b.web.app/).
 
 #### Webshop Features
 
@@ -28,7 +28,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
     - Cash on delivery.
 
-    - Stripe integration for test mode payments via card or digital wallets (e.g., Apple Pay, Google Pay). Use Stripe test cards for transactions.
+    - Stripe integration for test mode payments via card or digital wallets (e.g., Apple Pay, Google Pay). Use Stripe [test cards](https://docs.stripe.com/testing) for transactions.
 
 - **Loyalty Program:** Earn points on purchases; points can be redeemed for coupons.
 
@@ -106,7 +106,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
     - Stripe payment processing (including mock transactions).
 
-- A**dmin SDK:** Provides secure management of user accounts for password resets and other operations.
+- **Admin SDK:** Provides secure management of user accounts for password resets and other operations.
 
 - **Firebase Hosting:** Efficiently deploys the application for public access.
 
@@ -130,7 +130,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
     - Discounted products.
 
-    . Recently added products and blogs.
+    - Recently added products and blogs.
 
     - All content sorted by creation date for user relevance.
 
@@ -166,7 +166,7 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 ## Developer Notes
 
-- Use only Stripe’s test card numbers for transactions in the demo environment.
+- Use only Stripe’s [test card](https://docs.stripe.com/testing) numbers for transactions in the demo environment.
 
 - Regular updates to enhance application performance and introduce new features are ongoing.
 
