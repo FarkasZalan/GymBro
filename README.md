@@ -34,140 +34,140 @@ GymBro is an advanced Angular-based application designed for fitness enthusiasts
 
 - Receipts: After a successful purchase, users can view and print receipts.
 
-#### Blog Features
+### Blog Features
 
-Blog Interaction:
+#### Blog Interaction:
 
-Users can browse and read fitness-related blogs.
+- Users can browse and read fitness-related blogs.
 
-Related blogs suggested based on tags.
+- Related blogs suggested based on tags.
 
-Search and Filter: Advanced filtering options for blogs and products.
+- Search and Filter: Advanced filtering options for blogs and products.
 
-Content Curation: If fewer than six related items are found, random selections are displayed to fill the list.
+- Content Curation: If fewer than six related items are found, random selections are displayed to fill the list.
 
-User Functionality
+### User Functionality
 
-Authentication:
+#### Authentication:
 
-Email verification required during registration (valid for 5 minutes, single-use tokens via SMTP).
+- Email verification required during registration (valid for 5 minutes, single-use tokens via SMTP).
 
-Forgot password flow via Firebase Admin SDK for secure reset without logging in.
+- Forgot password flow via Firebase Admin SDK for secure reset without logging in.
 
-Address Management:
+#### Address Management:
 
-Shipping addresses for all users.
+- Shipping addresses for all users.
 
-Billing addresses for company accounts.
+- Billing addresses for company accounts.
 
-Cart Management:
+#### Cart Management:
 
-Add, modify, or delete products in the cart.
+- Add, modify, or delete products in the cart.
 
-Checkout with pre-saved or custom addresses.
+- Checkout with pre-saved or custom addresses.
 
-Restriction to one store’s products per order.
+- Restriction to one store’s products per order.
 
-Profile Management:
+#### Profile Management:
 
-Edit personal information.
+- Edit personal information.
 
-View and manage loyalty points, order history, and addresses.
+- View and manage loyalty points, order history, and addresses.
 
-Admin Features
+### Admin Features
 
-Account Access: Default admin account credentials:
+#### Account Access: Default admin account credentials:
 
-Email: admin@gymbro.com
+- Email: admin@gymbro.com
 
-Password: admin123
+- Password: admin123
 
-Content Management:
+#### Content Management:
 
-Manage products (quantity, size, flavor/color-specific stock, pricing, and images).
+- Manage products (quantity, size, flavor/color-specific stock, pricing, and images).
 
-Handle blogs (content, tags, and related settings).
+- Handle blogs (content, tags, and related settings).
 
-Update and oversee orders with notifications for new reviews or orders.
+- Update and oversee orders with notifications for new reviews or orders.
 
-Order Updates: Modify order statuses with one-click updates and notify customers via email about status changes.
+- Order Updates: Modify order statuses with one-click updates and notify customers via email about status changes.
 
-Technical Details
+## Technical Details
 
-Backend and Hosting
+### Backend and Hosting
 
-Firebase Authentication: Handles secure login and email verification.
+- Firebase Authentication: Handles secure login and email verification.
 
-Cloud Functions: Automates processes for:
+- Cloud Functions: Automates processes for:
 
-Email handling (SMTP integration for verification and notifications).
+- Email handling (SMTP integration for verification and notifications).
 
-Forgot password flow.
+- Forgot password flow.
 
-Stripe payment processing (including mock transactions).
+- Stripe payment processing (including mock transactions).
 
-Admin SDK: Provides secure management of user accounts for password resets and other operations.
+- Admin SDK: Provides secure management of user accounts for password resets and other operations.
 
-Firebase Hosting: Efficiently deploys the application for public access.
+. Firebase Hosting: Efficiently deploys the application for public access.
 
-Product Features for Admin
+## Product Features for Admin
 
-Assign unique pricing, stock levels, and images for each product variation (size, flavor, or color).
+- Assign unique pricing, stock levels, and images for each product variation (size, flavor, or color).
 
-Default product images are used if no specific variation image is uploaded.
+- Default product images are used if no specific variation image is uploaded.
 
-Application Highlights
+## Application Highlights
 
-Search and Filter
+- Search and Filter
 
-Intelligent search functionality for both products and blogs.
+- Search functionality for products.
 
-Dynamic filters to refine results based on user preferences.
+- Dynamic filters to refine results based on user preferences.
 
-Main Page
+## Main Page
 
-Display:
+### Display:
 
-Discounted products.
+- Discounted products.
 
-Recently added products and blogs.
+. Recently added products and blogs.
 
-All content sorted by creation date for user relevance.
+- All content sorted by creation date for user relevance.
 
-Customer Interaction
+### Customer Interaction
 
-Engage with reviews by liking or posting feedback directly on product pages.
+- Engage with reviews by liking or posting feedback directly on product pages.
 
-Loyal customers enjoy benefits through points and exclusive coupons.
+- Loyal customers enjoy benefits through points and exclusive coupons.
 
-Notifications and Emails
+### Notifications and Emails
 
-For Admins:
+#### For Admins:
 
-Receive notifications for unchecked reviews and orders.
+- Receive notifications for unchecked reviews and orders.
 
-Streamlined communication with users regarding order status updates.
+- Streamlined communication with users regarding order status updates.
 
-For Users:
+#### For Users:
 
-Automatic notifications for order placements and updates.
+- Automatic notifications for order placements and updates.
 
-Receipts and loyalty point status directly accessible within the user profile.
+- Receipts and loyalty point status directly accessible within the user profile.
 
-Installation and Deployment
+## Installation and Deployment
 
-Clone the repository.
+1. Clone the repository.
 
-Install dependencies with npm install.
+2. Install dependencies with npm install.
 
-Configure Firebase and Stripe keys in the environment files.
+3. Configure Firebase and Stripe keys in the environment files.
 
-Deploy the application with firebase deploy.
+4. Deploy the application with firebase deploy.
 
-Developer Notes
+## Developer Notes
 
-Use only Stripe’s test card numbers for transactions in the demo environment.
+- Use only Stripe’s test card numbers for transactions in the demo environment.
 
-Regular updates to enhance application performance and introduce new features are ongoing.
+- Regular updates to enhance application performance and introduce new features are ongoing.
 
 Thank you for exploring GymBro! If you have any questions or need support, feel free to reach out via the contact information provided in the deployed application.
